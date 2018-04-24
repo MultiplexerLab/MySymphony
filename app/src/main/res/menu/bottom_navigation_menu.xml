@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/home_bottom_navigation"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_home_bottom_navigation"
+        android:title="হোম"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/news_bottom_navigation"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_khoboradi_bottom_navigation"
+        android:title="খবরাদি"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/app_bottom_navigation"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_app_bottom_navigation"
+        android:title="এ্যাপ"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/download_bottom_navigation"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_download_bottom_navigation"
+        android:title="ডাউনলোড"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/symphony_bottom_navigation"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_symphony_bottom_navigation"
+        android:title="সিম্ফনি"
+        app:showAsAction="ifRoom"/>
+
+
+
+
+
+
+
+</menu>

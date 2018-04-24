@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#424242</color>
+    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="White">#FFFFFF</color>
+    <color name="Gray">#424242</color>
+    <color name="Halka_Gray">#E0E0E0</color>
+    <color name="ColorPrimaryDarkMV">#BDBDBD</color>
+    <color name="red">#F44336</color>
+    <color name="green">#185E20</color>
+    <color name="dark_red">#B71C1C</color>
+    <color name="black">#000000</color>
+</resources>

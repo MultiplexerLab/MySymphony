@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="tanvir.multiplexer">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".Activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Activity.PhoneNumberVerification" />
+        <activity android:name=".Activity.SignUpActivity" />
+        <activity
+            android:name=".Activity.PinActivity"
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".Activity.HomePage"
+            android:theme="@style/AppThemeMainActivity" />
+        <activity android:name=".Activity.SignInActivity" />
+        <activity android:name=".Activity.ForgetPasswordActivity" />
+        <activity android:name=".Activity.KheladhulaActivity" />
+        <activity android:name=".Activity.WallpaperBundleActivity" />
+        <activity android:name=".Activity.UserProfile" />
+        <activity android:name=".Activity.GoromKhoborActivity" />
+        <activity android:name=".Activity.PorashunaActivity" />
+        <activity android:name=".Activity.AuttoHashiActivity" />
+        <activity android:name=".Activity.JibonJaponActivity" />
+        <activity android:name=".Activity.PachMishaliActivity" />
+        <activity android:name=".Activity.BigganOProjuktiActivity" />
+        <activity android:name=".Activity.CartoonActivity" />
+        <activity android:name=".Activity.PaymentMethod" />
+        <activity android:name=".Activity.GalleryActivity" />
+        <activity android:name=".Activity.NewsDescriptionActivity" />
+        <activity android:name=".Activity.ProfileActivity" />
+        <activity android:name=".Activity.NotificationActivity" />
+
+        <service
+            android:name=".Notification.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".Notification.MyFirebaseInstanceIDService"
+            android:exported="false">
+            >
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".Activity.ImageViewActivity" />
+        <activity android:name=".Activity.SliderContentActivity" />
+        <activity android:name=".Activity.ShikhaDetails" />
+        <activity android:name=".Activity.PaymentConfirmation" />
+        <activity android:name=".Activity.Symphony" />
+        <activity android:name=".Activity.CricketSorbosheshSongbadDescriptionActivity" />
+        <activity android:name=".Activity.PorashunaDescriptionActivity" />
+        <activity android:name=".Activity.AuttohasiDescriptionActivity" />
+        <activity android:name=".Activity.JibonJaponDescriptionActivity" />
+        <activity android:name=".Activity.PachMishaliDescriptionActivity" />
+        <activity android:name=".Activity.BigganOProjuktiDescriptionActivity" />
+        <activity android:name=".Activity.CartoonDescriptionActivity" />
+        <activity android:name=".Activity.JapitiJibonDescriptionActivity" />
+    </application>
+
+</manifest>

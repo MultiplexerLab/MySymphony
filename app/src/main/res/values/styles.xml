@@ -1,0 +1,30 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppThemeMainActivity" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/Halka_Gray</item>
+        <item name="colorPrimaryDark">@color/ColorPrimaryDarkMV</item>
+        <item name="colorAccent">@color/Halka_Gray</item>
+    </style>
+
+    <style name="TabLayoutTheme">
+        <item name="colorAccent">@color/red</item>
+        <item name="colorPrimaryDark">@color/White</item>
+
+    </style>
+
+    <style name="viewPagerInSportsTheme">
+        <item name="colorAccent">@color/red</item>
+        <item name="colorPrimaryDark">@color/White</item>
+
+    </style>
+
+</resources>

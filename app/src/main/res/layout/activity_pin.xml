@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activity.PinActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:fitsSystemWindows="true">
+
+        <include
+            android:id="@+id/toolbarlayoutinpin"
+            layout="@layout/toolbar_layout_in_pin" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="আপনার নাম্বারে পাঠানো টেক্সট ম্যাসেজের ৪ ডিজিটের \n কোডটি লিখুন"
+        android:textSize="17sp" />
+
+    <com.goodiebag.pinview.Pinview
+        android:id="@+id/pinview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="60dp"
+        android:focusable="true"
+        app:cursorVisible="false"
+        app:forceKeyboard="true"
+        app:hint=""
+        app:inputType="number"
+        app:password="true"
+        app:pinHeight="40dp"
+        app:pinLength="6"
+        app:pinWidth="40dp"
+        app:pinBackground="@color/dark_red"/>
+
+
+    <!--<com.chaos.view.PinView
+        android:id="@+id/pinView"
+        style="@style/PinWidget.PinView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:padding="10dp"
+        android:textColor="@color/dark_red"
+        android:textSize="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        app:itemCount="4"
+        app:itemHeight="40dp"
+        app:itemRadius="18dp"
+        app:itemWidth="36dp"
+        app:lineColor="@color/dark_red"
+        app:lineWidth="5dp"
+        app:viewType="rectangle" />-->
+
+    <!--<RadioGroup
+        android:id="@+id/radioGroupInPinActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/firstRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/dark_red"
+            android:inputType="number" />
+
+        <RadioButton
+            android:id="@+id/secondRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/dark_red"
+            android:inputType="number" />
+
+        <RadioButton
+            android:id="@+id/thirdRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/dark_red"
+            android:inputType="number" />
+
+        <RadioButton
+            android:id="@+id/fourthRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/dark_red"
+            android:inputType="number" />
+    </RadioGroup>-->
+
+    <Button
+        android:id="@+id/btn_email_sign_in_"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="30dp"
+        android:background="@drawable/btn_style_halka_gray"
+        android:text="আবার কোড পাঠান"
+        android:textColor="@android:color/black" />
+
+</LinearLayout>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.CartoonDescriptionActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbarLayoutInCartoonDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:fitsSystemWindows="true">
+
+
+        <include
+            android:id="@+id/toolbarlayoutinnewsDescription"
+            layout="@layout/toolbar_layout_in_news_description" />
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_below="@id/appbarLayoutInCartoonDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="7dp">
+
+            <ImageView
+                android:id="@+id/imgCartoonDescription"
+                android:layout_width="match_parent"
+                android:layout_height="330dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/kheladhula_2" />
+
+            <TextView
+                android:id="@+id/newsTitleCartoonDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="বিস্তারিত"
+                android:textColor="@color/black"
+                android:textSize="28sp" />
+
+            <!--<TextView-->
+            <!--android:id="@+id/newsPublishedatPachMishaliDescription"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="1dp"-->
+            <!--android:text="বিস্তারিত"-->
+            <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />-->
+
+            <TextView
+                android:id="@+id/newsdescriptionCartoonDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="ক্রিকেট দুনিয়ার নানান ধরনের দারুন সব খবর নিয়ে আমাদের এই আয়োজন"
+                android:textColor="@color/black"
+                android:textSize="@dimen/textSize" />
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</RelativeLayout>
