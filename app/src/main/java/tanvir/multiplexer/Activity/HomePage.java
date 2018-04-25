@@ -589,7 +589,6 @@ public class HomePage extends AppCompatActivity {
         adapterForShikkhaSohayika = new RecyclerAdapterForShikkhaSohayika(this, shikkhaSohaYikaArrayList);
 
         recyclerViewForShikkhaSohayika.setAdapter(adapterForShikkhaSohayika);
-
     }
 
     public void startGoromKhoborPage(View view) {

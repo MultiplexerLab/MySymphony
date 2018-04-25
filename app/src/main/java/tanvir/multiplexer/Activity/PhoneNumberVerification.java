@@ -35,10 +35,8 @@ public class PhoneNumberVerification extends AppCompatActivity {
 
     RequestQueue queue;
 
-
     String[] permissions = new String[]{
             Manifest.permission.ACCESS_NETWORK_STATE,};
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,25 +47,20 @@ public class PhoneNumberVerification extends AppCompatActivity {
         setSupportActionBar(toolbar);
         phoneNumberET = findViewById(R.id.phoneNumberInPhoneVarification);
         queue = Volley.newRequestQueue(PhoneNumberVerification.this);
-
         //checkPermissions();
-
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
-
     }
 
     public void startPinActivity(View view) {
-
         //sendMobileNumberToServer();
         signUpRequest();
 //        Intent myIntent = new Intent(getApplicationContext(),PinActivity.class);
@@ -77,22 +70,11 @@ public class PhoneNumberVerification extends AppCompatActivity {
 //        finish();
     }
 
-    public void main() {
-        ///sensMobileNumberToServer();
-
-//        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-//        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//        this.startActivity(myIntent);
-//        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-//        finish();
-
-    }
 
     private void sendMobileNumberToServer() {
 
-
         final String phoneNumber = phoneNumberET.getText().toString();
-        String url = "http://bot.sharedtoday.com:9500/ws/gen2FACode?prcName=signUp&uid=" + phoneNumber;
+        String url = Endpoints.USER_MOBILE_VARIFICATION_GET_URL + phoneNumber;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {

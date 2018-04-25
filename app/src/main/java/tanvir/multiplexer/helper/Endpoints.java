@@ -11,10 +11,11 @@ public class Endpoints {
     public static final String BIGGAN_O_PROJUKTI_GET_URL="http://jachaibd.com/api/science_sample.json";
     public static final String KHELADHULA_CRICKET_GET_URL="http://jachaibd.com/api/games_sample.json";
     public static final String USER_SIGN_UP_POST_URL="http://bot.sharedtoday.com:9500/ws/signUpInsertIntoSingleTable?tbl=partner";
-    public static final String USER_SIGN_IN_GET_MOBILE_VARIFICATION_URL=" http://bot.sharedtoday.com:9500/ws/gen2FACode?prcName=signUp&uid=01717";
+    public static final String USER_MOBILE_VARIFICATION_GET_URL=" http://bot.sharedtoday.com:9500/ws/gen2FACode?prcName=signUp&uid=";
     public static final String USER_SIGN_IN_GET_VALIDATE_MOBILE_VARIFICATION_URL="http://bot.sharedtoday.com:9500/ws/validate2FACode?prcName=signUp&uid=01717&genRef=451&code=532526";
     public static final String USER_SIGN_IN_POST_URL="http://bot.sharedtoday.com:9500/mysymphony/login";
     public static final String USER_SIGN_UP_STATUS_POST_URL=" http://bot.sharedtoday.com:9500/login";
+    public static final String UPDATE_DEFAULT_PAAWORD_POST_URL="http://bot.sharedtoday.com:9500/ws/changePassword?pass=01717&newpass=";
 
 
 

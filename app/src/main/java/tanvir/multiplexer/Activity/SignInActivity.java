@@ -144,9 +144,8 @@ public class SignInActivity extends AppCompatActivity {
                         /// Toast.makeText(SignInActivity.this, "response : "+response, Toast.LENGTH_LONG).show();
                         Log.d("responseInSignIn ",response);
 
-                        if (response.toLowerCase().contains("SUCCESS")) {
+                        if (response.contains("SUCCESS")) {
                             if (internetConnected()) {
-
                                 homePageStart();
 
 

@@ -46,7 +46,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     String deviceId = "default";
     EditText DOB;
     String DOBTV;
-    String phoneNumber="";
+    String phoneNumber = "";
     private EditText txtpassword, txtUserName;
     String[] permissions = new String[]{
             Manifest.permission.ACCESS_NETWORK_STATE,};
@@ -62,9 +62,9 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         DOB = findViewById(R.id.txtDOB);
         txtpassword = findViewById(R.id.txtpassword);
         txtUserName = findViewById(R.id.txtUserName);
-        phoneNumber=getIntent().getStringExtra("phoneNumber");
+        phoneNumber = getIntent().getStringExtra("phoneNumber");
 
-        if(phoneNumber.length()>0)
+        if (phoneNumber.length() > 0)
             Toast.makeText(this, "Found", Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(this, "not", Toast.LENGTH_SHORT).show();
@@ -74,7 +74,6 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         ///deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
         //Log.i("DeviceId", deviceId);
-
     }
 
     private boolean checkPermissions() {
@@ -102,7 +101,6 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
-
     }
 
     private boolean internetConnected() {
@@ -124,18 +122,16 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         } else {
             Toast.makeText(this, "Internet is not connected", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
 
-        DOBTV=dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+        DOBTV = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
         DOB.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
     }
 
     public void showDatePickerDialog(View view) {
-
         Calendar now = Calendar.getInstance();
         DatePickerDialog dpd = DatePickerDialog.newInstance(
                 SignUpActivity.this,
@@ -147,10 +143,8 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     }
 
     public void signUpRequest() {
-
-        Toast.makeText(this, "phone "+phoneNumber, Toast.LENGTH_SHORT).show();
-
-        String url = "http://bot.sharedtoday.com:9500/ws/commonUpdateForArrayJSON?tbl=Partner&keyname=partnerId&id="+phoneNumber;
+        Toast.makeText(this, "phone " + phoneNumber, Toast.LENGTH_SHORT).show();
+        String url = "http://bot.sharedtoday.com:9500/ws/commonUpdateForArrayJSON?tbl=Partner&keyname=partnerId&id=" + phoneNumber;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -158,42 +152,6 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                         ///Toast.makeText(PhoneNumberVerification.this, response, Toast.LENGTH_SHORT).show();
                         Log.i("ResponseSignUp", response);
 
-//                        String result = "";
-//
-//                        try {
-//                            JSONArray jsonArray = new JSONArray(response);
-//
-//                            if (jsonArray.length() == 0)
-//                                Toast.makeText(SignUpActivity.this, "jsonArray blank", Toast.LENGTH_SHORT).show();
-//                            else {
-//                                for (int i = 0; i < jsonArray.length(); i++) {
-//                                    JSONObject postInfo = jsonArray.getJSONObject(i);
-//                                    result = postInfo.getString("msgType");
-//                                    Log.d("resultSignUp ", result);
-//                                    ///Toast.makeText(PhoneNumberVerification.this, "array : "+postInfo.getString("result"), Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                            Toast.makeText(SignUpActivity.this, "jsonException : " + e.toString(), Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        if (result.contains("SUCCESS")) {
-//                            Intent myIntent = new Intent(getApplicationContext(), SignInActivity.class);
-//                            myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//                            startActivity(myIntent);
-//                            overridePendingTransition(R.anim.left_in, R.anim.left_out);
-//                            finish();
-//
-//                        } else {
-//                            Toast.makeText(SignUpActivity.this, "Sign up failed", Toast.LENGTH_SHORT).show();
-//                        }
-//                        Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-//                        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//                        startActivity(myIntent);
-//                        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-//                        finish();
                     }
                 }, new Response.ErrorListener() {
 
@@ -201,14 +159,13 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("ErrorInSignUp", error.toString());
-
             }
         }) {
-
             @Override
             public String getBodyContentType() {
                 return "application/x-www-form-urlencoded; charset=UTF-8";
             }
+
             @Override
             public Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -222,20 +179,17 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                 return params;
             }
         };
-
         queue.add(stringRequest);
     }
 
-
     public void signInRequest() {
-
         Toast.makeText(this, "Enter sign in request", Toast.LENGTH_SHORT).show();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.USER_SIGN_IN_POST_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
-                       Toast.makeText(SignUpActivity.this, "response : "+response, Toast.LENGTH_LONG).show();
+                        Toast.makeText(SignUpActivity.this, "response : " + response, Toast.LENGTH_LONG).show();
                         Log.d("responseInSignIn", response);
 
                         if (response.contains("SUCCESS")) {
@@ -266,9 +220,35 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
 
             }
         }) {
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("userid", phoneNumber);
+                params.put("password", "12345");
+                return params;
+            }
+        };
 
+        queue.add(stringRequest);
+    }
 
+    public void sendUpdatedPasswordToserver() {
 
+        String url = Endpoints.UPDATE_DEFAULT_PAAWORD_POST_URL+txtpassword.getText().toString()+"&userid="+phoneNumber;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responseInSetUpdatedPassword", response);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VolleyErrorInSignIn", error.toString());
+
+            }
+        }) {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -277,8 +257,6 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
 
                 return params;
             }
-
-
         };
 
         queue.add(stringRequest);
