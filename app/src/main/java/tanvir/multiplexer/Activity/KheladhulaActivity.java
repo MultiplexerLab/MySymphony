@@ -2,16 +2,13 @@ package tanvir.multiplexer.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import tanvir.multiplexer.Fragment.Cricket_fragment;
 import tanvir.multiplexer.Fragment.Football_fragment;
-import tanvir.multiplexer.Fragment.MyInfoFragmentInProfileActivity;
-import tanvir.multiplexer.Fragment.MyItemFragmentInProfileActivity;
-import tanvir.multiplexer.Fragment.PaymentListFragmentInProfileActivity;
 import tanvir.multiplexer.Fragment.other_sports_fragment;
 import tanvir.multiplexer.R;
 import tanvir.multiplexer.ViewpagerAdapter.ViewPagerAdapterForSports;

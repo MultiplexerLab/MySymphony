@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Halka_Gray"
+    android:orientation="vertical"
+    tools:context=".Activity.PayWithPinActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbarLayoutInWallpaperBundle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:fitsSystemWindows="true">
+        <include
+            android:id="@+id/toolbarlayoutinpaywithpin"
+            layout="@layout/toolbar_layout_in_pay_with_pin_activity" />
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="পে উইথ পিন"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textColor="@color/dark_red" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" এজেন্টকে নীচের পেমেন্ট কোড"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:text="এবং টাকার পরিমান জানান"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@color/White"
+        android:layout_width="match_parent"
+        android:layout_height="70dp">
+
+        <TextView
+            android:layout_marginTop="7dp"
+            android:layout_weight=".01"
+            android:text="মোট পরিশোধযোগ্য মুল্য"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_weight=".01"
+            android:textColor="@color/black"
+            android:text="‎৳৬৫০"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@color/White"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_weight=".01"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:text="আপনার পেমেন্ট কোড"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_weight=".01"
+            android:textColor="@color/dark_red"
+            android:textSize="31sp"
+            android:text="৪৫৪৫৩৪"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_weight=".5"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/qr_code"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp" />
+
+        <TextView
+            android:layout_weight=".01"
+            android:layout_marginTop="10dp"
+            android:text="ট্র‍্যানজেক্শন হয়ে গেলে আপনি নোটিফিকেশন পাবেন"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_marginTop="17dp"
+            android:text="আপনার পেমেন্ট তালিকা দেখুন"
+            android:layout_width="320dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="10dp"/>
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

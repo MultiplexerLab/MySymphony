@@ -34,7 +34,7 @@ import java.util.ArrayList;
 
 import tanvir.multiplexer.CustomSwipeAdapter;
 import tanvir.multiplexer.ModelClass.GamesZone;
-import tanvir.multiplexer.ModelClass.JibonJapon;
+import tanvir.multiplexer.ModelClass.JapitoJibonMC;
 import tanvir.multiplexer.ModelClass.MulloChar;
 import tanvir.multiplexer.ModelClass.ShikkhaSohaYika;
 import tanvir.multiplexer.ModelClass.ShocolChobi;
@@ -47,7 +47,6 @@ import tanvir.multiplexer.RecycleerViewAdapter.RecyclerAdapterForSeraChobi;
 import tanvir.multiplexer.RecycleerViewAdapter.RecyclerAdapterForShikkhaSohayika;
 import tanvir.multiplexer.RecycleerViewAdapter.RecyclerAdapterForShocolChobi;
 import tanvir.multiplexer.helper.Endpoints;
-import tanvir.multiplexer.ModelClass.JapitoJibonMC;
 
 public class HomePage extends AppCompatActivity {
     Context context;
@@ -589,6 +588,7 @@ public class HomePage extends AppCompatActivity {
         adapterForShikkhaSohayika = new RecyclerAdapterForShikkhaSohayika(this, shikkhaSohaYikaArrayList);
 
         recyclerViewForShikkhaSohayika.setAdapter(adapterForShikkhaSohayika);
+
     }
 
     public void startGoromKhoborPage(View view) {

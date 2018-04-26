@@ -6,27 +6,21 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,9 +74,15 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void startHomePage(View view) {
+
+        if (internetConnected()) {
+            signInRequest();
+        } else
+            Toast.makeText(this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+
         ///checkCredintial();
         //homePageStart();
-        signInRequest();
+
 
     }
 
@@ -142,7 +142,7 @@ public class SignInActivity extends AppCompatActivity {
                     public void onResponse(String response) {
 
                         /// Toast.makeText(SignInActivity.this, "response : "+response, Toast.LENGTH_LONG).show();
-                        Log.d("responseInSignIn ",response);
+                        Log.d("responseInSignIn ", response);
 
                         if (response.contains("SUCCESS")) {
                             if (internetConnected()) {
@@ -173,7 +173,6 @@ public class SignInActivity extends AppCompatActivity {
                 return params;
             }
         };
-
         queue.add(stringRequest);
     }
 }

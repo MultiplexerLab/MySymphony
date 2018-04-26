@@ -1,8 +1,8 @@
 package tanvir.multiplexer.Activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
@@ -25,7 +25,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import tanvir.multiplexer.ModelClass.GoromKhobor;
-import tanvir.multiplexer.ModelClass.ShocolChobi;
 import tanvir.multiplexer.R;
 import tanvir.multiplexer.RecycleerViewAdapter.RecyclerAdapterForGoromKhobor;
 import tanvir.multiplexer.helper.Endpoints;

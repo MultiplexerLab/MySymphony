@@ -1,13 +1,11 @@
 package tanvir.multiplexer.Activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
 import android.util.Log;
-import android.view.Gravity;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -16,7 +14,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,10 +21,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import tanvir.multiplexer.ModelClass.Auttohashi;
 import tanvir.multiplexer.ModelClass.Cartoon;
 import tanvir.multiplexer.R;
-import tanvir.multiplexer.RecycleerViewAdapter.RecyclerAdapterForAuttohashi;
 import tanvir.multiplexer.RecycleerViewAdapter.RecyclerAdapterForCartoon;
 import tanvir.multiplexer.helper.Endpoints;
 

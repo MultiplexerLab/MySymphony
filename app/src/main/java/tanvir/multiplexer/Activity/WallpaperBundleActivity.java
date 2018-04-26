@@ -2,8 +2,8 @@ package tanvir.multiplexer.Activity;
 
 import android.content.Intent;
 import android.graphics.Paint;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import tanvir.multiplexer.R;

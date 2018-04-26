@@ -1,14 +1,13 @@
 package tanvir.multiplexer.Activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import tanvir.multiplexer.ModelClass.Kheladhula_Cricket_sorboshesh_sobgbad;
 import tanvir.multiplexer.ModelClass.Porashuna;
 import tanvir.multiplexer.R;
 

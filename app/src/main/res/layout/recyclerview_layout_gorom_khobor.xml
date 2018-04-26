@@ -25,6 +25,7 @@
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
+                android:padding="5dp"
                 android:src="@drawable/kheladhula_cricket_2" />
 
             <LinearLayout

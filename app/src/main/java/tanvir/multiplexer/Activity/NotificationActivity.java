@@ -1,7 +1,7 @@
 package tanvir.multiplexer.Activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
@@ -12,10 +12,8 @@ import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import java.util.ArrayList;
 
-import tanvir.multiplexer.ModelClass.BigganOProjukti;
 import tanvir.multiplexer.ModelClass.Notifications;
 import tanvir.multiplexer.R;
-import tanvir.multiplexer.RecycleerViewAdapter.RecyclerAdapterForBigganOProjukti;
 import tanvir.multiplexer.RecycleerViewAdapter.RecyclerAdapterNotification;
 
 public class NotificationActivity extends AppCompatActivity {

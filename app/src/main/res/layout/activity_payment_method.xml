@@ -44,7 +44,7 @@
                     android:background="@color/White"
                     android:padding="15dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/pin_pay" />
+                    android:src="@drawable/pay_pin_icon" />
                 <ImageButton
                     android:id="@+id/payWithBikash"
                     android:layout_width="0dp"

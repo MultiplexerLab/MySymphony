@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.provider.Settings;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -25,10 +23,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,16 +58,8 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         txtUserName = findViewById(R.id.txtUserName);
         phoneNumber = getIntent().getStringExtra("phoneNumber");
 
-        if (phoneNumber.length() > 0)
-            Toast.makeText(this, "Found", Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(this, "not", Toast.LENGTH_SHORT).show();
         queue = Volley.newRequestQueue(SignUpActivity.this);
         checkPermissions();
-
-        ///deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-
-        //Log.i("DeviceId", deviceId);
     }
 
     private boolean checkPermissions() {
@@ -120,7 +106,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
             signInRequest();
 
         } else {
-            Toast.makeText(this, "Internet is not connected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -143,7 +129,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     }
 
     public void signUpRequest() {
-        Toast.makeText(this, "phone " + phoneNumber, Toast.LENGTH_SHORT).show();
+
         String url = "http://bot.sharedtoday.com:9500/ws/commonUpdateForArrayJSON?tbl=Partner&keyname=partnerId&id=" + phoneNumber;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -151,6 +137,10 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                     public void onResponse(String response) {
                         ///Toast.makeText(PhoneNumberVerification.this, response, Toast.LENGTH_SHORT).show();
                         Log.i("ResponseSignUp", response);
+
+                        if(response.contains("SUCCESS")){
+                            sendUpdatedPasswordToserver();
+                        }
 
                     }
                 }, new Response.ErrorListener() {
@@ -183,19 +173,20 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     }
 
     public void signInRequest() {
-        Toast.makeText(this, "Enter sign in request", Toast.LENGTH_SHORT).show();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.USER_SIGN_IN_POST_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
-                        Toast.makeText(SignUpActivity.this, "response : " + response, Toast.LENGTH_LONG).show();
+
                         Log.d("responseInSignIn", response);
 
                         if (response.contains("SUCCESS")) {
                             if (internetConnected()) {
+
+                                ///Toast.makeText(SignUpActivity.this, "আপনার পিন সঠিক হয়েছে", Toast.LENGTH_SHORT).show();
                                 signUpRequest();
-                                //Toast.makeText(PinActivity.this, "আপনার পিন সঠিক হয়েছে", Toast.LENGTH_SHORT).show();
 
 //                                Intent myIntent = new Intent(getApplicationContext(), SignUpActivity.class);
 //                                myIntent.putExtra("phoneNumber",phoneNumber);
@@ -224,7 +215,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("userid", phoneNumber);
-                params.put("password", "12345");
+                params.put("password", "01717");
                 return params;
             }
         };
@@ -234,12 +225,23 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
 
     public void sendUpdatedPasswordToserver() {
 
-        String url = Endpoints.UPDATE_DEFAULT_PAAWORD_POST_URL+txtpassword.getText().toString()+"&userid="+phoneNumber;
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+        String url = Endpoints.UPDATE_DEFAULT_PASSWORD_POST_URL+txtpassword.getText().toString()+"&userid="+phoneNumber;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("responseInSetUpdatedPassword", response);
+                        Log.d("responseInSetUpdtedPass", response);
+
+                        if(response.contains("SUCCESS")){
+
+                            Toast.makeText(SignUpActivity.this, "আপনার সাইন আপ সম্পন্ন হয়েছে", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(SignUpActivity.this, HomePage.class);
+                            startActivity(intent);
+                        }
+                        else
+                            Toast.makeText(SignUpActivity.this, "আপনার সাইন আপ সম্পন্ন হয়নি\n" +
+                                    "আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
 
                     }
                 }, new Response.ErrorListener() {
@@ -248,16 +250,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                 Log.e("VolleyErrorInSignIn", error.toString());
 
             }
-        }) {
-            @Override
-            public Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("userid", phoneNumber);
-                params.put("password", "12345");
-
-                return params;
-            }
-        };
+        });
 
         queue.add(stringRequest);
     }

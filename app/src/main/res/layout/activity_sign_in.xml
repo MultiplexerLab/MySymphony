@@ -44,8 +44,8 @@
                     android:id="@+id/txtUserName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_action_person"
-                    android:hint=" আপনার নাম লিখুন "
+                    android:drawableLeft="@drawable/ic_action_phone"
+                    android:hint=" আপনার ফোন নাম্বার লিখুন"
                     android:imeActionId="6"
                     android:maxLines="1"
                     android:singleLine="true" />
