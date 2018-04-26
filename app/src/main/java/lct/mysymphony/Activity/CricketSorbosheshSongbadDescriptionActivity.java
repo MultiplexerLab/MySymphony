@@ -44,6 +44,7 @@ public class CricketSorbosheshSongbadDescriptionActivity extends AppCompatActivi
     public void onBackPressed() {
 
         super.onBackPressed();
+
         Intent myIntent = new Intent(getApplicationContext(), KheladhulaActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
@@ -52,7 +53,9 @@ public class CricketSorbosheshSongbadDescriptionActivity extends AppCompatActivi
     }
 
     public void mullochar(View view) {
+        Kheladhula_Cricket_sorboshesh_sobgbad object = (Kheladhula_Cricket_sorboshesh_sobgbad) getIntent().getSerializableExtra("Data");
         Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
+        purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);
     }
 }

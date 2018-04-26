@@ -27,7 +27,9 @@ public class ShikhaDetails extends AppCompatActivity {
     }
 
     public void purChase(View view) {
+        ShikkhaSohaYika shikhkha = (ShikkhaSohaYika) getIntent().getSerializableExtra("shikkha");
         Intent purchase = new Intent(ShikhaDetails.this, PaymentMethod.class);
+        purchase.putExtra("imageUrl",shikhkha.getContentUrl());
         startActivity(purchase);
     }
 

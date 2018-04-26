@@ -1,10 +1,12 @@
 package lct.mysymphony.Activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lct.mysymphony.R;
+import lct.mysymphony.helper.DownloadImage;
 import lct.mysymphony.helper.Endpoints;
 
 public class PayWithRocketActivity extends AppCompatActivity {
@@ -32,6 +35,7 @@ public class PayWithRocketActivity extends AppCompatActivity {
     TextView billNumberTV;
     String deviceId,userId;
     RequestQueue queue;
+    String imageUrl;
    /// Integer price;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +51,17 @@ public class PayWithRocketActivity extends AppCompatActivity {
         deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.d("deviceId",deviceId);
         sendRocketVerificationToServer();
+        imageUrl=getIntent().getStringExtra("imageUrl");
+        Log.d("url",imageUrl);
     }
     private void sendRocketVerificationToServer() {
         Log.i("Enter", "Enter in rocket");
-        ///String url = "http://bot.sharedtoday.com:9500/ws/validate2FACode?prcName=forgotPass&uid=" + phoneNumber + "&genRef=" + genref + "&code=" + pinText;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.GET_REFEREL_CODE_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("rockeTverification",response);
                         String jsonFormattedString = response.replaceAll("\\\\", "");
-
                         String result = "";
 
                         try {
@@ -70,13 +74,18 @@ public class PayWithRocketActivity extends AppCompatActivity {
                                     JSONObject postInfo = jsonArray.getJSONObject(i);
                                     result = postInfo.getString("refCode");
                                     billNumberTV.setText(result);
-                                    ///Toast.makeText(PhoneNumberVerification.this, "array : "+postInfo.getString("result"), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(PayWithRocketActivity.this, "jsonException : " + e.toString(), Toast.LENGTH_SHORT).show();
+                            billNumberTV.setText("3452");
+                           Log.d("jsnexception",e.toString());
                         }
+
+
+
+
+
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -97,5 +106,20 @@ public class PayWithRocketActivity extends AppCompatActivity {
             }
         };
         queue.add(stringRequest);
+    }
+
+    public void startUserProfileActivity(View view) {
+
+        Log.d("image_url",imageUrl);
+        DownloadImage downloadImage=new DownloadImage();
+        downloadImage.downloadImage(imageUrl,PayWithRocketActivity.this);
+        Toast.makeText(PayWithRocketActivity.this, "ধন্যবাদ আপনার পেমেন্ট টি যাচাই করা হচ্ছে", Toast.LENGTH_SHORT).show();
+        Intent myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
+        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        myIntent.putExtra("cameFromWhichActivity","payWithRocket");
+        this.startActivity(myIntent);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        finish();
+
     }
 }

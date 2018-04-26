@@ -1,10 +1,12 @@
 package lct.mysymphony.helper;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -28,7 +30,7 @@ public class DataHelper extends SQLiteOpenHelper {
     public static final String COL_CONTENT_STATUS = "contentStatus";
 
     public static final int DATABASE_VERSION = 1;
-    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "( " + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT  , " + CONTENT_ID + " INTEGER, " + COL_CONTENT_CAT + " TEXT , " + COL_CONTENT_TYPE + " TEXT , " + COL_CONTENT_TITLE + " TEXT , " + COL_CONTENT_DESC + " TEXT ," + COL_CONTENT_TEXT + " TEXT , " + COL_CONTENT_DATA + "  BLOB , " + COL_DOWLOAD_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_EXPIRE_TIMESTAMP + "DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_CONTENT_STATUS + "STRING )";
+    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "( " + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT  , " + COL_CONTENT_CAT + " TEXT , " + COL_CONTENT_TYPE + " TEXT , " + COL_CONTENT_TITLE + " TEXT , " + COL_CONTENT_DESC + " TEXT ," + COL_CONTENT_TEXT + " TEXT , " + COL_CONTENT_DATA + "  BLOB , " + COL_DOWLOAD_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_EXPIRE_TIMESTAMP + "DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_CONTENT_STATUS + "STRING )";
     public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     public DataHelper(Context context) {
@@ -63,8 +65,8 @@ public class DataHelper extends SQLiteOpenHelper {
 
         try {
             values = new ContentValues();
-            values.put("img", buffer);
-            values.put("description", "Image description");
+            values.put("contentData", buffer);
+            values.put("contentDesc", "Image description");
             // Insert Row
             long i = db.insert(TABLE_NAME, null, values);
             Log.i("Insert", i + "");
@@ -87,26 +89,34 @@ public class DataHelper extends SQLiteOpenHelper {
         // Open the database for reading
         SQLiteDatabase db = this.getReadableDatabase();
         // Start the transaction.
+        Log.d("enter","enter");
         db.beginTransaction();
 
         try {
             String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + id;
             Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.getCount()==0)
+                Log.d("cursor","0");
+            else if (cursor.getCount()>0)
+                Log.d("cursor","found");
+            cursor.moveToFirst();
             if (cursor.getCount() > 0) {
-                while (cursor.moveToNext()) {
+                ///while (cursor.moveToNext()) {
                     // Convert blob data to byte array
-                    byte[] blob = cursor.getBlob(cursor.getColumnIndex("img"));
+                    byte[] blob = cursor.getBlob(cursor.getColumnIndex("contentData"));
+                    ByteArrayInputStream inputStream = new ByteArrayInputStream(blob);
                     Log.d("getBitmap", "blob lenght: " + blob.length);
                     // Convert the byte array to Bitmap
-                    bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length);
+                    bitmap = BitmapFactory.decodeStream(inputStream);
 
-                }
+                ///}
 
             }
             db.setTransactionSuccessful();
 
         } catch (SQLiteException e) {
             e.printStackTrace();
+            Log.d("excption",e.toString());
 
         } finally {
             db.endTransaction();
@@ -115,5 +125,12 @@ public class DataHelper extends SQLiteOpenHelper {
             // Close database
         }
         return bitmap;
+    }
+
+    public long getRowCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        long count = DatabaseUtils.queryNumEntries(db, TABLE_NAME);
+        db.close();
+        return count;
     }
 }

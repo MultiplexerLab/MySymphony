@@ -52,7 +52,9 @@ public class PachMishaliDescriptionActivity extends AppCompatActivity {
     }
 
     public void mullochar(View view) {
+        PacMishali object = (PacMishali) getIntent().getSerializableExtra("Data");
         Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
+        purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);
     }
 }

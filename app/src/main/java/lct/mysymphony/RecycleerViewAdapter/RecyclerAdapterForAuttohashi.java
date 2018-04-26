@@ -91,6 +91,7 @@ public class RecyclerAdapterForAuttohashi extends RecyclerView.Adapter<RecyclerA
                 public void onClick(View view) {
                     Intent myIntent = new Intent(activity, AuttohasiDescriptionActivity.class);
                     myIntent.putExtra("Data", (Serializable) auttohashiArrayList.get(getAdapterPosition()));
+                    myIntent.putExtra("imageUrl",auttohashiArrayList.get(getAdapterPosition()).getImageUrl());
                     myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     activity.startActivity(myIntent);
                     activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);

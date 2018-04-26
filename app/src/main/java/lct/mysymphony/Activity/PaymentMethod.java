@@ -16,6 +16,7 @@ public class PaymentMethod extends AppCompatActivity {
     ImageButton payWithPin, payWithBikash, payWithRocket, payWithMaxis, payWithVisa, payWithMasterCard;
     ImageButton selectedButton;
     String selectedMethod = "";
+    String imageUrl;
     ///Integer price;
 
 
@@ -31,6 +32,7 @@ public class PaymentMethod extends AppCompatActivity {
         payWithMaxis = findViewById(R.id.payWithMaxis);
         payWithVisa = findViewById(R.id.payWithVisa);
         payWithMasterCard = findViewById(R.id.payWithMasterCard);
+        imageUrl=getIntent().getStringExtra("imageUrl");
 
         payWithPin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +117,7 @@ public class PaymentMethod extends AppCompatActivity {
             }else if(selectedMethod.contains("Rocket")){
                 Intent intent = new Intent(PaymentMethod.this, PayWithRocketActivity.class);
                 intent.putExtra("paymentMethod","Rocket");
+                intent.putExtra("imageUrl",imageUrl);
                 ///intent.putExtra("price",price);
                 startActivity(intent);
             }else

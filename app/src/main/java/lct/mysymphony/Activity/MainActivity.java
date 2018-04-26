@@ -49,8 +49,22 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("login", MODE_PRIVATE);
         int loginStatus = prefs.getInt("loginStatus", 0);
         if(loginStatus==1){
-            Intent intent = new Intent(MainActivity.this, HomePage.class);
-            startActivity(intent);
+
+            String cameFromWhichActivity=getIntent().getStringExtra("cameFromWhichActivity");
+            if (cameFromWhichActivity!=null)
+            {
+                if (cameFromWhichActivity.contains("HomePage"))
+                {
+                    ActivityCompat.finishAffinity(this);
+                }
+            }
+            else
+            {
+                Intent intent = new Intent(MainActivity.this, HomePage.class);
+                startActivity(intent);
+            }
+
+
         }
         imageView = findViewById(R.id.IV);
         Glide.with(this).load(R.drawable.symphoni).into(imageView);

@@ -34,6 +34,7 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
     TextView nameTV, birthDateTV;
     RequestQueue queue;
     String phoneNumber;
+    String userName;
 
     public MyInfoFragmentInProfileActivity() {
         // Required empty public constructor
@@ -70,7 +71,11 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
                             JSONObject postInfo = response.getJSONObject(0);
                             if (postInfo != null) {
                                 birthDateTV.setText("   " + postInfo.getString("applicantBirthDate"));
+                                userName=postInfo.getString("applicantBirthDate");
                                 nameTV.setText("   " + postInfo.getString("partnerName"));
+
+                                ActivityCommunicator activityCommunicator=(ActivityCommunicator)getActivity();
+                                activityCommunicator.passDataToActivity(userName);
 
                             } else {
                                 Log.d("json", "null");
@@ -90,5 +95,9 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
         });
 
         queue.add(jsonArrayRequest);
+    }
+
+    public interface ActivityCommunicator{
+         void passDataToActivity(String someValue);
     }
 }

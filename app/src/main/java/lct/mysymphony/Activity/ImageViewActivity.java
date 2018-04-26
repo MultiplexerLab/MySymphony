@@ -14,12 +14,13 @@ import lct.mysymphony.R;
 public class ImageViewActivity extends AppCompatActivity {
 
     ///int price;
+    String wallpaerUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_view);
 
-        String wallpaerUrl = (String) getIntent().getSerializableExtra("wallpaper");
+        wallpaerUrl = (String) getIntent().getSerializableExtra("wallpaper");
         ///price=getIntent().getIntExtra("price",0);
         ///Log.d("price",Integer.toString(price));
 
@@ -28,6 +29,8 @@ public class ImageViewActivity extends AppCompatActivity {
 
     public void purChase(View view) {
         Intent purchase = new Intent(ImageViewActivity.this, PaymentMethod.class);
+        Log.d("img_image",wallpaerUrl);
+        purchase.putExtra("imageUrl",wallpaerUrl);
         ///purchase.putExtra("price",price);
         startActivity(purchase);
     }

@@ -38,7 +38,6 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
 
     private android.support.v7.widget.Toolbar toolbar;
     RequestQueue queue;
-    String deviceId = "default";
     EditText DOB;
     String DOBTV;
     String phoneNumber = "";
@@ -58,7 +57,6 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         txtpassword = findViewById(R.id.txtpassword);
         txtUserName = findViewById(R.id.txtUserName);
         phoneNumber = getIntent().getStringExtra("phoneNumber");
-
         queue = Volley.newRequestQueue(SignUpActivity.this);
         checkPermissions();
     }
@@ -130,6 +128,10 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     }
 
     public void signUpRequest() {
+
+
+
+
         String url = "http://bot.sharedtoday.com:9500/ws/commonUpdateForArrayJSON?tbl=Partner&keyname=partnerId&id=" + phoneNumber;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -152,6 +154,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("ErrorInSignUp", error.toString());
+                Toast.makeText(getApplicationContext(), "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -209,6 +212,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInSignIn", error.toString());
+                Toast.makeText(getApplicationContext(), "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
 
             }
         }) {
@@ -249,6 +253,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInSignIn", error.toString());
+                Toast.makeText(getApplicationContext(), "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
 
             }
         });

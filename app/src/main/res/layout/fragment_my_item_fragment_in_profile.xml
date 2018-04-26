@@ -6,10 +6,17 @@
     tools:context=".Fragment.MyItemFragmentInProfileActivity">
 
     <!-- TODO: Update blank fragment layout -->
-    <ImageView
+    <!--<ImageView-->
 
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="250dp"-->
+        <!--android:src="@drawable/my_item__" />-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/RV_MyItemFragMent"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:src="@drawable/my_item__" />
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

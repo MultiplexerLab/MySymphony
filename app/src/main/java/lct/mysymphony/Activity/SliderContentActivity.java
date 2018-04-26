@@ -14,6 +14,7 @@ import lct.mysymphony.R;
 
 public class SliderContentActivity extends AppCompatActivity {
 
+    String imageUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +22,7 @@ public class SliderContentActivity extends AppCompatActivity {
 
         SliderImage wallpaerUrl = (SliderImage) getIntent().getSerializableExtra("wallpaper");
 
+        imageUrl=wallpaerUrl.getImage_url();
         Glide.with(this).load(wallpaerUrl.getImage_url()).into((ImageView) findViewById(R.id.imageViewWallpaper));
         TextView descriptio = findViewById(R.id.description);
         descriptio.setText(wallpaerUrl.getDescription());
@@ -28,6 +30,7 @@ public class SliderContentActivity extends AppCompatActivity {
 
     public void purChase(View view) {
         Intent purchase = new Intent(SliderContentActivity.this, PaymentMethod.class);
+        purchase.putExtra("imageUrl",imageUrl);
         startActivity(purchase);
     }
 

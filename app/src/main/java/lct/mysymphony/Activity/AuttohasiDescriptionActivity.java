@@ -48,7 +48,9 @@ public class AuttohasiDescriptionActivity extends AppCompatActivity {
     }
 
     public void mullochar(View view) {
+        Auttohashi object = (Auttohashi) getIntent().getSerializableExtra("Data");
         Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
+        purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);
     }
 }

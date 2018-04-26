@@ -32,7 +32,6 @@
         <activity android:name=".Activity.ForgetPasswordActivity" />
         <activity android:name=".Activity.KheladhulaActivity" />
         <activity android:name=".Activity.WallpaperBundleActivity" />
-        <activity android:name=".Activity.UserProfile" />
         <activity android:name=".Activity.GoromKhoborActivity" />
         <activity android:name=".Activity.PorashunaActivity" />
         <activity android:name=".Activity.AuttoHashiActivity" />
@@ -76,6 +75,7 @@
         <activity android:name=".Activity.CartoonDescriptionActivity" />
         <activity android:name=".Activity.JapitiJibonDescriptionActivity" />
         <activity android:name=".Activity.PayWithRocketActivity"></activity>
+        <activity android:name=".Activity.PayWithPinActivity"></activity>
     </application>
 
 </manifest>

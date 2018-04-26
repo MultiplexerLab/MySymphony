@@ -402,6 +402,7 @@ public class HomePage extends AppCompatActivity {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        myIntent.putExtra("cameFromWhichActivity","HomePage");
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();

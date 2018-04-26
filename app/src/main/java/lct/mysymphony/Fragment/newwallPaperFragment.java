@@ -53,19 +53,12 @@ public class newwallPaperFragment extends Fragment {
             Toast.makeText(getActivity(), "Null", Toast.LENGTH_SHORT).show();
 
 
-
-
         recyclerViewForNewWallPaper= view.findViewById(R.id.RV_newWallPaperFragment);
         int numberOfColumns = 3;
-
         recyclerViewForNewWallPaper.setLayoutManager(new GridLayoutManager(getActivity(),numberOfColumns,
                 LinearLayoutManager.VERTICAL, false));
-
         SnapHelper snapHelperStartMulloChar = new GravitySnapHelper(Gravity.START);
         snapHelperStartMulloChar.attachToRecyclerView(recyclerViewForNewWallPaper);
-
-
-
         recyclerViewForNewWallPaper.setHasFixedSize(true);
         adapterForNewWallPaper = new RecyclerAdapterForNewWallPaperFragment(getActivity(),seraChobiArrayList);
 

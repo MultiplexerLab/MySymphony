@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +17,7 @@ import lct.mysymphony.Fragment.PaymentListFragmentInProfileActivity;
 import lct.mysymphony.R;
 import lct.mysymphony.ViewpagerAdapter.ViewPagerAdapterForSports;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements MyInfoFragmentInProfileActivity.ActivityCommunicator {
 
     private android.support.v7.widget.Toolbar toolbar;
     TabLayout tabLayout;
@@ -24,6 +25,8 @@ public class ProfileActivity extends AppCompatActivity {
     ViewPagerAdapterForSports viewPagerAdapterForSports;
     ImageView logoutIcon;
     TextView nameTVInActivityUserProfile;
+    TextView nameTV;
+    String cameFromWhichActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         logoutIcon = toolbar.findViewById(R.id.logoutIcon);
         nameTVInActivityUserProfile = findViewById(R.id.nameTVInActivityUserProfile);
+        nameTV=findViewById(R.id.nameTVInActivityUserProfile);
+
+
 
         logoutIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +73,12 @@ public class ProfileActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
 
+        cameFromWhichActivity=getIntent().getStringExtra("cameFromWhichActivity");
+        if (cameFromWhichActivity!=null)
+        {
+            tabLayout.setScrollPosition(1,0f,true);
+            viewPager.setCurrentItem(1);
+        }
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -95,8 +107,17 @@ public class ProfileActivity extends AppCompatActivity {
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
+
+    }
+
+
+
+    @Override
+    public void passDataToActivity(String someValue) {
+        Log.d("enteractivity",someValue);
+        nameTV.setText(someValue);
 
     }
 }

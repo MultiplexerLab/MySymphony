@@ -75,7 +75,9 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
     }
 
     public void mullochar(View view) {
+        JapitoJibonMC object = (JapitoJibonMC) getIntent().getSerializableExtra("Data");
         Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
+        purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);
     }
 }

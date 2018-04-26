@@ -48,7 +48,9 @@ public class BigganOProjuktiDescriptionActivity extends AppCompatActivity {
     }
 
     public void mullochar(View view) {
+        BigganOProjukti object = (BigganOProjukti) getIntent().getSerializableExtra("Data");
         Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
+        purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);
     }
 }

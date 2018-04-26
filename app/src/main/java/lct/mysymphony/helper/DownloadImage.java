@@ -61,7 +61,7 @@ public class DownloadImage {
             //ImageView imgView=(ImageView)findViewById(R.id.imgview);
             // Read the first image from database and show it in ImageView
             //imgView.setImageBitmap(dbHelper.getBitmap(1));
-            Log.i("downlaoded image", dbHelper.getBitmap(1).toString());
+            ///Log.i("downlaoded image", dbHelper.getBitmap(1).toString());
         }
     }
 }
