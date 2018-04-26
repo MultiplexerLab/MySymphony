@@ -34,9 +34,7 @@ public class GoromKhoborActivity extends AppCompatActivity {
     private android.support.v7.widget.Toolbar toolbar;
     private RecyclerView recyclerViewForGoromKhobor;
     public RecyclerAdapterForGoromKhobor adapterForGoromKhobor;
-
     ArrayList<GoromKhobor> goromKhoborArrayList;
-
     RequestQueue queue;
 
     @Override
@@ -46,7 +44,6 @@ public class GoromKhoborActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbarlayoutingoromkhobor);
         setSupportActionBar(toolbar);
-
         goromKhoborArrayList = new ArrayList<>();
         queue = Volley.newRequestQueue(GoromKhoborActivity.this);
         loadDataFromVolley();
@@ -61,11 +58,8 @@ public class GoromKhoborActivity extends AppCompatActivity {
 
                         try {
                             JSONArray jsonHotNewsContentArr = response.getJSONArray("contents");
-
                             setGoromKhoborContent(jsonHotNewsContentArr);
 
-
-                            //settop_contents(jsontop_contentsArr);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -113,7 +107,6 @@ public class GoromKhoborActivity extends AppCompatActivity {
 
         recyclerViewForGoromKhobor.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
-
         SnapHelper snapHelperStartGoromKhobor = new GravitySnapHelper(Gravity.START);
         snapHelperStartGoromKhobor.attachToRecyclerView(recyclerViewForGoromKhobor);
         recyclerViewForGoromKhobor.setHasFixedSize(true);
@@ -129,6 +122,5 @@ public class GoromKhoborActivity extends AppCompatActivity {
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in , R.anim.right_out);
         finish();
-
     }
 }

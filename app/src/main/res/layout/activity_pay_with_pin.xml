@@ -34,7 +34,6 @@
             android:orientation="horizontal">
 
             <TextView
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="পে উইথ পিন"
@@ -46,7 +45,6 @@
                 android:layout_height="wrap_content"
                 android:text=" এজেন্টকে নীচের পেমেন্ট কোড"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
-
 
         </LinearLayout>
 
@@ -129,11 +127,6 @@
             android:layout_width="320dp"
             android:layout_height="70dp"
             android:layout_marginBottom="10dp"/>
-
-
     </LinearLayout>
-
-
-
 
 </LinearLayout>

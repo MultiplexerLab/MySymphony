@@ -32,7 +32,6 @@ public class CricketSorbosheshSongbadDescriptionActivity extends AppCompatActivi
 
     public void setDescripTionData() {
         Kheladhula_Cricket_sorboshesh_sobgbad object = (Kheladhula_Cricket_sorboshesh_sobgbad) getIntent().getSerializableExtra("Data");
-
         newsTitle.setText(object.getContentTitle());
         newsPublishedAt.setText(object.getPublishedAt());
         newsDescription.setText(object.getContentDescription());
@@ -50,8 +49,6 @@ public class CricketSorbosheshSongbadDescriptionActivity extends AppCompatActivi
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
-
-
     }
 
     public void mullochar(View view) {

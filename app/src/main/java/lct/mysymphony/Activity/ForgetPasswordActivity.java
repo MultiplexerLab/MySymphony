@@ -34,22 +34,17 @@ public class ForgetPasswordActivity extends AppCompatActivity {
 
         userPhoneNumber=findViewById(R.id.txtMobileNumInForgotPassword);
         editor = getSharedPreferences("phoneNumber", MODE_PRIVATE).edit();
-
-
         queue = Volley.newRequestQueue(this);
-
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
-
     }
 
     public void resetPassword(View view) {
@@ -58,12 +53,9 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     }
 
     private void sendUserPhoneNumberToServer() {
-
         String phoneNumber=userPhoneNumber.getText().toString();
         editor.putString("phoneNo", phoneNumber);
         String url= "http://bot.sharedtoday.com:9500/ws/gen2FACode?prcName=forgotPass&uid="+userPhoneNumber.getText().toString();
-
-
         final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -95,8 +87,6 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                             overridePendingTransition(R.anim.left_in, R.anim.left_out);
                             finish();
                         }
-
-
 
                     }
                 }, new Response.ErrorListener() {

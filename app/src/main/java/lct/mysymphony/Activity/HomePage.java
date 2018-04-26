@@ -50,19 +50,18 @@ import lct.mysymphony.helper.Endpoints;
 
 public class HomePage extends AppCompatActivity {
     Context context;
+
     ArrayList<SliderImage> sliderImages;
     ArrayList<String> topContentImages;
     ArrayList<JapitoJibonMC> japitoJibonMCArrayList;
-
     ArrayList<MulloChar> mulloCharArrayList;
     ArrayList<ShocolChobi> shocolChobiArrayList;
-
     ArrayList<GamesZone> gamesZoneArrayList;
     ArrayList<ShikkhaSohaYika> shikkhaSohaYikaArrayList;
-
     BottomNavigationView bottomNavigationView;
 
     private android.support.v7.widget.Toolbar toolbar;
+
     CustomSwipeAdapter customSwipeAdapter;
     ViewPager viewPager;
 
@@ -81,12 +80,10 @@ public class HomePage extends AppCompatActivity {
     private RecyclerView recyclerViewForShikkhaSohayika;
     public RecyclerAdapterForShikkhaSohayika adapterForShikkhaSohayika;
 
-
     private RecyclerView recyclerViewForShocolChobi;
     public RecyclerAdapterForShocolChobi adapterForShocolChobi;
 
     RequestQueue queue;
-
     ImageView profileIcon, notificationIcon;
 
     @Override
@@ -96,26 +93,17 @@ public class HomePage extends AppCompatActivity {
 
         context = HomePage.this;
         queue = Volley.newRequestQueue(HomePage.this);
-
         sliderImages = new ArrayList<>();
         topContentImages = new ArrayList<>();
-
         toolbar = findViewById(R.id.toolbarlayoutinhome_page);
         setSupportActionBar(toolbar);
-
         profileIcon = findViewById(R.id.profileIcon);
         notificationIcon = findViewById(R.id.notificationInHomePageToolbar);
-
         japitoJibonMCArrayList = new ArrayList<>();
         mulloCharArrayList = new ArrayList<>();
         gamesZoneArrayList = new ArrayList<>();
         shocolChobiArrayList = new ArrayList<>();
         shikkhaSohaYikaArrayList = new ArrayList<>();
-
-        //textView Onclicks
-
-        ///Bottom navigation
-
         bottomNavigationView = findViewById(R.id.btmNavigation);
         bottomNavigationView.getMenu().findItem(R.id.home_bottom_navigation).setChecked(true);
 
@@ -138,29 +126,22 @@ public class HomePage extends AppCompatActivity {
                 startActivity(profileIntent);
             }
         });
-
-
         notificationIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent profileIntent = new Intent(HomePage.this, NotificationActivity.class);
                 startActivity(profileIntent);
-
             }
         });
-
         loadDataFromVolley();
     }
 
     private void loadDataFromVolley() {
-
         StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, Endpoints.NEW_HOME_GET_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         JSONObject jsonObject = null;
-                        JSONArray jsonArray = null;
 
                         try {
                             String jsonFormattedString = response.replaceAll("\\\\", "");
@@ -197,11 +178,9 @@ public class HomePage extends AppCompatActivity {
                             JSONArray shocol_chobi__content_Arr = jsonObject.getJSONArray("moving_contents");
                             setShocolChobiContent(shocol_chobi__content_Arr);
 
-                            //settop_contents(jsontop_contentsArr);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -209,12 +188,10 @@ public class HomePage extends AppCompatActivity {
                 Log.e("Volley", error.toString());
             }
         });
-
         queue.add(jsonObjectRequest);
     }
 
     private void setShocolChobiContent(JSONArray shocol_chobi__content_arr) {
-
 
         if (shocol_chobi__content_arr.length() > 0) {
             for (int i = 0; i < shocol_chobi__content_arr.length(); i++) {
@@ -222,22 +199,15 @@ public class HomePage extends AppCompatActivity {
                     String contentUrl = shocol_chobi__content_arr.getJSONObject(i).getString("contentUrl");
                     String contentTitle = shocol_chobi__content_arr.getJSONObject(i).getString("contentTitle");
                     String contentType = shocol_chobi__content_arr.getJSONObject(i).getString("contentType");
-
                     shocolChobiArrayList.add(new ShocolChobi(contentType, contentUrl, contentTitle));
-
                 } catch (JSONException e) {
-
                     e.printStackTrace();
                 }
             }
-
             initializeShocolChobiRecyclerview();
-
-
         } else {
             Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void setGamesZoneContent(JSONArray games_zone__content_arr) {
@@ -250,30 +220,20 @@ public class HomePage extends AppCompatActivity {
                     String contentType = games_zone__content_arr.getJSONObject(i).getString("contentType");
                     int previousPrice = games_zone__content_arr.getJSONObject(i).getInt("previousPrice");
                     int newPrice = games_zone__content_arr.getJSONObject(i).getInt("newPrice");
-
                     gamesZoneArrayList.add(new GamesZone(contentType, contentUrl, contentTitle, previousPrice, newPrice));
-
-                    /*if (contentType.equals("video")) {
-                        japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), "video"));
-                    } else {
-                        japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, japito_jibon_content_arr.getJSONObject(i).getString("contentUrl"), "image"));
-                    }*/
 
                 } catch (JSONException e) {
                     Log.d("exception", e.toString());
-
                     e.printStackTrace();
                 }
             }
 
             Log.d("size", "size : " + Integer.toString(gamesZoneArrayList.size()));
-
             initializeGamesZoneRecyclerView();
         } else {
             Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
         }
     }
-
     private void setShikkhaSohayikaContent(JSONArray shikkha_sohayika__content_arr) {
 
         if (shikkha_sohayika__content_arr.length() > 0) {
@@ -290,7 +250,6 @@ public class HomePage extends AppCompatActivity {
                     } else {
                         shikkhaSohaYikaArrayList.add(new ShikkhaSohaYika(contentType, contentDescription, "", contentTitle, imageUrl));
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -299,8 +258,6 @@ public class HomePage extends AppCompatActivity {
         } else {
             Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     private void setMulloCharContent(JSONArray mullo_char_content_arr) {
@@ -313,19 +270,10 @@ public class HomePage extends AppCompatActivity {
                     String contentType = mullo_char_content_arr.getJSONObject(i).getString("contentType");
                     String image_url = mullo_char_content_arr.getJSONObject(i).getString("image_url");
                     int previousPrice = mullo_char_content_arr.getJSONObject(i).getInt("previousPrice");
-
                     int newPrice = mullo_char_content_arr.getJSONObject(i).getInt("newPrice");
-
                     mulloCharArrayList.add(new MulloChar(contentType, contentUrl, contentTitle, previousPrice, newPrice, image_url));
 
-                    /*if (contentType.equals("video")) {
-                        japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), "video"));
-                    } else {
-                        japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, japito_jibon_content_arr.getJSONObject(i).getString("contentUrl"), "image"));
-                    }*/
-
                 } catch (JSONException e) {
-
                     Log.d("mullochardata", e.toString());
                     e.printStackTrace();
                 }
@@ -340,7 +288,6 @@ public class HomePage extends AppCompatActivity {
         if (japito_jibon_content_arr.length() > 0) {
             for (int i = 0; i < japito_jibon_content_arr.length(); i++) {
                 try {
-                    ///String contentUrl = japito_jibon_content_arr.getJSONObject(i).getString("contentUrl");
                     String contentTitle = japito_jibon_content_arr.getJSONObject(i).getString("contentTitle");
                     String contentType = japito_jibon_content_arr.getJSONObject(i).getString("contentType");
                     String contentDescription = japito_jibon_content_arr.getJSONObject(i).getString("contentDescription");
@@ -353,7 +300,6 @@ public class HomePage extends AppCompatActivity {
                         Log.i("Data", "Image");
                         japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("contentUrl"), "image", contentUrl));
                     }
-
                 } catch (JSONException e) {
                     Log.d("japito_jibon_exception", e.toString());
                     e.printStackTrace();
@@ -363,17 +309,14 @@ public class HomePage extends AppCompatActivity {
         } else {
             Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void setTopContent(JSONArray top_contentsArr) {
-
         if (top_contentsArr.length() > 0) {
             for (int i = 0; i < top_contentsArr.length(); i++) {
                 try {
                     String contentUrl = top_contentsArr.getJSONObject(i).getString("contentUrl");
                     topContentImages.add(contentUrl);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -385,14 +328,12 @@ public class HomePage extends AppCompatActivity {
     }
 
     private void setSliderContent(JSONArray jsonSliderContentArr) {
-
         if (jsonSliderContentArr.length() > 0) {
             for (int i = 0; i < jsonSliderContentArr.length(); i++) {
                 try {
                     String contentUrl = jsonSliderContentArr.getJSONObject(i).getString("contentUrl");
                     String description = jsonSliderContentArr.getJSONObject(i).getString("contentDescription");
                     sliderImages.add(new SliderImage(contentUrl, description));
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -410,11 +351,9 @@ public class HomePage extends AppCompatActivity {
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
@@ -422,7 +361,6 @@ public class HomePage extends AppCompatActivity {
         finish();
 
     }
-
     public void startSportActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), KheladhulaActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -440,7 +378,6 @@ public class HomePage extends AppCompatActivity {
     }
 
     public void startAuttoHashiActivity(View view) {
-
         Intent myIntent = new Intent(getApplicationContext(), AuttoHashiActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
@@ -449,38 +386,30 @@ public class HomePage extends AppCompatActivity {
     }
 
     public void startJibonJaponActivity(View view) {
-
         Intent myIntent = new Intent(getApplicationContext(), JibonJaponActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
-
     }
 
     public void startPachMishaliActivity(View view) {
-
         Intent myIntent = new Intent(getApplicationContext(), PachMishaliActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
-
-
     }
 
     public void startBigganOProjuktiActivity(View view) {
-
         Intent myIntent = new Intent(getApplicationContext(), BigganOProjuktiActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
-
     }
 
     public void startCartoonActivity(View view) {
-
         Intent myIntent = new Intent(getApplicationContext(), CartoonActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
@@ -493,118 +422,76 @@ public class HomePage extends AppCompatActivity {
         customSwipeAdapter = new CustomSwipeAdapter(this, sliderImages);
         viewPager.setAdapter(customSwipeAdapter);
         CirclePageIndicator indicator = findViewById(R.id.indicator);
-
         indicator.setViewPager(viewPager);
-
         final float density = getResources().getDisplayMetrics().density;
         indicator.setRadius(5 * density);
     }
 
     public void initializeTopContentRecyclerView() {
         recyclerViewForSeraChobi = findViewById(R.id.RV_SeraChobi);
-
         recyclerViewForSeraChobi.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false));
-
         SnapHelper snapHelperStart = new GravitySnapHelper(Gravity.START);
         snapHelperStart.attachToRecyclerView(recyclerViewForSeraChobi);
-
         recyclerViewForSeraChobi.setHasFixedSize(true);
         adapterForSeraChobi = new RecyclerAdapterForSeraChobi(this, topContentImages);
-
         recyclerViewForSeraChobi.setAdapter(adapterForSeraChobi);
     }
 
     public void initializeJapitoJibonRecyclerView() {
-        //Recyclerview for japito jibon
-
         recyclerViewForJapitoJibon = findViewById(R.id.RV_japitoJibon);
-
         recyclerViewForJapitoJibon.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
-
         SnapHelper snapHelperStartJapitoJibon = new GravitySnapHelper(Gravity.START);
         snapHelperStartJapitoJibon.attachToRecyclerView(recyclerViewForJapitoJibon);
-
-
         recyclerViewForJapitoJibon.setHasFixedSize(true);
         adapterForJapitoJibon = new RecyclerAdapterForJapitoJibon(this, japitoJibonMCArrayList);
-
         recyclerViewForJapitoJibon.setAdapter(adapterForJapitoJibon);
     }
 
 
     public void initializeMulloCharRecyclerView() {
-
-        //Recyclerview for mullochar
-
-
         recyclerViewForMulloChar = findViewById(R.id.RV_mulloChar);
-
         recyclerViewForMulloChar.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false));
-
         SnapHelper snapHelperStartMulloChar = new GravitySnapHelper(Gravity.START);
         snapHelperStartMulloChar.attachToRecyclerView(recyclerViewForMulloChar);
-
         recyclerViewForMulloChar.setHasFixedSize(true);
         adapterForMulloChar = new RecyclerAdapterForMulloChar(this, mulloCharArrayList);
-
         recyclerViewForMulloChar.setAdapter(adapterForMulloChar);
-
     }
 
-
     public void initializeGamesZoneRecyclerView() {
-
         recyclerViewForGamesZone = findViewById(R.id.RV_gamesZone);
-
         recyclerViewForGamesZone.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false));
-
         SnapHelper snapHelperStartMulloChar = new GravitySnapHelper(Gravity.START);
         snapHelperStartMulloChar.attachToRecyclerView(recyclerViewForGamesZone);
-
         recyclerViewForGamesZone.setHasFixedSize(true);
         adapterForGamesZone = new RecyclerAdapterForGamesZone(this, gamesZoneArrayList);
-
         recyclerViewForGamesZone.setAdapter(adapterForGamesZone);
-
     }
 
     public void initializeShocolChobiRecyclerview() {
-        //Recyclerview for ShocholChobi
-
         recyclerViewForShocolChobi = findViewById(R.id.RV_ShocolChobi);
-
         recyclerViewForShocolChobi.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false));
-
         SnapHelper snapHelperStartShocolChobi = new GravitySnapHelper(Gravity.START);
         snapHelperStartShocolChobi.attachToRecyclerView(recyclerViewForShocolChobi);
-
         recyclerViewForShocolChobi.setHasFixedSize(true);
         adapterForShocolChobi = new RecyclerAdapterForShocolChobi(this, shocolChobiArrayList);
-
         recyclerViewForShocolChobi.setAdapter(adapterForShocolChobi);
     }
 
     public void initializeShikkhaSohayikaRecyclerview() {
-        //Recyclerview for ShikkhaSohayika
-
         recyclerViewForShikkhaSohayika = findViewById(R.id.RV_ShikkhaSohayika);
-
         recyclerViewForShikkhaSohayika.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
-
         SnapHelper snapHelperStartShikkhaSohayika = new GravitySnapHelper(Gravity.START);
         snapHelperStartShikkhaSohayika.attachToRecyclerView(recyclerViewForShikkhaSohayika);
-
         recyclerViewForShikkhaSohayika.setHasFixedSize(true);
         adapterForShikkhaSohayika = new RecyclerAdapterForShikkhaSohayika(this, shikkhaSohaYikaArrayList);
-
         recyclerViewForShikkhaSohayika.setAdapter(adapterForShikkhaSohayika);
-
     }
 
     public void startGoromKhoborPage(View view) {

@@ -24,7 +24,6 @@ public class CartoonDescriptionActivity extends AppCompatActivity {
         newsImageView = findViewById(R.id.imgCartoonDescription);
         newsTitle = findViewById(R.id.newsTitleCartoonDescription);
         newsDescription = findViewById(R.id.newsdescriptionCartoonDescription);
-
         setDescripTionData();
     }
 
@@ -37,20 +36,14 @@ public class CartoonDescriptionActivity extends AppCompatActivity {
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
-
-
     }
 
     public void setDescripTionData() {
         Cartoon object = (Cartoon) getIntent().getSerializableExtra("Data");
-
         newsTitle.setText(object.getContentTitle());
         newsDescription.setText(object.getContentDescription());
         Glide.with(CartoonDescriptionActivity.this)
                 .load(object.getImageUrl())
                 .into(newsImageView);
-
     }
-
-
 }

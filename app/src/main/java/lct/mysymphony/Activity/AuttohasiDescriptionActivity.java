@@ -24,15 +24,11 @@ public class AuttohasiDescriptionActivity extends AppCompatActivity {
         newsImageView = findViewById(R.id.imgAuttohasiDescription);
         newsTitle = findViewById(R.id.newsTitleAuttohasiDescription);
         newsDescription = findViewById(R.id.newsdescriptionAuttohasiDescription);
-
         setDescripTionData();
-
-
     }
 
     @Override
     public void onBackPressed() {
-
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), AuttoHashiActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -44,13 +40,11 @@ public class AuttohasiDescriptionActivity extends AppCompatActivity {
 
     public void setDescripTionData() {
         Auttohashi object = (Auttohashi) getIntent().getSerializableExtra("Data");
-
         newsTitle.setText(object.getContentTitle());
         newsDescription.setText(object.getContentDescription());
         Glide.with(AuttohasiDescriptionActivity.this)
                 .load(object.getImageUrl())
                 .into(newsImageView);
-
     }
 
     public void mullochar(View view) {

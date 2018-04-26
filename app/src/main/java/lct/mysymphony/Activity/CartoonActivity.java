@@ -29,16 +29,11 @@ import lct.mysymphony.helper.Endpoints;
 public class CartoonActivity extends AppCompatActivity {
 
     private android.support.v7.widget.Toolbar toolbar;
-
-
     private RecyclerView recyclerViewForCartoon;
     public RecyclerAdapterForCartoon adapterForCartoon;
-
     RecyclerView.LayoutManager mLayoutManager;
-
     ArrayList<Cartoon> cartoonArrayList;
     RequestQueue queue;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +42,9 @@ public class CartoonActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbarlayoutincartoon);
         setSupportActionBar(toolbar);
-
         cartoonArrayList = new ArrayList<>();
         queue = Volley.newRequestQueue(CartoonActivity.this);
-
         loadDataFromVolley();
-
-
     }
 
     private void loadDataFromVolley() {
@@ -62,11 +53,9 @@ public class CartoonActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
                         try {
                             JSONArray AuttoHashiContentArr = response.getJSONArray("contents");
                             setAuttoHashiContent(AuttoHashiContentArr);
-                            //settop_contents(jsontop_contentsArr);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -77,7 +66,6 @@ public class CartoonActivity extends AppCompatActivity {
                 Log.e("Volley", error.toString());
             }
         });
-
         queue.add(jsonObjectRequest);
     }
 
@@ -90,8 +78,6 @@ public class CartoonActivity extends AppCompatActivity {
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
-
-
     }
 
     private void setAuttoHashiContent(JSONArray auttoHashiContentArr) {
@@ -123,13 +109,10 @@ public class CartoonActivity extends AppCompatActivity {
 
     public void initializeRecyclerView() {
         recyclerViewForCartoon = findViewById(R.id.RV_Cartoon);
-
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerViewForCartoon.setLayoutManager(mLayoutManager);
-
         recyclerViewForCartoon.setHasFixedSize(true);
         adapterForCartoon= new RecyclerAdapterForCartoon(this, cartoonArrayList);
-
         recyclerViewForCartoon.setAdapter(adapterForCartoon);
     }
 }

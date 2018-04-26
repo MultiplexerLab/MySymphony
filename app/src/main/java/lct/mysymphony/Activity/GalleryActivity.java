@@ -18,7 +18,6 @@ public class GalleryActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewPagerAdapterForGallery viewPagerAdapterForGallery;
-
     Context context;
 
     @Override
@@ -28,32 +27,20 @@ public class GalleryActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbarlayoutingallery);
         setSupportActionBar(toolbar);
-
         context = GalleryActivity.this;
-
         tabLayout = findViewById(R.id.tabLayoutinGalleryActivity);
         viewPager = findViewById(R.id.viewPagerInGallery);
-
         viewPagerAdapterForGallery = new ViewPagerAdapterForGallery(getSupportFragmentManager());
         viewPager.setOffscreenPageLimit(2);
-
         viewPagerAdapterForGallery.addFragments(new newwallPaperFragment(), "নতুন");
         viewPagerAdapterForGallery.addFragments(new newwallPaperFragment(), "জনপ্রিয়");
-
-
         viewPager.setAdapter(viewPagerAdapterForGallery);
-
         tabLayout.setupWithViewPager(viewPager);
-
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
-
             @Override
             public void onPageSelected(int position) {
                 if (position == 1) {
@@ -72,12 +59,10 @@ public class GalleryActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
-
     }
 }

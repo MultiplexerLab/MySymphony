@@ -31,12 +31,9 @@ public class BigganOProjuktiActivity extends AppCompatActivity {
     private android.support.v7.widget.Toolbar toolbar;
     private RecyclerView recyclerViewForBigganOProjukti;
     public RecyclerAdapterForBigganOProjukti adapterForBigganOProjukti;
-
     RecyclerView.LayoutManager mLayoutManager;
-
     ArrayList<BigganOProjukti> bigganOProjuktiArrayList;
     RequestQueue queue;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +42,9 @@ public class BigganOProjuktiActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbarlayoutinbigganOProjukti);
         setSupportActionBar(toolbar);
-
         bigganOProjuktiArrayList = new ArrayList<>();
         queue = Volley.newRequestQueue(BigganOProjuktiActivity.this);
         loadDataFromVolley();
-
     }
 
     private void loadDataFromVolley() {
@@ -62,7 +57,6 @@ public class BigganOProjuktiActivity extends AppCompatActivity {
                         try {
                             JSONArray pachMishaliContentArr = response.getJSONArray("contents");
                             setporashunaiContent(pachMishaliContentArr);
-                            //settop_contents(jsontop_contentsArr);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -107,13 +101,10 @@ public class BigganOProjuktiActivity extends AppCompatActivity {
     private void initializeRecyclerView() {
 
         recyclerViewForBigganOProjukti = findViewById(R.id.RV_BigganOProjukti);
-
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerViewForBigganOProjukti.setLayoutManager(mLayoutManager);
-
         recyclerViewForBigganOProjukti.setHasFixedSize(true);
         adapterForBigganOProjukti= new RecyclerAdapterForBigganOProjukti(this, bigganOProjuktiArrayList);
-
         recyclerViewForBigganOProjukti.setAdapter(adapterForBigganOProjukti);
     }
 

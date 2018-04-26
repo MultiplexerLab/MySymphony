@@ -17,8 +17,6 @@ public class BigganOProjuktiDescriptionActivity extends AppCompatActivity {
     ImageView newsImageView;
     TextView newsTitle, newsDescription;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,33 +25,26 @@ public class BigganOProjuktiDescriptionActivity extends AppCompatActivity {
         newsImageView = findViewById(R.id.imgBigganOProjuktiDescription);
         newsTitle = findViewById(R.id.newsTitleBigganOProjuktiDescription);
         newsDescription = findViewById(R.id.newsdescriptionBigganOProjuktiDescription);
-
         setDescripTionData();
-
     }
 
     @Override
     public void onBackPressed() {
-
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), BigganOProjuktiActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
-
-
     }
 
     public void setDescripTionData() {
         BigganOProjukti object = (BigganOProjukti) getIntent().getSerializableExtra("Data");
-
         newsTitle.setText(object.getContentTitle());
         newsDescription.setText(object.getContentDescription());
         Glide.with(BigganOProjuktiDescriptionActivity.this)
                 .load(object.getImageUrl())
                 .into(newsImageView);
-
     }
 
     public void mullochar(View view) {

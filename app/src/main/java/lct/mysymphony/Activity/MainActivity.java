@@ -57,21 +57,20 @@ public class MainActivity extends AppCompatActivity {
 
         dbHelper=new DataHelper(this);
 
-        this.downloadImage();
+        //this.downloadImage();
     }
 
-    public void downloadImage(){
+    /*public void downloadImage(){
         Log.i("downloadImage","Inside download image");
         BackTask bt=new BackTask();
         String imgURL="http://paimages.prothom-alo.com/contents/cache/images/640x360x1/uploads/media/2018/04/22/0055799d71293e70a941a8b7e8861b0b-5adc299d79982.jpg";
         if(!imgURL.trim().equals("")){
             bt.execute(imgURL);
         }
-
-    }
+    }*/
 
     // AsynnTask to run download an image in background
-    private class BackTask extends AsyncTask<String,Void,Bitmap>{
+    /*private class BackTask extends AsyncTask<String,Void,Bitmap>{
         TextView tv;
         protected void onPreExecute(){
             Log.i("Donwload","Downloading the image. Please wait...");
@@ -106,35 +105,26 @@ public class MainActivity extends AppCompatActivity {
             //imgView.setImageBitmap(dbHelper.getBitmap(1));
             Log.i("downlaoded image", dbHelper.getBitmap(1).toString());
         }
-    }
-
+    }*/
 
     public void startSignUpActivity(View view) {
-
-
         Intent myIntent = new Intent(getApplicationContext(), PhoneNumberVerification.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
-
     }
 
     public void startSignInActivity(View view) {
-
-
         Intent myIntent = new Intent(getApplicationContext(), SignInActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
-
     }
 
     @Override
     public void onBackPressed() {
-
         ActivityCompat.finishAffinity(this);
-
     }
 }

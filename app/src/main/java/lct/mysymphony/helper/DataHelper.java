@@ -1,6 +1,7 @@
 package lct.mysymphony.helper;
 
 import java.io.ByteArrayOutputStream;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,22 +13,35 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 public class DataHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "imgdb";
-    public static final String TABLE_NAME = "tbl_img";
-    public static final int DATABASE_VERSION = 1;
-    public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "+ TABLE_NAME+ "(id INTEGER PRIMARY KEY AUTOINCREMENT, img BLOB NOT NULL, description TEXT)";
-    public static final String DELETE_TABLE="DROP TABLE IF EXISTS " + TABLE_NAME;
+    public static final String DATABASE_NAME = "contentDb";
+    public static final String TABLE_NAME = "downloadeContent";
+    public static final String COL_ID = "id";
+    public static final String CONTENT_ID = "id";
+    public static final String COL_CONTENT_CAT = "contentCat";
+    public static final String COL_CONTENT_TYPE = "contentType";
+    public static final String COL_CONTENT_TITLE = "contentTitle";
+    public static final String COL_CONTENT_DESC = "contentDesc";
+    public static final String COL_CONTENT_TEXT = "contentText";
+    public static final String COL_CONTENT_DATA = "contentData";
+    public static final String COL_DOWLOAD_TIMESTAMP = "downloadTimestamp";
+    public static final String COL_EXPIRE_TIMESTAMP = "expireTimestamp";
+    public static final String COL_CONTENT_STATUS = "contentStatus";
 
-    public DataHelper(Context context)  {
+    public static final int DATABASE_VERSION = 1;
+    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "( " + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT  , " + CONTENT_ID + " INTEGER, " + COL_CONTENT_CAT + " TEXT , " + COL_CONTENT_TYPE + " TEXT , " + COL_CONTENT_TITLE + " TEXT , " + COL_CONTENT_DESC + " TEXT ," + COL_CONTENT_TEXT + " TEXT , " + COL_CONTENT_DATA + "  BLOB , " + COL_DOWLOAD_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_EXPIRE_TIMESTAMP + "DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_CONTENT_STATUS + "STRING )";
+    public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+    public DataHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
     }
-    public void onCreate(SQLiteDatabase db)  {
+
+    public void onCreate(SQLiteDatabase db) {
         // Create the table
         db.execSQL(CREATE_TABLE);
 
     }
-    //Upgrading database
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //Drop older table if existed
@@ -36,20 +50,18 @@ public class DataHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertBitmap(Bitmap bm)  {
-
+    public void insertBitmap(Bitmap bm) {
         // Convert the image into byte array
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.PNG, 100, out);
-        byte[] buffer=out.toByteArray();
+        byte[] buffer = out.toByteArray();
         // Open the database for writing
         SQLiteDatabase db = this.getWritableDatabase();
         // Start the transaction.
         db.beginTransaction();
         ContentValues values;
 
-        try
-        {
+        try {
             values = new ContentValues();
             values.put("img", buffer);
             values.put("description", "Image description");
@@ -59,14 +71,10 @@ public class DataHelper extends SQLiteOpenHelper {
             // Insert into database successfully.
             db.setTransactionSuccessful();
 
-        }
-        catch (SQLiteException e)
-        {
+        } catch (SQLiteException e) {
             e.printStackTrace();
 
-        }
-        finally
-        {
+        } finally {
             db.endTransaction();
             // End the transaction.
             db.close();
@@ -74,46 +82,38 @@ public class DataHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Bitmap getBitmap(int id){
+    public Bitmap getBitmap(int id) {
         Bitmap bitmap = null;
         // Open the database for reading
         SQLiteDatabase db = this.getReadableDatabase();
         // Start the transaction.
         db.beginTransaction();
 
-        try
-        {
-            String selectQuery = "SELECT * FROM "+ TABLE_NAME+" WHERE id = " + id;
+        try {
+            String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + id;
             Cursor cursor = db.rawQuery(selectQuery, null);
-            if(cursor.getCount() >0)
-            {
+            if (cursor.getCount() > 0) {
                 while (cursor.moveToNext()) {
                     // Convert blob data to byte array
                     byte[] blob = cursor.getBlob(cursor.getColumnIndex("img"));
-                    Log.d("getBitmap","blob lenght: "+blob.length);
+                    Log.d("getBitmap", "blob lenght: " + blob.length);
                     // Convert the byte array to Bitmap
-                    bitmap=BitmapFactory.decodeByteArray(blob, 0, blob.length);
+                    bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length);
 
                 }
 
             }
             db.setTransactionSuccessful();
 
-        }
-        catch (SQLiteException e)
-        {
+        } catch (SQLiteException e) {
             e.printStackTrace();
 
-        }
-        finally
-        {
+        } finally {
             db.endTransaction();
             // End the transaction.
             db.close();
             // Close database
         }
         return bitmap;
-
     }
-
 }

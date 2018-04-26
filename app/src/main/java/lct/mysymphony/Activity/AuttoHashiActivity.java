@@ -29,12 +29,9 @@ import lct.mysymphony.helper.Endpoints;
 public class AuttoHashiActivity extends AppCompatActivity {
 
     private android.support.v7.widget.Toolbar toolbar;
-
-
     private RecyclerView recyclerViewForAuttohashi;
     public RecyclerAdapterForAuttohashi adapterForAuttohashi;
     RecyclerView.LayoutManager mLayoutManager;
-
     ArrayList<Auttohashi> auttohashiArrayList;
     RequestQueue queue;
 
@@ -45,14 +42,10 @@ public class AuttoHashiActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbarlayoutinauttohashi);
         setSupportActionBar(toolbar);
-
         auttohashiArrayList = new ArrayList<>();
         queue = Volley.newRequestQueue(AuttoHashiActivity.this);
-
         loadDataFromVolley();
-
     }
-
 
     private void loadDataFromVolley() {
 
@@ -64,7 +57,6 @@ public class AuttoHashiActivity extends AppCompatActivity {
                         try {
                             JSONArray AuttoHashiContentArr = response.getJSONArray("contents");
                             setAuttoHashiContent(AuttoHashiContentArr);
-                            //settop_contents(jsontop_contentsArr);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -80,7 +72,6 @@ public class AuttoHashiActivity extends AppCompatActivity {
     }
 
     private void setAuttoHashiContent(JSONArray auttoHashiContentArr) {
-
 
         if (auttoHashiContentArr.length() > 0) {
             for (int i = 0; i < auttoHashiContentArr.length(); i++) {
@@ -115,19 +106,14 @@ public class AuttoHashiActivity extends AppCompatActivity {
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
-
-
     }
 
     public void initializeRecyclerView() {
         recyclerViewForAuttohashi = findViewById(R.id.RV_Auttoahshi);
-
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerViewForAuttohashi.setLayoutManager(mLayoutManager);
-
         recyclerViewForAuttohashi.setHasFixedSize(true);
         adapterForAuttohashi = new RecyclerAdapterForAuttohashi(this, auttohashiArrayList);
-
         recyclerViewForAuttohashi.setAdapter(adapterForAuttohashi);
     }
 }
