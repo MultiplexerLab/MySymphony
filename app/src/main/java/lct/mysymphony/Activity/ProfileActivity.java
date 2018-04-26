@@ -1,10 +1,14 @@
 package lct.mysymphony.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import lct.mysymphony.Fragment.MyInfoFragmentInProfileActivity;
 import lct.mysymphony.Fragment.MyItemFragmentInProfileActivity;
@@ -18,7 +22,8 @@ public class ProfileActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewPagerAdapterForSports viewPagerAdapterForSports;
-
+    ImageView logoutIcon;
+    TextView nameTVInActivityUserProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,25 @@ public class ProfileActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbarlayoutinprofile);
         setSupportActionBar(toolbar);
+
+        logoutIcon = toolbar.findViewById(R.id.logoutIcon);
+        nameTVInActivityUserProfile = findViewById(R.id.nameTVInActivityUserProfile);
+
+        logoutIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor;
+                editor = getSharedPreferences("login", MODE_PRIVATE).edit();
+                editor.putInt("loginStatus", 0);
+                editor.apply();
+                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        SharedPreferences prefs = getSharedPreferences("login", MODE_PRIVATE);
+        String userName = prefs.getString("username", "");
+        nameTVInActivityUserProfile.setText(userName);
 
         tabLayout = findViewById(R.id.tabLayoutProfile);
         viewPager = findViewById(R.id.viewPagerProfile);
