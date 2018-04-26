@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tanvir.multiplexer">
+    package="lct.mysymphony">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,48 +14,48 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.MainActivity">
+        <activity android:name="lct.mysymphony.Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.PhoneNumberVerification" />
-        <activity android:name=".Activity.SignUpActivity" />
+        <activity android:name="lct.mysymphony.Activity.PhoneNumberVerification" />
+        <activity android:name="lct.mysymphony.Activity.SignUpActivity" />
         <activity
-            android:name=".Activity.PinActivity"
+            android:name="lct.mysymphony.Activity.PinActivity"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".Activity.HomePage"
+            android:name="lct.mysymphony.Activity.HomePage"
             android:theme="@style/AppThemeMainActivity" />
-        <activity android:name=".Activity.SignInActivity" />
-        <activity android:name=".Activity.ForgetPasswordActivity" />
-        <activity android:name=".Activity.KheladhulaActivity" />
-        <activity android:name=".Activity.WallpaperBundleActivity" />
-        <activity android:name=".Activity.UserProfile" />
-        <activity android:name=".Activity.GoromKhoborActivity" />
-        <activity android:name=".Activity.PorashunaActivity" />
-        <activity android:name=".Activity.AuttoHashiActivity" />
-        <activity android:name=".Activity.JibonJaponActivity" />
-        <activity android:name=".Activity.PachMishaliActivity" />
-        <activity android:name=".Activity.BigganOProjuktiActivity" />
-        <activity android:name=".Activity.CartoonActivity" />
-        <activity android:name=".Activity.PaymentMethod" />
-        <activity android:name=".Activity.GalleryActivity" />
-        <activity android:name=".Activity.NewsDescriptionActivity" />
-        <activity android:name=".Activity.ProfileActivity" />
-        <activity android:name=".Activity.NotificationActivity" />
+        <activity android:name="lct.mysymphony.Activity.SignInActivity" />
+        <activity android:name="lct.mysymphony.Activity.ForgetPasswordActivity" />
+        <activity android:name="lct.mysymphony.Activity.KheladhulaActivity" />
+        <activity android:name="lct.mysymphony.Activity.WallpaperBundleActivity" />
+        <activity android:name="lct.mysymphony.Activity.UserProfile" />
+        <activity android:name="lct.mysymphony.Activity.GoromKhoborActivity" />
+        <activity android:name="lct.mysymphony.Activity.PorashunaActivity" />
+        <activity android:name="lct.mysymphony.Activity.AuttoHashiActivity" />
+        <activity android:name="lct.mysymphony.Activity.JibonJaponActivity" />
+        <activity android:name="lct.mysymphony.Activity.PachMishaliActivity" />
+        <activity android:name="lct.mysymphony.Activity.BigganOProjuktiActivity" />
+        <activity android:name="lct.mysymphony.Activity.CartoonActivity" />
+        <activity android:name="lct.mysymphony.Activity.PaymentMethod" />
+        <activity android:name="lct.mysymphony.Activity.GalleryActivity" />
+        <activity android:name="lct.mysymphony.Activity.NewsDescriptionActivity" />
+        <activity android:name="lct.mysymphony.Activity.ProfileActivity" />
+        <activity android:name="lct.mysymphony.Activity.NotificationActivity" />
 
         <service
-            android:name=".Notification.MyFirebaseMessagingService"
+            android:name="lct.mysymphony.Notification.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".Notification.MyFirebaseInstanceIDService"
+            android:name="lct.mysymphony.Notification.MyFirebaseInstanceIDService"
             android:exported="false">
             >
             <intent-filter>
@@ -63,19 +63,19 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Activity.ImageViewActivity" />
-        <activity android:name=".Activity.SliderContentActivity" />
-        <activity android:name=".Activity.ShikhaDetails" />
-        <activity android:name=".Activity.PaymentConfirmation" />
-        <activity android:name=".Activity.Symphony" />
-        <activity android:name=".Activity.CricketSorbosheshSongbadDescriptionActivity" />
-        <activity android:name=".Activity.PorashunaDescriptionActivity" />
-        <activity android:name=".Activity.AuttohasiDescriptionActivity" />
-        <activity android:name=".Activity.JibonJaponDescriptionActivity" />
-        <activity android:name=".Activity.PachMishaliDescriptionActivity" />
-        <activity android:name=".Activity.BigganOProjuktiDescriptionActivity" />
-        <activity android:name=".Activity.CartoonDescriptionActivity" />
-        <activity android:name=".Activity.JapitiJibonDescriptionActivity" />
+        <activity android:name="lct.mysymphony.Activity.ImageViewActivity" />
+        <activity android:name="lct.mysymphony.Activity.SliderContentActivity" />
+        <activity android:name="lct.mysymphony.Activity.ShikhaDetails" />
+        <activity android:name="lct.mysymphony.Activity.PaymentConfirmation" />
+        <activity android:name="lct.mysymphony.Activity.Symphony" />
+        <activity android:name="lct.mysymphony.Activity.CricketSorbosheshSongbadDescriptionActivity" />
+        <activity android:name="lct.mysymphony.Activity.PorashunaDescriptionActivity" />
+        <activity android:name="lct.mysymphony.Activity.AuttohasiDescriptionActivity" />
+        <activity android:name="lct.mysymphony.Activity.JibonJaponDescriptionActivity" />
+        <activity android:name="lct.mysymphony.Activity.PachMishaliDescriptionActivity" />
+        <activity android:name="lct.mysymphony.Activity.BigganOProjuktiDescriptionActivity" />
+        <activity android:name="lct.mysymphony.Activity.CartoonDescriptionActivity" />
+        <activity android:name="lct.mysymphony.Activity.JapitiJibonDescriptionActivity" />
     </application>
 
 </manifest>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
 
-    tools:context="tanvir.multiplexer.Activity.Symphony">
+    tools:context="lct.mysymphony.Activity.Symphony">
 
     <android.support.v7.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
