@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:904373924633:android:dd7c765e37e1b6f5",
         "android_client_info": {
-          "package_name": "tanvir.multiplexer"
+          "package_name": "lct.mysymphony"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "904373924633-0ff77bg9hir8cu7k3shh6q6proik7khi.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "tanvir.multiplexer",
+            "package_name": "lct.mysymphony",
             "certificate_hash": "b7aa2410ccbe5dc5561d1cc17cc14ce0b93788f3"
           }
         },
