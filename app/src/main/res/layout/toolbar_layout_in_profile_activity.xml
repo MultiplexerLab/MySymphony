@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolBar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="@color/colorPrimary"
-    app:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:id="@+id/toolBar"
-    >
+    app:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-   <RelativeLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-       <TextView
-           android:textColor="#FFFFFF"
-           android:textSize="20sp"
-           android:layout_width="wrap_content"
-           android:text="প্রোফাইল"
-           android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="প্রোফাইল"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
 
-       <TextView
-           android:textSize="20sp"
-           android:textColor="@color/White"
-           android:paddingRight="8dp"
-           android:layout_alignParentRight="true"
-           android:text="এডিট করুন"
-           android:visibility="invisible"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content" />
-   </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingRight="8dp"
+            android:text="এডিট করুন"
+            android:textColor="@color/White"
+            android:textSize="20sp"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/logoutIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/logout" />
+    </RelativeLayout>
 
 
 </android.support.v7.widget.Toolbar>

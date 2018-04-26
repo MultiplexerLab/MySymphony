@@ -35,12 +35,9 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
     RequestQueue queue;
     String phoneNumber;
 
-
-
     public MyInfoFragmentInProfileActivity() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,41 +49,36 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
         phoneNumber = prefs.getString("phoneNo", "");
 
         queue = Volley.newRequestQueue(getActivity());
-        nameTV=view.findViewById(R.id.nameTVinMyinfoFragment);
-        birthDateTV=view.findViewById(R.id.birthDateTVMyInfoFragment);
+        nameTV = view.findViewById(R.id.nameTVinMyinfoFragment);
+        birthDateTV = view.findViewById(R.id.birthDateTVMyInfoFragment);
         loadDataFromVolley();
 
         return view;
     }
 
     private void loadDataFromVolley() {
-
-        String url= Endpoints.GET_USER_INFO_URL+phoneNumber;
+        String url = Endpoints.GET_USER_INFO_URL + phoneNumber;
+        Log.d("profileData", url);
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
 
-                        Log.d("responseprofile",response.toString());
+                        Log.d("responseprofile", response.toString());
 
                         try {
                             JSONObject postInfo = response.getJSONObject(0);
-                            if (postInfo!=null)
-                            {
-                                birthDateTV.setText(postInfo.getString("applicantBirthDate"));
-                                nameTV.setText(postInfo.getString("registeredName"));
+                            if (postInfo != null) {
+                                birthDateTV.setText("   " + postInfo.getString("applicantBirthDate"));
+                                nameTV.setText("   " + postInfo.getString("partnerName"));
 
+                            } else {
+                                Log.d("json", "null");
                             }
-                            else
-                            {
-                                Log.d("json","null");
-                            }
-
-
                             //settop_contents(jsontop_contentsArr);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.d("error",e.toString());
+                            Log.d("error", e.toString());
                         }
 
                     }
@@ -99,7 +91,4 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
 
         queue.add(jsonArrayRequest);
     }
-
-
-
 }

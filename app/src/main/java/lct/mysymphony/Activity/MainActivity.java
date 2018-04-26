@@ -1,6 +1,7 @@
 package lct.mysymphony.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +46,12 @@ public class MainActivity extends AppCompatActivity {
         FirebaseMessaging.getInstance().subscribeToTopic("NewApp");
         FirebaseMessaging.getInstance().subscribeToTopic("Male");
 
+        SharedPreferences prefs = getSharedPreferences("login", MODE_PRIVATE);
+        int loginStatus = prefs.getInt("loginStatus", 0);
+        if(loginStatus==1){
+            Intent intent = new Intent(MainActivity.this, HomePage.class);
+            startActivity(intent);
+        }
         imageView = findViewById(R.id.IV);
         Glide.with(this).load(R.drawable.symphoni).into(imageView);
 

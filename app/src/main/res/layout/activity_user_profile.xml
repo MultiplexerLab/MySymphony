@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Activity.ProfileActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -16,43 +16,41 @@
 
         <include
             android:id="@+id/toolbarlayoutinprofile"
-            layout="@layout/toolbar_layout_in_profile_activity"
-            />
+            layout="@layout/toolbar_layout_in_profile_activity" />
 
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="140dp">
+        android:layout_height="140dp"
+        android:orientation="vertical">
 
         <ImageView
-            android:layout_gravity="center"
-            android:src="@drawable/profile_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_width="100dp"
-            android:layout_height="100dp" />
+            android:layout_gravity="center"
+            android:src="@drawable/profile_image" />
 
         <TextView
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:layout_marginTop="5dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:text="jkdfvhdfjghdfjhg"
             android:id="@+id/nameTVInActivityUserProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="jkdfvhdfjghdfjhg"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayoutProfile"
-        android:background="@color/White"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/White"
         android:theme="@style/TabLayoutTheme"
         app:tabGravity="fill"
         app:tabIndicatorHeight="4dp"
@@ -62,12 +60,12 @@
         app:tabTextColor="@color/Halka_Gray" />
 
     <android.support.v4.view.ViewPager
-        android:background="@color/White"
         android:id="@+id/viewPagerProfile"
         style="@style/viewPagerInSportsTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/appbarLayout"
+        android:background="@color/White"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 

@@ -15,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
@@ -49,7 +50,8 @@ public class JibonJaponActivity extends AppCompatActivity {
 
         jibonJaponActivityArrayList = new ArrayList<>();
         queue = Volley.newRequestQueue(JibonJaponActivity.this);
-        loadDataFromVolley();    }
+        loadDataFromVolley();
+    }
 
     @Override
     public void onBackPressed() {
@@ -63,22 +65,23 @@ public class JibonJaponActivity extends AppCompatActivity {
 
     private void loadDataFromVolley() {
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Endpoints.JIBON_JAPON_GET_URL,
-                new Response.Listener<JSONObject>() {
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, Endpoints.JAPITO_JIBON_GET_URL,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-
+                    public void onResponse(String response) {
+                        JSONObject jsonObject;
                         try {
-                            JSONArray jsonJibonJaponContentArr = response.getJSONArray("contents");
-
-                            setJibonJaponContent(jsonJibonJaponContentArr);
-
-
-                            //settop_contents(jsontop_contentsArr);
+                            String jsonFormattedString = response.replaceAll("\\\\", "");
+                            jsonFormattedString = jsonFormattedString.substring(1, jsonFormattedString.length() - 1);
+                            jsonFormattedString = jsonFormattedString.replaceAll("\"\\[", "[");
+                            jsonFormattedString = jsonFormattedString.replaceAll("\\]\"", "]");
+                            Log.d("jsonFormattedString", jsonFormattedString);
+                            jsonObject = new JSONObject(jsonFormattedString);
+                            Log.d("obj", jsonObject.toString());
+                            setJibonJaponContent(jsonObject.getJSONArray("contents"));
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Log.d("JSON Error", e.getMessage());
                         }
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -101,13 +104,13 @@ public class JibonJaponActivity extends AppCompatActivity {
 
                     if (contentType.equals("video")) {
                         String contentUrl = jsonJibonJaponContentArr.getJSONObject(i).getString("thumbNail_image");
-                       jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, contentUrl));
+                        jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, contentUrl));
                     } else {
-                        jibonJaponActivityArrayList.add(new JibonJapon( contentTitle,contentType,contentDescription, jsonJibonJaponContentArr.getJSONObject(i).getString("contentUrl")));
+                        jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, jsonJibonJaponContentArr.getJSONObject(i).getString("contentUrl")));
                     }
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e("ErrorJapito", e.toString());
                 }
             }
             initializeJibonJaponArraylist();
@@ -116,8 +119,7 @@ public class JibonJaponActivity extends AppCompatActivity {
         }
     }
 
-    public void initializeJibonJaponArraylist()
-    {
+    public void initializeJibonJaponArraylist() {
         recyclerViewForJibonJapon = findViewById(R.id.RV_JibonJapon);
 
         recyclerViewForJibonJapon.setLayoutManager(new LinearLayoutManager(this,

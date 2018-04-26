@@ -3,6 +3,7 @@ package lct.mysymphony.Activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -48,7 +49,6 @@ public class SignInActivity extends AppCompatActivity {
         password = findViewById(R.id.txtpassword);
 
         queue = Volley.newRequestQueue(SignInActivity.this);
-
     }
 
     @Override
@@ -101,6 +101,10 @@ public class SignInActivity extends AppCompatActivity {
 //    }
 
     public void homePageStart() {
+        SharedPreferences.Editor editor;
+        editor = getSharedPreferences("login", MODE_PRIVATE).edit();
+        editor.putInt("loginStatus", 1);
+        editor.apply();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
@@ -147,8 +151,6 @@ public class SignInActivity extends AppCompatActivity {
                         if (response.contains("SUCCESS")) {
                             if (internetConnected()) {
                                 homePageStart();
-
-
                             } else
                                 Toast.makeText(SignInActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
 

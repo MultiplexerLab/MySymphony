@@ -3,6 +3,7 @@ package lct.mysymphony.Activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -129,7 +130,6 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     }
 
     public void signUpRequest() {
-
         String url = "http://bot.sharedtoday.com:9500/ws/commonUpdateForArrayJSON?tbl=Partner&keyname=partnerId&id=" + phoneNumber;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -139,9 +139,12 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                         Log.i("ResponseSignUp", response);
 
                         if(response.contains("SUCCESS")){
+                            SharedPreferences.Editor editor;
+                            editor = getSharedPreferences("login", MODE_PRIVATE).edit();
+                            editor.putString("username", txtUserName.getText().toString());
+                            editor.apply();
                             sendUpdatedPasswordToserver();
                         }
-
                     }
                 }, new Response.ErrorListener() {
 
@@ -178,8 +181,6 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-
                         Log.d("responseInSignIn", response);
 
                         if (response.contains("SUCCESS")) {
