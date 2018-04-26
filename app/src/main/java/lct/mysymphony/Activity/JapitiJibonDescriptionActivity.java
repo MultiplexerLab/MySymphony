@@ -34,19 +34,14 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
         setDescripTionData();
     }
 
-
-
     @Override
     public void onBackPressed() {
-
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
-
-
     }
 
     public void setDescripTionData() {
@@ -57,13 +52,10 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
             newsImageView.setVisibility(View.GONE);
             videoView.setVisibility(View.VISIBLE);
 
-            videoView.setVideoURI(Uri.parse("https://looselycoupled-my.sharepoint.com/personal/tanim_looselycoupled_org/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Ftanim%5Flooselycoupled%5Forg%2FDocuments%2FAttachments%2Fsample2%2Emp4&parent=%2Fpersonal%2Ftanim%5Flooselycoupled%5Forg%2FDocuments%2FAttachments&slrid=cd95609e%2Df08a%2D5000%2Db7ff%2D73de2b588dce"));
+            videoView.setVideoURI(Uri.parse("http://jachaibd.com/files/sample.mp4"));
             videoView.start();
 
             Log.i("japitojibon","japitojibon");
-
-//            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(object.getContentUrl())));
-
         }
         else
         {
@@ -73,13 +65,8 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
                     .load(object.getImageUrl())
                     .into(newsImageView);
         }
-
-
-
         newsTitle.setText(object.getContentTitle());
         newsDescription.setText(object.getContentDescription());
-
-
     }
 
     public void purChase(View view) {

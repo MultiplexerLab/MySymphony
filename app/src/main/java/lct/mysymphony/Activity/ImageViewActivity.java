@@ -3,6 +3,7 @@ package lct.mysymphony.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -12,18 +13,22 @@ import lct.mysymphony.R;
 
 public class ImageViewActivity extends AppCompatActivity {
 
+    ///int price;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_view);
 
         String wallpaerUrl = (String) getIntent().getSerializableExtra("wallpaper");
+        ///price=getIntent().getIntExtra("price",0);
+        ///Log.d("price",Integer.toString(price));
 
         Glide.with(this).load(wallpaerUrl).into((ImageView) findViewById(R.id.imageViewWallpaper));
     }
 
     public void purChase(View view) {
         Intent purchase = new Intent(ImageViewActivity.this, PaymentMethod.class);
+        ///purchase.putExtra("price",price);
         startActivity(purchase);
     }
 

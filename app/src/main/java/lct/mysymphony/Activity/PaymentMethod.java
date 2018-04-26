@@ -16,6 +16,7 @@ public class PaymentMethod extends AppCompatActivity {
     ImageButton payWithPin, payWithBikash, payWithRocket, payWithMaxis, payWithVisa, payWithMasterCard;
     ImageButton selectedButton;
     String selectedMethod = "";
+    ///Integer price;
 
 
     @Override
@@ -23,6 +24,7 @@ public class PaymentMethod extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_method);
 
+        ////price=getIntent().getIntExtra("price",0);
         payWithPin = findViewById(R.id.payWithPin);
         payWithBikash = findViewById(R.id.payWithBikash);
         payWithRocket = findViewById(R.id.payWithRocket);
@@ -36,7 +38,7 @@ public class PaymentMethod extends AppCompatActivity {
                 if (selectedButton != null)
                     selectedButton.setBackgroundColor(Color.WHITE);
                 selectedButton = findViewById(R.id.payWithPin);
-                selectedMethod = "পিন";
+                selectedMethod = "Pay with pin";
                 payWithPin.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_red_border, null));
             }
         });
@@ -46,7 +48,7 @@ public class PaymentMethod extends AppCompatActivity {
             public void onClick(View view) {
                 if (selectedButton != null)
                     selectedButton.setBackgroundColor(Color.WHITE);
-                selectedMethod = "বিকাশ";
+                selectedMethod = "Bikash";
                 selectedButton = findViewById(R.id.payWithBikash);
                 payWithBikash.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_red_border, null));
             }
@@ -57,7 +59,7 @@ public class PaymentMethod extends AppCompatActivity {
             public void onClick(View view) {
                 if (selectedButton != null)
                     selectedButton.setBackgroundColor(Color.WHITE);
-                selectedMethod = "রকেট";
+                selectedMethod = "Rocket";
                 selectedButton = findViewById(R.id.payWithRocket);
                 payWithRocket.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_red_border, null));
             }
@@ -69,7 +71,7 @@ public class PaymentMethod extends AppCompatActivity {
 
                 if (selectedButton != null)
                     selectedButton.setBackgroundColor(Color.WHITE);
-                selectedMethod = "ম্যাক্সিস";
+                selectedMethod = "Maxis";
                 selectedButton = findViewById(R.id.payWithMaxis);
                 payWithMaxis.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_red_border, null));
 
@@ -82,7 +84,7 @@ public class PaymentMethod extends AppCompatActivity {
 
                 if (selectedButton != null)
                     selectedButton.setBackgroundColor(Color.WHITE);
-                selectedMethod = "ভিসা কার্ড";
+                selectedMethod = "Visa Card";
                 selectedButton = findViewById(R.id.payWithVisa);
                 payWithVisa.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_red_border, null));
             }
@@ -93,7 +95,7 @@ public class PaymentMethod extends AppCompatActivity {
             public void onClick(View view) {
                 if (selectedButton != null)
                     selectedButton.setBackgroundColor(Color.WHITE);
-                selectedMethod = "মাস্টার কার্ড";
+                selectedMethod = "Master Card";
                 selectedButton = findViewById(R.id.payWithMasterCard);
                 payWithMasterCard.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_red_border, null));
             }
@@ -104,12 +106,18 @@ public class PaymentMethod extends AppCompatActivity {
 
         if (selectedMethod.length() > 0) {
             //Toast.makeText(PaymentMethod.this, "ধন্যবাদ " + selectedMethod + " এর মাধ্যমে পেমেন্ট করার জন্যে", Toast.LENGTH_SHORT).show();
-            if (selectedMethod.contains("পিন"))
+            if (selectedMethod.contains("Pay with pin"))
             {
                 Intent intent = new Intent(PaymentMethod.this, PayWithPinActivity.class);
+                intent.putExtra("paymentMethod","Pay with pin");
+                ///intent.putExtra("price",price);
                 startActivity(intent);
-            }
-            else
+            }else if(selectedMethod.contains("Rocket")){
+                Intent intent = new Intent(PaymentMethod.this, PayWithRocketActivity.class);
+                intent.putExtra("paymentMethod","Rocket");
+                ///intent.putExtra("price",price);
+                startActivity(intent);
+            }else
             {
                 Intent intent = new Intent(PaymentMethod.this, PaymentConfirmation.class);
                 startActivity(intent);

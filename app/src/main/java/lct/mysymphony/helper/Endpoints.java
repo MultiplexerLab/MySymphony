@@ -1,7 +1,6 @@
 package lct.mysymphony.helper;
 
 public class Endpoints {
-    public static final String HOME_GET_URL = "http://jachaibd.com/api/sample.json";
     public static final String UPDATED_HOME_GET_URL = "http://jachaibd.com/api/sample_home_updated.json";
     public static final String NEW_HOME_GET_URL = "http://bot.sharedtoday.com:9500/ws/mysymphony/getAllHomeContents";
     public static final String JAPITO_JIBON_GET_URL = "http://bot.sharedtoday.com:9500/ws/mysymphony/getCategorizedContents?cat=daily_life";
@@ -20,7 +19,7 @@ public class Endpoints {
     public static final String USER_SIGN_UP_STATUS_POST_URL=" http://bot.sharedtoday.com:9500/login";
     public static final String UPDATE_DEFAULT_PASSWORD_POST_URL="http://bot.sharedtoday.com:9500/ws/changePassword?pass=01717&newpass=";
     public static final String GET_USER_INFO_URL="http://bot.sharedtoday.com:9500/ws/commonGetFromTable?tbl=Partner&key=partnerId&val=";
-
+    public static final String GET_REFEREL_CODE_URL="http://bot.sharedtoday.com:9500/ws/mysymphony/getPaymentRefCode";
 
 
 }

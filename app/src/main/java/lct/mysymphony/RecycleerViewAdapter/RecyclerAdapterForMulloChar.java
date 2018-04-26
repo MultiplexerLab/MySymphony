@@ -90,6 +90,7 @@ public class RecyclerAdapterForMulloChar extends RecyclerView.Adapter<RecyclerAd
 
                     Intent myIntent = new Intent(activity, ImageViewActivity.class);
                     myIntent.putExtra("wallpaper", mulloCharArrayList.get(getAdapterPosition()).getContentUrl());
+                    ///myIntent.putExtra("price",mulloCharArrayList.get(getAdapterPosition()).getNewPrice());
                     myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     activity.startActivity(myIntent);
                     activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);

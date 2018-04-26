@@ -21,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
@@ -136,7 +137,7 @@ public class HomePage extends AppCompatActivity {
         loadDataFromVolley();
     }
 
-    private void loadDataFromVolley() {
+    private void newloadDataFromVolley() {
         StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, Endpoints.NEW_HOME_GET_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -188,6 +189,51 @@ public class HomePage extends AppCompatActivity {
                 Log.e("Volley", error.toString());
             }
         });
+        queue.add(jsonObjectRequest);
+    }
+
+    private void loadDataFromVolley() {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Endpoints.UPDATED_HOME_GET_URL,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            JSONArray jsonSliderContentArr = response.getJSONArray("slider_contents");
+                            setSliderContent(jsonSliderContentArr);
+
+                            JSONArray top_contentsArr = response.getJSONArray("top_contents");
+                            setTopContent(top_contentsArr);
+
+                            JSONArray japito_jibon_content_Arr = response.getJSONArray("daily_life_contents");
+                            setJapitiJibonContent(japito_jibon_content_Arr);
+
+                            JSONArray mullo_char_content_Arr = response.getJSONArray("discount_contents");
+                            setMulloCharContent(mullo_char_content_Arr);
+
+                            JSONArray shikkha_sohayika__content_Arr = response.getJSONArray("education_contents");
+                            setShikkhaSohayikaContent(shikkha_sohayika__content_Arr);
+
+                            JSONArray games_zone__content_Arr = response.getJSONArray("game_contents");
+                            setGamesZoneContent(games_zone__content_Arr);
+
+                            JSONArray shocol_chobi__content_Arr = response.getJSONArray("moving_contents");
+                            setShocolChobiContent(shocol_chobi__content_Arr);
+
+                            //settop_contents(jsontop_contentsArr);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley", error.toString());
+            }
+        });
+
         queue.add(jsonObjectRequest);
     }
 
