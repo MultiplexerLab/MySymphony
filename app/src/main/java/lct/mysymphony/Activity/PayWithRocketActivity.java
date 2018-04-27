@@ -81,11 +81,6 @@ public class PayWithRocketActivity extends AppCompatActivity {
                             billNumberTV.setText("3452");
                            Log.d("jsnexception",e.toString());
                         }
-
-
-
-
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -109,17 +104,27 @@ public class PayWithRocketActivity extends AppCompatActivity {
     }
 
     public void startUserProfileActivity(View view) {
-
         Log.d("image_url",imageUrl);
-        DownloadImage downloadImage=new DownloadImage();
-        downloadImage.downloadImage(imageUrl,PayWithRocketActivity.this);
-        Toast.makeText(PayWithRocketActivity.this, "ধন্যবাদ আপনার পেমেন্ট টি যাচাই করা হচ্ছে", Toast.LENGTH_SHORT).show();
-        Intent myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        myIntent.putExtra("cameFromWhichActivity","payWithRocket");
-        this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
 
+        if(!imageUrl.contains("mp4") && !imageUrl.contains("youtube") && !imageUrl.contains("music") && !imageUrl.contains("videos")) {
+            DownloadImage downloadImage = new DownloadImage();
+            downloadImage.downloadImage(imageUrl, PayWithRocketActivity.this);
+            Toast.makeText(PayWithRocketActivity.this, "ধন্যবাদ আপনার পেমেন্ট টি যাচাই করা হচ্ছে", Toast.LENGTH_SHORT).show();
+            Intent myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            myIntent.putExtra("cameFromWhichActivity","payWithRocket");
+            this.startActivity(myIntent);
+            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            finish();
+        }else{
+            Toast.makeText(PayWithRocketActivity.this, "ধন্যবাদ আপনার পেমেন্ট টি যাচাই করা হচ্ছে", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PayWithRocketActivity.this, "ভিডিও কন্টেন্ট পরবর্তীতে পাবেন", Toast.LENGTH_LONG).show();
+            Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            myIntent.putExtra("cameFromWhichActivity","payWithRocket");
+            this.startActivity(myIntent);
+            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            finish();
+        }
     }
 }
