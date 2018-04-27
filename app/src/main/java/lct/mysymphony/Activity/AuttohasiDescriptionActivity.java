@@ -52,5 +52,7 @@ public class AuttohasiDescriptionActivity extends AppCompatActivity {
         Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
         purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);
+        purchase.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 }

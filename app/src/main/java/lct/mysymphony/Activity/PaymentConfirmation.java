@@ -9,10 +9,14 @@ import lct.mysymphony.R;
 
 public class PaymentConfirmation extends AppCompatActivity {
 
+    String imageUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_confirmation);
+
+        imageUrl=getIntent().getStringExtra("imageUrl");
     }
 
     public void jumpToPaymentHistory(View view) {
@@ -25,9 +29,10 @@ public class PaymentConfirmation extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
+        myIntent.putExtra("imageUrl",imageUrl);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 }

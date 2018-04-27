@@ -21,9 +21,6 @@ public class ImageViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image_view);
 
         wallpaerUrl = (String) getIntent().getSerializableExtra("wallpaper");
-        ///price=getIntent().getIntExtra("price",0);
-        ///Log.d("price",Integer.toString(price));
-
         Glide.with(this).load(wallpaerUrl).into((ImageView) findViewById(R.id.imageViewWallpaper));
     }
 
@@ -31,8 +28,8 @@ public class ImageViewActivity extends AppCompatActivity {
         Intent purchase = new Intent(ImageViewActivity.this, PaymentMethod.class);
         Log.d("img_image",wallpaerUrl);
         purchase.putExtra("imageUrl",wallpaerUrl);
-        ///purchase.putExtra("price",price);
         startActivity(purchase);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
     @Override

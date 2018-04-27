@@ -11,14 +11,14 @@ import lct.mysymphony.Fragment.Cricket_fragment;
 import lct.mysymphony.Fragment.Football_fragment;
 import lct.mysymphony.Fragment.other_sports_fragment;
 import lct.mysymphony.R;
-import lct.mysymphony.ViewpagerAdapter.ViewPagerAdapterForSports;
+import lct.mysymphony.ViewpagerAdapter.ViewPagerAdapter;
 
 public class KheladhulaActivity extends AppCompatActivity {
 
     private android.support.v7.widget.Toolbar toolbar;
     TabLayout tabLayout;
     ViewPager viewPager;
-    ViewPagerAdapterForSports viewPagerAdapterForSports;
+    ViewPagerAdapter viewPagerAdapterForSports;
 
     Context context;
 
@@ -36,7 +36,7 @@ public class KheladhulaActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPagerInSports);
 
-        viewPagerAdapterForSports = new ViewPagerAdapterForSports(getSupportFragmentManager());
+        viewPagerAdapterForSports = new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setOffscreenPageLimit(3);
 
         viewPagerAdapterForSports.addFragments(new Cricket_fragment(), "ক্রিকেট");
@@ -91,7 +91,7 @@ public class KheladhulaActivity extends AppCompatActivity {
             Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             this.startActivity(myIntent);
-            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            overridePendingTransition(R.anim.right_in, R.anim.right_out);
             finish();
             //additional code
         } else {

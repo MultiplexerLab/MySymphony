@@ -19,6 +19,7 @@ public class Symphony extends AppCompatActivity {
     public void callHelpline(View view){
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", "16272", null));
         startActivity(intent);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
     @Override

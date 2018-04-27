@@ -58,6 +58,7 @@ public class JibonJaponDescriptionActivity extends AppCompatActivity {
         Intent purchase = new Intent(JibonJaponDescriptionActivity.this, PaymentMethod.class);
         purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
 
     }
 }

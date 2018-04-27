@@ -69,15 +69,17 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
         newsDescription.setText(object.getContentDescription());
     }
 
-    public void purChase(View view) {
-        Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
-        startActivity(purchase);
-    }
+//    public void purChase(View view) {
+//        Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
+//        startActivity(purchase);
+//        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+//    }
 
     public void mullochar(View view) {
         JapitoJibonMC object = (JapitoJibonMC) getIntent().getSerializableExtra("Data");
         Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
         purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 }

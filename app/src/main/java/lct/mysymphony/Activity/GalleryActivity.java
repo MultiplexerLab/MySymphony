@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import lct.mysymphony.Fragment.newwallPaperFragment;
 import lct.mysymphony.R;
-import lct.mysymphony.ViewpagerAdapter.ViewPagerAdapterForGallery;
+import lct.mysymphony.ViewpagerAdapter.ViewPagerAdapter;
 
 public class GalleryActivity extends AppCompatActivity {
 
@@ -17,7 +17,7 @@ public class GalleryActivity extends AppCompatActivity {
     private android.support.v7.widget.Toolbar toolbar;
     TabLayout tabLayout;
     ViewPager viewPager;
-    ViewPagerAdapterForGallery viewPagerAdapterForGallery;
+    ViewPagerAdapter viewPagerAdapterForGallery;
     Context context;
 
     @Override
@@ -30,7 +30,7 @@ public class GalleryActivity extends AppCompatActivity {
         context = GalleryActivity.this;
         tabLayout = findViewById(R.id.tabLayoutinGalleryActivity);
         viewPager = findViewById(R.id.viewPagerInGallery);
-        viewPagerAdapterForGallery = new ViewPagerAdapterForGallery(getSupportFragmentManager());
+        viewPagerAdapterForGallery = new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setOffscreenPageLimit(2);
         viewPagerAdapterForGallery.addFragments(new newwallPaperFragment(), "নতুন");
         viewPagerAdapterForGallery.addFragments(new newwallPaperFragment(), "জনপ্রিয়");
@@ -62,7 +62,7 @@ public class GalleryActivity extends AppCompatActivity {
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 }

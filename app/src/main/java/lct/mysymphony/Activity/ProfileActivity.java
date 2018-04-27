@@ -15,14 +15,14 @@ import lct.mysymphony.Fragment.MyInfoFragmentInProfileActivity;
 import lct.mysymphony.Fragment.MyItemFragmentInProfileActivity;
 import lct.mysymphony.Fragment.PaymentListFragmentInProfileActivity;
 import lct.mysymphony.R;
-import lct.mysymphony.ViewpagerAdapter.ViewPagerAdapterForSports;
+import lct.mysymphony.ViewpagerAdapter.ViewPagerAdapter;
 
 public class ProfileActivity extends AppCompatActivity implements MyInfoFragmentInProfileActivity.ActivityCommunicator {
 
     private android.support.v7.widget.Toolbar toolbar;
     TabLayout tabLayout;
     ViewPager viewPager;
-    ViewPagerAdapterForSports viewPagerAdapterForSports;
+    ViewPagerAdapter viewPagerAdapterForSports;
     ImageView logoutIcon;
     TextView nameTVInActivityUserProfile;
     TextView nameTV;
@@ -31,7 +31,7 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
+        setContentView(R.layout.activity_profile);
 
         toolbar = findViewById(R.id.toolbarlayoutinprofile);
         setSupportActionBar(toolbar);
@@ -51,6 +51,7 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
                 editor.apply();
                 Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.right_in, R.anim.right_out);
             }
         });
 
@@ -61,7 +62,7 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
         tabLayout = findViewById(R.id.tabLayoutProfile);
         viewPager = findViewById(R.id.viewPagerProfile);
 
-        viewPagerAdapterForSports = new ViewPagerAdapterForSports(getSupportFragmentManager());
+        viewPagerAdapterForSports = new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setOffscreenPageLimit(3);
 
         viewPagerAdapterForSports.addFragments(new PaymentListFragmentInProfileActivity(), "পেমেন্ট লিস্ট");

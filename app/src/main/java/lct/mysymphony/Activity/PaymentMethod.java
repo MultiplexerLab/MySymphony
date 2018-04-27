@@ -112,18 +112,23 @@ public class PaymentMethod extends AppCompatActivity {
             {
                 Intent intent = new Intent(PaymentMethod.this, PayWithPinActivity.class);
                 intent.putExtra("paymentMethod","Pay with pin");
+                intent.putExtra("imageUrl",imageUrl);
                 ///intent.putExtra("price",price);
                 startActivity(intent);
+                overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }else if(selectedMethod.contains("Rocket")){
                 Intent intent = new Intent(PaymentMethod.this, PayWithRocketActivity.class);
                 intent.putExtra("paymentMethod","Rocket");
                 intent.putExtra("imageUrl",imageUrl);
                 ///intent.putExtra("price",price);
                 startActivity(intent);
+                overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }else
             {
                 Intent intent = new Intent(PaymentMethod.this, PaymentConfirmation.class);
+                intent.putExtra("imageUrl",imageUrl);
                 startActivity(intent);
+                overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
         } else {
             Toast.makeText(this, "যেকোনো একটি পেমেন্ট মেথড সিলেক্ট করুন", Toast.LENGTH_SHORT).show();
@@ -136,7 +141,7 @@ public class PaymentMethod extends AppCompatActivity {
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 }

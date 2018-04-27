@@ -142,7 +142,6 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <Button
-
                     android:onClick="startUserProfileActivity"
                     android:layout_width="320dp"
                     android:layout_height="50dp"

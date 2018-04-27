@@ -113,8 +113,9 @@ public class HomePage extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 if (id == R.id.symphony_bottom_navigation) {
-                    Intent symphony = new Intent(HomePage.this, Symphony.class);
+                    Intent symphony = new Intent(HomePage.this, SymphonyCareActivity.class);
                     startActivity(symphony);
+                    overridePendingTransition(R.anim.left_in, R.anim.left_out);
                 }
                 return true;
             }
@@ -125,6 +126,7 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View view) {
                 Intent profileIntent = new Intent(HomePage.this, ProfileActivity.class);
                 startActivity(profileIntent);
+                overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
         });
         notificationIcon.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +134,7 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View view) {
                 Intent profileIntent = new Intent(HomePage.this, NotificationActivity.class);
                 startActivity(profileIntent);
+                overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
         });
         loadDataFromVolley();
@@ -561,15 +564,19 @@ public class HomePage extends AppCompatActivity {
     public void subscribe(View view) {
         Intent intentDailyLife = new Intent(HomePage.this, PaymentMethod.class);
         startActivity(intentDailyLife);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
     public void moreJapitoJibon(View view) {
         Intent intentDailyLife = new Intent(HomePage.this, JibonJaponActivity.class);
         startActivity(intentDailyLife);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
     public void moreShikha(View view) {
         Intent intentDailyLife = new Intent(HomePage.this, PorashunaActivity.class);
         startActivity(intentDailyLife);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
+
 }

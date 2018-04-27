@@ -1,7 +1,10 @@
 package lct.mysymphony.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -43,13 +46,20 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 
     public void resetPassword(View view) {
+        if (internetConnected())
+        {
+            sendUserPhoneNumberToServer();
+        }
+        else
+            Toast.makeText(this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
 
-        sendUserPhoneNumberToServer();
+
+
     }
 
     private void sendUserPhoneNumberToServer() {
@@ -97,5 +107,16 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         });
 
         queue.add(stringRequest);
+    }
+
+    private boolean internetConnected() {
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

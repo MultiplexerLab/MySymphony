@@ -32,6 +32,7 @@ public class SliderContentActivity extends AppCompatActivity {
         Intent purchase = new Intent(SliderContentActivity.this, PaymentMethod.class);
         purchase.putExtra("imageUrl",imageUrl);
         startActivity(purchase);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
     @Override

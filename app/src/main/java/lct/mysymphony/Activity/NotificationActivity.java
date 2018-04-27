@@ -1,5 +1,6 @@
 package lct.mysymphony.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -51,5 +52,18 @@ public class NotificationActivity extends AppCompatActivity {
         adapterNotification = new RecyclerAdapterNotification(NotificationActivity.this, notificationsArrayList);
 
         recyclerViewNotification.setAdapter(adapterNotification);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        super.onBackPressed();
+        Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
+        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        this.startActivity(myIntent);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        finish();
+
+
     }
 }

@@ -26,5 +26,12 @@
         <item name="colorPrimaryDark">@color/White</item>
 
     </style>
+    <style name="TabLayoutInSymphonyCareTheme" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/White</item>
+        <item name="tabIndicatorHeight">4dp</item>
+        <item name="colorPrimaryDark">@color/White</item>
+        <item name="colorAccent">@color/White</item>
+
+    </style>
 
 </resources>

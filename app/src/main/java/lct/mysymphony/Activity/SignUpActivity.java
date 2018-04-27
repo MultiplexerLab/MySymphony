@@ -84,7 +84,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 
@@ -243,6 +243,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
 
                             Intent intent = new Intent(SignUpActivity.this, HomePage.class);
                             startActivity(intent);
+                            overridePendingTransition(R.anim.left_in, R.anim.left_out);
                         }
                         else
                             Toast.makeText(SignUpActivity.this, "আপনার সাইন আপ সম্পন্ন হয়নি\n" +

@@ -33,19 +33,13 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
    /// private int[] images = {R.drawable.japito_jibon_1, R.drawable.japito_jibon_2};
 
     Activity activity;
-   DataHelper dataHelper;
-   Bitmap bitmap;
-   int rowCount=0;
+   ArrayList<Bitmap> bitmapArrayList;
 
 
-    public RecyclerAdapterForMyItemFragment(Activity activity) {
+    public RecyclerAdapterForMyItemFragment(Activity activity, ArrayList<Bitmap> bitmapArrayList) {
 
         this.activity = activity;
-        dataHelper=new DataHelper(activity);
-        rowCount =(int) dataHelper.getRowCount();
-
-        if (bitmap==null)
-            Log.d("bit","null");
+        this.bitmapArrayList=bitmapArrayList;
 
 
     }
@@ -62,16 +56,15 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
 
         ///holder.japitoJebonNewsTV.setText(japitoJibonMCArrayList.get(position).getContentTitle());
-        bitmap=dataHelper.getBitmap(position+1);
 
         Glide.with(activity)
-                .load(bitmap)
+                .load(bitmapArrayList.get(position))
                 .into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return rowCount;
+        return bitmapArrayList.size();
     }
 
 

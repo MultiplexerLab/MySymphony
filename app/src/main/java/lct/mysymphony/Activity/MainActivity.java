@@ -34,7 +34,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     ImageView imageView;
-    private DataHelper dbHelper;
+    DataHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 Intent intent = new Intent(MainActivity.this, HomePage.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
 
 
@@ -140,5 +141,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         ActivityCompat.finishAffinity(this);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 }

@@ -74,8 +74,9 @@
         <activity android:name=".Activity.BigganOProjuktiDescriptionActivity" />
         <activity android:name=".Activity.CartoonDescriptionActivity" />
         <activity android:name=".Activity.JapitiJibonDescriptionActivity" />
-        <activity android:name=".Activity.PayWithRocketActivity"></activity>
-        <activity android:name=".Activity.PayWithPinActivity"></activity>
+        <activity android:name=".Activity.PayWithRocketActivity" />
+        <activity android:name=".Activity.PayWithPinActivity" />
+        <activity android:name=".Activity.SymphonyCareActivity"></activity>
     </application>
 
 </manifest>

@@ -13,7 +13,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -58,7 +61,7 @@ public class SignInActivity extends AppCompatActivity {
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
 
     }
@@ -155,7 +158,16 @@ public class SignInActivity extends AppCompatActivity {
                                 Toast.makeText(SignInActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
 
                         } else
+                        {
+                            LinearLayout linearLayout=findViewById(R.id.shake);
+                            Animation shake = AnimationUtils.loadAnimation(SignInActivity.this, R.anim.shake);
+                            linearLayout.startAnimation(shake);
+                            userName.getText().clear();
+                            password.getText().clear();
+
                             Toast.makeText(SignInActivity.this, "আপনার তথ্য সঠিক নয় ", Toast.LENGTH_SHORT).show();
+                        }
+
 
 
                     }
@@ -178,4 +190,8 @@ public class SignInActivity extends AppCompatActivity {
         };
         queue.add(stringRequest);
     }
+
+
+
+
 }

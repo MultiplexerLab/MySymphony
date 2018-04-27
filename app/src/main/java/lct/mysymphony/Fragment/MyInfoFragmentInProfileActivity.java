@@ -66,6 +66,8 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
                     public void onResponse(JSONArray response) {
 
                         Log.d("responseprofile", response.toString());
+                        ActivityCommunicator activityCommunicator=(ActivityCommunicator)getActivity();
+                        activityCommunicator.passDataToActivity("Symphony");
 
                         try {
                             JSONObject postInfo = response.getJSONObject(0);
@@ -74,8 +76,7 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
                                 userName=postInfo.getString("applicantBirthDate");
                                 nameTV.setText("   " + postInfo.getString("partnerName"));
 
-                                ActivityCommunicator activityCommunicator=(ActivityCommunicator)getActivity();
-                                activityCommunicator.passDataToActivity(userName);
+
 
                             } else {
                                 Log.d("json", "null");

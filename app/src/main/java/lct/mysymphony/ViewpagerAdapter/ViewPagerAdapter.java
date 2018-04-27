@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Created by USER on 01-Mar-18.
  */
 
-public class ViewPagerAdapterForSports extends FragmentStatePagerAdapter {
+public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     ArrayList<Fragment> fragments = new ArrayList<>();
     ArrayList<String> tabTitles = new ArrayList<>();
@@ -22,7 +22,7 @@ public class ViewPagerAdapterForSports extends FragmentStatePagerAdapter {
         this.tabTitles.add(titles);
     }
 
-    public ViewPagerAdapterForSports(FragmentManager fm) {
+    public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -45,14 +45,6 @@ public class ViewPagerAdapterForSports extends FragmentStatePagerAdapter {
     public int getItemPosition(Object object) {
         return POSITION_NONE;
 
-    }
-
-    public void replaceFragment(Fragment fragment) {
-        fragments.remove(0);
-        fragments.add(0, fragment);
-        tabTitles.remove(0);
-        tabTitles.add(0,"Home");
-        notifyDataSetChanged();
     }
 
     @Override

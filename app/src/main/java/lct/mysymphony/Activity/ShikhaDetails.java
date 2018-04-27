@@ -31,6 +31,7 @@ public class ShikhaDetails extends AppCompatActivity {
         Intent purchase = new Intent(ShikhaDetails.this, PaymentMethod.class);
         purchase.putExtra("imageUrl",shikhkha.getContentUrl());
         startActivity(purchase);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
     @Override
