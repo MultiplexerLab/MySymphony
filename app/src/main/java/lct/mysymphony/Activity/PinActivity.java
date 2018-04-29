@@ -329,7 +329,6 @@ public class PinActivity extends AppCompatActivity {
                             PinActivity.this.startActivity(myIntent);
                             overridePendingTransition(R.anim.left_in, R.anim.left_out);
                             finish();
-
                         }
 
 //                        String genRef = "";
