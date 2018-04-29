@@ -1,11 +1,18 @@
 package lct.mysymphony.Activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +29,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lct.mysymphony.R;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
@@ -29,6 +39,9 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     EditText userPhoneNumber;
     RequestQueue queue;
     SharedPreferences.Editor editor;
+
+    String[] permissions = new String[]{
+            Manifest.permission.READ_SMS,};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +51,8 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         userPhoneNumber=findViewById(R.id.txtMobileNumInForgotPassword);
         editor = getSharedPreferences("phoneNumber", MODE_PRIVATE).edit();
         queue = Volley.newRequestQueue(this);
+        checkPermissions();
+
     }
 
     @Override
@@ -58,8 +73,6 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         else
             Toast.makeText(this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
 
-
-
     }
 
     private void sendUserPhoneNumberToServer() {
@@ -72,8 +85,6 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                     public void onResponse(String response) {
 
                         Log.d("responseprofile",response.toString());
-
-                        Log.d("responsePhone ", response);
 
                         String genRef = "";
                         JSONObject postInfo = null;
@@ -118,5 +129,22 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+
+
+    private boolean checkPermissions() {
+        int result;
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for (String p : permissions) {
+            result = ContextCompat.checkSelfPermission(this, p);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(p);
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 100);
+            return false;
+        }
+        return true;
     }
 }

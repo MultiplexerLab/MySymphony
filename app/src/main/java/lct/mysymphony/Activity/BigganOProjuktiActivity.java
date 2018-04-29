@@ -79,12 +79,14 @@ public class BigganOProjuktiActivity extends AppCompatActivity {
                     String contentTitle = pachMishaliContentArr.getJSONObject(i).getString("contentTitle");
                     String contentType = pachMishaliContentArr.getJSONObject(i).getString("contentType");
                     String contentDescription = pachMishaliContentArr.getJSONObject(i).getString("contentDescription");
+                    int contentId=pachMishaliContentArr.getJSONObject(i).getInt("contentId");
+                    String contentCat=pachMishaliContentArr.getJSONObject(i).getString("contentCat");
 
                     if (contentType.equals("video")) {
                         String contentUrl = pachMishaliContentArr.getJSONObject(i).getString("thumbNail_image");
-                        bigganOProjuktiArrayList.add(new BigganOProjukti(contentTitle, contentType, contentDescription, contentUrl));
+                        bigganOProjuktiArrayList.add(new BigganOProjukti(contentTitle, contentType, contentDescription, contentUrl,contentCat,contentId));
                     } else {
-                        bigganOProjuktiArrayList.add(new BigganOProjukti(contentTitle, contentType, contentDescription, pachMishaliContentArr.getJSONObject(i).getString("contentUrl")));
+                        bigganOProjuktiArrayList.add(new BigganOProjukti(contentTitle, contentType, contentDescription, pachMishaliContentArr.getJSONObject(i).getString("contentUrl"),contentCat,contentId));
                     }
 
                 } catch (JSONException e) {

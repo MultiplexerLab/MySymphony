@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import lct.mysymphony.ModelClass.SeraChobi;
 import lct.mysymphony.R;
 
 /**
@@ -21,11 +22,11 @@ public class RecyclerAdapterForNewWallPaperFragment extends RecyclerView.Adapter
 
 
 
-    ArrayList<String> images;
+    ArrayList<SeraChobi> images;
     Activity activity;
 
 
-    public RecyclerAdapterForNewWallPaperFragment(Activity activity, ArrayList<String> images) {
+    public RecyclerAdapterForNewWallPaperFragment(Activity activity, ArrayList<SeraChobi> images) {
 
         this.activity = activity;
         this.images = images;
@@ -45,7 +46,7 @@ public class RecyclerAdapterForNewWallPaperFragment extends RecyclerView.Adapter
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
 
         Glide.with(activity)
-                .load(images.get(position))
+                .load(images.get(position).getImage_url())
                 .into(holder.imageView);
     }
 

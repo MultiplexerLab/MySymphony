@@ -5,10 +5,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.R;
 
 public class PaymentMethod extends AppCompatActivity {
@@ -17,6 +19,7 @@ public class PaymentMethod extends AppCompatActivity {
     ImageButton selectedButton;
     String selectedMethod = "";
     String imageUrl;
+    DataBaseData dataBaseData;
     ///Integer price;
 
 
@@ -33,6 +36,9 @@ public class PaymentMethod extends AppCompatActivity {
         payWithVisa = findViewById(R.id.payWithVisa);
         payWithMasterCard = findViewById(R.id.payWithMasterCard);
         imageUrl=getIntent().getStringExtra("imageUrl");
+        dataBaseData= (DataBaseData) getIntent().getSerializableExtra("dataBaseData");
+        if (dataBaseData==null)
+            Log.d("dataBaseDataMethod","null");
 
         payWithPin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +118,7 @@ public class PaymentMethod extends AppCompatActivity {
             {
                 Intent intent = new Intent(PaymentMethod.this, PayWithPinActivity.class);
                 intent.putExtra("paymentMethod","Pay with pin");
+                intent.putExtra("dataBaseData",dataBaseData);
                 intent.putExtra("imageUrl",imageUrl);
                 ///intent.putExtra("price",price);
                 startActivity(intent);
@@ -119,6 +126,7 @@ public class PaymentMethod extends AppCompatActivity {
             }else if(selectedMethod.contains("Rocket")){
                 Intent intent = new Intent(PaymentMethod.this, PayWithRocketActivity.class);
                 intent.putExtra("paymentMethod","Rocket");
+                intent.putExtra("dataBaseData",dataBaseData);
                 intent.putExtra("imageUrl",imageUrl);
                 ///intent.putExtra("price",price);
                 startActivity(intent);

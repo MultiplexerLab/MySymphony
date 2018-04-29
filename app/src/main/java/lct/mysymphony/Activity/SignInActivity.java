@@ -153,6 +153,9 @@ public class SignInActivity extends AppCompatActivity {
 
                         if (response.contains("SUCCESS")) {
                             if (internetConnected()) {
+                                SharedPreferences.Editor editor = getSharedPreferences("phoneNumber", MODE_PRIVATE).edit();
+                                editor.putString("phoneNo", userName.getText().toString());
+                                editor.apply();
                                 homePageStart();
                             } else
                                 Toast.makeText(SignInActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();

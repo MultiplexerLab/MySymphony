@@ -1,11 +1,18 @@
 package lct.mysymphony.Activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +32,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lct.mysymphony.R;
 import lct.mysymphony.helper.Endpoints;
 
@@ -36,6 +46,8 @@ public class PinActivity extends AppCompatActivity {
     String genref = "";
     String phoneNumber;
     String cameFromWhichActivity = "";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +63,8 @@ public class PinActivity extends AppCompatActivity {
 
         phoneNumber = prefs.getString("phoneNo", "");
         pinview = findViewById(R.id.pinView);
+        readSms();
+
 
 //        pinview.setPinViewEventListener(new Pinview.PinViewEventListener() {
 //            @Override
@@ -91,15 +105,12 @@ public class PinActivity extends AppCompatActivity {
                         } else
                             sendVarificationCodeToServer();
 
-
                     } else {
                         Toast.makeText(PinActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
                         finish();
                         startActivity(getIntent());
-
                     }
                 }
-
 
             }
 
@@ -115,16 +126,13 @@ public class PinActivity extends AppCompatActivity {
         Log.i("GenRefreset", genref);
         Log.i("Pintext", pinText);
 
-
         String url = "http://bot.sharedtoday.com:9500/ws/validate2FACode?prcName=forgotPass&uid=" + phoneNumber + "&genRef=" + genref + "&code=" + pinText;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
                         Log.d("reset", response);
-
                         String result = "";
 
                         try {
@@ -230,7 +238,6 @@ public class PinActivity extends AppCompatActivity {
                         if (result.contains("SUCCESS")) {
                             Toast.makeText(PinActivity.this, "আপনার পিন সঠিক হয়েছে", Toast.LENGTH_SHORT).show();
 
-
                             Intent myIntent = new Intent(getApplicationContext(), SignUpActivity.class);
                             myIntent.putExtra("phoneNumber", phoneNumber);
                             myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -256,7 +263,6 @@ public class PinActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-
     public void resendMobileVerificationNumber() {
         String url = Endpoints.SEND_MOBILE_NUMBER_TO_SERVER_URL + phoneNumber;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -279,6 +285,7 @@ public class PinActivity extends AppCompatActivity {
                             Toast.makeText(PinActivity.this, "কিছুক্ষন পরে আবার চেষ্টা করুনা", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(PinActivity.this, "আপনার নাম্বার এ ছয় ডিজিটের পিন পাঠানো হয়েছে", Toast.LENGTH_SHORT).show();
+
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -331,7 +338,6 @@ public class PinActivity extends AppCompatActivity {
 
                         }
 
-
 //                        String genRef = "";
 //                        JSONObject postInfo = null;
 //                        try {
@@ -357,4 +363,54 @@ public class PinActivity extends AppCompatActivity {
         queue.add(stringRequest);
 
     }
+    public void readSms() {
+        Log.d("entersms","enter");
+        StringBuilder smsBuilder = new StringBuilder();
+        final String SMS_URI_INBOX = "content://sms/inbox";
+        final String SMS_URI_ALL = "content://sms/";
+        try {
+            Uri uri = Uri.parse(SMS_URI_INBOX);
+            String[] projection = new String[]{"_id", "address", "person", "body", "date", "type"};
+            Cursor cur = getContentResolver().query(uri, projection, "address='+8801552146213'", null, "date desc");
+            if (cur.moveToFirst()) {
+                int index_Address = cur.getColumnIndex("address");
+                int index_Person = cur.getColumnIndex("person");
+                int index_Body = cur.getColumnIndex("body");
+                int index_Date = cur.getColumnIndex("date");
+                int index_Type = cur.getColumnIndex("type");
+                do {
+                    String strAddress = cur.getString(index_Address);
+                    int intPerson = cur.getInt(index_Person);
+                    String strbody = cur.getString(index_Body);
+                    long longDate = cur.getLong(index_Date);
+                    int int_Type = cur.getInt(index_Type);
+
+                    smsBuilder.append("[ ");
+                    smsBuilder.append(strAddress + ", ");
+                    smsBuilder.append(intPerson + ", ");
+                    smsBuilder.append(strbody + ", ");
+                    smsBuilder.append(longDate + ", ");
+                    smsBuilder.append(int_Type);
+                    smsBuilder.append(" ]\n\n");
+                } while (cur.moveToNext());
+
+                if (!cur.isClosed()) {
+                    cur.close();
+                    cur = null;
+                }
+            } else {
+                smsBuilder.append("no result!");
+            } // end if
+        } catch (SQLiteException ex)
+        {
+            Log.d("SQLiteException", ex.getMessage());
+        }
+        Log.d("strngbldr",smsBuilder.toString());
+    }
+
+
+
+
+
 }
+

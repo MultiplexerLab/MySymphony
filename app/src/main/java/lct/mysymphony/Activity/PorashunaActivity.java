@@ -101,12 +101,14 @@ public class PorashunaActivity extends AppCompatActivity {
                     String contentTitle = porashunaContentArr.getJSONObject(i).getString("contentTitle");
                     String contentType = porashunaContentArr.getJSONObject(i).getString("contentType");
                     String contentDescription = porashunaContentArr.getJSONObject(i).getString("contentDescription");
+                    int contentId=porashunaContentArr.getJSONObject(i).getInt("contentId");
+                    String contentCat=porashunaContentArr.getJSONObject(i).getString("contentCat");
 
                     if (contentType.equals("video")) {
                         String contentUrl = porashunaContentArr.getJSONObject(i).getString("thumbNail_image");
-                        porashunaArrayList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl));
+                        porashunaArrayList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl,contentCat,contentId));
                     } else {
-                        porashunaArrayList.add(new Porashuna(contentTitle, contentType, contentDescription, porashunaContentArr.getJSONObject(i).getString("contentUrl")));
+                        porashunaArrayList.add(new Porashuna(contentTitle, contentType, contentDescription, porashunaContentArr.getJSONObject(i).getString("contentUrl"),contentCat,contentId));
                     }
 
                 } catch (JSONException e) {

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+
+    android:layout_height="match_parent"
+    tools:context=".Activity.ShowOnlyImage">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:fitsSystemWindows="true">
+
+        <include
+            android:id="@+id/toolbarlayoutinonlyimage"
+            layout="@layout/toolbar_layout_in_only_image_activity"
+            />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ImageView
+        android:layout_margin="15dp"
+        android:id="@+id/imageInOnlyImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

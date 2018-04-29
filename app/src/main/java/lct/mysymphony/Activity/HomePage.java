@@ -37,6 +37,7 @@ import lct.mysymphony.CustomSwipeAdapter;
 import lct.mysymphony.ModelClass.GamesZone;
 import lct.mysymphony.ModelClass.JapitoJibonMC;
 import lct.mysymphony.ModelClass.MulloChar;
+import lct.mysymphony.ModelClass.SeraChobi;
 import lct.mysymphony.ModelClass.ShikkhaSohaYika;
 import lct.mysymphony.ModelClass.ShocolChobi;
 import lct.mysymphony.ModelClass.SliderImage;
@@ -53,7 +54,7 @@ public class HomePage extends AppCompatActivity {
     Context context;
 
     ArrayList<SliderImage> sliderImages;
-    ArrayList<String> topContentImages;
+    ArrayList<SeraChobi> seraChobiArrayList;
     ArrayList<JapitoJibonMC> japitoJibonMCArrayList;
     ArrayList<MulloChar> mulloCharArrayList;
     ArrayList<ShocolChobi> shocolChobiArrayList;
@@ -95,7 +96,7 @@ public class HomePage extends AppCompatActivity {
         context = HomePage.this;
         queue = Volley.newRequestQueue(HomePage.this);
         sliderImages = new ArrayList<>();
-        topContentImages = new ArrayList<>();
+        seraChobiArrayList = new ArrayList<>();
         toolbar = findViewById(R.id.toolbarlayoutinhome_page);
         setSupportActionBar(toolbar);
         profileIcon = findViewById(R.id.profileIcon);
@@ -248,7 +249,9 @@ public class HomePage extends AppCompatActivity {
                     String contentUrl = shocol_chobi__content_arr.getJSONObject(i).getString("contentUrl");
                     String contentTitle = shocol_chobi__content_arr.getJSONObject(i).getString("contentTitle");
                     String contentType = shocol_chobi__content_arr.getJSONObject(i).getString("contentType");
-                    shocolChobiArrayList.add(new ShocolChobi(contentType, contentUrl, contentTitle));
+                    int contentId=shocol_chobi__content_arr.getJSONObject(i).getInt("contentId");
+                    String contentCat=shocol_chobi__content_arr.getJSONObject(i).getString("contentCat");
+                    shocolChobiArrayList.add(new ShocolChobi(contentType, contentUrl, contentTitle,contentCat,contentId));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -269,7 +272,9 @@ public class HomePage extends AppCompatActivity {
                     String contentType = games_zone__content_arr.getJSONObject(i).getString("contentType");
                     int previousPrice = games_zone__content_arr.getJSONObject(i).getInt("previousPrice");
                     int newPrice = games_zone__content_arr.getJSONObject(i).getInt("newPrice");
-                    gamesZoneArrayList.add(new GamesZone(contentType, contentUrl, contentTitle, previousPrice, newPrice));
+                    int contentId=games_zone__content_arr.getJSONObject(i).getInt("contentId");
+                    String contentCat=games_zone__content_arr.getJSONObject(i).getString("contentCat");
+                    gamesZoneArrayList.add(new GamesZone(contentType, contentUrl, contentTitle, previousPrice, newPrice,contentCat,contentId));
 
                 } catch (JSONException e) {
                     Log.d("exception", e.toString());
@@ -292,12 +297,14 @@ public class HomePage extends AppCompatActivity {
                     String contentType = shikkha_sohayika__content_arr.getJSONObject(i).getString("contentType");
                     String imageUrl = shikkha_sohayika__content_arr.getJSONObject(i).getString("thumbNail_image");
                     String contentDescription = shikkha_sohayika__content_arr.getJSONObject(i).getString("contentDescription");
+                    int contentId=shikkha_sohayika__content_arr.getJSONObject(i).getInt("contentId");
+                    String contentCat=shikkha_sohayika__content_arr.getJSONObject(i).getString("contentCat");
 
                     if (contentType.equals("video")) {
                         String contentUrl = shikkha_sohayika__content_arr.getJSONObject(i).getString("contentUrl");
-                        shikkhaSohaYikaArrayList.add(new ShikkhaSohaYika(contentType, contentDescription, contentUrl, contentTitle, imageUrl));
+                        shikkhaSohaYikaArrayList.add(new ShikkhaSohaYika(contentType, contentDescription, contentUrl, contentTitle, imageUrl,contentCat,contentId));
                     } else {
-                        shikkhaSohaYikaArrayList.add(new ShikkhaSohaYika(contentType, contentDescription, "", contentTitle, imageUrl));
+                        shikkhaSohaYikaArrayList.add(new ShikkhaSohaYika(contentType, contentDescription, "", contentTitle, imageUrl,contentCat,contentId));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -320,7 +327,9 @@ public class HomePage extends AppCompatActivity {
                     String image_url = mullo_char_content_arr.getJSONObject(i).getString("image_url");
                     int previousPrice = mullo_char_content_arr.getJSONObject(i).getInt("previousPrice");
                     int newPrice = mullo_char_content_arr.getJSONObject(i).getInt("newPrice");
-                    mulloCharArrayList.add(new MulloChar(contentType, contentUrl, contentTitle, previousPrice, newPrice, image_url));
+                    int contentId=mullo_char_content_arr.getJSONObject(i).getInt("contentId");
+                    String contentCat=mullo_char_content_arr.getJSONObject(i).getString("contentCat");
+                    mulloCharArrayList.add(new MulloChar(contentType, contentUrl, contentTitle, previousPrice, newPrice, image_url,contentCat,contentId));
 
                 } catch (JSONException e) {
                     Log.d("mullochardata", e.toString());
@@ -341,13 +350,15 @@ public class HomePage extends AppCompatActivity {
                     String contentType = japito_jibon_content_arr.getJSONObject(i).getString("contentType");
                     String contentDescription = japito_jibon_content_arr.getJSONObject(i).getString("contentDescription");
                     String contentUrl = japito_jibon_content_arr.getJSONObject(i).getString("contentUrl");
+                    String contentCat=japito_jibon_content_arr.getJSONObject(i).getString("contentCat");
+                    int contentid=japito_jibon_content_arr.getJSONObject(i).getInt("contentId");
 
                     if (contentType.equals("video")) {
                         Log.i("Data", "Video");
-                        japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), "video", contentUrl));
+                        japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), "video", contentUrl,contentCat,contentid));
                     } else {
                         Log.i("Data", "Image");
-                        japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("contentUrl"), "image", contentUrl));
+                        japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("contentUrl"), "image", contentUrl,contentCat,contentid));
                     }
                 } catch (JSONException e) {
                     Log.d("japito_jibon_exception", e.toString());
@@ -365,7 +376,11 @@ public class HomePage extends AppCompatActivity {
             for (int i = 0; i < top_contentsArr.length(); i++) {
                 try {
                     String contentUrl = top_contentsArr.getJSONObject(i).getString("contentUrl");
-                    topContentImages.add(contentUrl);
+                    String contentTitle=top_contentsArr.getJSONObject(i).getString("contentTitle");
+                    String contentType=top_contentsArr.getJSONObject(i).getString("contentType");
+                    String contentCat=top_contentsArr.getJSONObject(i).getString("contentCat");
+                    int contentId = top_contentsArr.getJSONObject(i).getInt("contentId");
+                    seraChobiArrayList.add(new SeraChobi(contentUrl,"",contentTitle,contentType,contentCat,contentId));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -382,7 +397,11 @@ public class HomePage extends AppCompatActivity {
                 try {
                     String contentUrl = jsonSliderContentArr.getJSONObject(i).getString("contentUrl");
                     String description = jsonSliderContentArr.getJSONObject(i).getString("contentDescription");
-                    sliderImages.add(new SliderImage(contentUrl, description));
+                    String contentTitle=jsonSliderContentArr.getJSONObject(i).getString("contentTitle");
+                    String contentType=jsonSliderContentArr.getJSONObject(i).getString("contentType");
+                    String contentCat=jsonSliderContentArr.getJSONObject(i).getString("contentCat");
+                    int contentId = jsonSliderContentArr.getJSONObject(i).getInt("contentId");
+                    sliderImages.add(new SliderImage(contentUrl, description,contentType,contentTitle,contentCat,contentId));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -484,7 +503,7 @@ public class HomePage extends AppCompatActivity {
         SnapHelper snapHelperStart = new GravitySnapHelper(Gravity.START);
         snapHelperStart.attachToRecyclerView(recyclerViewForSeraChobi);
         recyclerViewForSeraChobi.setHasFixedSize(true);
-        adapterForSeraChobi = new RecyclerAdapterForSeraChobi(this, topContentImages);
+        adapterForSeraChobi = new RecyclerAdapterForSeraChobi(this, seraChobiArrayList);
         recyclerViewForSeraChobi.setAdapter(adapterForSeraChobi);
     }
 
@@ -554,7 +573,7 @@ public class HomePage extends AppCompatActivity {
 
     public void startGalleryActivity(View view) {
         Intent galleryIntent = new Intent(getApplicationContext(), GalleryActivity.class);
-        galleryIntent.putStringArrayListExtra("galleryImageData", topContentImages);
+        galleryIntent.putExtra("galleryImageData", seraChobiArrayList);
         galleryIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(galleryIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);

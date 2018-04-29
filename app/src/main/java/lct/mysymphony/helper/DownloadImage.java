@@ -13,14 +13,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import lct.mysymphony.Activity.MainActivity;
+import lct.mysymphony.ModelClass.DataBaseData;
 
 public class DownloadImage {
 
     Context context;
+    DataBaseData dataBaseData;
 
-    public void downloadImage(String imgURL, Context context){
+    public void downloadImage(String imgURL, Context context, DataBaseData dataBaseData){
         this.context = context;
         Log.i("downloadImage","Inside download image");
+        this.dataBaseData=dataBaseData;
         DownloadImage.BackTask bt= new DownloadImage.BackTask();
         if(!imgURL.trim().equals("")){
             bt.execute(imgURL);
@@ -57,7 +60,7 @@ public class DownloadImage {
         protected void onPostExecute(Bitmap result){
             //tv.setVisibility(TextView.GONE);
             // Insert bitmap to the database
-            dbHelper.insertBitmap(result);
+            dbHelper.insertBitmap(result,dataBaseData);
             //ImageView imgView=(ImageView)findViewById(R.id.imgview);
             // Read the first image from database and show it in ImageView
             //imgView.setImageBitmap(dbHelper.getBitmap(1));

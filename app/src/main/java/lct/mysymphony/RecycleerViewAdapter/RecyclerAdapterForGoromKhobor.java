@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.NewsDescriptionActivity;
+import lct.mysymphony.Activity.ContentDescriptionActivity.NewsDescriptionActivity;
 import lct.mysymphony.ModelClass.GoromKhobor;
 import lct.mysymphony.R;
 

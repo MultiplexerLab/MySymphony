@@ -129,10 +129,13 @@ public class Cricket_fragment extends Fragment {
                     String contentType = jsonHotNewsContentArr.getJSONObject(i).getString("contentType");
                     String contentDescription = jsonHotNewsContentArr.getJSONObject(i).getString("contentDescription");
                     String publishedAt = jsonHotNewsContentArr.getJSONObject(i).getString("publishedAt");
+//                    String contentCat=jsonHotNewsContentArr.getJSONObject(i).getString("contentCat");
+                    int contentId=jsonHotNewsContentArr.getJSONObject(i).getInt("contentId");
 
-                    kheladhulaCricketArrayList.add(new Kheladhula_Cricket_sorboshesh_sobgbad(contentTitle, contentType, publishedAt, contentDescription, imageUrl));
+                    kheladhulaCricketArrayList.add(new Kheladhula_Cricket_sorboshesh_sobgbad(contentTitle, contentType, publishedAt, contentDescription, imageUrl,"Cricket_sorboshesh_songbad",contentId));
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Log.d("exceptionIncricket",e.toString());
                 }
             }
             initializerRecyclerView();

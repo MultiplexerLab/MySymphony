@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.AuttohasiDescriptionActivity">
+    tools:context=".Activity.ContentDescriptionActivity.AuttohasiDescriptionActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbarLayoutInAuttohasiDescription"
@@ -67,61 +67,62 @@
                 android:textColor="@color/black"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-            <LinearLayout
+            <!--<LinearLayout-->
 
-                android:id="@+id/kinunOrDownloadKorunLinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:gravity="bottom|end"
-                android:orientation="horizontal">
+                <!--android:id="@+id/kinunOrDownloadKorunLinearLayout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="18dp"-->
+                <!--android:gravity="bottom|end"-->
+                <!--android:orientation="horizontal">-->
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="vertical">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:orientation="vertical">-->
 
-                    <TextView
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="বিশেষ অফার"
-                        android:textColor="@color/red" />
+                    <!--<TextView-->
+                        <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="5dp"-->
+                        <!--android:text="বিশেষ অফার"-->
+                        <!--android:textColor="@color/red" />-->
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="horizontal">-->
 
-                        <TextView
-                            android:id="@+id/strikeThroughInWallPaperBundle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="৳১৫" />
+                        <!--<TextView-->
+                            <!--android:id="@+id/previousPriceTVinAuttoHashiDescription"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="৳১৫" />-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="৳১০"
-                            android:textColor="@color/green" />
-                    </LinearLayout>
-                </LinearLayout>
+                        <!--<TextView-->
+                            <!--android:id="@+id/newPriceTVinAuttoHashiDescription"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="10dp"-->
+                            <!--android:text="৳১০"-->
+                            <!--android:textColor="@color/green" />-->
+                    <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
 
-                <Button
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:onClick="mullochar"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/btn_style_red"
-                    android:text="কিনুন / ডাউনলোড করুন"
-                    android:textColor="@color/White" />
-            </LinearLayout>
+                <!--<Button-->
+                    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"-->
+                    <!--android:onClick="mullochar"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="70dp"-->
+                    <!--android:layout_gravity="bottom"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:background="@drawable/btn_style_red"-->
+                    <!--android:text="ডাউনলোড করুন"-->
+                    <!--android:textColor="@color/White" />-->
+            <!--</LinearLayout>-->
         </LinearLayout>
 
 

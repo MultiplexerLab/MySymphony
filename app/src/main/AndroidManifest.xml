@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+    <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
         android:allowBackup="true"
@@ -41,7 +43,7 @@
         <activity android:name=".Activity.CartoonActivity" />
         <activity android:name=".Activity.PaymentMethod" />
         <activity android:name=".Activity.GalleryActivity" />
-        <activity android:name=".Activity.NewsDescriptionActivity" />
+        <activity android:name=".Activity.ContentDescriptionActivity.NewsDescriptionActivity" />
         <activity android:name=".Activity.ProfileActivity" />
         <activity android:name=".Activity.NotificationActivity" />
 
@@ -62,21 +64,22 @@
         </service>
 
         <activity android:name=".Activity.ImageViewActivity" />
-        <activity android:name=".Activity.SliderContentActivity" />
-        <activity android:name=".Activity.ShikhaDetails" />
+        <activity android:name=".Activity.ContentDescriptionActivity.SliderContentActivity" />
+        <activity android:name=".Activity.ContentDescriptionActivity.ShikhaDetails" />
         <activity android:name=".Activity.PaymentConfirmation" />
         <activity android:name=".Activity.Symphony" />
-        <activity android:name=".Activity.CricketSorbosheshSongbadDescriptionActivity" />
-        <activity android:name=".Activity.PorashunaDescriptionActivity" />
-        <activity android:name=".Activity.AuttohasiDescriptionActivity" />
-        <activity android:name=".Activity.JibonJaponDescriptionActivity" />
-        <activity android:name=".Activity.PachMishaliDescriptionActivity" />
-        <activity android:name=".Activity.BigganOProjuktiDescriptionActivity" />
-        <activity android:name=".Activity.CartoonDescriptionActivity" />
-        <activity android:name=".Activity.JapitiJibonDescriptionActivity" />
+        <activity android:name=".Activity.ContentDescriptionActivity.CricketSorbosheshSongbadDescriptionActivity" />
+        <activity android:name=".Activity.ContentDescriptionActivity.PorashunaDescriptionActivity" />
+        <activity android:name=".Activity.ContentDescriptionActivity.AuttohasiDescriptionActivity" />
+        <activity android:name=".Activity.ContentDescriptionActivity.JibonJaponDescriptionActivity" />
+        <activity android:name=".Activity.ContentDescriptionActivity.PachMishaliDescriptionActivity" />
+        <activity android:name=".Activity.ContentDescriptionActivity.BigganOProjuktiDescriptionActivity" />
+        <activity android:name=".Activity.ContentDescriptionActivity.CartoonDescriptionActivity" />
+        <activity android:name=".Activity.ContentDescriptionActivity.JapitiJibonDescriptionActivity" />
         <activity android:name=".Activity.PayWithRocketActivity" />
         <activity android:name=".Activity.PayWithPinActivity" />
-        <activity android:name=".Activity.SymphonyCareActivity"></activity>
+        <activity android:name=".Activity.SymphonyCareActivity" />
+        <activity android:name=".Activity.ShowOnlyImage"></activity>
     </application>
 
 </manifest>

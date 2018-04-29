@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.JibonJaponDescriptionActivity;
+import lct.mysymphony.Activity.ContentDescriptionActivity.JibonJaponDescriptionActivity;
 import lct.mysymphony.ModelClass.JibonJapon;
 import lct.mysymphony.R;
 

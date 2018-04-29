@@ -95,7 +95,8 @@ public class RecyclerAdapterForGamesZone extends RecyclerView.Adapter<RecyclerAd
 
 
                     Intent myIntent = new Intent(activity, ImageViewActivity.class);
-                    myIntent.putExtra("wallpaper", gamesZoneArrayList.get(getAdapterPosition()).getContentUrl());
+                    myIntent.putExtra("wallpaper", gamesZoneArrayList.get(getAdapterPosition()));
+                    myIntent.putExtra("cameFromWhichActivity","GameZone");
                     ///myIntent.putExtra("price",gamesZoneArrayList.get(getAdapterPosition()).getNewPrice());
                     myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     activity.startActivity(myIntent);

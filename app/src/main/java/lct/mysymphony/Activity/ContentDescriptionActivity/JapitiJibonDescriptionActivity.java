@@ -1,4 +1,4 @@
-package lct.mysymphony.Activity;
+package lct.mysymphony.Activity.ContentDescriptionActivity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,6 +12,9 @@ import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 
+import lct.mysymphony.Activity.HomePage;
+import lct.mysymphony.Activity.PaymentMethod;
+import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.ModelClass.JapitoJibonMC;
 import lct.mysymphony.R;
 
@@ -20,6 +23,8 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
     ImageView newsImageView;
     TextView newsTitle, newsDescription;
     VideoView videoView;
+    TextView newPrice,previousPrice;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,9 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
         newsTitle = findViewById(R.id.newsTitleJapitiJibonDescription);
         newsDescription = findViewById(R.id.newsdescriptionJapitiJibonDescription);
         videoView=findViewById(R.id.videoViewJapitojibon);
+//        newPrice=findViewById(R.id.newPriceTVinJapitoJibonDescription);
+//        previousPrice=findViewById(R.id.previousPriceTVinJapitoJibonDescription);
+//        previousPrice.setPaintFlags(previousPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         setDescripTionData();
     }
@@ -78,6 +86,8 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
     public void mullochar(View view) {
         JapitoJibonMC object = (JapitoJibonMC) getIntent().getSerializableExtra("Data");
         Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
+        DataBaseData dataBaseData=new DataBaseData(object.getContentTitle(),object.getConntentCat(),object.getContentType(),object.getContentDescription(),"free",object.getContentId());
+        purchase.putExtra("dataBaseData",dataBaseData);
         purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);

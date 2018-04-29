@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.PorashunaDescriptionActivity;
+import lct.mysymphony.Activity.ContentDescriptionActivity.PorashunaDescriptionActivity;
 import lct.mysymphony.ModelClass.Porashuna;
 import lct.mysymphony.R;
 

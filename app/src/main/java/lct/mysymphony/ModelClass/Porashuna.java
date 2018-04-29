@@ -4,13 +4,25 @@ import java.io.Serializable;
 
 public class Porashuna implements Serializable {
 
-    String contentTitle , contentType , contentDescription , imageUrl;
+    String contentTitle , contentType , contentDescription , imageUrl,contentCat;
+    int contentId;
 
-    public Porashuna(String contentTitle, String contentType, String contentDescription, String imageUrl) {
+    public String getContentCat() {
+        return contentCat;
+    }
+
+    public int getContentId() {
+        return contentId;
+    }
+
+    public Porashuna(String contentTitle, String contentType, String contentDescription, String imageUrl, String contentCat, int contentId) {
         this.contentTitle = contentTitle;
         this.contentType = contentType;
         this.contentDescription = contentDescription;
         this.imageUrl = imageUrl;
+        this.contentCat=contentCat;
+        this.contentId=contentId;
+
     }
 
     public String getContentTitle() {

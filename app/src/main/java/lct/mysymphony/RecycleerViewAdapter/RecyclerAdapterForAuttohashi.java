@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.AuttohasiDescriptionActivity;
+import lct.mysymphony.Activity.ContentDescriptionActivity.AuttohasiDescriptionActivity;
 import lct.mysymphony.ModelClass.Auttohashi;
 import lct.mysymphony.R;
 

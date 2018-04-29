@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.ShikhaDetails;
+import lct.mysymphony.Activity.ContentDescriptionActivity.ShikhaDetails;
 import lct.mysymphony.ModelClass.ShikkhaSohaYika;
 import lct.mysymphony.R;
 

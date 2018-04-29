@@ -101,12 +101,14 @@ public class JibonJaponActivity extends AppCompatActivity {
                     String contentTitle = jsonJibonJaponContentArr.getJSONObject(i).getString("contentTitle");
                     String contentType = jsonJibonJaponContentArr.getJSONObject(i).getString("contentType");
                     String contentDescription = jsonJibonJaponContentArr.getJSONObject(i).getString("contentDescription");
+                    int contentId=jsonJibonJaponContentArr.getJSONObject(i).getInt("id");
+                    String contentCat=jsonJibonJaponContentArr.getJSONObject(i).getString("contentCat");
 
                     if (contentType.equals("video")) {
                         String contentUrl = jsonJibonJaponContentArr.getJSONObject(i).getString("thumbNail_image");
-                        jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, contentUrl));
+                        jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, contentUrl,contentCat,contentId));
                     } else {
-                        jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, jsonJibonJaponContentArr.getJSONObject(i).getString("contentUrl")));
+                        jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, jsonJibonJaponContentArr.getJSONObject(i).getString("contentUrl"),contentCat,contentId));
                     }
 
                 } catch (JSONException e) {
@@ -124,7 +126,6 @@ public class JibonJaponActivity extends AppCompatActivity {
 
         recyclerViewForJibonJapon.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
-
         SnapHelper snapHelperStartJibonJapon = new GravitySnapHelper(Gravity.START);
         snapHelperStartJibonJapon.attachToRecyclerView(recyclerViewForJibonJapon);
         recyclerViewForJibonJapon.setHasFixedSize(true);

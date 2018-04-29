@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.CricketSorbosheshSongbadDescriptionActivity;
+import lct.mysymphony.Activity.ContentDescriptionActivity.CricketSorbosheshSongbadDescriptionActivity;
 import lct.mysymphony.ModelClass.Kheladhula_Cricket_sorboshesh_sobgbad;
 import lct.mysymphony.R;
 

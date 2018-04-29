@@ -97,8 +97,6 @@ public class GoromKhoborActivity extends AppCompatActivity {
             Toast.makeText(GoromKhoborActivity.this, "No data found", Toast.LENGTH_SHORT).show();
 
         }
-
-
     }
 
     private void initializeGoromKhoborRecyclerView() {

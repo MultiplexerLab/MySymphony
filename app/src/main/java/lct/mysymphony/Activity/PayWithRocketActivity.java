@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.R;
 import lct.mysymphony.helper.DownloadImage;
 import lct.mysymphony.helper.Endpoints;
@@ -36,6 +37,7 @@ public class PayWithRocketActivity extends AppCompatActivity {
     String deviceId,userId;
     RequestQueue queue;
     String imageUrl;
+    DataBaseData dataBaseData;
    /// Integer price;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,9 @@ public class PayWithRocketActivity extends AppCompatActivity {
         sendRocketVerificationToServer();
         imageUrl=getIntent().getStringExtra("imageUrl");
         Log.d("url",imageUrl);
+        dataBaseData= (DataBaseData) getIntent().getSerializableExtra("dataBaseData");
+        if (dataBaseData==null)
+            Log.d("dataBaseData","null");
     }
     private void sendRocketVerificationToServer() {
         Log.i("Enter", "Enter in rocket");
@@ -60,19 +65,27 @@ public class PayWithRocketActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("rockeTverification",response);
-                        String jsonFormattedString = response.replaceAll("\\\\", "");
+
+                        Log.d("rockeTverificationw",response);
+                        //String jsonFormattedString = response.replaceAll("\\\\", "");
                         String result = "";
+                        ///Log.d("rockeTverification",jsonFormattedString);
 
                         try {
-                            JSONArray jsonArray = new JSONArray(jsonFormattedString);
+                            JSONArray jsonArray = new JSONArray(response);
 
                             if (jsonArray.length() == 0)
                                 Toast.makeText(PayWithRocketActivity.this, "jsonArray blank", Toast.LENGTH_SHORT).show();
                             else {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject postInfo = jsonArray.getJSONObject(i);
-                                    result = postInfo.getString("refCode");
+                                    result = postInfo.getString("qs");
+                                    result=result.replaceAll("refCode","");
+                                    result=result.replaceAll("\\{","");
+                                    result=result.replaceAll("\"","");
+                                    result=result.replaceAll(":","");
+                                    result=result.replaceAll("\\}","");
+                                    result=result.replaceAll(" ","");
                                     billNumberTV.setText(result);
                                 }
                             }
@@ -96,7 +109,7 @@ public class PayWithRocketActivity extends AppCompatActivity {
                 params.put("amount", "10");
                 params.put("paymentMethod", "rocket");
                 params.put("contentId", "1");
-                params.put("deviceId", "132654");
+                params.put("deviceId", "12345");
                 return params;
             }
         };
@@ -106,9 +119,9 @@ public class PayWithRocketActivity extends AppCompatActivity {
     public void startUserProfileActivity(View view) {
         Log.d("image_url",imageUrl);
 
-        if(!imageUrl.contains("mp4") && !imageUrl.contains("youtube") && !imageUrl.contains("music") && !imageUrl.contains("videos")) {
+        if(!dataBaseData.getContentType().contains("video")&&!imageUrl.contains("mp4") && !imageUrl.contains("youtube") && !imageUrl.contains("music") && !imageUrl.contains("videos")) {
             DownloadImage downloadImage = new DownloadImage();
-            downloadImage.downloadImage(imageUrl, PayWithRocketActivity.this);
+            downloadImage.downloadImage(imageUrl, PayWithRocketActivity.this,dataBaseData);
             Toast.makeText(PayWithRocketActivity.this, "ধন্যবাদ আপনার পেমেন্ট টি যাচাই করা হচ্ছে", Toast.LENGTH_SHORT).show();
             Intent myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -127,4 +140,5 @@ public class PayWithRocketActivity extends AppCompatActivity {
             finish();
         }
     }
+
 }

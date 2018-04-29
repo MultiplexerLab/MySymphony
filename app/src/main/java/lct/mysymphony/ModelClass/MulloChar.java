@@ -4,17 +4,28 @@ import java.io.Serializable;
 
 public class MulloChar implements Serializable {
 
-    String contentType, contentUrl, contentTile, imageUrl;
-    int previousPrice, newPrice;
+    String contentType, contentUrl, contentTile, imageUrl,contentCat;
+    int previousPrice, newPrice,contentId;
 
 
-    public MulloChar(String contentType, String contentUrl, String contentTile, int previousPrice, int newPrice, String imageUrl) {
+    public String getContentCat() {
+        return contentCat;
+    }
+
+    public int getContentId() {
+        return contentId;
+    }
+
+    public MulloChar(String contentType, String contentUrl, String contentTile, int previousPrice, int newPrice, String imageUrl, String contentCat, int contentId) {
         this.contentType = contentType;
         this.contentUrl = contentUrl;
         this.contentTile = contentTile;
         this.previousPrice = previousPrice;
         this.newPrice = newPrice;
         this.imageUrl = imageUrl;
+        this.contentCat=contentCat;
+        this.contentId=contentId;
+
 
 
     }

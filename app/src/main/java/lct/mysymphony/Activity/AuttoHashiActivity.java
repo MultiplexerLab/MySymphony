@@ -79,12 +79,14 @@ public class AuttoHashiActivity extends AppCompatActivity {
                     String contentTitle = auttoHashiContentArr.getJSONObject(i).getString("contentTitle");
                     String contentType = auttoHashiContentArr.getJSONObject(i).getString("contentType");
                     String contentDescription = auttoHashiContentArr.getJSONObject(i).getString("contentDescription");
+                    int contentId=auttoHashiContentArr.getJSONObject(i).getInt("contentId");
+                    String contentCat=auttoHashiContentArr.getJSONObject(i).getString("contentCat");
 
                     if (contentType.equals("video")) {
                         String contentUrl = auttoHashiContentArr.getJSONObject(i).getString("thumbNail_image");
-                        auttohashiArrayList.add(new Auttohashi(contentTitle, contentType, contentDescription, contentUrl));
+                        auttohashiArrayList.add(new Auttohashi(contentTitle, contentType, contentDescription, contentUrl,contentCat,contentId));
                     } else {
-                        auttohashiArrayList.add(new Auttohashi(contentTitle, contentType, contentDescription, auttoHashiContentArr.getJSONObject(i).getString("contentUrl")));
+                        auttohashiArrayList.add(new Auttohashi(contentTitle, contentType, contentDescription, auttoHashiContentArr.getJSONObject(i).getString("contentUrl"),contentCat,contentId));
                     }
 
                 } catch (JSONException e) {

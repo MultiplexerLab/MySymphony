@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.CartoonDescriptionActivity;
+import lct.mysymphony.Activity.ContentDescriptionActivity.CartoonDescriptionActivity;
 import lct.mysymphony.ModelClass.Cartoon;
 import lct.mysymphony.R;
 

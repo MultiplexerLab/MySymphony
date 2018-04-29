@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import lct.mysymphony.Activity.ImageViewActivity;
+import lct.mysymphony.ModelClass.SeraChobi;
 import lct.mysymphony.R;
 
 /**
@@ -24,11 +25,11 @@ public class RecyclerAdapterForSeraChobi extends RecyclerView.Adapter<RecyclerAd
 
     ///private int[] images = {R.drawable.sera_chobi_1, R.drawable.sera_chobi_2, R.drawable.sera_chobi_3, R.drawable.sera_chobi_4};
 
-    ArrayList<String> images;
+    ArrayList<SeraChobi> images;
     Activity activity;
 
 
-    public RecyclerAdapterForSeraChobi(Activity activity, ArrayList<String> images) {
+    public RecyclerAdapterForSeraChobi(Activity activity, ArrayList<SeraChobi> images) {
 
         this.activity = activity;
         this.images = images;
@@ -38,7 +39,6 @@ public class RecyclerAdapterForSeraChobi extends RecyclerView.Adapter<RecyclerAd
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_sera_chobi, parent, false);
-
         RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, images);
         return recyclerViewHolder;
     }
@@ -48,7 +48,7 @@ public class RecyclerAdapterForSeraChobi extends RecyclerView.Adapter<RecyclerAd
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
 
         Glide.with(activity)
-                .load(images.get(position))
+                .load(images.get(position).getImage_url())
                 .into(holder.imageView);
     }
 
@@ -63,7 +63,7 @@ public class RecyclerAdapterForSeraChobi extends RecyclerView.Adapter<RecyclerAd
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<String> images) {
+        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<SeraChobi> images) {
             super(view);
             imageView = view.findViewById(R.id.img);
 
@@ -72,6 +72,7 @@ public class RecyclerAdapterForSeraChobi extends RecyclerView.Adapter<RecyclerAd
                 public void onClick(View view) {
                     Intent myIntent = new Intent(activity, ImageViewActivity.class);
                     myIntent.putExtra("wallpaper", (Serializable) images.get(getAdapterPosition()));
+                    myIntent.putExtra("cameFromWhichActivity","SeraChobi");
                     myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     activity.startActivity(myIntent);
                     activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);

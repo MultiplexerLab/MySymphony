@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.BigganOProjuktiDescriptionActivity;
+import lct.mysymphony.Activity.ContentDescriptionActivity.BigganOProjuktiDescriptionActivity;
 import lct.mysymphony.ModelClass.BigganOProjukti;
 import lct.mysymphony.R;
 

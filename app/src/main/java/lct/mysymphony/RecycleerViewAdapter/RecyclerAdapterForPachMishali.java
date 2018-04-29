@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.PachMishaliDescriptionActivity;
+import lct.mysymphony.Activity.ContentDescriptionActivity.PachMishaliDescriptionActivity;
 import lct.mysymphony.ModelClass.PacMishali;
 import lct.mysymphony.R;
 

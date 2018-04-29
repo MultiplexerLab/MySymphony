@@ -18,6 +18,7 @@ import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import java.util.ArrayList;
 
+import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.R;
 import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForMyItemFragment;
 import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForNewWallPaperFragment;
@@ -34,6 +35,9 @@ public class MyItemFragmentInProfileActivity extends Fragment {
     DataHelper dataHelper;
     int rowCount;
     private ArrayList<Bitmap> bitmapArrayList;
+    private ArrayList<String> contentTypeArrayList;
+    private ArrayList<DataBaseData> dataBaseDataArrayList;
+
     View view;
 
 
@@ -50,6 +54,8 @@ public class MyItemFragmentInProfileActivity extends Fragment {
 
         dataHelper=new DataHelper(getActivity());
         bitmapArrayList=new ArrayList<>();
+        contentTypeArrayList=new ArrayList<>();
+        dataBaseDataArrayList=new ArrayList<>() ;
         new RetriveBitMapFromDatabase().execute();
 
         return view;
@@ -65,9 +71,8 @@ public class MyItemFragmentInProfileActivity extends Fragment {
             for (int i=0;i<rowCount;i++)
             {
                 bitmapArrayList.add(dataHelper.getBitmap(i+1));
+                dataBaseDataArrayList.add(dataHelper.getAllData(i+1));
             }
-
-
             return null;
         }
 
@@ -84,7 +89,7 @@ public class MyItemFragmentInProfileActivity extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewForMyItem.setLayoutManager(mLayoutManager);
         recyclerViewForMyItem.setHasFixedSize(true);
-        adapterForMyItem = new RecyclerAdapterForMyItemFragment(getActivity(),bitmapArrayList);
+        adapterForMyItem = new RecyclerAdapterForMyItemFragment(getActivity(),bitmapArrayList,dataBaseDataArrayList);
         recyclerViewForMyItem.setAdapter(adapterForMyItem);
     }
 }

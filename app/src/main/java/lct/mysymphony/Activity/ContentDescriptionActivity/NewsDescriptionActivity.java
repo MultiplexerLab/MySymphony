@@ -1,4 +1,4 @@
-package lct.mysymphony.Activity;
+package lct.mysymphony.Activity.ContentDescriptionActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 
 import java.io.Serializable;
 
+import lct.mysymphony.Activity.GoromKhoborActivity;
 import lct.mysymphony.ModelClass.GoromKhobor;
 import lct.mysymphony.R;
 

@@ -17,6 +17,7 @@ import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import java.util.ArrayList;
 
+import lct.mysymphony.ModelClass.SeraChobi;
 import lct.mysymphony.R;
 import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForNewWallPaperFragment;
 
@@ -25,7 +26,7 @@ import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForNewWallPaperFragmen
  */
 public class newwallPaperFragment extends Fragment {
 
-    ArrayList<String> seraChobiArrayList;
+    ArrayList<SeraChobi> seraChobiArrayList;
 
     private RecyclerView recyclerViewForNewWallPaper;
     private RecyclerView.Adapter adapterForNewWallPaper;
@@ -47,7 +48,7 @@ public class newwallPaperFragment extends Fragment {
 
         if (getActivity().getIntent()!=null)
         {
-            seraChobiArrayList = getActivity().getIntent().getStringArrayListExtra("galleryImageData");
+            seraChobiArrayList = (ArrayList<SeraChobi>) getActivity().getIntent().getSerializableExtra("galleryImageData");
         }
         else
             Toast.makeText(getActivity(), "Null", Toast.LENGTH_SHORT).show();

@@ -4,18 +4,30 @@ import java.io.Serializable;
 
 public class ShikkhaSohaYika implements Serializable {
 
-    String contentType,contentDescription, contentUrl, contentTitle, imageURL;
+    String contentType,contentDescription, contentUrl, contentTitle, imageURL,contentCat;
+    int contentId;
 
     public String getContentDescription() {
         return contentDescription;
     }
 
-    public ShikkhaSohaYika(String contentType, String contentDescription, String contentUrl, String contentTitle, String imageURL) {
+    public String getContentCat() {
+        return contentCat;
+    }
+
+    public int getContentId() {
+        return contentId;
+    }
+
+    public ShikkhaSohaYika(String contentType, String contentDescription, String contentUrl, String contentTitle, String imageURL, String contentCat, int contentId) {
         this.contentType = contentType;
         this.contentUrl = contentUrl;
         this.contentTitle=contentTitle;
         this.imageURL = imageURL;
         this.contentDescription=contentDescription;
+        this.contentCat=contentCat;
+        this.contentId=contentId;
+
     }
 
     public String getContentType() {
