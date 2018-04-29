@@ -80,6 +80,12 @@
         <activity android:name=".Activity.PayWithPinActivity" />
         <activity android:name=".Activity.SymphonyCareActivity" />
         <activity android:name=".Activity.ShowOnlyImage"></activity>
+
+        <receiver android:name=".helper.SMSListener">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

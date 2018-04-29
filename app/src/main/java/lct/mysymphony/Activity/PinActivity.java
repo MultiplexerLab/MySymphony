@@ -47,8 +47,6 @@ public class PinActivity extends AppCompatActivity {
     String phoneNumber;
     String cameFromWhichActivity = "";
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +61,7 @@ public class PinActivity extends AppCompatActivity {
 
         phoneNumber = prefs.getString("phoneNo", "");
         pinview = findViewById(R.id.pinView);
-        readSms();
+        //readSms();
 
 
 //        pinview.setPinViewEventListener(new Pinview.PinViewEventListener() {
@@ -111,9 +109,7 @@ public class PinActivity extends AppCompatActivity {
                         startActivity(getIntent());
                     }
                 }
-
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -181,8 +177,6 @@ public class PinActivity extends AppCompatActivity {
         });
 
         queue.add(stringRequest);
-
-
     }
 
     @Override
@@ -361,8 +355,8 @@ public class PinActivity extends AppCompatActivity {
             }
         });
         queue.add(stringRequest);
-
     }
+
     public void readSms() {
         Log.d("entersms","enter");
         StringBuilder smsBuilder = new StringBuilder();
@@ -407,10 +401,5 @@ public class PinActivity extends AppCompatActivity {
         }
         Log.d("strngbldr",smsBuilder.toString());
     }
-
-
-
-
-
 }
 
