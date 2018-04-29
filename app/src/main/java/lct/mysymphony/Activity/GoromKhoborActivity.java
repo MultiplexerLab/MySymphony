@@ -35,6 +35,7 @@ public class GoromKhoborActivity extends AppCompatActivity {
     private RecyclerView recyclerViewForGoromKhobor;
     public RecyclerAdapterForGoromKhobor adapterForGoromKhobor;
     ArrayList<GoromKhobor> goromKhoborArrayList;
+    RecyclerView.LayoutManager mLayoutManager;
     RequestQueue queue;
 
     @Override
@@ -103,11 +104,8 @@ public class GoromKhoborActivity extends AppCompatActivity {
     private void initializeGoromKhoborRecyclerView() {
 
         recyclerViewForGoromKhobor = findViewById(R.id.RV_GoromKhobor);
-
-        recyclerViewForGoromKhobor.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false));
-        SnapHelper snapHelperStartGoromKhobor = new GravitySnapHelper(Gravity.START);
-        snapHelperStartGoromKhobor.attachToRecyclerView(recyclerViewForGoromKhobor);
+        mLayoutManager = new LinearLayoutManager(GoromKhoborActivity.this);
+        recyclerViewForGoromKhobor.setLayoutManager(mLayoutManager);
         recyclerViewForGoromKhobor.setHasFixedSize(true);
         adapterForGoromKhobor = new RecyclerAdapterForGoromKhobor(this,goromKhoborArrayList);
         recyclerViewForGoromKhobor.setAdapter(adapterForGoromKhobor);
