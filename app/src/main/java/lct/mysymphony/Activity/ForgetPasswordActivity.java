@@ -114,6 +114,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
+                Toast.makeText(getApplicationContext(), "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
             }
         });
 

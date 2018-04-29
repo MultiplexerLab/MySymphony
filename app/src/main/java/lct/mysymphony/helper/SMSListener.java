@@ -34,6 +34,15 @@ public class SMSListener extends BroadcastReceiver {
                         editor.putString("verificationCode", numbers);
                         editor.apply();
                         Log.d("verificationCode", numbers);
+
+                        SharedPreferences prefs = context.getSharedPreferences("pincode", context.MODE_PRIVATE);
+                        String restoredText = prefs.getString("verificationCode", null);
+
+                        if (restoredText==null)
+                            Log.d("verificationCode", "NULL");
+                        else
+                            Log.d("verificationCode","not null");
+
                     }
                 } catch (Exception e) {
 //                            Log.d("Exception caught",e.getMessage());
