@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.SET_WALLPAPER"/>
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
         android:allowBackup="true"
@@ -81,7 +82,7 @@
         <activity android:name=".Activity.SymphonyCareActivity" />
         <activity android:name=".Activity.ShowOnlyImage"></activity>
 
-        <receiver android:name=".helper.SMSListener">
+        <receiver android:name=".helper.SimpleSmsReciever">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>

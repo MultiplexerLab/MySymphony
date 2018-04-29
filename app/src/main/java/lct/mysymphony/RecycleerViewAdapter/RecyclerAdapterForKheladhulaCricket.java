@@ -91,7 +91,7 @@ public class RecyclerAdapterForKheladhulaCricket extends RecyclerView.Adapter<Re
 
                     if (position == 0) {
                         Intent myIntent = new Intent(activity, WallpaperBundleActivity.class);
-                        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        
                         activity.startActivity(myIntent);
                         activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
                         activity.finish();

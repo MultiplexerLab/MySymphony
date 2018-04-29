@@ -89,7 +89,7 @@ public class RecyclerAdapterForGoromKhobor extends RecyclerView.Adapter<Recycler
                 public void onClick(View view) {
                     Intent myIntent = new Intent(activity, NewsDescriptionActivity.class);
                     myIntent.putExtra("Data", (Serializable) goromKhoborArrayList.get(getAdapterPosition()));
-                    myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    
                     activity.startActivity(myIntent);
                     activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
                     activity.finish();

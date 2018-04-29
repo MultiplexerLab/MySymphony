@@ -41,7 +41,10 @@ public class SignInActivity extends AppCompatActivity {
 
     RequestQueue queue;
     String[] permissions = new String[]{
-            Manifest.permission.ACCESS_NETWORK_STATE,};
+            Manifest.permission.ACCESS_NETWORK_STATE,
+            Manifest.permission.RECEIVE_SMS,
+            Manifest.permission.READ_SMS,
+            Manifest.permission.READ_PHONE_STATE,};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class SignInActivity extends AppCompatActivity {
         password = findViewById(R.id.txtpassword);
 
         queue = Volley.newRequestQueue(SignInActivity.this);
+        checkPermissions();
     }
 
     @Override
@@ -59,7 +63,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onBackPressed();
 
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
@@ -69,7 +73,7 @@ public class SignInActivity extends AppCompatActivity {
     public void startForgotPasswordActivity(View view) {
 
         Intent myIntent = new Intent(getApplicationContext(), ForgetPasswordActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
@@ -109,7 +113,7 @@ public class SignInActivity extends AppCompatActivity {
         editor.putInt("loginStatus", 1);
         editor.apply();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();

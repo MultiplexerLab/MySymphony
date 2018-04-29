@@ -112,7 +112,7 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
                     view.setDrawingCacheEnabled(false);
 //                    Intent myIntent = new Intent(activity, NewsDescriptionActivity.class);
 //                    myIntent.putExtra("Data", (Serializable) goromKhoborArrayList.get(getAdapterPosition()));
-//                    myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                    
 //                    activity.startActivity(myIntent);
 //                    activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
 //                    activity.finish();
@@ -125,7 +125,7 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
 ////
                         Intent myIntent = new Intent(activity, ShowOnlyImage.class);
                         myIntent.putExtra("id", getAdapterPosition());
-                        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        
                         activity.startActivity(myIntent);
                         activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
                         activity.finish();

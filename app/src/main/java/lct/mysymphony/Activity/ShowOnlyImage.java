@@ -73,7 +73,7 @@ public class ShowOnlyImage extends AppCompatActivity {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
         myIntent.putExtra("cameFromWhichActivity","ShowOnlyImage");
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();

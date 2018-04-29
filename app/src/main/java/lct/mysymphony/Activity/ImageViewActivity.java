@@ -163,7 +163,7 @@ public class ImageViewActivity extends AppCompatActivity {
                 downloadImage.downloadImage(imageUrl, ImageViewActivity.this, dataBaseData);
                 Toast.makeText(ImageViewActivity.this, "ধন্যবাদ কিছুক্ষন পরে মাইআইটেম লিস্ট এ আপনার আইটেমটি দেখতে পারবেন", Toast.LENGTH_SHORT).show();
                 Intent myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
-                myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                
                 myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
                 this.startActivity(myIntent);
                 overridePendingTransition(R.anim.left_in, R.anim.left_out);
@@ -171,7 +171,7 @@ public class ImageViewActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(ImageViewActivity.this, "ভিডিও কন্টেন্ট পরবর্তীতে পাবেন", Toast.LENGTH_LONG).show();
                 Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-                myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                
                 myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
                 this.startActivity(myIntent);
                 overridePendingTransition(R.anim.left_in, R.anim.left_out);
@@ -192,7 +192,7 @@ public class ImageViewActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();

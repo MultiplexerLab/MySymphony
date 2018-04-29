@@ -73,7 +73,7 @@ public class RecyclerAdapterForSeraChobi extends RecyclerView.Adapter<RecyclerAd
                     Intent myIntent = new Intent(activity, ImageViewActivity.class);
                     myIntent.putExtra("wallpaper", (Serializable) images.get(getAdapterPosition()));
                     myIntent.putExtra("cameFromWhichActivity","SeraChobi");
-                    myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    
                     activity.startActivity(myIntent);
                     activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
                     activity.finish();

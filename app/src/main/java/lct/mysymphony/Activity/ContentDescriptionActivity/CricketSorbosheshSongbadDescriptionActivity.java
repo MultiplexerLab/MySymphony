@@ -53,7 +53,7 @@ public class CricketSorbosheshSongbadDescriptionActivity extends AppCompatActivi
         super.onBackPressed();
 
         Intent myIntent = new Intent(getApplicationContext(), KheladhulaActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();

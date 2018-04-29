@@ -82,7 +82,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         super.onBackPressed();
 
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
@@ -194,7 +194,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
 
 //                                Intent myIntent = new Intent(getApplicationContext(), SignUpActivity.class);
 //                                myIntent.putExtra("phoneNumber",phoneNumber);
-//                                myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                                
 //                                startActivity(myIntent);
 //                                overridePendingTransition(R.anim.left_in, R.anim.left_out);
 //                                finish();

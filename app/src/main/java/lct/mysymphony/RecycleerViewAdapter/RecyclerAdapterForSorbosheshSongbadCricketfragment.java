@@ -91,7 +91,7 @@ public class RecyclerAdapterForSorbosheshSongbadCricketfragment extends Recycler
 
                     Intent myIntent = new Intent(activity, CricketSorbosheshSongbadDescriptionActivity.class);
                     myIntent.putExtra("Data", (Serializable) kheladhula_cricket_sorboshesh_sobgbadArrayList.get(getAdapterPosition()));
-                    myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    
                     activity.startActivity(myIntent);
                     activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
                     activity.finish();

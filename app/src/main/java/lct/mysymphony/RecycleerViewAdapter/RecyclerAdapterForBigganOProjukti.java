@@ -95,7 +95,7 @@ public class RecyclerAdapterForBigganOProjukti extends RecyclerView.Adapter<Recy
                     Intent myIntent = new Intent(activity, BigganOProjuktiDescriptionActivity.class);
                     myIntent.putExtra("Data", (Serializable) bigganOProjuktiArrayList.get(getAdapterPosition()));
                     myIntent.putExtra("imageUrl",bigganOProjuktiArrayList.get(getAdapterPosition()).getImageUrl());
-                    myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    
                     activity.startActivity(myIntent);
                     activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
                     activity.finish();

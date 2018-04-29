@@ -414,7 +414,7 @@ public class HomePage extends AppCompatActivity {
 
     public void startLoginActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
@@ -423,7 +423,7 @@ public class HomePage extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         myIntent.putExtra("cameFromWhichActivity","HomePage");
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
@@ -432,7 +432,7 @@ public class HomePage extends AppCompatActivity {
     }
     public void startSportActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), KheladhulaActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
@@ -440,7 +440,7 @@ public class HomePage extends AppCompatActivity {
 
     public void startPorashunaActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
@@ -448,7 +448,7 @@ public class HomePage extends AppCompatActivity {
 
     public void startAuttoHashiActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), AuttoHashiActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
@@ -456,7 +456,7 @@ public class HomePage extends AppCompatActivity {
 
     public void startJibonJaponActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), JibonJaponActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
@@ -464,7 +464,7 @@ public class HomePage extends AppCompatActivity {
 
     public void startPachMishaliActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), PachMishaliActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
@@ -472,7 +472,7 @@ public class HomePage extends AppCompatActivity {
 
     public void startBigganOProjuktiActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), BigganOProjuktiActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
@@ -480,7 +480,7 @@ public class HomePage extends AppCompatActivity {
 
     public void startCartoonActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), CartoonActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
@@ -565,7 +565,7 @@ public class HomePage extends AppCompatActivity {
 
     public void startGoromKhoborPage(View view) {
         Intent myIntent = new Intent(getApplicationContext(), GoromKhoborActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
@@ -574,7 +574,6 @@ public class HomePage extends AppCompatActivity {
     public void startGalleryActivity(View view) {
         Intent galleryIntent = new Intent(getApplicationContext(), GalleryActivity.class);
         galleryIntent.putExtra("galleryImageData", seraChobiArrayList);
-        galleryIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         this.startActivity(galleryIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();

@@ -85,7 +85,7 @@ public class RecyclerAdapterForPachMishali extends RecyclerView.Adapter<Recycler
                 public void onClick(View view) {
                     Intent myIntent = new Intent(activity, PachMishaliDescriptionActivity.class);
                     myIntent.putExtra("Data", (Serializable) pacMishaliArrayList.get(getAdapterPosition()));
-                    myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    
                     activity.startActivity(myIntent);
                     activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
                     activity.finish();

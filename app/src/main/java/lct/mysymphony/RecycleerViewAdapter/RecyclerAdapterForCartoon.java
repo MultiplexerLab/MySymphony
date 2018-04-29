@@ -96,7 +96,7 @@ public class RecyclerAdapterForCartoon extends RecyclerView.Adapter<RecyclerAdap
                     Intent myIntent = new Intent(activity, CartoonDescriptionActivity.class);
                     myIntent.putExtra("Data", (Serializable) cartoonArrayList.get(getAdapterPosition()));
                     myIntent.putExtra("imageUrl",cartoonArrayList.get(getAdapterPosition()).getImageUrl());
-                    myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    
                     activity.startActivity(myIntent);
                     activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
                     activity.finish();

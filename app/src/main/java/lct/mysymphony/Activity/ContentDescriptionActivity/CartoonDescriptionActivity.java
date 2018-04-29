@@ -41,7 +41,7 @@ public class CartoonDescriptionActivity extends AppCompatActivity {
 
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), CartoonActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
@@ -63,7 +63,6 @@ public class CartoonDescriptionActivity extends AppCompatActivity {
         purchase.putExtra("dataBaseData",dataBaseData);
         purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);
-        purchase.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 }

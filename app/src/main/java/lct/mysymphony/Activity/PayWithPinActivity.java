@@ -40,7 +40,7 @@ public class PayWithPinActivity extends AppCompatActivity {
             downloadImage.downloadImage(imageUrl, PayWithPinActivity.this,dataBaseData);
             Toast.makeText(PayWithPinActivity.this, "ধন্যবাদ আপনার পেমেন্ট টি যাচাই করা হচ্ছে", Toast.LENGTH_SHORT).show();
             Intent myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
-            myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            
             myIntent.putExtra("cameFromWhichActivity","payWithPin");
             this.startActivity(myIntent);
             overridePendingTransition(R.anim.left_in, R.anim.left_out);
@@ -49,7 +49,7 @@ public class PayWithPinActivity extends AppCompatActivity {
             Toast.makeText(PayWithPinActivity.this, "ধন্যবাদ আপনার পেমেন্ট টি যাচাই করা হচ্ছে", Toast.LENGTH_SHORT).show();
             Toast.makeText(PayWithPinActivity.this, "ভিডিও কন্টেন্ট পরবর্তীতে পাবেন", Toast.LENGTH_LONG).show();
             Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-            myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            
             myIntent.putExtra("cameFromWhichActivity","payWithPin");
             this.startActivity(myIntent);
             overridePendingTransition(R.anim.left_in, R.anim.left_out);
@@ -62,7 +62,7 @@ public class PayWithPinActivity extends AppCompatActivity {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), PaymentMethod.class);
         myIntent.putExtra("imageUrl",imageUrl);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();

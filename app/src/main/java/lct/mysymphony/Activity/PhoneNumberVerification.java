@@ -57,7 +57,7 @@ public class PhoneNumberVerification extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
@@ -111,7 +111,7 @@ public class PhoneNumberVerification extends AppCompatActivity {
                         } else {
                             Toast.makeText(PhoneNumberVerification.this, "আপনার নাম্বার এ ছয় ডিজিটের পিন পাঠানো হয়েছে\nআপনার পিনের মেয়াদ পাচ মিনিট", Toast.LENGTH_SHORT).show();
                             Intent myIntent = new Intent(getApplicationContext(), PinActivity.class);
-                            myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            
                             startActivity(myIntent);
                             overridePendingTransition(R.anim.left_in, R.anim.left_out);
                             finish();

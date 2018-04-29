@@ -73,7 +73,6 @@ public class CustomSwipeAdapter extends PagerAdapter {
                 Activity activity= (Activity) context;
                 Intent intent = new Intent(context, SliderContentActivity.class);
                 intent.putExtra("wallpaper", (Serializable) sliderImages.get(position));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 context.startActivity(intent);
                 activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }

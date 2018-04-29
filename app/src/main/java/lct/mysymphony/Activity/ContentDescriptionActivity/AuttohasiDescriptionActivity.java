@@ -40,7 +40,7 @@ public class AuttohasiDescriptionActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), AuttoHashiActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
@@ -64,7 +64,6 @@ public class AuttohasiDescriptionActivity extends AppCompatActivity {
         purchase.putExtra("DataBaseData",dataBaseData);
         purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);
-        purchase.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 }

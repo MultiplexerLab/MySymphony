@@ -124,7 +124,7 @@ public class PayWithRocketActivity extends AppCompatActivity {
             downloadImage.downloadImage(imageUrl, PayWithRocketActivity.this,dataBaseData);
             Toast.makeText(PayWithRocketActivity.this, "ধন্যবাদ আপনার পেমেন্ট টি যাচাই করা হচ্ছে", Toast.LENGTH_SHORT).show();
             Intent myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
-            myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            
             myIntent.putExtra("cameFromWhichActivity","payWithRocket");
             this.startActivity(myIntent);
             overridePendingTransition(R.anim.left_in, R.anim.left_out);
@@ -133,7 +133,7 @@ public class PayWithRocketActivity extends AppCompatActivity {
             Toast.makeText(PayWithRocketActivity.this, "ধন্যবাদ আপনার পেমেন্ট টি যাচাই করা হচ্ছে", Toast.LENGTH_SHORT).show();
             Toast.makeText(PayWithRocketActivity.this, "ভিডিও কন্টেন্ট পরবর্তীতে পাবেন", Toast.LENGTH_LONG).show();
             Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-            myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            
             myIntent.putExtra("cameFromWhichActivity","payWithRocket");
             this.startActivity(myIntent);
             overridePendingTransition(R.anim.left_in, R.anim.left_out);

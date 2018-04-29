@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startSignUpActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), PhoneNumberVerification.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startSignInActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), SignInActivity.class);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();

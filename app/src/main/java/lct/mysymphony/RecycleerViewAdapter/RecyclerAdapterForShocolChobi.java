@@ -82,7 +82,7 @@ public class RecyclerAdapterForShocolChobi extends RecyclerView.Adapter<Recycler
                 public void onClick(View view) {
                     Intent myIntent = new Intent(activity, ImageViewActivity.class);
                     myIntent.putExtra("wallpaper", shocolChobiArrayList.get(getAdapterPosition()));
-                    myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    
                     myIntent.putExtra("cameFromWhichActivity","ShocolChobi");
                     activity.startActivity(myIntent);
                     activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
