@@ -121,26 +121,22 @@ public class PhoneNumberVerification extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInPhoneNumbe", error.toString());
-                Toast.makeText(PhoneNumberVerification.this, "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-            }
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();            }
         });
 
         queue.add(stringRequest);
     }
 
     public void  phoneNumberEntry() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.USER_SIGN_UP_POST_URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.PHONE_NUMBER_ENTRY_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         ///Toast.makeText(PhoneNumberVerification.this, response, Toast.LENGTH_SHORT).show();
                         Log.i("Response", response);
-
                         String result = "";
-
                         try {
                             JSONArray jsonArray = new JSONArray(response);
-
                             if (jsonArray.length() == 0)
                                 Toast.makeText(PhoneNumberVerification.this, "jsonArray blank", Toast.LENGTH_SHORT).show();
                             else {
@@ -160,8 +156,7 @@ public class PhoneNumberVerification extends AppCompatActivity {
                             sendMobileNumberToServer();
                         } else {
                             Log.e("VolleyErrorInPhoneNumbe", result.toString());
-                            Toast.makeText(PhoneNumberVerification.this, "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-                        }
+                           Toast.makeText(getApplicationContext(), "এই নাম্বারটি দিয়ে পুর্বে রেজিস্টার করা হয়েছে", Toast.LENGTH_SHORT).show();                        }
                     }
                 }, new Response.ErrorListener() {
             @Override

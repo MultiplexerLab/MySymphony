@@ -66,7 +66,6 @@ public class MyItemFragmentInProfileActivity extends Fragment {
         @Override
         protected Void doInBackground(Void... voids) {
 
-
             rowCount =(int) dataHelper.getRowCount();
             for (int i=0;i<rowCount;i++)
             {
@@ -76,11 +75,9 @@ public class MyItemFragmentInProfileActivity extends Fragment {
             return null;
         }
 
-
         @Override
         protected void onPostExecute(Void aVoid) {
             updateRecyclerView();
-
         }
     }
     public void updateRecyclerView()

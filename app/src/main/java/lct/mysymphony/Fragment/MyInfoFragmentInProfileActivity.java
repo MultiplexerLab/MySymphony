@@ -37,6 +37,7 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
     String phoneNumber;
     String userName;
 
+
     public MyInfoFragmentInProfileActivity() {
         // Required empty public constructor
     }
@@ -96,8 +97,7 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
-                Toast.makeText(getActivity(), "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-
+              Toast.makeText(getContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         });
 

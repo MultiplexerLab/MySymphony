@@ -99,8 +99,7 @@ public class PayWithRocketActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInPinActvt", error.toString());
-                Toast.makeText(PayWithRocketActivity.this, "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-            }
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();            }
         }){
             @Override
             public Map<String, String> getParams() throws AuthFailureError {

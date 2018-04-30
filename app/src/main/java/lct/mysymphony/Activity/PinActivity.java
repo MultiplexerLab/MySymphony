@@ -48,6 +48,9 @@ public class PinActivity extends AppCompatActivity {
     boolean isResendAlreadyused = false;
     String cameFromWhichActivity = "";
 
+
+    lct.mysymphony.helper.SimpleSmsReciever simpleSmsReceiver=new lct.mysymphony.helper.SimpleSmsReciever();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,28 +102,13 @@ public class PinActivity extends AppCompatActivity {
             }
 
         } else
-            Log.d("Bundle", "null");
+            {
+                Log.d("Bundle", "null");
+                }
+
 
 
         //readSms();
-
-
-//        pinview.setPinViewEventListener(new Pinview.PinViewEventListener() {
-//            @Override
-//            public void onDataEntered(Pinview pinview, boolean b) {
-//
-//                pinText = pinview.getValue().toString();
-//
-//                if (internetConnected()) {
-//                    sendVarificationCodeToServer();
-//                } else {
-//                    Toast.makeText(PinActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-//                    finish();
-//                    startActivity(getIntent());
-//                    pinview.setValue(null);
-//                }
-//            }
-//        });
 
         pinview.addTextChangedListener(new TextWatcher() {
             @Override
@@ -131,25 +119,25 @@ public class PinActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-//                if (charSequence.length() == 6) {
-//
-//                    pinText = String.valueOf(charSequence);
-//
-//                    Log.d("cameFromWhichActivity", cameFromWhichActivity);
-//
-//                    if (internetConnected()) {
-//                        if (cameFromWhichActivity.contains("forgetPassword")) {
-//                            sendVerificationCodeForReset();
-//
-//                        } else
-//                            sendVarificationCodeToServer();
-//
-//                    } else {
-//                        Toast.makeText(PinActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-//                        finish();
-//                        startActivity(getIntent());
-//                    }
-//                }
+                if (charSequence.length() == 6) {
+
+                    pinText = String.valueOf(charSequence);
+
+                    Log.d("cameFromWhichActivity", cameFromWhichActivity);
+
+                    if (internetConnected()) {
+                        if (cameFromWhichActivity.contains("forgetPassword")) {
+                            sendVerificationCodeForReset();
+
+                        } else
+                            sendVarificationCodeToServer();
+
+                    } else {
+                        Toast.makeText(PinActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+                        finish();
+                        startActivity(getIntent());
+                    }
+                }
             }
 
             @Override
@@ -218,8 +206,7 @@ public class PinActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e("VolleyErrorInPinActvt", error.toString());
-                    Toast.makeText(PinActivity.this, "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-                }
+                    Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();                }
             });
 
             queue.add(stringRequest);
@@ -300,8 +287,7 @@ public class PinActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInPinActvt", error.toString());
-                Toast.makeText(PinActivity.this, "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-            }
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();            }
         });
 
         queue.add(stringRequest);
@@ -326,7 +312,7 @@ public class PinActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         if (genRef.contains("-1") || genRef.contains("-2") || genRef.contains("-3")) {
-                            Toast.makeText(PinActivity.this, "কিছুক্ষন পরে আবার চেষ্টা করুনা", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PinActivity.this, "কিছুক্ষন পরে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
                         } else {
                             SharedPreferences.Editor editor = getSharedPreferences("isBroadcastAlreadyUsed", MODE_PRIVATE).edit();
                             editor.putString("used", "true");
@@ -339,8 +325,7 @@ public class PinActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInPhoneNumbe", error.toString());
-                Toast.makeText(PinActivity.this, "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-            }
+               Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();            }
         });
 
         queue.add(stringRequest);
@@ -406,8 +391,7 @@ public class PinActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInPhoneNumbe", error.toString());
-                Toast.makeText(PinActivity.this, "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-            }
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();            }
         });
         queue.add(stringRequest);
     }
@@ -462,5 +446,21 @@ public class PinActivity extends AppCompatActivity {
 //        editor.apply();
 //
 //    }
+
+@Override
+public void onResume(){
+    super.onResume();
+    this.registerReceiver(simpleSmsReceiver,new android.content.IntentFilter(
+            "android.provider.Telephony.SMS_RECEIVED"));
+
+}
+ @Override
+    protected void onPause() {
+     super.onPause();
+
+     this.unregisterReceiver(simpleSmsReceiver);
+    }
+
+
 }
 

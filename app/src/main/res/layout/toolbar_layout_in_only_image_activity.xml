@@ -20,10 +20,9 @@
            android:gravity="center"
            android:textStyle="bold"
            android:clickable="true"
-           android:onClick="setAsAWallpaper"
-          android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+          android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
            android:textColor="@color/White"
-           android:text="ওয়ালপেপার হিসেবে ব্যাবহার করতে এখানে ক্লিক করুন"
+           android:text="ছবি"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content" />
    </LinearLayout>

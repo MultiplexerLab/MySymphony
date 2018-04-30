@@ -128,10 +128,6 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     }
 
     public void signUpRequest() {
-
-
-
-
         String url = "http://bot.sharedtoday.com:9500/ws/commonUpdateForArrayJSON?tbl=Partner&keyname=partnerId&id=" + phoneNumber;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -154,7 +150,8 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("ErrorInSignUp", error.toString());
-                Toast.makeText(getApplicationContext(), "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+
             }
         }) {
             @Override
@@ -194,7 +191,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
 
 //                                Intent myIntent = new Intent(getApplicationContext(), SignUpActivity.class);
 //                                myIntent.putExtra("phoneNumber",phoneNumber);
-//                                
+//
 //                                startActivity(myIntent);
 //                                overridePendingTransition(R.anim.left_in, R.anim.left_out);
 //                                finish();
@@ -212,7 +209,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInSignIn", error.toString());
-                Toast.makeText(getApplicationContext(), "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
 
             }
         }) {
@@ -254,7 +251,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInSignIn", error.toString());
-                Toast.makeText(getApplicationContext(), "সার্ভারে সমস্যা দয়া করে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
 
             }
         });
