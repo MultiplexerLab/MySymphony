@@ -33,7 +33,6 @@ public class PachMishaliActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewForPachMishali;
     public RecyclerAdapterForPachMishali adapterForPachMishali;
-
     RecyclerView.LayoutManager mLayoutManager;
 
     ArrayList<PacMishali> pacMishaliArrayList;

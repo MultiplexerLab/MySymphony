@@ -22,6 +22,7 @@ public class NotificationActivity extends AppCompatActivity {
     private android.support.v7.widget.Toolbar toolbar;
     private RecyclerView recyclerViewNotification;
     public RecyclerAdapterNotification adapterNotification;
+    RecyclerView.LayoutManager mLayoutManager;
 
 
     ArrayList<Notifications> notificationsArrayList;
@@ -42,11 +43,8 @@ public class NotificationActivity extends AppCompatActivity {
         notificationsArrayList.add(new Notifications("ট্র্যানজেক্শন সম্পন্ন হয়েছে", "আপনার ১০২ তম ট্রানজেকশন সম্পন্ন হয়েছে", "১ মিনিট আগে"));
 
         recyclerViewNotification = findViewById(R.id.RVNotification);
-
-        recyclerViewNotification.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false));
-        SnapHelper snapHelperStartGoromKhobor = new GravitySnapHelper(Gravity.START);
-        snapHelperStartGoromKhobor.attachToRecyclerView(recyclerViewNotification);
+        mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerViewNotification.setLayoutManager(mLayoutManager);
         recyclerViewNotification.setHasFixedSize(true);
         adapterNotification = new RecyclerAdapterNotification(NotificationActivity.this, notificationsArrayList);
         recyclerViewNotification.setAdapter(adapterNotification);

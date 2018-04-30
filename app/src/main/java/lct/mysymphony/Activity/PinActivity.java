@@ -95,7 +95,7 @@ public class PinActivity extends AppCompatActivity {
                     Toast.makeText(PinActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
                     finish();
                     startActivity(getIntent());
-                    //setIsBroadcastusedSharedPrefferenseFalse();
+
                 }
             }
 
@@ -115,11 +115,8 @@ public class PinActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (charSequence.length() == 6) {
-
                     pinText = String.valueOf(charSequence);
-
                     Log.d("cameFromWhichActivity", cameFromWhichActivity);
-
                     if (internetConnected()) {
                         if (cameFromWhichActivity.contains("forgetPassword")) {
                             sendVerificationCodeForReset();

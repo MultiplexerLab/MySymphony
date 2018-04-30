@@ -30,6 +30,7 @@ public class newwallPaperFragment extends Fragment {
 
     private RecyclerView recyclerViewForNewWallPaper;
     private RecyclerView.Adapter adapterForNewWallPaper;
+    RecyclerView.LayoutManager mLayoutManager;
 
     public newwallPaperFragment() {
         // Required empty public constructor

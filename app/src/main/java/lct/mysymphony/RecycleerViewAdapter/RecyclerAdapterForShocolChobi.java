@@ -21,13 +21,8 @@ import lct.mysymphony.R;
  */
 
 public class RecyclerAdapterForShocolChobi extends RecyclerView.Adapter<RecyclerAdapterForShocolChobi.RecyclerViewHolder> {
-
-
-    ///private int[] images = {R.drawable.gif_1, R.drawable.gif_2, R.drawable.gif_1, R.drawable.gif_2};
-
     Activity activity;
     ArrayList<ShocolChobi> shocolChobiArrayList;
-
 
     public RecyclerAdapterForShocolChobi(Activity activity, ArrayList<ShocolChobi> shocolChobiArrayList) {
 
@@ -37,9 +32,7 @@ public class RecyclerAdapterForShocolChobi extends RecyclerView.Adapter<Recycler
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_shocol_chobi, parent, false);
-
         RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, shocolChobiArrayList);
         return recyclerViewHolder;
     }
@@ -48,13 +41,10 @@ public class RecyclerAdapterForShocolChobi extends RecyclerView.Adapter<Recycler
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
 
-
         Glide.with(activity)
                 .load(shocolChobiArrayList.get(position).getContentUrl())
                 .into(holder.imageView);
-
-
-    }
+        }
 
     @Override
     public int getItemCount() {
@@ -71,18 +61,14 @@ public class RecyclerAdapterForShocolChobi extends RecyclerView.Adapter<Recycler
         public RecyclerViewHolder(View view, final Activity activity, final ArrayList<ShocolChobi> shocolChobiArrayList) {
             super(view);
 
-
             imageView = view.findViewById(R.id.imgShocholChobi);
-
             this.activity = activity;
             this.shocolChobiArrayList = shocolChobiArrayList;
-
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent myIntent = new Intent(activity, ImageViewActivity.class);
                     myIntent.putExtra("wallpaper", shocolChobiArrayList.get(getAdapterPosition()));
-                    
                     myIntent.putExtra("cameFromWhichActivity","ShocolChobi");
                     activity.startActivity(myIntent);
                     activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
@@ -90,7 +76,6 @@ public class RecyclerAdapterForShocolChobi extends RecyclerView.Adapter<Recycler
                 }
             });
         }
-
-    }
+        }
 }
 

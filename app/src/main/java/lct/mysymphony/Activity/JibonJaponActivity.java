@@ -36,7 +36,7 @@ public class JibonJaponActivity extends AppCompatActivity {
     private RecyclerView recyclerViewForJibonJapon;
     public RecyclerAdapterForJibonJapon adapterForJibonJapon;
 
-    LinearLayoutManager linearLayoutManager;
+    RecyclerView.LayoutManager mLayoutManager;
     ArrayList<JibonJapon> jibonJaponActivityArrayList;
     RequestQueue queue;
 
@@ -122,11 +122,8 @@ public class JibonJaponActivity extends AppCompatActivity {
 
     public void initializeJibonJaponArraylist() {
         recyclerViewForJibonJapon = findViewById(R.id.RV_JibonJapon);
-
-        recyclerViewForJibonJapon.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false));
-        SnapHelper snapHelperStartJibonJapon = new GravitySnapHelper(Gravity.START);
-        snapHelperStartJibonJapon.attachToRecyclerView(recyclerViewForJibonJapon);
+        mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerViewForJibonJapon.setLayoutManager(mLayoutManager);
         recyclerViewForJibonJapon.setHasFixedSize(true);
         adapterForJibonJapon = new RecyclerAdapterForJibonJapon(this, jibonJaponActivityArrayList);
         recyclerViewForJibonJapon.setAdapter(adapterForJibonJapon);
