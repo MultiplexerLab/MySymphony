@@ -49,10 +49,8 @@ public class ShowOnlyImage extends AppCompatActivity {
 
             DataHelper dataHelper=new DataHelper(ShowOnlyImage.this);
             bitmap=dataHelper.getBitmap(id+1);
-
             return null;
         }
-
 
         @Override
         protected void onPostExecute(Void aVoid) {
@@ -80,13 +78,10 @@ public class ShowOnlyImage extends AppCompatActivity {
     }
 
     public void setAsAWallpaper(View view) {
-        //view.setDrawingCacheEnabled(false);
-
         View drawingView = imageView;
         drawingView.buildDrawingCache(true);
         Bitmap bitmap = drawingView.getDrawingCache(true).copy(Bitmap.Config.RGB_565, false);
         drawingView.destroyDrawingCache();
-
 
         WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
         try {

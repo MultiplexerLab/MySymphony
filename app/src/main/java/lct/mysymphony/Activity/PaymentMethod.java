@@ -20,8 +20,6 @@ public class PaymentMethod extends AppCompatActivity {
     String selectedMethod = "";
     String imageUrl;
     DataBaseData dataBaseData;
-    ///Integer price;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +145,6 @@ public class PaymentMethod extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();

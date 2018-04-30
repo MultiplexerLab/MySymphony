@@ -45,10 +45,8 @@ public class Cricket_fragment extends Fragment {
     private RecyclerView.Adapter adapterForSorbosheshSongbad;
 
     RecyclerView.LayoutManager mLayoutManager;
-
     ArrayList<Kheladhula_Cricket_sorboshesh_sobgbad> kheladhulaCricketArrayList;
     RequestQueue queue;
-
 
     public Cricket_fragment() {
         // Required empty public constructor
@@ -64,7 +62,6 @@ public class Cricket_fragment extends Fragment {
         kheladhulaCricketArrayList = new ArrayList<>();
         queue = Volley.newRequestQueue(getActivity());
         loadDataFromVolley();
-
         recyclerViewForSorbosheshSongbad = view.findViewById(R.id.RV_sorboshesh_songbad_cricket_fragment);
 
 
@@ -76,16 +73,12 @@ public class Cricket_fragment extends Fragment {
         wallpaperData.add("এক্সক্লুসিভ মুস্তাফিজ");
 
         recyclerViewForWallPaper = view.findViewById(R.id.RV_wallpaper_cricket_fragment);
-
         recyclerViewForWallPaper.setLayoutManager(new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.HORIZONTAL, false));
-
         SnapHelper snapHelperStartMulloChar = new GravitySnapHelper(Gravity.START);
         snapHelperStartMulloChar.attachToRecyclerView(recyclerViewForWallPaper);
-
         recyclerViewForWallPaper.setHasFixedSize(true);
         adapterForWallPaper = new RecyclerAdapterForKheladhulaCricket(getActivity(), wallpaperData);
-
         recyclerViewForWallPaper.setAdapter(adapterForWallPaper);
 
 

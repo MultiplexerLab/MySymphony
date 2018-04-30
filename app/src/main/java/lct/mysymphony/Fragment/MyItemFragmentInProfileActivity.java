@@ -37,9 +37,7 @@ public class MyItemFragmentInProfileActivity extends Fragment {
     private ArrayList<Bitmap> bitmapArrayList;
     private ArrayList<String> contentTypeArrayList;
     private ArrayList<DataBaseData> dataBaseDataArrayList;
-
     View view;
-
 
     public MyItemFragmentInProfileActivity() {
         // Required empty public constructor

@@ -30,7 +30,7 @@
             android:id="@+id/tabLayoutInSyphonyCare"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/red"
+            android:background="@color/toolbarColor"
             android:theme="@style/TabLayoutInSymphonyCareTheme"
             app:tabGravity="fill"
             app:tabIndicatorHeight="4dp"

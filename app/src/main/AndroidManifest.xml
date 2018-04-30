@@ -68,7 +68,6 @@
         <activity android:name=".Activity.ContentDescriptionActivity.SliderContentActivity" />
         <activity android:name=".Activity.ContentDescriptionActivity.ShikhaDetails" />
         <activity android:name=".Activity.PaymentConfirmation" />
-        <activity android:name=".Activity.Symphony" />
         <activity android:name=".Activity.ContentDescriptionActivity.CricketSorbosheshSongbadDescriptionActivity" />
         <activity android:name=".Activity.ContentDescriptionActivity.PorashunaDescriptionActivity" />
         <activity android:name=".Activity.ContentDescriptionActivity.AuttohasiDescriptionActivity" />

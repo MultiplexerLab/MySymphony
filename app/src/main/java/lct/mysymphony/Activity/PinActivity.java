@@ -68,7 +68,6 @@ public class PinActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
 
-
         if (extras != null) {
             String address = extras.getString("MessageNumber");
             String message = extras.getString("Message");
@@ -84,7 +83,6 @@ public class PinActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = getSharedPreferences("isBroadcastAlreadyUsed", MODE_PRIVATE).edit();
                 editor.putString("used", "true");
                 editor.apply();
-
 
                 if (internetConnected()) {
                     if (cameFromWhichActivity.contains("forgetPassword")) {
@@ -106,9 +104,6 @@ public class PinActivity extends AppCompatActivity {
                 Log.d("Bundle", "null");
                 }
 
-
-
-        //readSms();
 
         pinview.addTextChangedListener(new TextWatcher() {
             @Override

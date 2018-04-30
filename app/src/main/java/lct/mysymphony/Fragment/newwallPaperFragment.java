@@ -31,13 +31,9 @@ public class newwallPaperFragment extends Fragment {
     private RecyclerView recyclerViewForNewWallPaper;
     private RecyclerView.Adapter adapterForNewWallPaper;
 
-
-
-
     public newwallPaperFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,7 +49,6 @@ public class newwallPaperFragment extends Fragment {
         else
             Toast.makeText(getActivity(), "Null", Toast.LENGTH_SHORT).show();
 
-
         recyclerViewForNewWallPaper= view.findViewById(R.id.RV_newWallPaperFragment);
         int numberOfColumns = 3;
         recyclerViewForNewWallPaper.setLayoutManager(new GridLayoutManager(getActivity(),numberOfColumns,
@@ -62,13 +57,7 @@ public class newwallPaperFragment extends Fragment {
         snapHelperStartMulloChar.attachToRecyclerView(recyclerViewForNewWallPaper);
         recyclerViewForNewWallPaper.setHasFixedSize(true);
         adapterForNewWallPaper = new RecyclerAdapterForNewWallPaperFragment(getActivity(),seraChobiArrayList);
-
         recyclerViewForNewWallPaper.setAdapter(adapterForNewWallPaper);
-
-
-
-
-        // Inflate the layout for this fragment
         return view;
     }
 

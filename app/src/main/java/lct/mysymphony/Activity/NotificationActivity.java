@@ -48,9 +48,7 @@ public class NotificationActivity extends AppCompatActivity {
         SnapHelper snapHelperStartGoromKhobor = new GravitySnapHelper(Gravity.START);
         snapHelperStartGoromKhobor.attachToRecyclerView(recyclerViewNotification);
         recyclerViewNotification.setHasFixedSize(true);
-
         adapterNotification = new RecyclerAdapterNotification(NotificationActivity.this, notificationsArrayList);
-
         recyclerViewNotification.setAdapter(adapterNotification);
     }
 
@@ -59,7 +57,6 @@ public class NotificationActivity extends AppCompatActivity {
 
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();

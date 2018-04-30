@@ -36,7 +36,6 @@ public class PorashunaDescriptionActivity extends AppCompatActivity {
 
         setDescripTionData();
 
-
     }
 
     @Override

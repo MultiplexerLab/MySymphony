@@ -39,7 +39,6 @@ public class PachMishaliActivity extends AppCompatActivity {
     ArrayList<PacMishali> pacMishaliArrayList;
     RequestQueue queue;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,19 +116,14 @@ public class PachMishaliActivity extends AppCompatActivity {
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
-
-
-    }
+        }
 
     public void initializeRecyclerView() {
         recyclerViewForPachMishali = findViewById(R.id.RV_PachMishali);
-
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerViewForPachMishali.setLayoutManager(mLayoutManager);
-
         recyclerViewForPachMishali.setHasFixedSize(true);
         adapterForPachMishali= new RecyclerAdapterForPachMishali(this, pacMishaliArrayList);
-
         recyclerViewForPachMishali.setAdapter(adapterForPachMishali);
     }
 }

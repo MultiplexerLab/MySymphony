@@ -69,7 +69,6 @@ public class KheladhulaActivity extends AppCompatActivity {
                     ///Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
                 }
 
-
             }
 
             @Override

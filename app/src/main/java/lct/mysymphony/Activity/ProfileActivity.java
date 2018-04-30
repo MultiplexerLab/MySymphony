@@ -40,8 +40,6 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
         nameTVInActivityUserProfile = findViewById(R.id.nameTVInActivityUserProfile);
         nameTV=findViewById(R.id.nameTVInActivityUserProfile);
 
-
-
         logoutIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,8 +110,6 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
         finish();
 
     }
-
-
 
     @Override
     public void passDataToActivity(String someValue) {

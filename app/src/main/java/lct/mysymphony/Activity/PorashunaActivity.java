@@ -36,7 +36,6 @@ public class PorashunaActivity extends AppCompatActivity {
     public RecyclerAdapterForPorashuna adapterForPorashuna;
     RecyclerView.LayoutManager mLayoutManager;
 
-
     ArrayList<Porashuna> porashunaArrayList;
     RequestQueue queue;
 
@@ -47,7 +46,6 @@ public class PorashunaActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbarlayoutinporashuna);
         setSupportActionBar(toolbar);
-
         porashunaArrayList = new ArrayList<>();
         queue = Volley.newRequestQueue(PorashunaActivity.this);
         loadDataFromVolley();
@@ -60,7 +58,6 @@ public class PorashunaActivity extends AppCompatActivity {
 
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
@@ -127,10 +124,8 @@ public class PorashunaActivity extends AppCompatActivity {
 
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerViewForPorashuna.setLayoutManager(mLayoutManager);
-
         recyclerViewForPorashuna.setHasFixedSize(true);
         adapterForPorashuna = new RecyclerAdapterForPorashuna(this, porashunaArrayList);
-
         recyclerViewForPorashuna.setAdapter(adapterForPorashuna);
     }
 }

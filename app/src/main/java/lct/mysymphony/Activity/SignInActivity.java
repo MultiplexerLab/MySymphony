@@ -63,7 +63,6 @@ public class SignInActivity extends AppCompatActivity {
         super.onBackPressed();
 
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
@@ -73,7 +72,6 @@ public class SignInActivity extends AppCompatActivity {
     public void startForgotPasswordActivity(View view) {
 
         Intent myIntent = new Intent(getApplicationContext(), ForgetPasswordActivity.class);
-        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
@@ -196,8 +194,4 @@ public class SignInActivity extends AppCompatActivity {
         };
         queue.add(stringRequest);
     }
-
-
-
-
 }

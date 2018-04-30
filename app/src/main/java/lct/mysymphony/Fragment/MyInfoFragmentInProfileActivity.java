@@ -37,7 +37,6 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
     String phoneNumber;
     String userName;
 
-
     public MyInfoFragmentInProfileActivity() {
         // Required empty public constructor
     }
@@ -50,7 +49,6 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
 
         SharedPreferences prefs = getActivity().getSharedPreferences("phoneNumber", MODE_PRIVATE);
         phoneNumber = prefs.getString("phoneNo", "");
-
         queue = Volley.newRequestQueue(getActivity());
         nameTV = view.findViewById(R.id.nameTVinMyinfoFragment);
         birthDateTV = view.findViewById(R.id.birthDateTVMyInfoFragment);

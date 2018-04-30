@@ -23,11 +23,11 @@
     </android.support.design.widget.AppBarLayout>
 
     <ImageView
-        android:layout_weight="1"
+        android:layout_weight="0"
         android:layout_margin="15dp"
         android:id="@+id/imageInOnlyImage"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="330dp" />
 
     <Button
         android:layout_weight="0"
