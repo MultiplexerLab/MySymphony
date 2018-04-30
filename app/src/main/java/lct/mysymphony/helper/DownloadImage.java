@@ -62,6 +62,7 @@ public class DownloadImage {
             return bitmap;
         }
         protected void onPostExecute(Bitmap result){
+
             //tv.setVisibility(TextView.GONE);
             // Insert bitmap to the database
             //asyncDialog.dismiss();
