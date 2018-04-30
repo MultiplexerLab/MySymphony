@@ -7,8 +7,8 @@ public class JapitoJibonMC implements Serializable {
     private String contentTitle;
     private String imageUrl;
     private String contentType;
-    private String contentDescription,contentUrl,conntentCat;
-    int contentId;
+    private String contentDescription,contentUrl,contentCat;
+    int contentId,contentPrice;
 
 
 
@@ -16,13 +16,27 @@ public class JapitoJibonMC implements Serializable {
         return contentDescription;
     }
 
-    public JapitoJibonMC(String contentTitle, String contentDescription, String imageUrl, String contentType,String contentUrl,String conntentCat,int contentId) {
+
+
+    public JapitoJibonMC(String contentTitle, String contentDescription, String imageUrl, String contentType, String contentUrl, String contentCat, int contentId, int contentPrice) {
         this.contentTitle = contentTitle;
         this.imageUrl = imageUrl;
         this.contentType = contentType;
 
         this.contentDescription=contentDescription;
         this.contentUrl=contentUrl;
+        this.contentPrice=contentPrice;
+        this.contentId=contentId;
+        this.contentCat=contentCat;
+
+    }
+
+    public String getContentCat() {
+        return contentCat;
+    }
+
+    public int getContentPrice() {
+        return contentPrice;
     }
 
     public String getContentTitle() {
@@ -53,9 +67,7 @@ public class JapitoJibonMC implements Serializable {
         return contentUrl;
     }
 
-    public String getConntentCat() {
-        return conntentCat;
-    }
+
 
     public int getContentId() {
         return contentId;

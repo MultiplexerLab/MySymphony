@@ -21,14 +21,15 @@
     </android.support.design.widget.AppBarLayout>
 
     <TextView
+
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:text="আপনার নাম্বারে পাঠানো টেক্সট ম্যাসেজের 6 ডিজিটের \n কোডটি লিখুন"
-        android:textSize="17sp" />
+        android:text="আপনার নাম্বারে পাঠানো টেক্সট ম্যাসেজের 6 ডিজিটের কোডটি লিখুন"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
     <!--<com.goodiebag.pinview.Pinview-->
         <!--android:id="@+id/pinview"-->
@@ -133,6 +134,7 @@
     </RadioGroup>-->
 
     <Button
+
         android:onClick="resendVerificationNumber"
         android:id="@+id/btn_email_sign_in_"
         android:layout_width="match_parent"

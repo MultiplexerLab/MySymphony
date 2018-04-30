@@ -1,10 +1,12 @@
 package lct.mysymphony.Activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -43,13 +45,33 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
         logoutIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences.Editor editor;
-                editor = getSharedPreferences("login", MODE_PRIVATE).edit();
-                editor.putInt("loginStatus", 0);
-                editor.apply();
-                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.right_in, R.anim.right_out);
+                final AlertDialog alertDialog = new AlertDialog.Builder(ProfileActivity.this).create();
+                alertDialog.setTitle("লগ আউট");
+                alertDialog.setMessage("আপনি কি লগ আউট করতে চান ?");
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "না", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "হ্যা",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences.Editor editor;
+                                editor = getSharedPreferences("login", MODE_PRIVATE).edit();
+                                editor.putInt("loginStatus", 0);
+                                editor.apply();
+                                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.right_in, R.anim.right_out);
+                                dialog.dismiss();
+                            }
+                        });
+
+                alertDialog.show();
+
+
+
             }
         });
 

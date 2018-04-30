@@ -1,6 +1,8 @@
 package lct.mysymphony.Fragment;
 
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,8 +33,10 @@ public class MyItemFragmentInProfileActivity extends Fragment {
 
     private RecyclerView recyclerViewForMyItem;
     private RecyclerView.Adapter adapterForMyItem;
+    private ProgressDialog dialog;
     RecyclerView.LayoutManager mLayoutManager;
     DataHelper dataHelper;
+    Activity activity;
     int rowCount;
     private ArrayList<Bitmap> bitmapArrayList;
     private ArrayList<String> contentTypeArrayList;
@@ -53,13 +57,25 @@ public class MyItemFragmentInProfileActivity extends Fragment {
         bitmapArrayList=new ArrayList<>();
         contentTypeArrayList=new ArrayList<>();
         dataBaseDataArrayList=new ArrayList<>() ;
+        activity=getActivity();
         new RetriveBitMapFromDatabase().execute();
+        //dialog = new ProgressDialog(getActivity());
 
         return view;
     }
 
     private class RetriveBitMapFromDatabase extends AsyncTask<Void, Void, Void> {
+        ProgressDialog asyncDialog = new ProgressDialog(activity);
 
+
+        @Override
+        protected void onPreExecute() {
+//            dialog.setMessage("Doing something, please wait.");
+//            dialog.show();
+            asyncDialog.setMessage("ডাটা লোড হচ্ছে");
+            //show dialog
+            asyncDialog.show();
+        }
         @Override
         protected Void doInBackground(Void... voids) {
 
@@ -74,7 +90,9 @@ public class MyItemFragmentInProfileActivity extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            updateRecyclerView();
+
+            asyncDialog.dismiss();
+                updateRecyclerView();
         }
     }
     public void updateRecyclerView()

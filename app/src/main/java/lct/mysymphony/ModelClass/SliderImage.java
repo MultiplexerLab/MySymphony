@@ -10,18 +10,29 @@ public class SliderImage implements Serializable{
     private String image_url;
     private int contentId;
     private String description;
-    private String contentType,contentTitle,contentCat;
+    private String contentType,contentTitle,contentCat,contentDesc;
+    int contentPrice;
 
 
 
-    public SliderImage(String image_url, String description, String contentType, String contentTitle, String contentCat,int contentId) {
+    public SliderImage(String image_url, String description, String contentType, String contentTitle, String contentCat,int contentId,String contentDesc,int contentPrice) {
         this.image_url = image_url;
         this.description = description;
         this.contentType=contentType;
         this.contentTitle=contentTitle;
         this.contentCat=contentCat;
         this.contentId=contentId;
+        this.contentDesc=contentDesc;
+        this.contentPrice=contentPrice;
 
+    }
+
+    public String getContentDesc() {
+        return contentDesc;
+    }
+
+    public int getContentPrice() {
+        return contentPrice;
     }
 
     public int getContentId() {

@@ -5,15 +5,20 @@ import java.io.Serializable;
 public class ShocolChobi implements Serializable {
 
     String contentType, contentUrl , contentTile,contentCat;
-    int contentId;
+    int contentId,contentPrice;
 
 
-    public ShocolChobi(String contentType, String contentUrl, String contentTile,String contentCat , int contentId) {
+    public int getContentPrice() {
+        return contentPrice;
+    }
+
+    public ShocolChobi(String contentType, String contentUrl, String contentTile, String contentCat , int contentId, int contentPrice) {
         this.contentType = contentType;
         this.contentUrl = contentUrl;
         this.contentTile = contentTile;
         this.contentCat=contentCat;
         this.contentId=contentId;
+        this.contentPrice=contentPrice;
 
     }
 

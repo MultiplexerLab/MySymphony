@@ -49,53 +49,57 @@
                 android:text="ক্রিকেট দুনিয়ার নানান ধরনের দারুন সব খবর নিয়ে আমাদের এই আয়োজন"
                 android:textColor="@color/black"
                 android:textSize="@dimen/textSize" />
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="18dp"-->
-                <!--android:gravity="bottom|end"-->
-                <!--android:orientation="horizontal">-->
+            <LinearLayout
+                android:id="@+id/buyOrDownLoadLLInSliderDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:gravity="bottom|end"
+                android:orientation="horizontal">
 
-                <!--<LinearLayout-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="center"-->
-                    <!--android:orientation="vertical">-->
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginTop="5dp"-->
-                        <!--android:text="বিশেষ অফার"-->
-                        <!--android:textColor="@color/red" />-->
+                <LinearLayout
+                    android:id="@+id/bisheshOfferLLInSliderDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="বিশেষ অফার"
+                        android:textColor="@color/red" />
 
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:orientation="horizontal">-->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
                         <!--<TextView-->
                             <!--android:id="@+id/strikeThroughInWallPaperBundle"-->
                             <!--android:layout_width="wrap_content"-->
                             <!--android:layout_height="wrap_content"-->
                             <!--android:text="৳১৫" />-->
-                        <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginLeft="10dp"-->
-                            <!--android:text="৳১০"-->
-                            <!--android:textColor="@color/green" />-->
-                    <!--</LinearLayout>-->
-                <!--</LinearLayout>-->
+                        <TextView
+                            android:id="@+id/priceTVinSliderDetails"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="৳১০"
+                            android:textColor="@color/green" />
+                    </LinearLayout>
+                </LinearLayout>
 
-                <!--<Button-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="70dp"-->
-                    <!--android:layout_gravity="bottom"-->
-                    <!--android:layout_marginLeft="10dp"-->
-                    <!--android:background="@drawable/btn_style_red"-->
-                    <!--android:onClick="purChase"-->
-                    <!--android:text="কিনুন / ডাউনলোড করুন"-->
-                    <!--android:textColor="@color/White" />-->
-            <!--</LinearLayout>-->
+                <Button
+                    android:id="@+id/buyOrDownloadBTNInSliderDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/btn_style_red"
+                    android:onClick="purChase"
+                    android:text="কিনুন / ডাউনলোড করুন"
+                    android:textColor="@color/White" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

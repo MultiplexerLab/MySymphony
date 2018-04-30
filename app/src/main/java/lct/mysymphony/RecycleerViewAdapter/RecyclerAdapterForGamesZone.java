@@ -52,9 +52,11 @@ public class RecyclerAdapterForGamesZone extends RecyclerView.Adapter<RecyclerAd
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
 
 
-        holder.strikrthroughTextView.setPaintFlags(holder.strikrthroughTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        ///holder.strikrthroughTextView.setPaintFlags(holder.strikrthroughTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+//        holder.strikrthroughTextView.setVisibility(View.GONE);
+
         holder.mullocharTV.setText(gamesZoneArrayList.get(position).getContentTile());
-        holder.strikrthroughTextView.setText(Integer.toString(gamesZoneArrayList.get(position).getPreviousPrice()));
+//        holder.strikrthroughTextView.setText(Integer.toString(gamesZoneArrayList.get(position).getPreviousPrice()));
         holder.newPriceTV.setText(Integer.toString(gamesZoneArrayList.get(position).getNewPrice()));
 
         Glide.with(activity)
@@ -85,7 +87,7 @@ public class RecyclerAdapterForGamesZone extends RecyclerView.Adapter<RecyclerAd
             this.gamesZoneArrayList=gamesZoneArrayList;
 
             mullocharTV = view.findViewById(R.id.gamesZoneTV);
-            strikrthroughTextView = view.findViewById(R.id.strikeThroughTextInGamesZone);
+//            strikrthroughTextView = view.findViewById(R.id.strikeThroughTextInGamesZone);
             imageView = view.findViewById(R.id.imgGamesZone);
             newPriceTV = view.findViewById(R.id.newPriceTVInGamesZone);
 

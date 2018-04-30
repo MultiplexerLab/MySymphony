@@ -35,6 +35,7 @@ public class ImageViewActivity extends AppCompatActivity {
     Button buyOrDownloadBTN;
     boolean isDownloaded = false;
     boolean isOnlyDownload = false;
+    boolean isItFree=false;
     DataHelper dataHelper;
     LinearLayout buyOrDownloadLinearLayout;
 
@@ -47,6 +48,8 @@ public class ImageViewActivity extends AppCompatActivity {
         dataHelper = new DataHelper(ImageViewActivity.this);
         bisheshOfferLinearLayout = findViewById(R.id.bisheshOfferLL);
         buyOrDownloadLinearLayout = findViewById(R.id.buyOrDownloadLL);
+        previousPrice=findViewById(R.id.previousPriceTVinImageViewActivity);
+        newPrice=findViewById(R.id.newPriceTVinImageViewActivity);
 
         cameFromWhichActivity = getIntent().getStringExtra("cameFromWhichActivity");
 
@@ -59,6 +62,8 @@ public class ImageViewActivity extends AppCompatActivity {
                 contentCat = Data.getContentCat();
                 contentDesc = "";
                 contentType = Data.getContentType();
+                newPrice.setText(Integer.toString(Data.getNewPrice()));
+                previousPrice.setText(Integer.toString(Data.getPreviousPrice()));
                 dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, "paid", Data.getContentId());
                 Glide.with(this).load(Data.getImageUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
 
@@ -75,7 +80,25 @@ public class ImageViewActivity extends AppCompatActivity {
                 contentCat = Data.getContentCat();
                 contentDesc = "";
                 contentType = Data.getContentType();
-                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, "paid", Data.getContentId());
+                Log.d("newPrice",Integer.toString(Data.getNewPrice()));
+                Log.d("previousPrice",Integer.toString(Data.getPreviousPrice()));
+                previousPrice.setVisibility(View.GONE);
+                newPrice.setText(Integer.toString(Data.getNewPrice()));
+
+                String priceStatus;
+                if (Data.getNewPrice()==0 && Data.getPreviousPrice()==0)
+                {
+                    isItFree=true;
+                    priceStatus="free";
+                }
+                else
+                {
+                    isItFree=false;
+                    priceStatus="paid";
+                }
+
+
+                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, priceStatus, Data.getContentId());
                 Glide.with(this).load(Data.getContentUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
 
                 if (dataHelper.checkDownLoadedOrNot(Data.getContentCat(), Data.getContentId())) {
@@ -90,19 +113,38 @@ public class ImageViewActivity extends AppCompatActivity {
                 contentCat = Data.getContentCat();
                 contentDesc = "";
                 contentType = Data.getContentType();
-                isDownloaded = true;
 
-                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, "free", Data.getContentId());
+                String priceStatus;
+                if (Data.getContentPrice()==0)
+                {
+                    priceStatus="free";
+                    isItFree=true;
+                }
+                else
+                {
+                    isItFree=false;
+                    priceStatus="paid";
+                }
+
+
+                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, priceStatus, Data.getContentId());
                 Glide.with(this).load(Data.getContentUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
 
                 if (dataHelper.checkDownLoadedOrNot(Data.getContentCat(), Data.getContentId())) {
                     isDownloaded = true;
-                    Log.d("enter","ShocolChobi");
+                    Log.d("enter","SeraChobi");
                     buyOrDownloadLinearLayout.setVisibility(View.GONE);
-                } else {
+                } else if (Data.getContentPrice()==0){
+                    Log.d("enter","not");
                     bisheshOfferLinearLayout.setVisibility(View.GONE);
                     buyOrDownloadBTN.setText("ডাউনলোড করুন");
                 }
+                else if (Data.getContentPrice()>0){
+                    Log.d("enter","not");
+                    buyOrDownloadLinearLayout.setVisibility(View.VISIBLE);
+                    previousPrice.setVisibility(View.GONE);
+                }
+
             } else if (cameFromWhichActivity.contains("SeraChobi")) {
                 SeraChobi Data = (SeraChobi) getIntent().getSerializableExtra("wallpaper");
                 imageUrl = Data.getImage_url();
@@ -111,42 +153,40 @@ public class ImageViewActivity extends AppCompatActivity {
                 isDownloaded = true;
                 contentDesc = "";
                 contentType = Data.getContentType();
-//                bisheshOfferLinearLayout.setVisibility(View.GONE);
-//                buyOrDownloadBTN.setText("ডাউনলোড করুন");
-                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, "free", Data.getContentId());
+
+                String priceStatus;
+                if (Data.getContentPrice()==0)
+                {
+                    isItFree=true;
+                    priceStatus="free";
+                }
+                else
+                {
+                    isItFree=false;
+                    priceStatus="paid";
+                }
+
+                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, priceStatus, Data.getContentId());
                 Glide.with(this).load(Data.getImage_url()).into((ImageView) findViewById(R.id.imageViewWallpaper));
 
                 if (dataHelper.checkDownLoadedOrNot(Data.getContentCat(), Data.getContentId())) {
                     isDownloaded = true;
                     Log.d("enter","SeraChobi");
                     buyOrDownloadLinearLayout.setVisibility(View.GONE);
-                } else {
+                } else if (Data.getContentPrice()==0){
                     Log.d("enter","not");
                     bisheshOfferLinearLayout.setVisibility(View.GONE);
                     buyOrDownloadBTN.setText("ডাউনলোড করুন");
+                }
+                else if (Data.getContentPrice()>0){
+                    Log.d("enter","not");
+                    buyOrDownloadLinearLayout.setVisibility(View.VISIBLE);
+                    previousPrice.setVisibility(View.GONE);
                 }
             }
 
         }
         Log.d("isDownloaded", String.valueOf(isDownloaded));
-//        if (isDownloaded)
-//        {
-//            if (isOnlyDownload)
-//            {
-//                bisheshOfferLinearLayout.setVisibility(View.GONE);
-//                buyOrDownloadBTN.setText("ডাউনলোড করুন");
-//            }
-//        }
-//
-//        else
-//        {
-//            if (isOnlyDownload)
-//            {
-//
-//                buyOrDownloadBTN.setText("ডাউনলোড করুন");
-//            }
-//            buyOrDownloadLinearLayout.setVisibility(View.VISIBLE);
-//        }
 
 
         previousPrice = findViewById(R.id.previousPriceTVinImageViewActivity);
@@ -157,13 +197,24 @@ public class ImageViewActivity extends AppCompatActivity {
         if (dataBaseData == null)
             Log.d("databaseDataImageView", "null");
 
-        if (cameFromWhichActivity.contains("ShocolChobi") || cameFromWhichActivity.contains("SeraChobi")) {
+
             if (!dataBaseData.getContentType().contains("video") && !imageUrl.contains("mp4") && !imageUrl.contains("youtube") && !imageUrl.contains("music") && !imageUrl.contains("videos")) {
-                DownloadImage downloadImage = new DownloadImage();
-                downloadImage.downloadImage(imageUrl, ImageViewActivity.this, dataBaseData);
-                Toast.makeText(ImageViewActivity.this, "ধন্যবাদ কিছুক্ষন পরে মাইআইটেম লিস্ট এ আপনার আইটেমটি দেখতে পারবেন", Toast.LENGTH_SHORT).show();
-                Intent myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
-                
+
+//
+                Intent myIntent ;
+                if (isItFree)
+                {
+                    myIntent= new Intent(getApplicationContext(), ProfileActivity.class);
+                    DownloadImage downloadImage = new DownloadImage();
+                    downloadImage.downloadImage(imageUrl, ImageViewActivity.this, dataBaseData);
+                    Toast.makeText(ImageViewActivity.this, "ধন্যবাদ কিছুক্ষন পরে মাইআইটেম লিস্ট এ আপনার আইটেমটি দেখতে পারবেন", Toast.LENGTH_SHORT).show();
+                }
+
+                else
+                    myIntent= new Intent(getApplicationContext(), PaymentMethod.class);
+
+                myIntent.putExtra("imageUrl", imageUrl);
+                myIntent.putExtra("dataBaseData", dataBaseData);
                 myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
                 this.startActivity(myIntent);
                 overridePendingTransition(R.anim.left_in, R.anim.left_out);
@@ -171,20 +222,11 @@ public class ImageViewActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(ImageViewActivity.this, "ভিডিও কন্টেন্ট পরবর্তীতে পাবেন", Toast.LENGTH_LONG).show();
                 Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-                
                 myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
                 this.startActivity(myIntent);
                 overridePendingTransition(R.anim.left_in, R.anim.left_out);
                 finish();
             }
-        } else {
-            Intent purchase = new Intent(ImageViewActivity.this, PaymentMethod.class);
-            Log.d("img_image", imageUrl);
-            purchase.putExtra("imageUrl", imageUrl);
-            purchase.putExtra("dataBaseData", dataBaseData);
-            startActivity(purchase);
-            overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        }
 
     }
 
@@ -197,4 +239,6 @@ public class ImageViewActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
+
+
 }

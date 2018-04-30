@@ -2,6 +2,7 @@ package lct.mysymphony.helper;
 
 public class Endpoints {
     public static final String UPDATED_HOME_GET_URL = "http://jachaibd.com/api/sample_home_updated.json";
+    public static final String NEW_UPDATED_HOME_GET_URL = "http://jachaibd.com/api/new_home_discount.json";
     public static final String NEW_HOME_GET_URL = "http://bot.sharedtoday.com:9500/ws/mysymphony/getAllHomeContents";
     public static final String JAPITO_JIBON_GET_URL = "http://bot.sharedtoday.com:9500/ws/mysymphony/getCategorizedContents?cat=daily_life";
     public static final String HOT_NEWS_GET_URL="http://jachaibd.com/api/hot_news_sample.json";

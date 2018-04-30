@@ -1,5 +1,6 @@
 package lct.mysymphony.helper;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,8 +34,11 @@ public class DownloadImage {
     private class BackTask extends AsyncTask<String,Void,Bitmap> {
         TextView tv;
         DataHelper dbHelper = new DataHelper(context);
+        ///ProgressDialog asyncDialog = new ProgressDialog(context);
         protected void onPreExecute(){
             Log.i("Donwload","Downloading the image. Please wait...");
+            //asyncDialog.setMessage("কিছুক্ষন অপেক্ষা করুন");
+            ///asyncDialog.show();
         }
         protected Bitmap doInBackground(String...params){
             Bitmap bitmap=null;
@@ -60,6 +64,7 @@ public class DownloadImage {
         protected void onPostExecute(Bitmap result){
             //tv.setVisibility(TextView.GONE);
             // Insert bitmap to the database
+            //asyncDialog.dismiss();
             dbHelper.insertBitmap(result,dataBaseData);
             //ImageView imgView=(ImageView)findViewById(R.id.imgview);
             // Read the first image from database and show it in ImageView
