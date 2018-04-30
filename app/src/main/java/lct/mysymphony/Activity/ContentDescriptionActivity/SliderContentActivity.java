@@ -37,6 +37,7 @@ public class SliderContentActivity extends AppCompatActivity {
     }
 
     public void purChase(View view) {
+
         Intent purchase = new Intent(SliderContentActivity.this, PaymentMethod.class);
         DataBaseData dataBaseData=new DataBaseData(wallpaerUrl.getContentTitle(),wallpaerUrl.getContentCat(),wallpaerUrl.getContentType(),"","free",wallpaerUrl.getContentId());
         purchase.putExtra("dataBaseData",dataBaseData);
