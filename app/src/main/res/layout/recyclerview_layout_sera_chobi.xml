@@ -4,12 +4,33 @@
     android:orientation="vertical"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:padding="10dp"
-        android:id="@+id/img"
-        android:scaleType="centerCrop"
-        android:src="@drawable/image_1"
-        android:layout_width="140dp"
-        android:layout_height="140dp" />
+    <RelativeLayout
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:padding="10dp"
+            android:id="@+id/img"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image_1"
+            android:layout_width="140dp"
+            android:layout_height="140dp" />
+
+        <ProgressBar
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/progressBarInSeraChobi"
+            android:layout_marginEnd="5dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:indeterminate="true"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/progress_diaog_color"/>
+
+    </RelativeLayout>
+
+
 
 </LinearLayout>

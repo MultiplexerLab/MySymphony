@@ -4,48 +4,68 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <ImageView
+    <RelativeLayout
         android:layout_gravity="center"
-        android:id="@+id/imgGamesZone"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:paddingTop="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="1dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/image_1" />
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imgGamesZone"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:paddingBottom="1dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image_1" />
+
+        <ProgressBar
+            android:id="@+id/progressBarInGamesZone"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/progress_diaog_color"
+            android:indeterminateTintMode="src_atop" />
+
+    </RelativeLayout>
+
 
     <TextView
         android:id="@+id/gamesZoneTV"
-        android:layout_gravity="center"
-        android:text="স্মার্ট থীম প্যাক"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="স্মার্ট থীম প্যাক" />
 
     <LinearLayout
-        android:layout_gravity="center"
-        android:gravity="center"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_gravity="center"
         android:layout_marginBottom="4dp"
+        android:layout_marginTop="2dp"
+        android:gravity="center"
         android:orientation="horizontal">
 
-      <!--  <TextView
-            android:id="@+id/strikeThroughTextInGamesZone"
-            android:layout_marginLeft="2dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="৳১৫" />-->
+        <!--  <TextView
+              android:id="@+id/strikeThroughTextInGamesZone"
+              android:layout_marginLeft="2dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="৳১৫" />-->
 
         <TextView
             android:id="@+id/newPriceTVInGamesZone"
-            android:textColor="@color/green"
-            android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="৳১০" />
+            android:layout_marginLeft="10dp"
+            android:text="৳১০"
+            android:textColor="@color/green" />
 
 
     </LinearLayout>

@@ -383,8 +383,8 @@
                         android:layout_marginTop="8dp"
                         android:text="সাবস্ক্রাইব করুন"
                         android:textColor="@color/red"
-                        android:onClick="subscribe"
-                        android:textSize="17sp" />
+                        android:textSize="17sp"/>
+                        <!--android:onClick="subscribe"-->
 
 
                     <android.support.v7.widget.RecyclerView

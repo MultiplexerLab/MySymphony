@@ -1,10 +1,14 @@
 package lct.mysymphony.Activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,7 +27,7 @@ import lct.mysymphony.R;
 import lct.mysymphony.helper.DataHelper;
 import lct.mysymphony.helper.DownloadImage;
 
-public class ImageViewActivity extends AppCompatActivity {
+public class ImageViewActivity extends AppCompatActivity implements DownloadImage.AsyncResponse {
 
     ///int price;
     String imageUrl;
@@ -34,10 +38,10 @@ public class ImageViewActivity extends AppCompatActivity {
     DataBaseData dataBaseData;
     Button buyOrDownloadBTN;
     boolean isDownloaded = false;
-    boolean isOnlyDownload = false;
-    boolean isItFree=false;
+    boolean isItFree = false;
     DataHelper dataHelper;
     LinearLayout buyOrDownloadLinearLayout;
+    lct.mysymphony.helper.ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +52,11 @@ public class ImageViewActivity extends AppCompatActivity {
         dataHelper = new DataHelper(ImageViewActivity.this);
         bisheshOfferLinearLayout = findViewById(R.id.bisheshOfferLL);
         buyOrDownloadLinearLayout = findViewById(R.id.buyOrDownloadLL);
-        previousPrice=findViewById(R.id.previousPriceTVinImageViewActivity);
-        newPrice=findViewById(R.id.newPriceTVinImageViewActivity);
+        previousPrice = findViewById(R.id.previousPriceTVinImageViewActivity);
+        newPrice = findViewById(R.id.newPriceTVinImageViewActivity);
+        progressDialog=new lct.mysymphony.helper.ProgressDialog(this);
+
+
 
         cameFromWhichActivity = getIntent().getStringExtra("cameFromWhichActivity");
 
@@ -69,7 +76,7 @@ public class ImageViewActivity extends AppCompatActivity {
 
                 if (dataHelper.checkDownLoadedOrNot(Data.getContentCat(), Data.getContentId())) {
                     buyOrDownloadLinearLayout.setVisibility(View.GONE);
-                    Log.d("enter","MulloChar");
+                    Log.d("enter", "MulloChar");
                     isDownloaded = true;
                 }
 
@@ -80,21 +87,18 @@ public class ImageViewActivity extends AppCompatActivity {
                 contentCat = Data.getContentCat();
                 contentDesc = "";
                 contentType = Data.getContentType();
-                Log.d("newPrice",Integer.toString(Data.getNewPrice()));
-                Log.d("previousPrice",Integer.toString(Data.getPreviousPrice()));
+                Log.d("newPrice", Integer.toString(Data.getNewPrice()));
+                Log.d("previousPrice", Integer.toString(Data.getPreviousPrice()));
                 previousPrice.setVisibility(View.GONE);
                 newPrice.setText(Integer.toString(Data.getNewPrice()));
 
                 String priceStatus;
-                if (Data.getNewPrice()==0 && Data.getPreviousPrice()==0)
-                {
-                    isItFree=true;
-                    priceStatus="free";
-                }
-                else
-                {
-                    isItFree=false;
-                    priceStatus="paid";
+                if (Data.getNewPrice() == 0 && Data.getPreviousPrice() == 0) {
+                    isItFree = true;
+                    priceStatus = "free";
+                } else {
+                    isItFree = false;
+                    priceStatus = "paid";
                 }
 
 
@@ -104,7 +108,7 @@ public class ImageViewActivity extends AppCompatActivity {
                 if (dataHelper.checkDownLoadedOrNot(Data.getContentCat(), Data.getContentId())) {
                     buyOrDownloadLinearLayout.setVisibility(View.GONE);
                     isDownloaded = true;
-                    Log.d("enter","GameZone");
+                    Log.d("enter", "GameZone");
                 }
             } else if (cameFromWhichActivity.contains("ShocolChobi")) {
                 ShocolChobi Data = (ShocolChobi) getIntent().getSerializableExtra("wallpaper");
@@ -115,15 +119,12 @@ public class ImageViewActivity extends AppCompatActivity {
                 contentType = Data.getContentType();
 
                 String priceStatus;
-                if (Data.getContentPrice()==0)
-                {
-                    priceStatus="free";
-                    isItFree=true;
-                }
-                else
-                {
-                    isItFree=false;
-                    priceStatus="paid";
+                if (Data.getContentPrice() == 0) {
+                    priceStatus = "free";
+                    isItFree = true;
+                } else {
+                    isItFree = false;
+                    priceStatus = "paid";
                 }
 
 
@@ -132,15 +133,14 @@ public class ImageViewActivity extends AppCompatActivity {
 
                 if (dataHelper.checkDownLoadedOrNot(Data.getContentCat(), Data.getContentId())) {
                     isDownloaded = true;
-                    Log.d("enter","SeraChobi");
+                    Log.d("enter", "SeraChobi");
                     buyOrDownloadLinearLayout.setVisibility(View.GONE);
-                } else if (Data.getContentPrice()==0){
-                    Log.d("enter","not");
+                } else if (Data.getContentPrice() == 0) {
+                    Log.d("enter", "not");
                     bisheshOfferLinearLayout.setVisibility(View.GONE);
                     buyOrDownloadBTN.setText("ডাউনলোড করুন");
-                }
-                else if (Data.getContentPrice()>0){
-                    Log.d("enter","not");
+                } else if (Data.getContentPrice() > 0) {
+                    Log.d("enter", "not");
                     buyOrDownloadLinearLayout.setVisibility(View.VISIBLE);
                     previousPrice.setVisibility(View.GONE);
                 }
@@ -155,15 +155,12 @@ public class ImageViewActivity extends AppCompatActivity {
                 contentType = Data.getContentType();
 
                 String priceStatus;
-                if (Data.getContentPrice()==0)
-                {
-                    isItFree=true;
-                    priceStatus="free";
-                }
-                else
-                {
-                    isItFree=false;
-                    priceStatus="paid";
+                if (Data.getContentPrice() == 0) {
+                    isItFree = true;
+                    priceStatus = "free";
+                } else {
+                    isItFree = false;
+                    priceStatus = "paid";
                 }
 
                 dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, priceStatus, Data.getContentId());
@@ -171,18 +168,18 @@ public class ImageViewActivity extends AppCompatActivity {
 
                 if (dataHelper.checkDownLoadedOrNot(Data.getContentCat(), Data.getContentId())) {
                     isDownloaded = true;
-                    Log.d("enter","SeraChobi");
+                    Log.d("enter", "SeraChobi");
                     buyOrDownloadLinearLayout.setVisibility(View.GONE);
-                } else if (Data.getContentPrice()==0){
-                    Log.d("enter","not");
+                } else if (Data.getContentPrice() == 0) {
+                    Log.d("enter", "SeraChobiFree");
                     bisheshOfferLinearLayout.setVisibility(View.GONE);
                     buyOrDownloadBTN.setText("ডাউনলোড করুন");
-                }
-                else if (Data.getContentPrice()>0){
-                    Log.d("enter","not");
+                } else if (Data.getContentPrice() > 0) {
+                    Log.d("enter", "SeraChobiPaid");
                     buyOrDownloadLinearLayout.setVisibility(View.VISIBLE);
                     previousPrice.setVisibility(View.GONE);
                 }
+                Log.d("isItFrreSeraChobi", String.valueOf(isItFree));
             }
 
         }
@@ -194,39 +191,42 @@ public class ImageViewActivity extends AppCompatActivity {
     }
 
     public void purChase(View view) {
-        if (dataBaseData == null)
-            Log.d("databaseDataImageView", "null");
+        if (dataBaseData == null) Log.d("databaseDataImageView", "null");
 
 
-            if (!dataBaseData.getContentType().contains("video") && !imageUrl.contains("mp4") && !imageUrl.contains("youtube") && !imageUrl.contains("music") && !imageUrl.contains("videos")) {
+        if (!dataBaseData.getContentType().contains("video") && !imageUrl.contains("mp4") && !imageUrl.contains("youtube") && !imageUrl.contains("music") && !imageUrl.contains("videos")) {
 
-//
-                Intent myIntent ;
-                if (isItFree)
-                {
-                    myIntent= new Intent(getApplicationContext(), ProfileActivity.class);
-                    DownloadImage downloadImage = new DownloadImage();
-                    downloadImage.downloadImage(imageUrl, ImageViewActivity.this, dataBaseData);
-                    Toast.makeText(ImageViewActivity.this, "ধন্যবাদ কিছুক্ষন পরে মাইআইটেম লিস্ট এ আপনার আইটেমটি দেখতে পারবেন", Toast.LENGTH_SHORT).show();
-                }
 
-                else
-                    myIntent= new Intent(getApplicationContext(), PaymentMethod.class);
+            Log.d("isItFreeInPurchase",String.valueOf(isItFree));
+            Intent myIntent;
+            if (isItFree==false) {
 
+                myIntent = new Intent(getApplicationContext(), PaymentMethod.class);
                 myIntent.putExtra("imageUrl", imageUrl);
                 myIntent.putExtra("dataBaseData", dataBaseData);
                 myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
                 this.startActivity(myIntent);
                 overridePendingTransition(R.anim.left_in, R.anim.left_out);
                 finish();
-            } else {
-                Toast.makeText(ImageViewActivity.this, "ভিডিও কন্টেন্ট পরবর্তীতে পাবেন", Toast.LENGTH_LONG).show();
-                Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-                myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
-                this.startActivity(myIntent);
-                overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                finish();
             }
+            else
+            {
+                progressDialog.showProgressDialog();
+                DownloadImage downloadImage = new DownloadImage();
+                downloadImage.downloadImage(imageUrl, ImageViewActivity.this, dataBaseData);
+
+
+            }
+//
+
+        } else {
+            Toast.makeText(ImageViewActivity.this, "ভিডিও কন্টেন্ট পরবর্তীতে পাবেন", Toast.LENGTH_LONG).show();
+            Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
+            myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
+            this.startActivity(myIntent);
+            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            finish();
+        }
 
     }
 
@@ -234,10 +234,29 @@ public class ImageViewActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
+    }
+
+
+    @Override
+    public void processFinish(String output) {
+
+        progressDialog.hideProgressDialog();
+        Log.d("processFinished", "processFinished");
+        if (output.contains("complete")) {
+            Intent myIntent;
+            myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
+            Toast.makeText(ImageViewActivity.this, "ধন্যবাদ কিছুক্ষন পরে মাইআইটেম লিস্ট এ আপনার আইটেমটি দেখতে পারবেন", Toast.LENGTH_SHORT).show();
+            myIntent.putExtra("imageUrl", imageUrl);
+            myIntent.putExtra("dataBaseData", dataBaseData);
+            myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
+            this.startActivity(myIntent);
+            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            finish();
+
+        }
     }
 
 

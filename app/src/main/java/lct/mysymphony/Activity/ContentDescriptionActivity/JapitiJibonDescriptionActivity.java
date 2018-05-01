@@ -1,6 +1,7 @@
 package lct.mysymphony.Activity.ContentDescriptionActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -32,6 +34,7 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
     LinearLayout buyOrDownloadLL,bisheshOfferLL;
     Button buyOrDownloadBTN;
     String imageUrl;
+    ProgressBar imageProgressBar,videoProgressBar;
 
 
 
@@ -51,6 +54,7 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
         bisheshOfferLL=findViewById(R.id.bisheshOfferLLInJapitoJibonDescription);
         buyOrDownloadLL=findViewById(R.id.buyOrDownloadLLInJapitoJibonDescription);
         buyOrDownloadBTN=findViewById(R.id.buyOrDownloadBTNInJapitoJibonDescription);
+        videoProgressBar=findViewById(R.id.progressBarInVideoViewInJapitiJibonDescription);
 
 //        newPrice=findViewById(R.id.newPriceTVinJapitoJibonDescription);
 //        previousPrice=findViewById(R.id.previousPriceTVinJapitoJibonDescription);
@@ -73,6 +77,7 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
 
         ///previousPrice.setVisibility(View.GONE);
         newPrice.setText(Integer.toString(object.getContentPrice()));
+        Log.d("japitojibonPrice",Integer.toString(object.getContentPrice()));
 
         String priceStatus;
         if (object.getContentPrice()==0)
@@ -120,6 +125,33 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
             videoView.setVideoURI(Uri.parse("http://jachaibd.com/files/sample.mp4"));
             videoView.start();
 
+            videoProgressBar.setVisibility(View.VISIBLE);
+            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    // TODO Auto-generated method stub
+                    mp.start();
+                    mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+                        @Override
+                        public void onVideoSizeChanged(MediaPlayer mp, int what,
+                                                       int arg2) {
+                            videoProgressBar.setVisibility(View.GONE);
+                            mp.start();
+
+                            if (MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START == what) {
+                                videoProgressBar.setVisibility(View.GONE);
+                            }
+                            if (MediaPlayer.MEDIA_INFO_BUFFERING_START == what) {
+                                videoProgressBar.setVisibility(View.VISIBLE);
+                            }
+                            if (MediaPlayer.MEDIA_INFO_BUFFERING_END == what) {
+                                videoProgressBar.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
+                }
+            });
+
             Log.i("japitojibon","japitojibon");
         }
         else
@@ -129,6 +161,7 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
             Glide.with(JapitiJibonDescriptionActivity.this)
                     .load(object.getImageUrl())
                     .into(newsImageView);
+            videoProgressBar.setVisibility(View.GONE);
         }
         newsTitle.setText(object.getContentTitle());
         newsDescription.setText(object.getContentDescription());

@@ -1,11 +1,16 @@
 package lct.mysymphony.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -34,16 +39,20 @@ public class AuttoHashiActivity extends AppCompatActivity {
     RecyclerView.LayoutManager mLayoutManager;
     ArrayList<Auttohashi> auttohashiArrayList;
     RequestQueue queue;
+    AlertDialog alertDialog;
+    AlertDialog.Builder dialogBuilder;
+    lct.mysymphony.helper.ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_autto_hashi);
-
+        progressDialog=new lct.mysymphony.helper.ProgressDialog(this);
         toolbar = findViewById(R.id.toolbarlayoutinauttohashi);
         setSupportActionBar(toolbar);
         auttohashiArrayList = new ArrayList<>();
         queue = Volley.newRequestQueue(AuttoHashiActivity.this);
+        progressDialog.showProgressDialog();
         loadDataFromVolley();
     }
 
@@ -57,14 +66,17 @@ public class AuttoHashiActivity extends AppCompatActivity {
                         try {
                             JSONArray AuttoHashiContentArr = response.getJSONArray("contents");
                             setAuttoHashiContent(AuttoHashiContentArr);
+                            progressDialog.hideProgressDialog();
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            progressDialog.hideProgressDialog();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
+                progressDialog.hideProgressDialog();
             }
         });
 
@@ -118,4 +130,6 @@ public class AuttoHashiActivity extends AppCompatActivity {
         adapterForAuttohashi = new RecyclerAdapterForAuttohashi(this, auttohashiArrayList);
         recyclerViewForAuttohashi.setAdapter(adapterForAuttohashi);
     }
+
+
 }

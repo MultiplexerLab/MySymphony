@@ -10,8 +10,10 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -38,7 +40,7 @@ public class SignInActivity extends AppCompatActivity {
 
 
     EditText userName, password;
-
+    lct.mysymphony.helper.ProgressDialog progressDialog;
     RequestQueue queue;
     String[] permissions = new String[]{
             Manifest.permission.ACCESS_NETWORK_STATE,
@@ -50,6 +52,7 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        progressDialog=new lct.mysymphony.helper.ProgressDialog(this);
 
         userName = findViewById(R.id.txtUserName);
         password = findViewById(R.id.txtpassword);
@@ -81,6 +84,7 @@ public class SignInActivity extends AppCompatActivity {
     public void startHomePage(View view) {
 
         if (internetConnected()) {
+           progressDialog.showProgressDialog();
             signInRequest();
         } else
             Toast.makeText(this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
@@ -111,7 +115,6 @@ public class SignInActivity extends AppCompatActivity {
         editor.putInt("loginStatus", 1);
         editor.apply();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
@@ -152,6 +155,7 @@ public class SignInActivity extends AppCompatActivity {
 
                         /// Toast.makeText(SignInActivity.this, "response : "+response, Toast.LENGTH_LONG).show();
                         Log.d("responseInSignIn ", response);
+                       progressDialog.hideProgressDialog();
 
                         if (response.contains("SUCCESS")) {
                             if (internetConnected()) {
@@ -180,6 +184,7 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInSignIn", error.toString());
+                progressDialog.hideProgressDialog();
                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         }) {
@@ -194,4 +199,6 @@ public class SignInActivity extends AppCompatActivity {
         };
         queue.add(stringRequest);
     }
+
+
 }

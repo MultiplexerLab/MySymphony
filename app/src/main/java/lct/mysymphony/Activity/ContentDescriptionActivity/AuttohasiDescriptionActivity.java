@@ -31,7 +31,7 @@ public class AuttohasiDescriptionActivity extends AppCompatActivity {
         newsDescription = findViewById(R.id.newsdescriptionAuttohasiDescription);
 //        newPrice=findViewById(R.id.newPriceTVinAuttoHashiDescription);
 //        previousPrice=findViewById(R.id.previousPriceTVinAuttoHashiDescription);
-        previousPrice.setPaintFlags(previousPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        ///previousPrice.setPaintFlags(previousPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         setDescripTionData();
     }

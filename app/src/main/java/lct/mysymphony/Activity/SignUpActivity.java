@@ -10,8 +10,10 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -44,6 +46,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     private EditText txtpassword, txtUserName;
     String[] permissions = new String[]{
             Manifest.permission.ACCESS_NETWORK_STATE,};
+    lct.mysymphony.helper.ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         phoneNumber = getIntent().getStringExtra("phoneNumber");
         queue = Volley.newRequestQueue(SignUpActivity.this);
         checkPermissions();
+        progressDialog=new lct.mysymphony.helper.ProgressDialog(this);
     }
 
     private boolean checkPermissions() {
@@ -82,7 +86,6 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         super.onBackPressed();
 
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
@@ -102,6 +105,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     public void signUpRequest(View view) {
         if (internetConnected()) {
             ///signUpRequest();
+            progressDialog.showProgressDialog();
             signInRequest();
 
         } else {
@@ -146,10 +150,10 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                     }
                 }, new Response.ErrorListener() {
 
-
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("ErrorInSignUp", error.toString());
+                progressDialog.hideProgressDialog();
                 Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
 
             }
@@ -186,22 +190,21 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                         if (response.contains("SUCCESS")) {
                             if (internetConnected()) {
 
-                                ///Toast.makeText(SignUpActivity.this, "আপনার পিন সঠিক হয়েছে", Toast.LENGTH_SHORT).show();
                                 signUpRequest();
 
-//                                Intent myIntent = new Intent(getApplicationContext(), SignUpActivity.class);
-//                                myIntent.putExtra("phoneNumber",phoneNumber);
-//
-//                                startActivity(myIntent);
-//                                overridePendingTransition(R.anim.left_in, R.anim.left_out);
-//                                finish();
-
-
                             } else
+                            {
+                                progressDialog.hideProgressDialog();
                                 Toast.makeText(SignUpActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+                            }
+
 
                         } else
+                        {
+                            progressDialog.hideProgressDialog();
                             Toast.makeText(SignUpActivity.this, "আপনার তথ্য সঠিক নয় ", Toast.LENGTH_SHORT).show();
+                        }
+
 
 
                     }
@@ -209,6 +212,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInSignIn", error.toString());
+                progressDialog.hideProgressDialog();
                 Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
 
             }
@@ -235,7 +239,11 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                         Log.d("responseInSetUpdtedPass", response);
 
                         if(response.contains("SUCCESS")){
-
+                            progressDialog.hideProgressDialog();
+                            SharedPreferences.Editor editor;
+                            editor = getSharedPreferences("login", MODE_PRIVATE).edit();
+                            editor.putInt("loginStatus", 1);
+                            editor.apply();
                             Toast.makeText(SignUpActivity.this, "আপনার সাইন আপ সম্পন্ন হয়েছে", Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(SignUpActivity.this, HomePage.class);
@@ -243,19 +251,25 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                             overridePendingTransition(R.anim.left_in, R.anim.left_out);
                         }
                         else
+                        {
+                            progressDialog.hideProgressDialog();
                             Toast.makeText(SignUpActivity.this, "আপনার সাইন আপ সম্পন্ন হয়নি\n" +
                                     "আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+                        }
+
 
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInSignIn", error.toString());
+                progressDialog.hideProgressDialog();
                 Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
-
             }
         });
 
         queue.add(stringRequest);
     }
+
+
 }

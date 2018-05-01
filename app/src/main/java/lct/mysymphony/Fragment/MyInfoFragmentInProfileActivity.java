@@ -79,8 +79,6 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
                                 ActivityCommunicator activityCommunicator=(ActivityCommunicator)getActivity();
                                 activityCommunicator.passDataToActivity(postInfo.getString("partnerName"));
 
-
-
                             } else {
                                 Log.d("json", "null");
                             }

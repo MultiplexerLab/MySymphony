@@ -34,6 +34,7 @@ public class DownloadImage {
     private class BackTask extends AsyncTask<String,Void,Bitmap> {
         TextView tv;
         DataHelper dbHelper = new DataHelper(context);
+
         ///ProgressDialog asyncDialog = new ProgressDialog(context);
         protected void onPreExecute(){
             Log.i("Donwload","Downloading the image. Please wait...");
@@ -66,11 +67,17 @@ public class DownloadImage {
             //tv.setVisibility(TextView.GONE);
             // Insert bitmap to the database
             //asyncDialog.dismiss();
+           AsyncResponse asyncResponse= (AsyncResponse) context;
+           asyncResponse.processFinish("complete");
             dbHelper.insertBitmap(result,dataBaseData);
             //ImageView imgView=(ImageView)findViewById(R.id.imgview);
             // Read the first image from database and show it in ImageView
             //imgView.setImageBitmap(dbHelper.getBitmap(1));
             ///Log.i("downlaoded image", dbHelper.getBitmap(1).toString());
         }
+    }
+
+    public interface AsyncResponse {
+        void processFinish(String output);
     }
 }

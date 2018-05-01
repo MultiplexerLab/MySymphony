@@ -1,11 +1,15 @@
 package lct.mysymphony.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,6 +29,7 @@ import lct.mysymphony.ModelClass.BigganOProjukti;
 import lct.mysymphony.R;
 import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForBigganOProjukti;
 import lct.mysymphony.helper.Endpoints;
+import lct.mysymphony.helper.ProgressDialog;
 
 public class BigganOProjuktiActivity extends AppCompatActivity {
 
@@ -34,16 +39,19 @@ public class BigganOProjuktiActivity extends AppCompatActivity {
     RecyclerView.LayoutManager mLayoutManager;
     ArrayList<BigganOProjukti> bigganOProjuktiArrayList;
     RequestQueue queue;
+    lct.mysymphony.helper.ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_biggan_oprojukti);
-
+        progressDialog=new lct.mysymphony.helper.ProgressDialog(this);
+        progressDialog=new ProgressDialog(this);
         toolbar = findViewById(R.id.toolbarlayoutinbigganOProjukti);
         setSupportActionBar(toolbar);
         bigganOProjuktiArrayList = new ArrayList<>();
         queue = Volley.newRequestQueue(BigganOProjuktiActivity.this);
+        progressDialog.showProgressDialog();
         loadDataFromVolley();
     }
 
@@ -57,14 +65,18 @@ public class BigganOProjuktiActivity extends AppCompatActivity {
                         try {
                             JSONArray pachMishaliContentArr = response.getJSONArray("contents");
                             setporashunaiContent(pachMishaliContentArr);
+                            progressDialog.hideProgressDialog();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            progressDialog.hideProgressDialog();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
+                progressDialog.hideProgressDialog();
             }
         });
 
@@ -81,6 +93,7 @@ public class BigganOProjuktiActivity extends AppCompatActivity {
                     String contentDescription = pachMishaliContentArr.getJSONObject(i).getString("contentDescription");
                     int contentId=pachMishaliContentArr.getJSONObject(i).getInt("contentId");
                     String contentCat=pachMishaliContentArr.getJSONObject(i).getString("contentCat");
+
 
                     if (contentType.equals("video")) {
                         String contentUrl = pachMishaliContentArr.getJSONObject(i).getString("thumbNail_image");
@@ -119,4 +132,6 @@ public class BigganOProjuktiActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
+
+
 }

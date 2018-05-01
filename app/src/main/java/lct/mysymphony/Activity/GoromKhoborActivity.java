@@ -1,13 +1,17 @@
 package lct.mysymphony.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -37,6 +41,7 @@ public class GoromKhoborActivity extends AppCompatActivity {
     ArrayList<GoromKhobor> goromKhoborArrayList;
     RecyclerView.LayoutManager mLayoutManager;
     RequestQueue queue;
+    lct.mysymphony.helper.ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,8 @@ public class GoromKhoborActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         goromKhoborArrayList = new ArrayList<>();
         queue = Volley.newRequestQueue(GoromKhoborActivity.this);
+        progressDialog=new lct.mysymphony.helper.ProgressDialog(this);
+        progressDialog.showProgressDialog();
         loadDataFromVolley();
     }
 
@@ -60,9 +67,11 @@ public class GoromKhoborActivity extends AppCompatActivity {
                         try {
                             JSONArray jsonHotNewsContentArr = response.getJSONArray("contents");
                             setGoromKhoborContent(jsonHotNewsContentArr);
+                           progressDialog.hideProgressDialog();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            progressDialog.hideProgressDialog();
                         }
 
                     }
@@ -70,6 +79,7 @@ public class GoromKhoborActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
+                progressDialog.hideProgressDialog();
                 Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();            }
         });
 
@@ -90,6 +100,7 @@ public class GoromKhoborActivity extends AppCompatActivity {
                     goromKhoborArrayList.add(new GoromKhobor(contentTitle, contentDescription, contentType, imageUrl, publishedAt));
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    progressDialog.hideProgressDialog();
                 }
             }
             initializeGoromKhoborRecyclerView();
@@ -114,9 +125,10 @@ public class GoromKhoborActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        
         this.startActivity(myIntent);
         overridePendingTransition(R.anim.right_in , R.anim.right_out);
         finish();
     }
+
+
 }

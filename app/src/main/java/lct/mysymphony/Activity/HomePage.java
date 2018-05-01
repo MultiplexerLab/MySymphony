@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -89,15 +91,14 @@ public class HomePage extends AppCompatActivity {
 
     RequestQueue queue;
     ImageView profileIcon, notificationIcon;
-    ProgressDialog progressDialog;
+    lct.mysymphony.helper.ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        progressDialog= new ProgressDialog(this);
-
+        progressDialog=new lct.mysymphony.helper.ProgressDialog(this);
         context = HomePage.this;
         queue = Volley.newRequestQueue(HomePage.this);
         sliderImages = new ArrayList<>();
@@ -113,8 +114,7 @@ public class HomePage extends AppCompatActivity {
         shikkhaSohaYikaArrayList = new ArrayList<>();
         bottomNavigationView = findViewById(R.id.btmNavigation);
         bottomNavigationView.getMenu().findItem(R.id.home_bottom_navigation).setChecked(true);
-        progressDialog.setMessage("ডাটা লোড হচ্ছে");
-        progressDialog.setCancelable(false);
+       progressDialog.showProgressDialog();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -212,7 +212,7 @@ public class HomePage extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        progressDialog.dismiss();
+
                         try {
                             JSONArray jsonSliderContentArr = response.getJSONArray("slider_contents");
                             setSliderContent(jsonSliderContentArr);
@@ -234,10 +234,13 @@ public class HomePage extends AppCompatActivity {
 
                             JSONArray shocol_chobi__content_Arr = response.getJSONArray("moving_contents");
                             setShocolChobiContent(shocol_chobi__content_Arr);
+                            progressDialog.hideProgressDialog();
 
                             //settop_contents(jsontop_contentsArr);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Log.d("exceptionLoadData4rmvly",e.toString());
+                            progressDialog.hideProgressDialog();
                         }
 
                     }
@@ -245,7 +248,7 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
-                progressDialog.dismiss();
+                progressDialog.hideProgressDialog();
                   Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         });
@@ -650,5 +653,7 @@ public class HomePage extends AppCompatActivity {
         startActivity(intentDailyLife);
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
+
+
 
 }

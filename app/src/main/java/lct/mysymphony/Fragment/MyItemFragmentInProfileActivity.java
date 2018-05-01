@@ -3,10 +3,12 @@ package lct.mysymphony.Fragment;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,6 +44,7 @@ public class MyItemFragmentInProfileActivity extends Fragment {
     private ArrayList<String> contentTypeArrayList;
     private ArrayList<DataBaseData> dataBaseDataArrayList;
     View view;
+    lct.mysymphony.helper.ProgressDialog progressDialog;
 
     public MyItemFragmentInProfileActivity() {
         // Required empty public constructor
@@ -58,23 +61,20 @@ public class MyItemFragmentInProfileActivity extends Fragment {
         contentTypeArrayList=new ArrayList<>();
         dataBaseDataArrayList=new ArrayList<>() ;
         activity=getActivity();
+        progressDialog=new lct.mysymphony.helper.ProgressDialog(getActivity());
         new RetriveBitMapFromDatabase().execute();
+
+
         //dialog = new ProgressDialog(getActivity());
 
         return view;
     }
 
     private class RetriveBitMapFromDatabase extends AsyncTask<Void, Void, Void> {
-        ProgressDialog asyncDialog = new ProgressDialog(activity);
-
 
         @Override
         protected void onPreExecute() {
-//            dialog.setMessage("Doing something, please wait.");
-//            dialog.show();
-            asyncDialog.setMessage("ডাটা লোড হচ্ছে");
-            //show dialog
-            asyncDialog.show();
+            progressDialog.showProgressDialog();
         }
         @Override
         protected Void doInBackground(Void... voids) {
@@ -90,8 +90,7 @@ public class MyItemFragmentInProfileActivity extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-
-            asyncDialog.dismiss();
+            
                 updateRecyclerView();
         }
     }
@@ -103,5 +102,8 @@ public class MyItemFragmentInProfileActivity extends Fragment {
         recyclerViewForMyItem.setHasFixedSize(true);
         adapterForMyItem = new RecyclerAdapterForMyItemFragment(getActivity(),bitmapArrayList,dataBaseDataArrayList);
         recyclerViewForMyItem.setAdapter(adapterForMyItem);
+        progressDialog.hideProgressDialog();
     }
+
+
 }

@@ -34,16 +34,18 @@ public class CartoonActivity extends AppCompatActivity {
     RecyclerView.LayoutManager mLayoutManager;
     ArrayList<Cartoon> cartoonArrayList;
     RequestQueue queue;
+    lct.mysymphony.helper.ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cartoon);
-
+        progressDialog=new lct.mysymphony.helper.ProgressDialog(this);
         toolbar = findViewById(R.id.toolbarlayoutincartoon);
         setSupportActionBar(toolbar);
         cartoonArrayList = new ArrayList<>();
         queue = Volley.newRequestQueue(CartoonActivity.this);
+        progressDialog.showProgressDialog();
         loadDataFromVolley();
     }
 
@@ -53,17 +55,21 @@ public class CartoonActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        progressDialog.hideProgressDialog();
                         try {
                             JSONArray AuttoHashiContentArr = response.getJSONArray("contents");
                             setAuttoHashiContent(AuttoHashiContentArr);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            progressDialog.hideProgressDialog();
                         }
                     }
-                }, new Response.ErrorListener() {
+                }, new Response.ErrorListener()
+        {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
+                progressDialog.hideProgressDialog();
             }
         });
         queue.add(jsonObjectRequest);

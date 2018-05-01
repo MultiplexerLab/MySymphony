@@ -1,5 +1,6 @@
 package lct.mysymphony.Activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,7 +10,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,30 +48,40 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
         logoutIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog alertDialog = new AlertDialog.Builder(ProfileActivity.this).create();
-                alertDialog.setTitle("লগ আউট");
-                alertDialog.setMessage("আপনি কি লগ আউট করতে চান ?");
-                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "না", new DialogInterface.OnClickListener() {
+                final AlertDialog alertDialog;
+                final View logoutDialogView;
+                AlertDialog.Builder builder=new AlertDialog.Builder(ProfileActivity.this);
+                LayoutInflater layoutInflater= (LayoutInflater) ProfileActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                logoutDialogView=layoutInflater.inflate(R.layout.logout_confirmation,null);
+                builder.setView(logoutDialogView);
+                alertDialog=builder.create();
+                alertDialog.show();
+
+                Button yesBTN=logoutDialogView.findViewById(R.id.yesBTN);
+                Button noBTN=logoutDialogView.findViewById(R.id.noBTN);
+
+                yesBTN.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
+                    public void onClick(View view) {
+                        Log.d("yesBtn","Enter");
+                        SharedPreferences.Editor editor;
+                        editor = getSharedPreferences("login", MODE_PRIVATE).edit();
+                        editor.putInt("loginStatus", 0);
+                        editor.apply();
+                        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+                        alertDialog.dismiss();
                     }
                 });
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "হ্যা",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                SharedPreferences.Editor editor;
-                                editor = getSharedPreferences("login", MODE_PRIVATE).edit();
-                                editor.putInt("loginStatus", 0);
-                                editor.apply();
-                                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.right_in, R.anim.right_out);
-                                dialog.dismiss();
-                            }
-                        });
 
-                alertDialog.show();
+                noBTN.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d("noBtn","Enter");
+                        alertDialog.dismiss();
+                    }
+                });
 
 
 

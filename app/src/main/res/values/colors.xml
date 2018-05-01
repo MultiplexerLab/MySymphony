@@ -10,6 +10,7 @@
     <color name="red">#F44336</color>
     <color name="green">#185E20</color>
     <color name="dark_red">#B71C1C</color>
+    <color name="progress_diaog_color">#B71C1C</color>
     <color name="black">#000000</color>
     <color name="toolbarColor">#B71C1C</color>
     <color name="bottomnavigationColor">#B71C1C</color>

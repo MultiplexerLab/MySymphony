@@ -20,13 +20,34 @@
             android:orientation="horizontal"
             android:padding="1dp">
 
-            <ImageView
-                android:id="@+id/imgGoromKhobor"
+            <RelativeLayout
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:layout_width="140dp"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:padding="5dp"
-                android:src="@drawable/kheladhula_cricket_2" />
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imgGoromKhobor"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/kheladhula_cricket_2" />
+
+                <ProgressBar
+                    android:id="@+id/progressBarInGoromKhobor"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="5dp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/progress_diaog_color"
+                    android:indeterminateTintMode="src_atop" />
+
+
+            </RelativeLayout>
+
 
             <LinearLayout
 
@@ -42,8 +63,8 @@
                     android:layout_height="wrap_content"
                     android:maxHeight="70dp"
                     android:text="চ্যাম্পিয়ন্স ট্রফিতে যাদের বিরুদ্ধে খেলবে বাংলাদেশ"
-                    android:textColor="@color/black"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/black" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -52,10 +73,10 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_alignParentBottom="true"
                         android:id="@+id/publishedAtGoromKhobor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
                         android:text="15 Sep 2017 "
                         android:textSize="15sp" />
 

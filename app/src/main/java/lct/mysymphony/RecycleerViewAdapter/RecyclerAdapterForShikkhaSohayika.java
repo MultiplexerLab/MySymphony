@@ -2,14 +2,21 @@ package lct.mysymphony.RecycleerViewAdapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -50,7 +57,21 @@ public class RecyclerAdapterForShikkhaSohayika extends RecyclerView.Adapter<Recy
         holder.news.setText(shikkhaSohaYikaArrayList.get(position).getContentTitle());
 
         Glide.with(activity)
-                .load(shikkhaSohaYikaArrayList.get(position).getImageURL()).into(holder.imageView);
+                .load(shikkhaSohaYikaArrayList.get(position).getImageURL())
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        holder.progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        holder.progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(holder.imageView);
 
         if(shikkhaSohaYikaArrayList.get(position).getContentType().equals("video")){
             holder.videoPreviewPlayButton.setVisibility(View.VISIBLE);
@@ -68,6 +89,7 @@ public class RecyclerAdapterForShikkhaSohayika extends RecyclerView.Adapter<Recy
     {
         ImageView imageView, videoPreviewPlayButton;
         TextView news;
+        ProgressBar progressBar;
 
         public RecyclerViewHolder(View view, final Activity activity, final ArrayList<ShikkhaSohaYika> shikkhaSohaYikaArrayList)
         {
@@ -76,6 +98,8 @@ public class RecyclerAdapterForShikkhaSohayika extends RecyclerView.Adapter<Recy
             news=view.findViewById(R.id.newsTV);
             imageView =  view.findViewById(R.id.imgShikkhaSohayika);
             videoPreviewPlayButton = view.findViewById(R.id.videoPreviewPlayButton);
+
+            progressBar=view.findViewById(R.id.progressBarInShikkhaSohayika);
 
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
