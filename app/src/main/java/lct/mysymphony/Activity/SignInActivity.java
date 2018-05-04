@@ -67,7 +67,7 @@ public class SignInActivity extends AppCompatActivity {
 
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
 
     }
@@ -76,38 +76,29 @@ public class SignInActivity extends AppCompatActivity {
 
         Intent myIntent = new Intent(getApplicationContext(), ForgetPasswordActivity.class);
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
-
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //finish();
     }
 
     public void startHomePage(View view) {
-
         if (internetConnected()) {
            progressDialog.showProgressDialog();
             signInRequest();
         } else
             Toast.makeText(this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
 
-        ///checkCredintial();
-        //homePageStart();
-
-
     }
+    public void checkCredintial() {
 
-//    public void checkCredintial() {
-//
-//        if (internetConnected()) {
-//            if (password.getText().toString().equals("12345") && userName.getText().toString().equals("admin")) {
-//                homePageStart();
-//            } else {
-//                Toast.makeText(this, "আপনার তথ্য সঠিক নয় ", Toast.LENGTH_SHORT).show();
-//            }
-//        } else
-//            Toast.makeText(this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-//
-//
-//    }
+        if (internetConnected()) {
+            if (password.getText().toString().equals("12345") && userName.getText().toString().equals("admin")) {
+                homePageStart();
+            } else {
+                Toast.makeText(this, "আপনার তথ্য সঠিক নয় ", Toast.LENGTH_SHORT).show();
+            }
+        } else
+            Toast.makeText(this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+    }
 
     public void homePageStart() {
         SharedPreferences.Editor editor;
@@ -116,12 +107,11 @@ public class SignInActivity extends AppCompatActivity {
         editor.apply();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
     }
 
     private boolean internetConnected() {
-
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnectedOrConnecting()) {

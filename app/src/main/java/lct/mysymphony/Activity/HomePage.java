@@ -123,7 +123,7 @@ public class HomePage extends AppCompatActivity {
                 if (id == R.id.symphony_bottom_navigation) {
                     Intent symphony = new Intent(HomePage.this, SymphonyCareActivity.class);
                     startActivity(symphony);
-                    overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                    //overridePendingTransition(R.anim.left_in, R.anim.left_out);
                 }
                 return true;
             }
@@ -134,7 +134,7 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View view) {
                 Intent profileIntent = new Intent(HomePage.this, ProfileActivity.class);
                 startActivity(profileIntent);
-                overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                //overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
         });
         notificationIcon.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +142,7 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View view) {
                 Intent profileIntent = new Intent(HomePage.this, NotificationActivity.class);
                 startActivity(profileIntent);
-                overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                //overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
         });
       loadDataFromVolley();
@@ -473,7 +473,7 @@ public class HomePage extends AppCompatActivity {
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
         
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
     }
     @Override
@@ -483,7 +483,7 @@ public class HomePage extends AppCompatActivity {
         
         myIntent.putExtra("cameFromWhichActivity","HomePage");
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
 
     }
@@ -491,56 +491,56 @@ public class HomePage extends AppCompatActivity {
         Intent myIntent = new Intent(getApplicationContext(), KheladhulaActivity.class);
         
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //finish();
     }
 
     public void startPorashunaActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
         
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //finish();
     }
 
     public void startAuttoHashiActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), AuttoHashiActivity.class);
         
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //finish();
     }
 
     public void startJibonJaponActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), JibonJaponActivity.class);
         
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //finish();
     }
 
     public void startPachMishaliActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), PachMishaliActivity.class);
         
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //finish();
     }
 
     public void startBigganOProjuktiActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), BigganOProjuktiActivity.class);
         
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //finish();
     }
 
     public void startCartoonActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), CartoonActivity.class);
         
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //finish();
     }
 
     public void initialCustomSwipeAdapter() {
@@ -624,34 +624,34 @@ public class HomePage extends AppCompatActivity {
         Intent myIntent = new Intent(getApplicationContext(), GoromKhoborActivity.class);
         
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //finish();
     }
 
     public void startGalleryActivity(View view) {
         Intent galleryIntent = new Intent(getApplicationContext(), GalleryActivity.class);
         galleryIntent.putExtra("galleryImageData", seraChobiArrayList);
         this.startActivity(galleryIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //finish();
     }
 
     public void subscribe(View view) {
         Intent intentDailyLife = new Intent(HomePage.this, PaymentMethod.class);
         startActivity(intentDailyLife);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
     public void moreJapitoJibon(View view) {
         Intent intentDailyLife = new Intent(HomePage.this, JibonJaponActivity.class);
         startActivity(intentDailyLife);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
     public void moreShikha(View view) {
         Intent intentDailyLife = new Intent(HomePage.this, PorashunaActivity.class);
         startActivity(intentDailyLife);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
 

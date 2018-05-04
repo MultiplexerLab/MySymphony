@@ -215,13 +215,13 @@ public class PinActivity extends AppCompatActivity {
             Intent myIntent = new Intent(getApplicationContext(), ForgetPasswordActivity.class);
             //();
             this.startActivity(myIntent);
-            overridePendingTransition(R.anim.right_in, R.anim.right_out);
+            //overridePendingTransition(R.anim.right_in, R.anim.right_out);
             finish();
         } else {
             Intent myIntent = new Intent(getApplicationContext(), PhoneNumberVerification.class);
             //setIsBroadcastusedSharedPrefferenseFalse();
             this.startActivity(myIntent);
-            overridePendingTransition(R.anim.right_in, R.anim.right_out);
+            //overridePendingTransition(R.anim.right_in, R.anim.right_out);
             finish();
         }
 
@@ -264,7 +264,7 @@ public class PinActivity extends AppCompatActivity {
                             myIntent.putExtra("phoneNumber", phoneNumber);
                             //setIsBroadcastusedSharedPrefferenseFalse();
                             PinActivity.this.startActivity(myIntent);
-                            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
                             finish();
                         } else {
                             Toast.makeText(PinActivity.this, "আপনার পিন ভুল হয়েছে" + "\n" + "আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
@@ -360,7 +360,7 @@ public class PinActivity extends AppCompatActivity {
                             //setIsBroadcastusedSharedPrefferenseFalse();
                             PinActivity.this.startActivity(myIntent);
                             ///setIsBroadcastusedSharedPrefferenseFalse();
-                            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
                             finish();
                         }
 

@@ -143,8 +143,8 @@ public class PayWithRocketActivity extends AppCompatActivity implements Download
 
             myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
             this.startActivity(myIntent);
-            overridePendingTransition(R.anim.left_in, R.anim.left_out);
-            finish();
+            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            //finish();
         }
     }
 
@@ -157,7 +157,7 @@ public class PayWithRocketActivity extends AppCompatActivity implements Download
             Intent myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
             myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
             this.startActivity(myIntent);
-            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
             finish();
         }
     }

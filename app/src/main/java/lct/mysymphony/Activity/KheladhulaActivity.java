@@ -90,7 +90,7 @@ public class KheladhulaActivity extends AppCompatActivity {
             Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
             
             this.startActivity(myIntent);
-            overridePendingTransition(R.anim.right_in, R.anim.right_out);
+            //overridePendingTransition(R.anim.right_in, R.anim.right_out);
             finish();
             //additional code
         } else {

@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 Intent intent = new Intent(MainActivity.this, HomePage.class);
                 startActivity(intent);
-                overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                //overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
 
 
@@ -125,21 +125,20 @@ public class MainActivity extends AppCompatActivity {
     public void startSignUpActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), PhoneNumberVerification.class);
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //finish();
     }
 
     public void startSignInActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), SignInActivity.class);
-//        
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //finish();
     }
 
     @Override
     public void onBackPressed() {
         ActivityCompat.finishAffinity(this);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 }

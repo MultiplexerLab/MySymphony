@@ -54,7 +54,6 @@ public class SymphonyCareActivity extends AppCompatActivity {
         viewPagerAdapter.addFragments(new ZogazogFragment(), "যোগাযোগ");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
-
     }
 
     @Override

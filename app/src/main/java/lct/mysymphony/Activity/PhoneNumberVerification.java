@@ -59,7 +59,7 @@ public class PhoneNumberVerification extends AppCompatActivity {
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
         
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 
@@ -113,7 +113,7 @@ public class PhoneNumberVerification extends AppCompatActivity {
                             Intent myIntent = new Intent(getApplicationContext(), PinActivity.class);
                             
                             startActivity(myIntent);
-                            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
                             finish();
                         }
                     }

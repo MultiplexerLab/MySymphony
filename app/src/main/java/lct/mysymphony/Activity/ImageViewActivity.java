@@ -206,16 +206,14 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 myIntent.putExtra("dataBaseData", dataBaseData);
                 myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
                 this.startActivity(myIntent);
-                overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                finish();
+                //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                //finish();
             }
             else
             {
                 progressDialog.showProgressDialog();
                 DownloadImage downloadImage = new DownloadImage();
                 downloadImage.downloadImage(imageUrl, ImageViewActivity.this, dataBaseData);
-
-
             }
 //
 
@@ -224,8 +222,8 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
             Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
             myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
             this.startActivity(myIntent);
-            overridePendingTransition(R.anim.left_in, R.anim.left_out);
-            finish();
+            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            //finish();
         }
 
     }
@@ -235,7 +233,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 
@@ -253,9 +251,8 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
             myIntent.putExtra("dataBaseData", dataBaseData);
             myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
             this.startActivity(myIntent);
-            overridePendingTransition(R.anim.left_in, R.anim.left_out);
-            finish();
-
+            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            //finish();
         }
     }
 

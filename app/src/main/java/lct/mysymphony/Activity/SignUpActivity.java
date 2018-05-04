@@ -87,7 +87,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
 
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 
@@ -248,7 +248,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
 
                             Intent intent = new Intent(SignUpActivity.this, HomePage.class);
                             startActivity(intent);
-                            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
                         }
                         else
                         {

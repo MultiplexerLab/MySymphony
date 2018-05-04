@@ -51,7 +51,7 @@ public class PayWithPinActivity extends AppCompatActivity implements DownloadIma
             
             myIntent.putExtra("cameFromWhichActivity","payWithPin");
             this.startActivity(myIntent);
-            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
             finish();
         }
     }
@@ -63,7 +63,7 @@ public class PayWithPinActivity extends AppCompatActivity implements DownloadIma
         myIntent.putExtra("imageUrl",imageUrl);
         
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 
@@ -76,10 +76,8 @@ public class PayWithPinActivity extends AppCompatActivity implements DownloadIma
             Intent myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
             myIntent.putExtra("cameFromWhichActivity","payWithPin");
             this.startActivity(myIntent);
-            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
             finish();
         }
-
     }
-
 }

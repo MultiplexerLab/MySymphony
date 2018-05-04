@@ -32,7 +32,7 @@ public class WallpaperBundleActivity extends AppCompatActivity {
 
         Intent myIntent = new Intent(getApplicationContext(), KheladhulaActivity.class);
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
 
     }

@@ -70,7 +70,7 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
                         editor.apply();
                         Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
                         startActivity(intent);
-                        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+                        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
                         alertDialog.dismiss();
                     }
                 });
@@ -141,7 +141,7 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
 
     }

@@ -73,7 +73,7 @@ public class ShowOnlyImage extends AppCompatActivity {
         myIntent.putExtra("cameFromWhichActivity","ShowOnlyImage");
         
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 
