@@ -3,6 +3,7 @@ package lct.mysymphony.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.ModelClass.GamesZone;
@@ -26,6 +28,8 @@ import lct.mysymphony.ModelClass.ShocolChobi;
 import lct.mysymphony.R;
 import lct.mysymphony.helper.DataHelper;
 import lct.mysymphony.helper.DownloadImage;
+import lct.mysymphony.helper.PushDataToSharedPref;
+import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
 public class ImageViewActivity extends AppCompatActivity implements DownloadImage.AsyncResponse {
 
@@ -42,6 +46,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
     DataHelper dataHelper;
     LinearLayout buyOrDownloadLinearLayout;
     lct.mysymphony.helper.ProgressDialog progressDialog;
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +59,13 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         buyOrDownloadLinearLayout = findViewById(R.id.buyOrDownloadLL);
         previousPrice = findViewById(R.id.previousPriceTVinImageViewActivity);
         newPrice = findViewById(R.id.newPriceTVinImageViewActivity);
-        progressDialog=new lct.mysymphony.helper.ProgressDialog(this);
+        progressDialog = new lct.mysymphony.helper.ProgressDialog(this);
 
-
+        preferences = getSharedPreferences("tempData", MODE_PRIVATE);
 
         cameFromWhichActivity = getIntent().getStringExtra("cameFromWhichActivity");
 
         if (cameFromWhichActivity != null) {
-
             if (cameFromWhichActivity.contains("MulloChar")) {
                 MulloChar Data = (MulloChar) getIntent().getSerializableExtra("wallpaper");
                 imageUrl = Data.getContentUrl();
@@ -73,6 +77,9 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 previousPrice.setText(Integer.toString(Data.getPreviousPrice()));
                 dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, "paid", Data.getContentId());
                 Glide.with(this).load(Data.getImageUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
+
+                PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
+                pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, ImageViewActivity.this);
 
                 if (dataHelper.checkDownLoadedOrNot(Data.getContentCat(), Data.getContentId())) {
                     buyOrDownloadLinearLayout.setVisibility(View.GONE);
@@ -101,9 +108,10 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                     priceStatus = "paid";
                 }
 
-
                 dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, priceStatus, Data.getContentId());
                 Glide.with(this).load(Data.getContentUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
+                PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
+                pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, ImageViewActivity.this);
 
                 if (dataHelper.checkDownLoadedOrNot(Data.getContentCat(), Data.getContentId())) {
                     buyOrDownloadLinearLayout.setVisibility(View.GONE);
@@ -127,9 +135,10 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                     priceStatus = "paid";
                 }
 
-
                 dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, priceStatus, Data.getContentId());
                 Glide.with(this).load(Data.getContentUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
+                PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
+                pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, ImageViewActivity.this);
 
                 if (dataHelper.checkDownLoadedOrNot(Data.getContentCat(), Data.getContentId())) {
                     isDownloaded = true;
@@ -165,6 +174,8 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
 
                 dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, priceStatus, Data.getContentId());
                 Glide.with(this).load(Data.getImage_url()).into((ImageView) findViewById(R.id.imageViewWallpaper));
+                PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
+                pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, ImageViewActivity.this);
 
                 if (dataHelper.checkDownLoadedOrNot(Data.getContentCat(), Data.getContentId())) {
                     isDownloaded = true;
@@ -185,47 +196,36 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         }
         Log.d("isDownloaded", String.valueOf(isDownloaded));
 
-
         previousPrice = findViewById(R.id.previousPriceTVinImageViewActivity);
         previousPrice.setPaintFlags(previousPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
     }
 
+
     public void purChase(View view) {
         if (dataBaseData == null) Log.d("databaseDataImageView", "null");
 
-
         if (!dataBaseData.getContentType().contains("video") && !imageUrl.contains("mp4") && !imageUrl.contains("youtube") && !imageUrl.contains("music") && !imageUrl.contains("videos")) {
 
-
-            Log.d("isItFreeInPurchase",String.valueOf(isItFree));
+            Log.d("isItFreeInPurchase", String.valueOf(isItFree));
             Intent myIntent;
-            if (isItFree==false) {
-
+            if (isItFree == false) {
+                SharedPreferences preferences = getSharedPreferences("phoneNumber", MODE_PRIVATE);
                 myIntent = new Intent(getApplicationContext(), PaymentMethod.class);
-                myIntent.putExtra("imageUrl", imageUrl);
-                myIntent.putExtra("dataBaseData", dataBaseData);
-                myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
-                this.startActivity(myIntent);
+                myIntent.putExtra("userId", preferences.getString("phoneNo", ""));
+                this.startActivityForResult(myIntent, 1);
                 //overridePendingTransition(R.anim.left_in, R.anim.left_out);
                 //finish();
-            }
-            else
-            {
+            } else {
                 progressDialog.showProgressDialog();
                 DownloadImage downloadImage = new DownloadImage();
                 downloadImage.downloadImage(imageUrl, ImageViewActivity.this, dataBaseData);
             }
-//
-
         } else {
             Toast.makeText(ImageViewActivity.this, "ভিডিও কন্টেন্ট পরবর্তীতে পাবেন", Toast.LENGTH_LONG).show();
             Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
             myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
             this.startActivity(myIntent);
-            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-            //finish();
         }
-
     }
 
     @Override
@@ -237,10 +237,8 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         finish();
     }
 
-
     @Override
     public void processFinish(String output) {
-
         progressDialog.hideProgressDialog();
         Log.d("processFinished", "processFinished");
         if (output.contains("complete")) {
@@ -256,5 +254,22 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         }
     }
 
-
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                String returnedResult = data.getData().toString();
+                Log.i("ResultFromLib", returnedResult);
+                if (returnedResult.equals("Success")) {
+                    progressDialog.showProgressDialog();
+                    Gson gson = new Gson();
+                    SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
+                    String json = preferences.getString("databaseData", "");
+                    String imageURL = preferences.getString("imageUrl", "");
+                    DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
+                    DownloadImage downloadImage = new DownloadImage();
+                    downloadImage.downloadImage(imageURL, ImageViewActivity.this, dataBaseData);
+                }
+            }
+        }
+    }
 }

@@ -39,6 +39,7 @@ import java.util.ArrayList;
 
 import lct.mysymphony.CustomSwipeAdapter;
 import lct.mysymphony.ModelClass.GamesZone;
+import lct.mysymphony.ModelClass.GoromKhobor;
 import lct.mysymphony.ModelClass.JapitoJibonMC;
 import lct.mysymphony.ModelClass.MulloChar;
 import lct.mysymphony.ModelClass.SeraChobi;
@@ -53,6 +54,7 @@ import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForSeraChobi;
 import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForShikkhaSohayika;
 import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForShocolChobi;
 import lct.mysymphony.helper.Endpoints;
+import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
 public class HomePage extends AppCompatActivity {
     Context context;
@@ -114,7 +116,7 @@ public class HomePage extends AppCompatActivity {
         shikkhaSohaYikaArrayList = new ArrayList<>();
         bottomNavigationView = findViewById(R.id.btmNavigation);
         bottomNavigationView.getMenu().findItem(R.id.home_bottom_navigation).setChecked(true);
-       progressDialog.showProgressDialog();
+        progressDialog.showProgressDialog();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -124,6 +126,13 @@ public class HomePage extends AppCompatActivity {
                     Intent symphony = new Intent(HomePage.this, SymphonyCareActivity.class);
                     startActivity(symphony);
                     //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                }else if (id == R.id.news_bottom_navigation) {
+                    Intent news = new Intent(HomePage.this, GoromKhoborActivity.class);
+                    startActivity(news);
+                    //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                }else if(id == R.id.download_bottom_navigation){
+                    Intent apps = new Intent(HomePage.this, ProfileActivity.class);
+                    startActivity(apps);
                 }
                 return true;
             }
@@ -145,8 +154,8 @@ public class HomePage extends AppCompatActivity {
                 //overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
         });
-      loadDataFromVolley();
-
+        loadDataFromVolley();
+        //newloadDataFromVolley();
     }
 
     private void newloadDataFromVolley() {
@@ -155,7 +164,6 @@ public class HomePage extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         JSONObject jsonObject = null;
-
                         try {
                             String jsonFormattedString = response.replaceAll("\\\\", "");
                             jsonFormattedString = jsonFormattedString.substring(1, jsonFormattedString.length() - 1);
@@ -193,25 +201,26 @@ public class HomePage extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Log.d("exceptionLoadData4rmvly",e.toString());
+                            progressDialog.hideProgressDialog();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
-                  Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                progressDialog.hideProgressDialog();
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         });
         queue.add(jsonObjectRequest);
     }
 
     private void loadDataFromVolley() {
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Endpoints.NEW_UPDATED_HOME_GET_URL,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
 
                         try {
                             JSONArray jsonSliderContentArr = response.getJSONArray("slider_contents");
@@ -249,7 +258,7 @@ public class HomePage extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
                 progressDialog.hideProgressDialog();
-                  Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -367,10 +376,7 @@ public class HomePage extends AppCompatActivity {
                     {
                         newPrice = jsonArray.getJSONObject(j).getInt("discountPrice");
                     }
-
-
                     mulloCharArrayList.add(new MulloChar(contentType, contentUrl, contentTitle, previousPrice, newPrice, image_url,contentCat,contentId));
-
                 } catch (JSONException e) {
                     Log.d("mullochardata", e.toString());
                     e.printStackTrace();
@@ -480,7 +486,6 @@ public class HomePage extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        
         myIntent.putExtra("cameFromWhichActivity","HomePage");
         this.startActivity(myIntent);
         //overridePendingTransition(R.anim.left_in, R.anim.left_out);
@@ -491,56 +496,36 @@ public class HomePage extends AppCompatActivity {
         Intent myIntent = new Intent(getApplicationContext(), KheladhulaActivity.class);
         
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        //finish();
     }
 
     public void startPorashunaActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
-        
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        //finish();
     }
 
     public void startAuttoHashiActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), AuttoHashiActivity.class);
-        
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        //finish();
     }
 
     public void startJibonJaponActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), JibonJaponActivity.class);
-        
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        //finish();
     }
 
     public void startPachMishaliActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), PachMishaliActivity.class);
-        
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        //finish();
     }
 
     public void startBigganOProjuktiActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), BigganOProjuktiActivity.class);
-        
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        //finish();
     }
 
     public void startCartoonActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), CartoonActivity.class);
-        
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        //finish();
     }
 
     public void initialCustomSwipeAdapter() {
@@ -654,6 +639,21 @@ public class HomePage extends AppCompatActivity {
         //overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
+    public void jumpToHandsetFeature(View view) {
+        Intent intent = new Intent(HomePage.this, SymphonyCareActivity.class);
+        intent.putExtra("position", 0);
+        startActivity(intent);
+    }
 
+    public void jumpToCustomerCare(View view) {
+        Intent intent = new Intent(HomePage.this, SymphonyCareActivity.class);
+        intent.putExtra("position", 1);
+        startActivity(intent);
+    }
 
+    public void jumpToContact(View view) {
+        Intent intent = new Intent(HomePage.this, SymphonyCareActivity.class);
+        intent.putExtra("position", 2);
+        startActivity(intent);
+    }
 }

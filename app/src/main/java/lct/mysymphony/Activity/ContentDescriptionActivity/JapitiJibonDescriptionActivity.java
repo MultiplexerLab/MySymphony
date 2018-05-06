@@ -1,6 +1,7 @@
 package lct.mysymphony.Activity.ContentDescriptionActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,18 +13,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 
 import lct.mysymphony.Activity.HomePage;
-import lct.mysymphony.Activity.PaymentMethod;
+import lct.mysymphony.Activity.ImageViewActivity;
+import lct.mysymphony.Activity.ProfileActivity;
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.ModelClass.JapitoJibonMC;
 import lct.mysymphony.R;
 import lct.mysymphony.helper.DataHelper;
+import lct.mysymphony.helper.DownloadImage;
+import lct.mysymphony.helper.PushDataToSharedPref;
+import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
-public class JapitiJibonDescriptionActivity extends AppCompatActivity {
+public class JapitiJibonDescriptionActivity extends AppCompatActivity implements DownloadImage.AsyncResponse{
 
     ImageView newsImageView;
     TextView newsTitle, newsDescription;
@@ -35,8 +42,7 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
     Button buyOrDownloadBTN;
     String imageUrl;
     ProgressBar imageProgressBar,videoProgressBar;
-
-
+    lct.mysymphony.helper.ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,8 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
         buyOrDownloadLL=findViewById(R.id.buyOrDownloadLLInJapitoJibonDescription);
         buyOrDownloadBTN=findViewById(R.id.buyOrDownloadBTNInJapitoJibonDescription);
         videoProgressBar=findViewById(R.id.progressBarInVideoViewInJapitiJibonDescription);
+
+        progressDialog = new lct.mysymphony.helper.ProgressDialog(this);
 
 //        newPrice=findViewById(R.id.newPriceTVinJapitoJibonDescription);
 //        previousPrice=findViewById(R.id.previousPriceTVinJapitoJibonDescription);
@@ -88,6 +96,7 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
             priceStatus="paid";
 
         dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, priceStatus, object.getContentId());
+
         Boolean check=dataHelper.checkDownLoadedOrNot(object.getContentCat(), object.getContentId());
         Log.d("checkJapitoJibon",check.toString());
         if (dataHelper.checkDownLoadedOrNot(object.getContentCat(), object.getContentId())) {
@@ -175,9 +184,46 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity {
 
     public void mullochar(View view) {
         Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
-        purchase.putExtra("dataBaseData",dataBaseData);
-        purchase.putExtra("imageUrl",imageUrl);
-        startActivity(purchase);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
+        pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, JapitiJibonDescriptionActivity.this);
+        SharedPreferences preferences = getSharedPreferences("phoneNumber", MODE_PRIVATE);
+        purchase.putExtra("userId", preferences.getString("phoneNo", ""));
+        startActivityForResult(purchase, 1);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                String returnedResult = data.getData().toString();
+                Log.i("ResultFromLib", returnedResult);
+                if (returnedResult.equals("Success")) {
+                    progressDialog.showProgressDialog();
+                    Gson gson = new Gson();
+                    SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
+                    String json = preferences.getString("databaseData", "");
+                    String imageURL = preferences.getString("imageUrl", "");
+                    DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
+                    DownloadImage downloadImage = new DownloadImage();
+                    downloadImage.downloadImage(imageURL, JapitiJibonDescriptionActivity.this, dataBaseData);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void processFinish(String output) {
+        progressDialog.hideProgressDialog();
+        Log.d("processFinished", "processFinished");
+        if (output.contains("complete")) {
+            Intent myIntent;
+            myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
+            Toast.makeText(JapitiJibonDescriptionActivity.this, "ধন্যবাদ কিছুক্ষন পরে মাইআইটেম লিস্ট এ আপনার আইটেমটি দেখতে পারবেন", Toast.LENGTH_SHORT).show();
+            myIntent.putExtra("imageUrl", imageUrl);
+            myIntent.putExtra("dataBaseData", dataBaseData);
+            myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
+            this.startActivity(myIntent);
+            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            //finish();
+        }
     }
 }

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -56,8 +57,7 @@ public class CustomSwipeAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((LinearLayout) object);
-
+        container.removeView((RelativeLayout) object);
 
     }
 
@@ -97,7 +97,7 @@ public class CustomSwipeAdapter extends PagerAdapter {
                 Intent intent = new Intent(context, SliderContentActivity.class);
                 intent.putExtra("wallpaper", (Serializable) sliderImages.get(position));
                 context.startActivity(intent);
-                activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                //activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
         });
 

@@ -11,10 +11,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import lct.mysymphony.Activity.JibonJaponActivity;
-import lct.mysymphony.Activity.PaymentMethod;
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.ModelClass.JibonJapon;
 import lct.mysymphony.R;
+import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
 public class JibonJaponDescriptionActivity extends AppCompatActivity {
 
@@ -30,24 +30,19 @@ public class JibonJaponDescriptionActivity extends AppCompatActivity {
         newsImageView = findViewById(R.id.imgJibonJaponDescription);
         newsTitle = findViewById(R.id.newsTitleJibonJaponDescription);
         newsDescription = findViewById(R.id.newsdescriptionJibonJaponDescription);
-//        newPrice=findViewById(R.id.newPriceTVinJibonJaponDescription);
-//        previousPrice=findViewById(R.id.previousPriceTVinJibonJaponDescription);
-        ///previousPrice.setPaintFlags(previousPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
+//      newPrice=findViewById(R.id.newPriceTVinJibonJaponDescription);
+//      previousPrice=findViewById(R.id.previousPriceTVinJibonJaponDescription);
+// /    previousPrice.setPaintFlags(previousPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         setDescripTionData();
     }
 
     @Override
     public void onBackPressed() {
-
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), JibonJaponActivity.class);
-        
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
-
-
     }
 
     public void setDescripTionData() {
@@ -58,7 +53,6 @@ public class JibonJaponDescriptionActivity extends AppCompatActivity {
         Glide.with(JibonJaponDescriptionActivity.this)
                 .load(object.getImageUrl())
                 .into(newsImageView);
-
     }
 
     public void mullochar(View view) {
@@ -68,7 +62,6 @@ public class JibonJaponDescriptionActivity extends AppCompatActivity {
         purchase.putExtra("dataBaseData",dataBaseData);
         purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-
+        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 }

@@ -11,9 +11,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import lct.mysymphony.Activity.HomePage;
-import lct.mysymphony.Activity.PaymentMethod;
 import lct.mysymphony.ModelClass.ShikkhaSohaYika;
 import lct.mysymphony.R;
+import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
 public class ShikhaDetails extends AppCompatActivity {
 

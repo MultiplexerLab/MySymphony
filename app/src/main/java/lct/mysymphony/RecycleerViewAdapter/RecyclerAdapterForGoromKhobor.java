@@ -26,37 +26,26 @@ import lct.mysymphony.Activity.ContentDescriptionActivity.NewsDescriptionActivit
 import lct.mysymphony.ModelClass.GoromKhobor;
 import lct.mysymphony.R;
 
-/**
- * Created by USER on 01-Feb-17.
- */
 
 public class RecyclerAdapterForGoromKhobor extends RecyclerView.Adapter<RecyclerAdapterForGoromKhobor.RecyclerViewHolder> {
-
-
-   /// private int[] images = {R.drawable.japito_jibon_1, R.drawable.japito_jibon_2};
 
     Activity activity;
     private ArrayList<GoromKhobor> goromKhoborArrayList;
 
-
-    public RecyclerAdapterForGoromKhobor(Activity activity,ArrayList<GoromKhobor> goromKhoborArrayList) {
-
+    public RecyclerAdapterForGoromKhobor(Activity activity, ArrayList<GoromKhobor> goromKhoborArrayList) {
         this.activity = activity;
-        this.goromKhoborArrayList=goromKhoborArrayList;
-
+        this.goromKhoborArrayList = goromKhoborArrayList;
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_gorom_khobor, parent, false);
-        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view,activity, goromKhoborArrayList);
+        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, goromKhoborArrayList);
         return recyclerViewHolder;
     }
 
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-
         ///holder.japitoJebonNewsTV.setText(japitoJibonMCArrayList.get(position).getContentTitle());
         holder.goromKhoborTitle.setText(goromKhoborArrayList.get(position).getContentTitle());
         holder.publishedAt.setText(goromKhoborArrayList.get(position).getPublishedAt());
@@ -89,21 +78,21 @@ public class RecyclerAdapterForGoromKhobor extends RecyclerView.Adapter<Recycler
         ImageView imageView;
         CardView cardView;
         Activity activity;
-        TextView goromKhoborTitle,publishedAt;
+        TextView goromKhoborTitle, publishedAt;
         ArrayList<GoromKhobor> goromKhoborArrayList;
         ProgressBar progressBar;
 
         public RecyclerViewHolder(View view, final Activity activity, final ArrayList<GoromKhobor> goromKhoborArrayList) {
             super(view);
 
-            this.activity=activity;
-            this.goromKhoborArrayList=goromKhoborArrayList;
-            progressBar=view.findViewById(R.id.progressBarInGoromKhobor);
+            this.activity = activity;
+            this.goromKhoborArrayList = goromKhoborArrayList;
+            progressBar = view.findViewById(R.id.progressBarInGoromKhobor);
 
             imageView = view.findViewById(R.id.imgGoromKhobor);
-            goromKhoborTitle=view.findViewById(R.id.titleGoromKhobor);
-            publishedAt=view.findViewById(R.id.publishedAtGoromKhobor);
-            cardView=view.findViewById(R.id.goromKhoborCardView);
+            goromKhoborTitle = view.findViewById(R.id.titleGoromKhobor);
+            publishedAt = view.findViewById(R.id.publishedAtGoromKhobor);
+            cardView = view.findViewById(R.id.goromKhoborCardView);
             ///japitoJebonNewsTV = view.findViewById(R.id.japitoJibonNewsTV);
 
             cardView.setOnClickListener(new View.OnClickListener() {
@@ -111,17 +100,12 @@ public class RecyclerAdapterForGoromKhobor extends RecyclerView.Adapter<Recycler
                 public void onClick(View view) {
                     Intent myIntent = new Intent(activity, NewsDescriptionActivity.class);
                     myIntent.putExtra("Data", (Serializable) goromKhoborArrayList.get(getAdapterPosition()));
-                    
+
                     activity.startActivity(myIntent);
-                    activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                    activity.finish();
-
-
+                    //activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                    //activity.finish();
                 }
             });
-
         }
     }
-
-
 }

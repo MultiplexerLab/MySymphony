@@ -3,8 +3,6 @@ package lct.mysymphony.ModelClass;
 import java.io.Serializable;
 
 public class DataBaseData implements Serializable {
-
-
     String contentTitle;
     String contentCat;
     String contentType;

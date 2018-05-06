@@ -11,10 +11,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import lct.mysymphony.Activity.CartoonActivity;
-import lct.mysymphony.Activity.PaymentMethod;
 import lct.mysymphony.ModelClass.Cartoon;
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.R;
+import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
 public class CartoonDescriptionActivity extends AppCompatActivity {
 

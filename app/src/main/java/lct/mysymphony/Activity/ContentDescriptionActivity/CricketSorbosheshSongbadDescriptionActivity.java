@@ -11,10 +11,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import lct.mysymphony.Activity.KheladhulaActivity;
-import lct.mysymphony.Activity.PaymentMethod;
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.ModelClass.Kheladhula_Cricket_sorboshesh_sobgbad;
 import lct.mysymphony.R;
+import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
 public class CricketSorbosheshSongbadDescriptionActivity extends AppCompatActivity {
 

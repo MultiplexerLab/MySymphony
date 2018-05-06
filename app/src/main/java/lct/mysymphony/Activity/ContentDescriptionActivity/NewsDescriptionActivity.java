@@ -36,11 +36,9 @@ public class NewsDescriptionActivity extends AppCompatActivity implements Serial
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), GoromKhoborActivity.class);
-        
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
-
     }
 
     public void setDescripTionData() {

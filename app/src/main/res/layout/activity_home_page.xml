@@ -11,8 +11,8 @@
         android:id="@+id/appbarLayoutInHomepage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:fitsSystemWindows="true">
+
         <include
             android:id="@+id/toolbarlayoutinhome_page"
             layout="@layout/toolbar_layout_in_homepage" />
@@ -20,14 +20,12 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <requestFocus/>
+    <requestFocus />
 
     <android.support.v4.widget.NestedScrollView
-
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="50dp"
-        android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -36,32 +34,31 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:descendantFocusability="blocksDescendants"
             android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">
 
             <LinearLayout
-                android:descendantFocusability="blocksDescendants"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="?attr/actionBarSize"
+                android:descendantFocusability="blocksDescendants"
                 android:orientation="vertical">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <android.support.v4.view.ViewPager
                         android:id="@+id/viewPager"
-                        android:layout_width="fill_parent"
-                        android:layout_height="250dp"
-                        android:layout_alignParentTop="true" />
-                    <requestFocus/>
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp" />
+                    <requestFocus />
 
                     <com.viewpagerindicator.CirclePageIndicator
                         android:id="@+id/indicator"
                         android:layout_width="fill_parent"
-                        android:layout_height="45dp"
+                        android:layout_height="30dp"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:background="#4D000000"
@@ -76,29 +73,74 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp"
+                    android:gravity="bottom">
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="60dp"
+                        android:drawableLeft="@drawable/mobile"
+                        android:text="হ্যান্ডসেট ফিচার"
+                        android:textSize="12dp"
+                        android:onClick="jumpToHandsetFeature"/>
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="60dp"
+                        android:text="কাস্টোমার কেয়ার"
+                        android:drawableLeft="@drawable/customer_care"
+                        android:textSize="12dp"
+                        android:onClick="jumpToCustomerCare"/>
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="60dp"
+                        android:textSize="12dp"
+                        android:text="যোগাযোগ করুন"
+                        android:drawableLeft="@drawable/support"
+                        android:onClick="jumpToContact"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="আপনাদের জন্য আরও আয়োজন"
+                        android:gravity="center"
+                        android:padding="3dp"
+                        android:textColor="@color/dark_red"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textStyle="normal"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@color/Halka_Gray"
                     android:orientation="vertical"
-                    android:padding="10dp">
-
+                    android:padding="5dp">
                     <!-- gorom khobor start -->
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
                         android:background="@color/Halka_Gray"
                         android:gravity="center"
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:clickable="true"
-                            android:onClick="startGoromKhoborPage"
                             android:layout_width="@dimen/item_width_home_page"
                             android:layout_height="@dimen/item_hight_home_page"
                             android:layout_marginTop="5dp"
                             android:background="@color/White"
+                            android:clickable="true"
                             android:gravity="center"
+                            android:onClick="startGoromKhoborPage"
                             android:orientation="vertical">
 
                             <ImageView
@@ -142,14 +184,14 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:clickable="true"
-                            android:onClick="startPorashunaActivity"
                             android:layout_width="@dimen/item_width_home_page"
                             android:layout_height="@dimen/item_hight_home_page"
                             android:layout_marginLeft="3dp"
                             android:layout_marginTop="5dp"
                             android:background="@color/White"
+                            android:clickable="true"
                             android:gravity="center"
+                            android:onClick="startPorashunaActivity"
                             android:orientation="vertical">
 
                             <ImageView
@@ -168,14 +210,14 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:clickable="true"
-                            android:onClick="startAuttoHashiActivity"
                             android:layout_width="@dimen/item_width_home_page"
                             android:layout_height="@dimen/item_hight_home_page"
                             android:layout_marginLeft="3dp"
                             android:layout_marginTop="5dp"
                             android:background="@color/White"
+                            android:clickable="true"
                             android:gravity="center"
+                            android:onClick="startAuttoHashiActivity"
                             android:orientation="vertical">
 
                             <ImageView
@@ -197,22 +239,22 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:clickable="true"
-                        android:onClick="startJibonJaponActivity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/Halka_Gray"
+                        android:clickable="true"
                         android:gravity="center"
+                        android:onClick="startJibonJaponActivity"
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:onClick="startJibonJaponActivity"
-                            android:clickable="true"
                             android:layout_width="@dimen/item_width_home_page"
                             android:layout_height="@dimen/item_hight_home_page"
                             android:layout_marginTop="2dp"
                             android:background="@color/White"
+                            android:clickable="true"
                             android:gravity="center"
+                            android:onClick="startJibonJaponActivity"
                             android:orientation="vertical">
 
                             <ImageView
@@ -231,14 +273,14 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:clickable="true"
-                            android:onClick="startPachMishaliActivity"
                             android:layout_width="@dimen/item_width_home_page"
                             android:layout_height="@dimen/item_hight_home_page"
                             android:layout_marginLeft="3dp"
                             android:layout_marginTop="2dp"
                             android:background="@color/White"
+                            android:clickable="true"
                             android:gravity="center"
+                            android:onClick="startPachMishaliActivity"
                             android:orientation="vertical">
 
                             <ImageView
@@ -257,13 +299,13 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:onClick="startBigganOProjuktiActivity"
                             android:layout_width="@dimen/item_width_home_page"
                             android:layout_height="@dimen/item_hight_home_page"
                             android:layout_marginLeft="3dp"
                             android:layout_marginTop="2dp"
                             android:background="@color/White"
                             android:gravity="center"
+                            android:onClick="startBigganOProjuktiActivity"
                             android:orientation="vertical">
 
                             <ImageView
@@ -282,14 +324,14 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:clickable="true"
-                            android:onClick="startCartoonActivity"
                             android:layout_width="@dimen/item_width_home_page"
                             android:layout_height="@dimen/item_hight_home_page"
                             android:layout_marginLeft="3dp"
                             android:layout_marginTop="2dp"
                             android:background="@color/White"
+                            android:clickable="true"
                             android:gravity="center"
+                            android:onClick="startCartoonActivity"
                             android:orientation="vertical">
 
                             <ImageView
@@ -326,18 +368,17 @@
                         android:textSize="17sp" />
 
                     <TextView
-                        android:clickable="true"
-                        android:onClick="startGalleryActivity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginRight="5dp"
                         android:layout_marginTop="8dp"
+                        android:clickable="true"
+                        android:onClick="startGalleryActivity"
                         android:text="আরো দেখুন"
                         android:textColor="@color/red"
-                        android:textSize="17sp"
-                        />
+                        android:textSize="17sp" />
 
 
                     <android.support.v7.widget.RecyclerView
@@ -383,8 +424,8 @@
                         android:layout_marginTop="8dp"
                         android:text="সাবস্ক্রাইব করুন"
                         android:textColor="@color/red"
-                        android:textSize="17sp"/>
-                        <!--android:onClick="subscribe"-->
+                        android:textSize="17sp" />
+                    <!--android:onClick="subscribe"-->
 
 
                     <android.support.v7.widget.RecyclerView
@@ -407,8 +448,8 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="10dp"
-                        android:text="আরো পড়ুন"
                         android:onClick="moreJapitoJibon"
+                        android:text="আরো পড়ুন"
                         android:textColor="@color/red"
                         android:textSize="17sp" />
 
@@ -442,9 +483,9 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginTop="8dp"
                         android:text="আরো দেখুন"
-                        android:visibility="invisible"
                         android:textColor="@color/red"
-                        android:textSize="17sp" />
+                        android:textSize="17sp"
+                        android:visibility="invisible" />
 
 
                     <android.support.v7.widget.RecyclerView
@@ -495,9 +536,9 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginTop="8dp"
                         android:text="আরো দেখুন"
-                        android:visibility="invisible"
                         android:textColor="@color/red"
-                        android:textSize="17sp" />
+                        android:textSize="17sp"
+                        android:visibility="invisible" />
 
 
                     <android.support.v7.widget.RecyclerView
@@ -515,7 +556,6 @@
                 </RelativeLayout>
 
 
-
                 <!--  Shikkha sohayika -->
 
                 <RelativeLayout
@@ -531,8 +571,8 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="8dp"
-                        android:text="শিক্ষা সহায়িকা"
                         android:onClick="subscribe"
+                        android:text="শিক্ষা সহায়িকা"
                         android:textSize="17sp" />
 
                     <TextView
@@ -567,8 +607,8 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="10dp"
-                        android:text="আরো পড়ুন"
                         android:onClick="moreShikha"
+                        android:text="আরো পড়ুন"
                         android:textColor="@color/red"
                         android:textSize="17sp" />
 
@@ -601,9 +641,9 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginTop="8dp"
                         android:text="আরো দেখুন"
-                        android:visibility="invisible"
                         android:textColor="@color/red"
-                        android:textSize="17sp" />
+                        android:textSize="17sp"
+                        android:visibility="invisible" />
 
 
                     <android.support.v7.widget.RecyclerView

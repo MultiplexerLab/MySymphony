@@ -11,10 +11,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import lct.mysymphony.Activity.PachMishaliActivity;
-import lct.mysymphony.Activity.PaymentMethod;
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.ModelClass.PacMishali;
 import lct.mysymphony.R;
+import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
 public class PachMishaliDescriptionActivity extends AppCompatActivity {
 

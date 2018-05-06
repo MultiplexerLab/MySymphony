@@ -39,7 +39,6 @@ public class SymphonyCareActivity extends AppCompatActivity {
                 if (id == R.id.home_bottom_navigation) {
                     Intent symphony = new Intent(getApplicationContext(), HomePage.class);
                     startActivity(symphony);
-                    overridePendingTransition(R.anim.left_in, R.anim.left_out);
                 }
                 return true;
             }
@@ -54,11 +53,10 @@ public class SymphonyCareActivity extends AppCompatActivity {
         viewPagerAdapter.addFragments(new ZogazogFragment(), "যোগাযোগ");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+
+        int fragmentPosition = getIntent().getIntExtra("position", 0);
+        tabLayout.setScrollPosition(fragmentPosition, 0f, true);
+        viewPager.setCurrentItem(fragmentPosition);
     }
 
-    @Override
-    public void onBackPressed() {
-        ActivityCompat.finishAffinity(this);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-    }
 }

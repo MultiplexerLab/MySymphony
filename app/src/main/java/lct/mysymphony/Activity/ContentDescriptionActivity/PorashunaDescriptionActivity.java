@@ -9,12 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
-import lct.mysymphony.Activity.PaymentMethod;
 import lct.mysymphony.Activity.PorashunaActivity;
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.ModelClass.Porashuna;
 import lct.mysymphony.R;
+import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
 public class PorashunaDescriptionActivity extends AppCompatActivity {
 
