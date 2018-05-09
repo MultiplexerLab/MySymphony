@@ -442,7 +442,7 @@ public class HomePage extends AppCompatActivity {
                     if(top_contentsArr.getJSONObject(i).has("contentPrice")){
                         contentPrice=top_contentsArr.getJSONObject(i).getInt("contentPrice");
                     }
-                    seraChobiArrayList.add(new SeraChobi(contentUrl,"",contentTitle,thumbNail_image,contentType,contentCat,contentId,contentDescription,contentPrice));
+                    seraChobiArrayList.add(new SeraChobi(contentUrl,"",contentType, contentTitle,thumbNail_image,contentCat,contentId,contentDescription,contentPrice));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("tpCntntExcptn",e.toString());
