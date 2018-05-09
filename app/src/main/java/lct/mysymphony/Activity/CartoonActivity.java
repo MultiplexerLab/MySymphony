@@ -96,12 +96,13 @@ public class CartoonActivity extends AppCompatActivity {
                     String contentDescription = auttoHashiContentArr.getJSONObject(i).getString("contentDescription");
                     int contentId=auttoHashiContentArr.getJSONObject(i).getInt("contentId");
                     String contentCat=auttoHashiContentArr.getJSONObject(i).getString("contentCat");
+                    String thumbNail_image=auttoHashiContentArr.getJSONObject(i).getString("thumbNail_image");
 
                     if (contentType.equals("video")) {
                         String contentUrl = auttoHashiContentArr.getJSONObject(i).getString("thumbNail_image");
-                        cartoonArrayList.add(new Cartoon(contentTitle, contentType, contentDescription, contentUrl,contentCat,contentId));
+                        cartoonArrayList.add(new Cartoon(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat,contentId));
                     } else {
-                        cartoonArrayList.add(new Cartoon(contentTitle, contentType, contentDescription, auttoHashiContentArr.getJSONObject(i).getString("contentUrl"),contentCat,contentId));
+                        cartoonArrayList.add(new Cartoon(contentTitle, contentType, contentDescription, auttoHashiContentArr.getJSONObject(i).getString("contentUrl"),thumbNail_image, contentCat,contentId));
                     }
 
                 } catch (JSONException e) {

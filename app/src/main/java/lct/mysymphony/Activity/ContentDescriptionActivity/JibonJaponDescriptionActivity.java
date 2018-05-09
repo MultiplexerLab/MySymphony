@@ -58,7 +58,7 @@ public class JibonJaponDescriptionActivity extends AppCompatActivity {
     public void mullochar(View view) {
         JibonJapon object = (JibonJapon) getIntent().getSerializableExtra("Data");
         Intent purchase = new Intent(JibonJaponDescriptionActivity.this, PaymentMethod.class);
-        DataBaseData dataBaseData=new DataBaseData(object.getContentTitle(),object.getContentCat(),object.getContentType(),object.getContentDescription(),"free",object.getContentId());
+        DataBaseData dataBaseData=new DataBaseData(object.getContentTitle(),object.getContentCat(),object.getContentType(),object.getContentDescription(), object.getThumbnailImgUrl(), "free",object.getContentId());
         purchase.putExtra("dataBaseData",dataBaseData);
         purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);

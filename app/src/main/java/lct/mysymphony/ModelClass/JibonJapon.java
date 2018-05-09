@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class JibonJapon implements Serializable {
 
-    String contentTitle , contentType , contentDescription , imageUrl,contentCat;
+    String contentTitle , contentType , contentDescription , imageUrl,contentCat, thumbnailImgUrl;
     int contentId;
 
     public String getContentCat() {
@@ -15,14 +15,14 @@ public class JibonJapon implements Serializable {
         return contentId;
     }
 
-    public JibonJapon(String contentTitle, String contentType, String contentDescription, String imageUrl, String contentCat, int contentId) {
+    public JibonJapon(String contentTitle, String contentType, String contentDescription, String imageUrl, String contentCat, String thumbnailImgUrl, int contentId) {
         this.contentTitle = contentTitle;
         this.contentType = contentType;
         this.contentDescription = contentDescription;
         this.imageUrl = imageUrl;
         this.contentCat=contentCat;
         this.contentId=contentId;
-
+        this.thumbnailImgUrl = thumbnailImgUrl;
     }
 
     public String getContentTitle() {
@@ -35,6 +35,10 @@ public class JibonJapon implements Serializable {
 
     public String getContentDescription() {
         return contentDescription;
+    }
+
+    public String getThumbnailImgUrl() {
+        return thumbnailImgUrl;
     }
 
     public String getImageUrl() {

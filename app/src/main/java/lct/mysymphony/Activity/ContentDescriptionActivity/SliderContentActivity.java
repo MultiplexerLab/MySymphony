@@ -77,7 +77,7 @@ public class SliderContentActivity extends AppCompatActivity {
         else
             priceStatus="paid";
 
-        DataBaseData dataBaseData=new DataBaseData(wallpaerUrl.getContentTitle(),wallpaerUrl.getContentCat(),wallpaerUrl.getContentType(),"",priceStatus,wallpaerUrl.getContentId());
+        DataBaseData dataBaseData=new DataBaseData(wallpaerUrl.getContentTitle(),wallpaerUrl.getContentCat(),wallpaerUrl.getContentType(),"",wallpaerUrl.getThumbNail_image(), priceStatus,wallpaerUrl.getContentId());
         purchase.putExtra("dataBaseData",dataBaseData);
         purchase.putExtra("imageUrl",imageUrl);
         startActivity(purchase);

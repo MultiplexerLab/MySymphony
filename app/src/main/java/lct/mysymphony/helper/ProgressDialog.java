@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import lct.mysymphony.R;
 
@@ -21,6 +22,18 @@ public class ProgressDialog {
         dialogBuilder = new AlertDialog.Builder(context);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View dialogView = inflater.inflate(R.layout.progress_dialog, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+    public void showProgressDialog(String message) {
+        dialogBuilder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        View dialogView = inflater.inflate(R.layout.progress_dialog, null);
+        TextView loading_msg = dialogView.findViewById(R.id.loading_msg);
+        loading_msg.setText("ভিডিও ডাওনলোড হচ্ছে");
         dialogBuilder.setView(dialogView);
         dialogBuilder.setCancelable(false);
         alertDialog = dialogBuilder.create();

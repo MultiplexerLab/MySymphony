@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class MulloChar implements Serializable {
 
-    String contentType, contentUrl, contentTile, imageUrl,contentCat;
+    String contentType, contentUrl, contentTile, imageUrl,contentCat, thumbNailImgUrl;
     int previousPrice, newPrice,contentId;
 
 
@@ -16,7 +16,7 @@ public class MulloChar implements Serializable {
         return contentId;
     }
 
-    public MulloChar(String contentType, String contentUrl, String contentTile, int previousPrice, int newPrice, String imageUrl, String contentCat, int contentId) {
+    public MulloChar(String contentType, String contentUrl, String contentTile, String thumbNailImgUrl, int previousPrice, int newPrice, String imageUrl, String contentCat, int contentId) {
         this.contentType = contentType;
         this.contentUrl = contentUrl;
         this.contentTile = contentTile;
@@ -25,9 +25,7 @@ public class MulloChar implements Serializable {
         this.imageUrl = imageUrl;
         this.contentCat=contentCat;
         this.contentId=contentId;
-
-
-
+        this.thumbNailImgUrl = thumbNailImgUrl;
     }
 
     public String getContentType() {
@@ -40,6 +38,10 @@ public class MulloChar implements Serializable {
 
     public String getContentTile() {
         return contentTile;
+    }
+
+    public String getThumbNailImgUrl() {
+        return thumbNailImgUrl;
     }
 
     public int getPreviousPrice() {

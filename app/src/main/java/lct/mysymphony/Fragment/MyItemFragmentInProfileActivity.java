@@ -63,10 +63,6 @@ public class MyItemFragmentInProfileActivity extends Fragment {
         activity=getActivity();
         progressDialog=new lct.mysymphony.helper.ProgressDialog(getActivity());
         new RetriveBitMapFromDatabase().execute();
-
-
-        //dialog = new ProgressDialog(getActivity());
-
         return view;
     }
 

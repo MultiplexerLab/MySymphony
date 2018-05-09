@@ -124,8 +124,9 @@ public class Cricket_fragment extends Fragment {
                     String publishedAt = jsonHotNewsContentArr.getJSONObject(i).getString("publishedAt");
 //                    String contentCat=jsonHotNewsContentArr.getJSONObject(i).getString("contentCat");
                     int contentId=jsonHotNewsContentArr.getJSONObject(i).getInt("contentId");
+                    String thumbNail_image=jsonHotNewsContentArr.getJSONObject(i).getString("thumbNail_image");
 
-                    kheladhulaCricketArrayList.add(new Kheladhula_Cricket_sorboshesh_sobgbad(contentTitle, contentType, publishedAt, contentDescription, imageUrl,"Cricket_sorboshesh_songbad",contentId));
+                    kheladhulaCricketArrayList.add(new Kheladhula_Cricket_sorboshesh_sobgbad(contentTitle, contentType, publishedAt, contentDescription, thumbNail_image, imageUrl,"Cricket_sorboshesh_songbad",contentId));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("exceptionIncricket",e.toString());

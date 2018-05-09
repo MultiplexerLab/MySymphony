@@ -62,7 +62,7 @@ public class CricketSorbosheshSongbadDescriptionActivity extends AppCompatActivi
     public void mullochar(View view) {
         Kheladhula_Cricket_sorboshesh_sobgbad object = (Kheladhula_Cricket_sorboshesh_sobgbad) getIntent().getSerializableExtra("Data");
         Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
-        DataBaseData dataBaseData=new DataBaseData(object.getContentTitle(),object.getContentcat(),object.getContentType(),object.getContentDescription(),"free",object.getContentId());
+        DataBaseData dataBaseData=new DataBaseData(object.getContentTitle(),object.getContentcat(),object.getContentType(),object.getContentDescription(), object.getThumbnailImgUrl(), "free",object.getContentId());
         purchase.putExtra("dataBaseData",dataBaseData);
         purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);

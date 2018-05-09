@@ -102,12 +102,13 @@ public class JibonJaponActivity extends AppCompatActivity {
                     String contentDescription = jsonJibonJaponContentArr.getJSONObject(i).getString("contentDescription");
                     int contentId=jsonJibonJaponContentArr.getJSONObject(i).getInt("id");
                     String contentCat=jsonJibonJaponContentArr.getJSONObject(i).getString("contentCat");
+                    String thumbNail_image=jsonJibonJaponContentArr.getJSONObject(i).getString("thumbNail_image");
 
                     if (contentType.equals("video")) {
                         String contentUrl = jsonJibonJaponContentArr.getJSONObject(i).getString("thumbNail_image");
-                        jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, contentUrl,contentCat,contentId));
+                        jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat,contentId));
                     } else {
-                        jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, jsonJibonJaponContentArr.getJSONObject(i).getString("contentUrl"),contentCat,contentId));
+                        jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, jsonJibonJaponContentArr.getJSONObject(i).getString("contentUrl"), thumbNail_image, contentCat,contentId));
                     }
 
                 } catch (JSONException e) {

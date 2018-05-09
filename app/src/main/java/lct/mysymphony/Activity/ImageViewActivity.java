@@ -37,7 +37,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
     ///int price;
     String imageUrl;
     LinearLayout bisheshOfferLinearLayout;
-    String contentTitle, contentCat, contentDesc, contentType;
+    String contentTitle, contentCat, contentDesc, contentType, thumbNailImgUrl;
     TextView previousPrice, newPrice;
     String cameFromWhichActivity;
     DataBaseData dataBaseData;
@@ -74,9 +74,11 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 contentCat = Data.getContentCat();
                 contentDesc = "";
                 contentType = Data.getContentType();
+                thumbNailImgUrl = Data.getThumbNailImgUrl();
+
                 newPrice.setText(Integer.toString(Data.getNewPrice()));
                 previousPrice.setText(Integer.toString(Data.getPreviousPrice()));
-                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, "paid", Data.getContentId());
+                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, "paid", Data.getContentId());
                 Glide.with(this).load(Data.getImageUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
 
                 PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
@@ -95,6 +97,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 contentCat = Data.getContentCat();
                 contentDesc = "";
                 contentType = Data.getContentType();
+                thumbNailImgUrl = Data.getThumbNailImgUrl();
                 Log.d("newPrice", Integer.toString(Data.getNewPrice()));
                 Log.d("previousPrice", Integer.toString(Data.getPreviousPrice()));
                 previousPrice.setVisibility(View.GONE);
@@ -109,7 +112,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                     priceStatus = "paid";
                 }
 
-                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, priceStatus, Data.getContentId());
+                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, priceStatus, Data.getContentId());
                 Glide.with(this).load(Data.getContentUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
                 PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
                 pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, ImageViewActivity.this);
@@ -126,6 +129,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 contentCat = Data.getContentCat();
                 contentDesc = "";
                 contentType = Data.getContentType();
+                thumbNailImgUrl = Data.getThumbNailImgUrl();
 
                 String priceStatus;
                 if (Data.getContentPrice() == 0) {
@@ -136,7 +140,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                     priceStatus = "paid";
                 }
 
-                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, priceStatus, Data.getContentId());
+                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, priceStatus, Data.getContentId());
                 Glide.with(this).load(Data.getContentUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
                 PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
                 pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, ImageViewActivity.this);
@@ -163,6 +167,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 isDownloaded = true;
                 contentDesc = "";
                 contentType = Data.getContentType();
+                thumbNailImgUrl = Data.getThumbNailImgUrl();
 
                 String priceStatus;
                 if (Data.getContentPrice() == 0) {
@@ -173,7 +178,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                     priceStatus = "paid";
                 }
 
-                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, priceStatus, Data.getContentId());
+                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, priceStatus, Data.getContentId());
                 Glide.with(this).load(Data.getImage_url()).into((ImageView) findViewById(R.id.imageViewWallpaper));
                 PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
                 pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, ImageViewActivity.this);
@@ -269,8 +274,11 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                     DownloadImage downloadImage = new DownloadImage();
                     downloadImage.downloadImage(imageURL, ImageViewActivity.this, dataBaseData);*/
 
-                    if (!dataBaseData.getContentType().contains("video") && !imageUrl.contains("mp4") && !imageUrl.contains("youtube") && !imageUrl.contains("music") && !imageUrl.contains("videos")) {
+                    Log.i("TagContent", dataBaseData.getContentType());
+
+                    if (dataBaseData.getContentType().contains("image")) {
                         progressDialog.showProgressDialog();
+                        Log.i("ImageContent", "image");
                         Gson gson = new Gson();
                         SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
                         String json = preferences.getString("databaseData", "");
@@ -278,16 +286,16 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                         DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
                         DownloadImage downloadImage = new DownloadImage();
                         downloadImage.downloadImage(imageURL, ImageViewActivity.this, dataBaseData);
-                    } else {
-                        Log.i("Video", "VideoDownload");
+                    } else if (dataBaseData.getContentType().contains("video")){
                         progressDialog.showProgressDialog();
                         Gson gson = new Gson();
                         SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
                         String json = preferences.getString("databaseData", "");
                         //String imageURL = preferences.getString("imageUrl", "");
                         DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
+                        Log.i("VideoCOntent", "video");
                         DownloadVideo downLoadVideo = new DownloadVideo();
-                        downLoadVideo.downloadVideo("http://jachaibd.com/files/sample.mp4", ImageViewActivity.this, dataBaseData);
+                        downLoadVideo.downloadVideo("http://jachaibd.com/files/videoplayback.mp4", ImageViewActivity.this, dataBaseData);
                     }
                 }
 

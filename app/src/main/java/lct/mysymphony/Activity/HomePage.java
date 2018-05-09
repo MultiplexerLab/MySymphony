@@ -154,8 +154,8 @@ public class HomePage extends AppCompatActivity {
                 //overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
         });
-        loadDataFromVolley();
-        //newloadDataFromVolley();
+        //loadDataFromVolley();
+        newloadDataFromVolley();
     }
 
     private void newloadDataFromVolley() {
@@ -198,6 +198,8 @@ public class HomePage extends AppCompatActivity {
 
                             JSONArray shocol_chobi__content_Arr = jsonObject.getJSONArray("moving_contents");
                             setShocolChobiContent(shocol_chobi__content_Arr);
+
+                            progressDialog.hideProgressDialog();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -245,7 +247,6 @@ public class HomePage extends AppCompatActivity {
                             setShocolChobiContent(shocol_chobi__content_Arr);
                             progressDialog.hideProgressDialog();
 
-                            //settop_contents(jsontop_contentsArr);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.d("exceptionLoadData4rmvly",e.toString());
@@ -276,10 +277,11 @@ public class HomePage extends AppCompatActivity {
                     String contentType = shocol_chobi__content_arr.getJSONObject(i).getString("contentType");
                     int contentId=shocol_chobi__content_arr.getJSONObject(i).getInt("id");
                     String contentCat=shocol_chobi__content_arr.getJSONObject(i).getString("contentCat");
+                    String thumbnailImgUrl=shocol_chobi__content_arr.getJSONObject(i).getString("thumbNail_image");
                     if(shocol_chobi__content_arr.getJSONObject(i).has("contentPrice")){
                         contentPrice=shocol_chobi__content_arr.getJSONObject(i).getInt("contentPrice");
                     }
-                    shocolChobiArrayList.add(new ShocolChobi(contentType, contentUrl, contentTitle,contentCat,contentId,contentPrice));
+                    shocolChobiArrayList.add(new ShocolChobi(contentType, contentUrl, contentTitle,contentCat,thumbnailImgUrl,contentId,contentPrice));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -301,6 +303,7 @@ public class HomePage extends AppCompatActivity {
                     String contentUrl = games_zone__content_arr.getJSONObject(i).getString("contentUrl");
                     String contentTitle = games_zone__content_arr.getJSONObject(i).getString("contentTitle");
                     String contentType = games_zone__content_arr.getJSONObject(i).getString("contentType");
+                    String thumbnailImgUrl=games_zone__content_arr.getJSONObject(i).getString("thumbNail_image");
                     ///int previousPrice = games_zone__content_arr.getJSONObject(i).getInt("previousPrice");
                     if(games_zone__content_arr.getJSONObject(i).has("contentPrice")){
                         newPrice = games_zone__content_arr.getJSONObject(i).getInt("contentPrice");
@@ -308,7 +311,7 @@ public class HomePage extends AppCompatActivity {
 
                     int contentId=games_zone__content_arr.getJSONObject(i).getInt("id");
                     String contentCat=games_zone__content_arr.getJSONObject(i).getString("contentCat");
-                    gamesZoneArrayList.add(new GamesZone(contentType, contentUrl, contentTitle, 0, newPrice,contentCat,contentId));
+                    gamesZoneArrayList.add(new GamesZone(contentType, contentUrl, contentTitle, thumbnailImgUrl, 0, newPrice,contentCat,contentId));
 
                 } catch (JSONException e) {
                     Log.d("exception", e.toString());
@@ -369,6 +372,7 @@ public class HomePage extends AppCompatActivity {
                     int previousPrice = mulloCharJsonArr.getJSONObject(i).getInt("contentPrice");
                     int contentId=mulloCharJsonArr.getJSONObject(i).getInt("id");
                     String contentCat=mulloCharJsonArr.getJSONObject(i).getString("contentCat");
+                    String thumbNail_image=mulloCharJsonArr.getJSONObject(i).getString("thumbNail_image");
 
                     JSONArray jsonArray = mulloCharJsonArr.getJSONObject(i).getJSONArray("discount");
 
@@ -376,7 +380,7 @@ public class HomePage extends AppCompatActivity {
                     {
                         newPrice = jsonArray.getJSONObject(j).getInt("discountPrice");
                     }
-                    mulloCharArrayList.add(new MulloChar(contentType, contentUrl, contentTitle, previousPrice, newPrice, image_url,contentCat,contentId));
+                    mulloCharArrayList.add(new MulloChar(contentType, contentUrl, contentTitle, thumbNail_image, previousPrice, newPrice, image_url,contentCat,contentId));
                 } catch (JSONException e) {
                     Log.d("mullochardata", e.toString());
                     e.printStackTrace();
@@ -398,6 +402,7 @@ public class HomePage extends AppCompatActivity {
                     String contentDescription = japito_jibon_content_arr.getJSONObject(i).getString("contentDescription");
                     String contentUrl = japito_jibon_content_arr.getJSONObject(i).getString("contentUrl");
                     String contentCat=japito_jibon_content_arr.getJSONObject(i).getString("contentCat");
+                    String thumbNail_image=japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image");
                     int contentid=japito_jibon_content_arr.getJSONObject(i).getInt("id");
                     if(japito_jibon_content_arr.getJSONObject(i).has("contentPrice")){
                         contentPrice=japito_jibon_content_arr.getJSONObject(i).getInt("contentPrice");
@@ -406,10 +411,10 @@ public class HomePage extends AppCompatActivity {
 
                     if (contentType.equals("video")) {
                         Log.i("Data", "Video");
-                        japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), "video", contentUrl,contentCat,contentid,contentPrice));
+                        japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), "video", contentUrl,contentCat,thumbNail_image,contentid,contentPrice));
                     } else {
                         Log.i("Data", "Image");
-                        japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("contentUrl"), "image", contentUrl,contentCat,contentid,contentPrice));
+                        japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("contentUrl"), "image", contentUrl,contentCat,thumbNail_image, contentid,contentPrice));
                     }
                 } catch (JSONException e) {
                     Log.d("japito_jibon_exception", e.toString());
@@ -431,12 +436,13 @@ public class HomePage extends AppCompatActivity {
                     String contentTitle=top_contentsArr.getJSONObject(i).getString("contentTitle");
                     String contentType=top_contentsArr.getJSONObject(i).getString("contentType");
                     String contentCat=top_contentsArr.getJSONObject(i).getString("contentCat");
+                    String thumbNail_image=top_contentsArr.getJSONObject(i).getString("thumbNail_image");
                     int contentId = top_contentsArr.getJSONObject(i).getInt("id");
                     String contentDescription=top_contentsArr.getJSONObject(i).getString("contentDescription");
                     if(top_contentsArr.getJSONObject(i).has("contentPrice")){
                         contentPrice=top_contentsArr.getJSONObject(i).getInt("contentPrice");
                     }
-                    seraChobiArrayList.add(new SeraChobi(contentUrl,"",contentTitle,contentType,contentCat,contentId,contentDescription,contentPrice));
+                    seraChobiArrayList.add(new SeraChobi(contentUrl,"",contentTitle,thumbNail_image,contentType,contentCat,contentId,contentDescription,contentPrice));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("tpCntntExcptn",e.toString());
@@ -460,10 +466,11 @@ public class HomePage extends AppCompatActivity {
                     String contentCat=jsonSliderContentArr.getJSONObject(i).getString("contentCat");
                     int contentId = jsonSliderContentArr.getJSONObject(i).getInt("id");
                     String contentDescription=jsonSliderContentArr.getJSONObject(i).getString("contentDescription");
+                    String thumbNailImg=jsonSliderContentArr.getJSONObject(i).getString("thumbNail_image");
                     if(jsonSliderContentArr.getJSONObject(i).has("contentPrice")){
                         contentPrice=jsonSliderContentArr.getJSONObject(i).getInt("contentPrice");
                     }
-                    sliderImages.add(new SliderImage(contentUrl, description,contentType,contentTitle,contentCat,contentId,contentDescription,contentPrice));
+                    sliderImages.add(new SliderImage(contentUrl, description,contentType,contentTitle,contentCat,contentId,contentDescription,thumbNailImg, contentPrice));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("SldrCntntExcptn",e.toString());

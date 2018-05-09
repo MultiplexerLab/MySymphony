@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 public class Kheladhula_Cricket_sorboshesh_sobgbad implements Serializable {
 
-    String contentTitle , contentDescription , contentType , imageUrl , publishedAt,contentcat;
+    String contentTitle , contentDescription , contentType , imageUrl , publishedAt,contentcat, thumbnailImgUrl;
     int contentId;
 
-    public Kheladhula_Cricket_sorboshesh_sobgbad(String contentTitle, String contentType, String publishedAt, String contentDescription, String imageUrl,String contentcat,int id) {
+    public Kheladhula_Cricket_sorboshesh_sobgbad(String contentTitle, String contentType, String publishedAt, String contentDescription, String thumbnailImgUrl, String imageUrl,String contentcat,int id) {
         this.contentTitle = contentTitle;
         this.contentDescription = contentDescription;
         this.contentType = contentType;
@@ -15,6 +15,7 @@ public class Kheladhula_Cricket_sorboshesh_sobgbad implements Serializable {
         this.publishedAt = publishedAt;
         this.contentcat=contentcat;
         this.contentId=id;
+        this.thumbnailImgUrl = thumbnailImgUrl;
     }
 
     public String getContentcat() {
@@ -35,6 +36,10 @@ public class Kheladhula_Cricket_sorboshesh_sobgbad implements Serializable {
 
     public String getContentType() {
         return contentType;
+    }
+
+    public String getThumbnailImgUrl() {
+        return thumbnailImgUrl;
     }
 
     public String getImageUrl() {

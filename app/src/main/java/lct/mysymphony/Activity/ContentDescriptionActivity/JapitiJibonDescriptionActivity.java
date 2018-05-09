@@ -80,6 +80,7 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity implements
         String contentCat = object.getContentCat();
         String contentDesc = "";
         String contentType = object.getContentType();
+        String thumbNail_image = object.getThumbNail_image();
         Log.d("newPrice",Integer.toString(object.getContentPrice()));
         Log.d("japitojibonid",Integer.toString(object.getContentId()));
 
@@ -95,7 +96,7 @@ public class JapitiJibonDescriptionActivity extends AppCompatActivity implements
         else
             priceStatus="paid";
 
-        dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, priceStatus, object.getContentId());
+        dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNail_image, priceStatus, object.getContentId());
 
         Boolean check=dataHelper.checkDownLoadedOrNot(object.getContentCat(), object.getContentId());
         Log.d("checkJapitoJibon",check.toString());

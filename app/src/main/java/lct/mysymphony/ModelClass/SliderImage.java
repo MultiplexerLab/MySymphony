@@ -10,12 +10,11 @@ public class SliderImage implements Serializable{
     private String image_url;
     private int contentId;
     private String description;
-    private String contentType,contentTitle,contentCat,contentDesc;
+    private String contentType,contentTitle,contentCat,contentDesc, thumbNail_image;
     int contentPrice;
 
 
-
-    public SliderImage(String image_url, String description, String contentType, String contentTitle, String contentCat,int contentId,String contentDesc,int contentPrice) {
+    public SliderImage(String image_url, String description, String contentType, String contentTitle, String contentCat,int contentId,String contentDesc, String thumbNail_image, int contentPrice) {
         this.image_url = image_url;
         this.description = description;
         this.contentType=contentType;
@@ -24,6 +23,7 @@ public class SliderImage implements Serializable{
         this.contentId=contentId;
         this.contentDesc=contentDesc;
         this.contentPrice=contentPrice;
+        this.thumbNail_image=thumbNail_image;
 
     }
 
@@ -53,6 +53,10 @@ public class SliderImage implements Serializable{
 
     public String getImage_url() {
         return image_url;
+    }
+
+    public String getThumbNail_image() {
+        return thumbNail_image;
     }
 
     public void setImage_url(String image_url) {

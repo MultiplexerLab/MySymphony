@@ -26,6 +26,7 @@ public class DataHelper extends SQLiteOpenHelper {
     public static final String COL_CONTENT_TYPE = "contentType";
     public static final String COL_CONTENT_TITLE = "contentTitle";
     public static final String COL_CONTENT_DESC = "contentDesc";
+    public static final String COL_CONTENT_THUMBNAILIMG = "contentThumbnailImg";
     public static final String COL_CONTENT_TEXT = "contentText";
     public static final String COL_CONTENT_DATA = "contentData";
     public static final String COL_DOWLOAD_TIMESTAMP = "downloadTimestamp";
@@ -33,7 +34,7 @@ public class DataHelper extends SQLiteOpenHelper {
     public static final String COL_CONTENT_STATUS = "contentStatus";
 
     public static final int DATABASE_VERSION = 1;
-    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "( " + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT  , " +COL_CONTENT_ID+" INTEGER , "+ COL_CONTENT_CAT + " TEXT , " + COL_CONTENT_TYPE + " TEXT , " + COL_CONTENT_TITLE + " TEXT , " + COL_CONTENT_DESC + " TEXT ," + COL_CONTENT_TEXT + " TEXT , " + COL_CONTENT_DATA + "  BLOB , " + COL_DOWLOAD_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_EXPIRE_TIMESTAMP + "DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_CONTENT_STATUS + " TEXT )";
+    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "( " + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT  , " + COL_CONTENT_ID + " INTEGER , " + COL_CONTENT_CAT + " TEXT , " + COL_CONTENT_TYPE + " TEXT , " + COL_CONTENT_TITLE + " TEXT , " + COL_CONTENT_DESC + " TEXT ," + COL_CONTENT_TEXT + " TEXT , " + COL_CONTENT_THUMBNAILIMG + " TEXT, " + COL_CONTENT_DATA + "  BLOB , " + COL_DOWLOAD_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_EXPIRE_TIMESTAMP + "DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_CONTENT_STATUS + " TEXT )";
     public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     public DataHelper(Context context) {
@@ -76,10 +77,10 @@ public class DataHelper extends SQLiteOpenHelper {
             values.put(COL_CONTENT_DATA, buffer);
             values.put(COL_DOWLOAD_TIMESTAMP, "11/12/13");
             values.put(COL_CONTENT_STATUS, dataBaseData.getContentStatus());
-            values.put(COL_CONTENT_ID,dataBaseData.getContentId());
+            values.put(COL_CONTENT_ID, dataBaseData.getContentId());
 
-            Log.d("contentcat",dataBaseData.getContentCat());
-            Log.d("contentid",Integer.toString(dataBaseData.getContentId()));
+            Log.d("contentcat", dataBaseData.getContentCat());
+            Log.d("contentid", Integer.toString(dataBaseData.getContentId()));
 
 
             // Insert Row
@@ -102,9 +103,7 @@ public class DataHelper extends SQLiteOpenHelper {
 
     public Bitmap getBitmap(int id) {
         Bitmap bitmap = null;
-        // Open the database for reading
         SQLiteDatabase db = this.getReadableDatabase();
-        // Start the transaction.
         Log.d("enter", "enter");
         db.beginTransaction();
 
@@ -117,16 +116,10 @@ public class DataHelper extends SQLiteOpenHelper {
                 Log.d("cursor", "found");
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {
-                ///while (cursor.moveToNext()) {
-                // Convert blob data to byte array
                 byte[] blob = cursor.getBlob(cursor.getColumnIndex("contentData"));
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(blob);
                 Log.d("getBitmap", "blob lenght: " + blob.length);
-                // Convert the byte array to Bitmap
                 bitmap = BitmapFactory.decodeStream(inputStream);
-
-                ///}
-
             }
             db.setTransactionSuccessful();
 
@@ -136,9 +129,7 @@ public class DataHelper extends SQLiteOpenHelper {
 
         } finally {
             db.endTransaction();
-            // End the transaction.
             db.close();
-            // Close database
         }
         return bitmap;
     }
@@ -226,38 +217,29 @@ public class DataHelper extends SQLiteOpenHelper {
                 Log.d("cursorAll", "found");
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {
-                dataBaseData = new DataBaseData(cursor.getString(cursor.getColumnIndex(COL_CONTENT_TITLE)), cursor.getString(cursor.getColumnIndex(COL_CONTENT_CAT)), cursor.getString(cursor.getColumnIndex(COL_CONTENT_TYPE)), cursor.getString(cursor.getColumnIndex(COL_CONTENT_DESC)), cursor.getString(cursor.getColumnIndex(COL_CONTENT_STATUS)), cursor.getInt(cursor.getColumnIndex(COL_CONTENT_ID)));
+                dataBaseData = new DataBaseData(cursor.getString(cursor.getColumnIndex(COL_CONTENT_TITLE)), cursor.getString(cursor.getColumnIndex(COL_CONTENT_CAT)), cursor.getString(cursor.getColumnIndex(COL_CONTENT_TYPE)), cursor.getString(cursor.getColumnIndex(COL_CONTENT_DESC)), cursor.getString(cursor.getColumnIndex(COL_CONTENT_THUMBNAILIMG)), cursor.getString(cursor.getColumnIndex(COL_CONTENT_STATUS)), cursor.getInt(cursor.getColumnIndex(COL_CONTENT_ID)));
             }
-
-
         } catch (SQLiteException e) {
             e.printStackTrace();
             Log.d("excptionAll", e.toString());
-
         }
         db.close();
         return dataBaseData;
     }
 
-    public boolean checkDownLoadedOrNot(String contentCat,int id)
-    {
+    public boolean checkDownLoadedOrNot(String contentCat, int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         try {
-            String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE "+COL_CONTENT_ID+" = " + id+" AND "+COL_CONTENT_CAT+" = '"+contentCat+"'";
+            String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL_CONTENT_ID + " = " + id + " AND " + COL_CONTENT_CAT + " = '" + contentCat + "'";
 
-            Log.d("contentcat2",contentCat);
-            Log.d("contentid2",Integer.toString(id));
+            Log.d("contentcat2", contentCat);
+            Log.d("contentid2", Integer.toString(id));
             ///Cursor cursor = db.query(TABLE_NAME, new String[]{COL_CONTENT_ID + " =? and " + COL_CONTENT_CAT + " =? "}, new String[] { String.valueOf(id), contentCat }, null, null, null);
             Cursor cursor = db.rawQuery(selectQuery, null);
-
-
-            if (cursor.getCount() > 0)
-            {
+            if (cursor.getCount() > 0) {
                 Log.d("cursorCheck", "found");
                 return true;
-            }
-            else
-            {
+            } else {
                 Log.d("cursorCheck", "notfound");
                 return false;
             }
@@ -273,5 +255,31 @@ public class DataHelper extends SQLiteOpenHelper {
     }
 
     public void insertVideoStr(String result, DataBaseData dataBaseData) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        ContentValues values;
+        try {
+            values = new ContentValues();
+            values.put(COL_CONTENT_CAT, dataBaseData.getContentCat());
+            values.put(COL_CONTENT_TYPE, dataBaseData.getContentType());
+            values.put(COL_CONTENT_TITLE, dataBaseData.getContentTitle());
+            values.put(COL_CONTENT_DESC, dataBaseData.getContentDesc());
+            values.put(COL_CONTENT_TEXT, "ContentText");
+            values.put(COL_CONTENT_THUMBNAILIMG, dataBaseData.getThumbNailImgUrl());
+            values.put(COL_CONTENT_DATA, result);
+            values.put(COL_DOWLOAD_TIMESTAMP, "11/12/13");
+            values.put(COL_CONTENT_STATUS, dataBaseData.getContentStatus());
+            values.put(COL_CONTENT_ID, dataBaseData.getContentId());
+
+            long i = db.insert(TABLE_NAME, null, values);
+            Log.i("Insert", values.toString());
+            db.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            Log.d("insertErr", e.toString());
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
     }
 }

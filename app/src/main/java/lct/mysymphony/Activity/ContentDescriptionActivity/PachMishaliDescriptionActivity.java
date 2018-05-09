@@ -62,7 +62,7 @@ public class PachMishaliDescriptionActivity extends AppCompatActivity {
     public void mullochar(View view) {
         PacMishali object = (PacMishali) getIntent().getSerializableExtra("Data");
         Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
-        DataBaseData dataBaseData=new DataBaseData(object.getContentTitle(),object.getContentCat(),object.getContentType(),object.getContentDescription(),"free",object.getContentId());
+        DataBaseData dataBaseData=new DataBaseData(object.getContentTitle(),object.getContentCat(),object.getContentType(),object.getContentDescription(), object.getThumbNail_image(), "free",object.getContentId());
         purchase.putExtra("dataBaseData",dataBaseData);
         purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);

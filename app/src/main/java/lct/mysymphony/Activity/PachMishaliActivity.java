@@ -87,12 +87,13 @@ public class PachMishaliActivity extends AppCompatActivity {
                     String contentDescription = pachMishaliContentArr.getJSONObject(i).getString("contentDescription");
                     int contentId=pachMishaliContentArr.getJSONObject(i).getInt("contentId");
                     String contentCat=pachMishaliContentArr.getJSONObject(i).getString("contentCat");
+                    String thumbNail_image=pachMishaliContentArr.getJSONObject(i).getString("thumbNail_image");
 
                     if (contentType.equals("video")) {
                         String contentUrl = pachMishaliContentArr.getJSONObject(i).getString("thumbNail_image");
-                        pacMishaliArrayList.add(new PacMishali(contentTitle, contentType, contentDescription, contentUrl,contentCat,contentId));
+                        pacMishaliArrayList.add(new PacMishali(contentTitle, contentType, contentDescription, contentUrl,thumbNail_image, contentCat,contentId));
                     } else {
-                        pacMishaliArrayList.add(new PacMishali(contentTitle, contentType, contentDescription, pachMishaliContentArr.getJSONObject(i).getString("contentUrl"),contentCat,contentId));
+                        pacMishaliArrayList.add(new PacMishali(contentTitle, contentType, contentDescription, pachMishaliContentArr.getJSONObject(i).getString("contentUrl"),thumbNail_image,contentCat,contentId));
                     }
 
                 } catch (JSONException e) {

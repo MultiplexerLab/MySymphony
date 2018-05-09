@@ -63,7 +63,7 @@ public class PorashunaDescriptionActivity extends AppCompatActivity {
     public void mullochar(View view) {
         Porashuna object = (Porashuna) getIntent().getSerializableExtra("Data");
         Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
-        DataBaseData dataBaseData=new DataBaseData(object.getContentTitle(),object.getContentCat(),object.getContentType(),object.getContentDescription(),"free",object.getContentId());
+        DataBaseData dataBaseData=new DataBaseData(object.getContentTitle(),object.getContentCat(),object.getContentType(),object.getContentDescription(), object.getThumbnailImgUrl(), "free",object.getContentId());
         purchase.putExtra("dataBaseData",dataBaseData);
         purchase.putExtra("imageUrl",object.getImageUrl());
         startActivity(purchase);
