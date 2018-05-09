@@ -68,7 +68,6 @@ public class DataHelper extends SQLiteOpenHelper {
 
         try {
             values = new ContentValues();
-
             values.put(COL_CONTENT_CAT, dataBaseData.getContentCat());
             values.put(COL_CONTENT_TYPE, dataBaseData.getContentType());
             values.put(COL_CONTENT_TITLE, dataBaseData.getContentTitle());
@@ -271,5 +270,8 @@ public class DataHelper extends SQLiteOpenHelper {
         db.close();
 
         return false;
+    }
+
+    public void insertVideoStr(String result, DataBaseData dataBaseData) {
     }
 }

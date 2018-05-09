@@ -1,7 +1,10 @@
 package lct.mysymphony.helper;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,49 +12,75 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import lct.mysymphony.ModelClass.DataBaseData;
+
 public class DownloadVideo {
 
-    public String downloadVideo(String url)
-    {
-        String video = "";
-        URL u = null;
-        InputStream is = null;
+    Context context;
+    String videoUrl;
+    private DataBaseData dataBaseData;
 
-        Log.i("url", url);
+    public void downloadVideo(String videoUrl, Context context, DataBaseData dataBaseData) {
+        this.context = context;
+        this.videoUrl = videoUrl;
+        this.dataBaseData = dataBaseData;
+        DownloadVideo.RetrieveVideoTask bt = new DownloadVideo.RetrieveVideoTask();
+        bt.execute(videoUrl);
+    }
 
-        try {
-            u = new URL(url);
-            is = u.openStream();
-            HttpURLConnection huc = (HttpURLConnection)u.openConnection();
+    class RetrieveVideoTask extends AsyncTask<String, Void, String> {
 
-            if(huc != null)
-            {
-                InputStream inputStream =  huc.getInputStream();
-                byte[] buff = new byte[8000];
-                int bytesRead = 0;
+        private Exception exception;
+        DataHelper dbHelper = new DataHelper(context);
 
-                ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
-                while((bytesRead = inputStream.read(buff)) != -1) {
-                    bao.write(buff, 0, bytesRead);
-                }
-                byte[] data = bao.toByteArray();
-                video = Base64.encodeToString(data, Base64.DEFAULT);
-                Log.i("videoStr", video);
-            }
-        }catch (MalformedURLException mue) {
-            mue.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        } finally {
+        protected String doInBackground(String... urls) {
+            String video = "";
+            InputStream is = null;
+
             try {
-                if(is != null){
-                    is.close();
-                }
-            }catch (IOException ioe) {
+                URL url = new URL(urls[0]);
+                is = url.openStream();
+                HttpURLConnection huc = (HttpURLConnection) url.openConnection();
 
+                if (huc != null) {
+                    InputStream inputStream = huc.getInputStream();
+                    byte[] buff = new byte[8000];
+                    int bytesRead = 0;
+
+                    ByteArrayOutputStream bao = new ByteArrayOutputStream();
+
+                    while ((bytesRead = inputStream.read(buff)) != -1) {
+                        bao.write(buff, 0, bytesRead);
+                    }
+                    byte[] data = bao.toByteArray();
+                    video = Base64.encodeToString(data, Base64.DEFAULT);
+                    Log.i("videoStr", video);
+                }
+            } catch (MalformedURLException mue) {
+                Log.e("URLException", mue.toString());
+            } catch (IOException ioe) {
+                Log.e("IOException", ioe.toString());
+            } finally {
+                try {
+                    if (is != null) {
+                        is.close();
+                    }
+                } catch (IOException ioe) {
+
+                }
             }
+            return video;
         }
-        return video;
+
+        protected void onPostExecute(String result) {
+            DownloadImage.AsyncResponse asyncResponse = (DownloadImage.AsyncResponse) context;
+            asyncResponse.processFinish("complete");
+            dbHelper.insertVideoStr(result, dataBaseData);
+        }
+    }
+
+    public interface AsyncResponse {
+        void processFinish(String output);
     }
 }

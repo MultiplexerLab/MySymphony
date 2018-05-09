@@ -28,6 +28,7 @@ import lct.mysymphony.ModelClass.ShocolChobi;
 import lct.mysymphony.R;
 import lct.mysymphony.helper.DataHelper;
 import lct.mysymphony.helper.DownloadImage;
+import lct.mysymphony.helper.DownloadVideo;
 import lct.mysymphony.helper.PushDataToSharedPref;
 import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
@@ -204,8 +205,8 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
     public void purChase(View view) {
         if (dataBaseData == null) Log.d("databaseDataImageView", "null");
 
-        if (!dataBaseData.getContentType().contains("video") && !imageUrl.contains("mp4") && !imageUrl.contains("youtube") && !imageUrl.contains("music") && !imageUrl.contains("videos")) {
-
+        /*if (!dataBaseData.getContentType().contains("video") && !imageUrl.contains("mp4") && !imageUrl.contains("youtube") && !imageUrl.contains("music") && !imageUrl.contains("videos")) {
+*/
             Log.d("isItFreeInPurchase", String.valueOf(isItFree));
             Intent myIntent;
             if (isItFree == false) {
@@ -220,12 +221,12 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 DownloadImage downloadImage = new DownloadImage();
                 downloadImage.downloadImage(imageUrl, ImageViewActivity.this, dataBaseData);
             }
-        } else {
+        /*} else {
             Toast.makeText(ImageViewActivity.this, "ভিডিও কন্টেন্ট পরবর্তীতে পাবেন", Toast.LENGTH_LONG).show();
             Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
             myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
             this.startActivity(myIntent);
-        }
+        }*/
     }
 
     @Override
@@ -260,15 +261,36 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 String returnedResult = data.getData().toString();
                 Log.i("ResultFromLib", returnedResult);
                 if (returnedResult.equals("Success")) {
-                    progressDialog.showProgressDialog();
-                    Gson gson = new Gson();
+/*                    Gson gson = new Gson();
                     SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
                     String json = preferences.getString("databaseData", "");
                     String imageURL = preferences.getString("imageUrl", "");
                     DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
                     DownloadImage downloadImage = new DownloadImage();
-                    downloadImage.downloadImage(imageURL, ImageViewActivity.this, dataBaseData);
+                    downloadImage.downloadImage(imageURL, ImageViewActivity.this, dataBaseData);*/
+
+                    if (!dataBaseData.getContentType().contains("video") && !imageUrl.contains("mp4") && !imageUrl.contains("youtube") && !imageUrl.contains("music") && !imageUrl.contains("videos")) {
+                        progressDialog.showProgressDialog();
+                        Gson gson = new Gson();
+                        SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
+                        String json = preferences.getString("databaseData", "");
+                        String imageURL = preferences.getString("imageUrl", "");
+                        DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
+                        DownloadImage downloadImage = new DownloadImage();
+                        downloadImage.downloadImage(imageURL, ImageViewActivity.this, dataBaseData);
+                    } else {
+                        Log.i("Video", "VideoDownload");
+                        progressDialog.showProgressDialog();
+                        Gson gson = new Gson();
+                        SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
+                        String json = preferences.getString("databaseData", "");
+                        //String imageURL = preferences.getString("imageUrl", "");
+                        DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
+                        DownloadVideo downLoadVideo = new DownloadVideo();
+                        downLoadVideo.downloadVideo("http://jachaibd.com/files/sample.mp4", ImageViewActivity.this, dataBaseData);
+                    }
                 }
+
             }
         }
     }

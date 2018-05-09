@@ -21,28 +21,29 @@ public class DownloadImage {
     Context context;
     DataBaseData dataBaseData;
 
-    public void downloadImage(String imgURL, Context context, DataBaseData dataBaseData){
+    public void downloadImage(String imgURL, Context context, DataBaseData dataBaseData) {
         this.context = context;
-        Log.i("downloadImage","Inside download image");
-        this.dataBaseData=dataBaseData;
-        DownloadImage.BackTask bt= new DownloadImage.BackTask();
-        if(!imgURL.trim().equals("")){
+        Log.i("downloadImage", "Inside download image");
+        this.dataBaseData = dataBaseData;
+        DownloadImage.BackTask bt = new DownloadImage.BackTask();
+        if (!imgURL.trim().equals("")) {
             bt.execute(imgURL);
         }
     }
 
-    private class BackTask extends AsyncTask<String,Void,Bitmap> {
+    private class BackTask extends AsyncTask<String, Void, Bitmap> {
         TextView tv;
         DataHelper dbHelper = new DataHelper(context);
 
         ///ProgressDialog asyncDialog = new ProgressDialog(context);
-        protected void onPreExecute(){
-            Log.i("Donwload","Downloading the image. Please wait...");
+        protected void onPreExecute() {
+            Log.i("Donwload", "Downloading the image. Please wait...");
             //asyncDialog.setMessage("কিছুক্ষন অপেক্ষা করুন");
             ///asyncDialog.show();
         }
-        protected Bitmap doInBackground(String...params){
-            Bitmap bitmap=null;
+
+        protected Bitmap doInBackground(String... params) {
+            Bitmap bitmap = null;
             try {
                 // Download the image
                 URL url = new URL(params[0]);
@@ -53,23 +54,19 @@ public class DownloadImage {
                 // Decode image to get smaller image to save memory
                 final BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = false;
-                options.inSampleSize=4;
-                bitmap = BitmapFactory.decodeStream(is,null, options);
+                options.inSampleSize = 4;
+                bitmap = BitmapFactory.decodeStream(is, null, options);
                 is.close();
-            }
-            catch(IOException e){
+            } catch (IOException e) {
                 return null;
             }
             return bitmap;
         }
-        protected void onPostExecute(Bitmap result){
 
-            //tv.setVisibility(TextView.GONE);
-            // Insert bitmap to the database
-            //asyncDialog.dismiss();
-           AsyncResponse asyncResponse= (AsyncResponse) context;
-           asyncResponse.processFinish("complete");
-            dbHelper.insertBitmap(result,dataBaseData);
+        protected void onPostExecute(Bitmap result) {
+            AsyncResponse asyncResponse = (AsyncResponse) context;
+            asyncResponse.processFinish("complete");
+            dbHelper.insertBitmap(result, dataBaseData);
             //ImageView imgView=(ImageView)findViewById(R.id.imgview);
             // Read the first image from database and show it in ImageView
             //imgView.setImageBitmap(dbHelper.getBitmap(1));
