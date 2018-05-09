@@ -22,7 +22,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     dependencies {
-        compile project(":lctpaymentgateway")
+        compile project(":lctpaymentgateway-release")
     }
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:27.1.1'
