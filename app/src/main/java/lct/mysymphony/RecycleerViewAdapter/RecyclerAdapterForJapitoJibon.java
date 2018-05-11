@@ -22,7 +22,7 @@ import com.bumptech.glide.request.target.Target;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.ContentDescriptionActivity.JapitiJibonDescriptionActivity;
+import lct.mysymphony.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
 import lct.mysymphony.R;
 import lct.mysymphony.ModelClass.JapitoJibon;
 
@@ -100,7 +100,7 @@ public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<Recycler
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent myIntent = new Intent(activity, JapitiJibonDescriptionActivity.class);
+                    Intent myIntent = new Intent(activity, JapitoJibonDescriptionActivity.class);
                     myIntent.putExtra("Data", (Serializable) japitoJibonArrayLis.get(getAdapterPosition()));
                     activity.startActivity(myIntent);
                 }

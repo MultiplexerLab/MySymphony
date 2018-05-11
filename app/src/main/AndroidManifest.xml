@@ -77,7 +77,7 @@
         <activity android:name=".Activity.ContentDescriptionActivity.PachMishaliDescriptionActivity"></activity>
         <activity android:name=".Activity.ContentDescriptionActivity.BigganOProjuktiDescriptionActivity"></activity>
         <activity android:name=".Activity.ContentDescriptionActivity.CartoonDescriptionActivity"></activity>
-        <activity android:name=".Activity.ContentDescriptionActivity.JapitiJibonDescriptionActivity"></activity>
+        <activity android:name=".Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity"></activity>
         <!--<activity android:name=".Activity.PayWithRocketActivity" />-->
         <!--<activity android:name=".Activity.PayWithPinActivity" />-->
         <activity android:name=".Activity.SymphonyCareActivity"></activity>
