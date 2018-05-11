@@ -1,4 +1,4 @@
-package lct.mysymphony.RecycleerViewAdapter;
+package lct.mysymphony.RecyclerViewAdapter;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;

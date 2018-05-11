@@ -29,8 +29,8 @@ import java.util.ArrayList;
 
 import lct.mysymphony.ModelClass.KheladhulaCricketSorbosheshSongbad;
 import lct.mysymphony.R;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForKheladhulaCricket;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForSorbosheshSongbadCricketfragment;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForKheladhulaCricket;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForSorbosheshSongbadCricketfragment;
 import lct.mysymphony.helper.Endpoints;
 
 /**

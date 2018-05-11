@@ -5,19 +5,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
 import android.util.Log;
-import android.view.Gravity;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +23,7 @@ import java.util.ArrayList;
 
 import lct.mysymphony.ModelClass.JibonJapon;
 import lct.mysymphony.R;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForJibonJapon;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForJibonJapon;
 import lct.mysymphony.helper.Endpoints;
 import lct.mysymphony.helper.ProgressDialog;
 

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 import lct.mysymphony.ModelClass.PacMishali;
 import lct.mysymphony.R;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForPachMishali;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForPachMishali;
 import lct.mysymphony.helper.Endpoints;
 import lct.mysymphony.helper.ProgressDialog;
 

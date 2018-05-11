@@ -1,7 +1,6 @@
-package lct.mysymphony.RecycleerViewAdapter;
+package lct.mysymphony.RecyclerViewAdapter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,13 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.ContentDescriptionActivity.NewsDescriptionActivity;
-import lct.mysymphony.ModelClass.GoromKhobor;
 import lct.mysymphony.R;
 
 /**

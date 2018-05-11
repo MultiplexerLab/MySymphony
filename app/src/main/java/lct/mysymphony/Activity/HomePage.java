@@ -43,12 +43,12 @@ import lct.mysymphony.ModelClass.ShikkhaSohaYika;
 import lct.mysymphony.ModelClass.ShocolChobi;
 import lct.mysymphony.ModelClass.SliderImage;
 import lct.mysymphony.R;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForGamesZone;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForJapitoJibon;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForMulloChar;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForSeraChobi;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForShikkhaSohayika;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForShocolChobi;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForGamesZone;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForJapitoJibon;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForMulloChar;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForSeraChobi;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForShikkhaSohayika;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForShocolChobi;
 import lct.mysymphony.helper.Endpoints;
 import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 

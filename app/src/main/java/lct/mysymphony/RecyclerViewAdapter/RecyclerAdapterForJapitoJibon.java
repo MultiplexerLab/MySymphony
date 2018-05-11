@@ -1,4 +1,4 @@
-package lct.mysymphony.RecycleerViewAdapter;
+package lct.mysymphony.RecyclerViewAdapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,36 +22,41 @@ import com.bumptech.glide.request.target.Target;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.ContentDescriptionActivity.NewsDescriptionActivity;
-import lct.mysymphony.ModelClass.GoromKhobor;
+import lct.mysymphony.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
 import lct.mysymphony.R;
+import lct.mysymphony.ModelClass.JapitoJibon;
 
+/**
+ * Created by USER on 01-Feb-17.
+ */
 
-public class RecyclerAdapterForGoromKhobor extends RecyclerView.Adapter<RecyclerAdapterForGoromKhobor.RecyclerViewHolder> {
+public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<RecyclerAdapterForJapitoJibon.RecyclerViewHolder> {
     Activity activity;
-    private ArrayList<GoromKhobor> goromKhoborArrayList;
-    public RecyclerAdapterForGoromKhobor(Activity activity, ArrayList<GoromKhobor> goromKhoborArrayList) {
+    private ArrayList<JapitoJibon> japitoJibonArrayList;
+    public RecyclerAdapterForJapitoJibon(Activity activity, ArrayList<JapitoJibon> japitoJibonArrayLis) {
+
         this.activity = activity;
-        this.goromKhoborArrayList = goromKhoborArrayList;
+        this.japitoJibonArrayList = japitoJibonArrayLis;
     }
+
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_gorom_khobor, parent, false);
-        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, goromKhoborArrayList);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_japito_jibon, parent, false);
+        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, japitoJibonArrayList);
         return recyclerViewHolder;
     }
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-        holder.goromKhoborTitle.setText(goromKhoborArrayList.get(position).getContentTitle());
-        holder.publishedAt.setText(goromKhoborArrayList.get(position).getPublishedAt());
+        holder.japitoJebonNewsTV.setText(japitoJibonArrayList.get(position).getContentTitle());
         Glide.with(activity)
-                .load(goromKhoborArrayList.get(position).getImageUrl())
+                .load(japitoJibonArrayList.get(position).getImageUrl())
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         holder.progressBar.setVisibility(View.GONE);
                         return false;
                     }
+
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         holder.progressBar.setVisibility(View.GONE);
@@ -59,34 +64,44 @@ public class RecyclerAdapterForGoromKhobor extends RecyclerView.Adapter<Recycler
                     }
                 })
                 .into(holder.imageView);
-    }
 
+        if (japitoJibonArrayList.get(position).getContentType().equals("video")) {
+            holder.videoPreviewPlayButton.setVisibility(View.VISIBLE);
+        }
+    }
     @Override
     public int getItemCount() {
-        return goromKhoborArrayList.size();
+        if(japitoJibonArrayList.size()>3){
+            return 3;
+        }else{
+            return japitoJibonArrayList.size();
+        }
     }
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        CardView cardView;
-        Activity activity;
-        TextView goromKhoborTitle, publishedAt;
-        ArrayList<GoromKhobor> goromKhoborArrayList;
-        ProgressBar progressBar;
 
-        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<GoromKhobor> goromKhoborArrayList) {
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView, videoPreviewPlayButton;
+        TextView japitoJebonNewsTV;
+        ProgressBar progressBar;
+        Activity activity;
+        ArrayList<JapitoJibon> japitoJibonArrayList;
+        CardView cardView;
+
+        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<JapitoJibon> japitoJibonArrayLis) {
             super(view);
+            imageView = view.findViewById(R.id.imgJapitoJibon);
+            japitoJebonNewsTV = view.findViewById(R.id.japitoJibonNewsTV);
+            videoPreviewPlayButton = view.findViewById(R.id.videoPreviewPlayButton);
+            cardView = view.findViewById(R.id.cardviewJapitojibon);
+            progressBar=view.findViewById(R.id.progressBarInJapitoJibon);
+
             this.activity = activity;
-            this.goromKhoborArrayList = goromKhoborArrayList;
-            progressBar = view.findViewById(R.id.progressBarInGoromKhobor);
-            imageView = view.findViewById(R.id.imgGoromKhobor);
-            goromKhoborTitle = view.findViewById(R.id.titleGoromKhobor);
-            publishedAt = view.findViewById(R.id.publishedAtGoromKhobor);
-            cardView = view.findViewById(R.id.goromKhoborCardView);
+            this.japitoJibonArrayList = japitoJibonArrayLis;
+
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent myIntent = new Intent(activity, NewsDescriptionActivity.class);
-                    myIntent.putExtra("Data", (Serializable) goromKhoborArrayList.get(getAdapterPosition()));
+                    Intent myIntent = new Intent(activity, JapitoJibonDescriptionActivity.class);
+                    myIntent.putExtra("Data", (Serializable) japitoJibonArrayLis.get(getAdapterPosition()));
                     activity.startActivity(myIntent);
                 }
             });

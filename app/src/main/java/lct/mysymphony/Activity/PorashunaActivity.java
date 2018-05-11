@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 import lct.mysymphony.ModelClass.Porashuna;
 import lct.mysymphony.R;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForPorashuna;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForPorashuna;
 import lct.mysymphony.helper.Endpoints;
 import lct.mysymphony.helper.ProgressDialog;
 

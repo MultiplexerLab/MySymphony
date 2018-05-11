@@ -1,10 +1,9 @@
-package lct.mysymphony.RecycleerViewAdapter;
+package lct.mysymphony.RecyclerViewAdapter;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,41 +21,42 @@ import com.bumptech.glide.request.target.Target;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
+import lct.mysymphony.Activity.ContentDescriptionActivity.ShikkhaSohaYikaDescriptionActivity;
+import lct.mysymphony.ModelClass.ShikkhaSohaYika;
 import lct.mysymphony.R;
-import lct.mysymphony.ModelClass.JapitoJibon;
 
 /**
  * Created by USER on 01-Feb-17.
  */
 
-public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<RecyclerAdapterForJapitoJibon.RecyclerViewHolder> {
-    Activity activity;
-    private ArrayList<JapitoJibon> japitoJibonArrayList;
-    public RecyclerAdapterForJapitoJibon(Activity activity, ArrayList<JapitoJibon> japitoJibonArrayLis) {
+public class RecyclerAdapterForShikkhaSohayika extends RecyclerView.Adapter<RecyclerAdapterForShikkhaSohayika.RecyclerViewHolder> {
 
+    ArrayList<ShikkhaSohaYika> shikkhaSohaYikaArrayList;
+    Activity activity;
+    public RecyclerAdapterForShikkhaSohayika(Activity activity,ArrayList<ShikkhaSohaYika> shikkhaSohaYikaArrayList)
+    {
         this.activity = activity;
-        this.japitoJibonArrayList = japitoJibonArrayLis;
+        this.shikkhaSohaYikaArrayList=shikkhaSohaYikaArrayList;
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_japito_jibon, parent, false);
-        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, japitoJibonArrayList);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_shikkha_sohayika,parent,false);
+        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, shikkhaSohaYikaArrayList);
         return recyclerViewHolder;
     }
+
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-        holder.japitoJebonNewsTV.setText(japitoJibonArrayList.get(position).getContentTitle());
+        holder.news.setText(shikkhaSohaYikaArrayList.get(position).getContentTitle());
         Glide.with(activity)
-                .load(japitoJibonArrayList.get(position).getImageUrl())
+                .load(shikkhaSohaYikaArrayList.get(position).getImageURL())
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         holder.progressBar.setVisibility(View.GONE);
                         return false;
                     }
-
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         holder.progressBar.setVisibility(View.GONE);
@@ -65,43 +65,33 @@ public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<Recycler
                 })
                 .into(holder.imageView);
 
-        if (japitoJibonArrayList.get(position).getContentType().equals("video")) {
+        if(shikkhaSohaYikaArrayList.get(position).getContentType().equals("video")){
             holder.videoPreviewPlayButton.setVisibility(View.VISIBLE);
         }
     }
+
     @Override
     public int getItemCount() {
-        if(japitoJibonArrayList.size()>3){
-            return 3;
-        }else{
-            return japitoJibonArrayList.size();
-        }
+        return shikkhaSohaYikaArrayList.size();
     }
 
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
+    public  static  class  RecyclerViewHolder extends RecyclerView.ViewHolder
+    {
         ImageView imageView, videoPreviewPlayButton;
-        TextView japitoJebonNewsTV;
+        TextView news;
         ProgressBar progressBar;
-        Activity activity;
-        ArrayList<JapitoJibon> japitoJibonArrayList;
-        CardView cardView;
-
-        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<JapitoJibon> japitoJibonArrayLis) {
+        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<ShikkhaSohaYika> shikkhaSohaYikaArrayList)
+        {
             super(view);
-            imageView = view.findViewById(R.id.imgJapitoJibon);
-            japitoJebonNewsTV = view.findViewById(R.id.japitoJibonNewsTV);
+            news=view.findViewById(R.id.newsTV);
+            imageView =  view.findViewById(R.id.imgShikkhaSohayika);
             videoPreviewPlayButton = view.findViewById(R.id.videoPreviewPlayButton);
-            cardView = view.findViewById(R.id.cardviewJapitojibon);
-            progressBar=view.findViewById(R.id.progressBarInJapitoJibon);
-
-            this.activity = activity;
-            this.japitoJibonArrayList = japitoJibonArrayLis;
-
-            cardView.setOnClickListener(new View.OnClickListener() {
+            progressBar=view.findViewById(R.id.progressBarInShikkhaSohayika);
+            imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent myIntent = new Intent(activity, JapitoJibonDescriptionActivity.class);
-                    myIntent.putExtra("Data", (Serializable) japitoJibonArrayLis.get(getAdapterPosition()));
+                    Intent myIntent = new Intent(activity, ShikkhaSohaYikaDescriptionActivity.class);
+                    myIntent.putExtra("shikkha", (Serializable) shikkhaSohaYikaArrayList.get(getAdapterPosition()));
                     activity.startActivity(myIntent);
                 }
             });

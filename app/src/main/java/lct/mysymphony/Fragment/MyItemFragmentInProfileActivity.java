@@ -2,30 +2,21 @@ package lct.mysymphony.Fragment;
 
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import java.util.ArrayList;
 
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.R;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForMyItemFragment;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForNewWallPaperFragment;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForMyItemFragment;
 import lct.mysymphony.helper.DataHelper;
 
 /**

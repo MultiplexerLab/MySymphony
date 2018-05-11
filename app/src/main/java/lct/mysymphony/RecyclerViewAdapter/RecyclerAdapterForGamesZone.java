@@ -1,4 +1,4 @@
-package lct.mysymphony.RecycleerViewAdapter;
+package lct.mysymphony.RecyclerViewAdapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,45 +18,44 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.ContentDescriptionActivity.ShikkhaSohaYikaDescriptionActivity;
-import lct.mysymphony.ModelClass.ShikkhaSohaYika;
+import lct.mysymphony.Activity.ImageViewActivity;
+import lct.mysymphony.ModelClass.GamesZone;
 import lct.mysymphony.R;
 
 /**
  * Created by USER on 01-Feb-17.
  */
 
-public class RecyclerAdapterForShikkhaSohayika extends RecyclerView.Adapter<RecyclerAdapterForShikkhaSohayika.RecyclerViewHolder> {
+public class RecyclerAdapterForGamesZone extends RecyclerView.Adapter<RecyclerAdapterForGamesZone.RecyclerViewHolder> {
 
-    ArrayList<ShikkhaSohaYika> shikkhaSohaYikaArrayList;
     Activity activity;
-    public RecyclerAdapterForShikkhaSohayika(Activity activity,ArrayList<ShikkhaSohaYika> shikkhaSohaYikaArrayList)
-    {
+    ArrayList<GamesZone> gamesZoneArrayList;
+    public RecyclerAdapterForGamesZone(Activity activity, ArrayList<GamesZone> gamesZoneArrayList) {
         this.activity = activity;
-        this.shikkhaSohaYikaArrayList=shikkhaSohaYikaArrayList;
+        this.gamesZoneArrayList = gamesZoneArrayList;
     }
-
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_shikkha_sohayika,parent,false);
-        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, shikkhaSohaYikaArrayList);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_games_zone, parent, false);
+        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity,gamesZoneArrayList);
         return recyclerViewHolder;
     }
 
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-        holder.news.setText(shikkhaSohaYikaArrayList.get(position).getContentTitle());
+        holder.mullocharTV.setText(gamesZoneArrayList.get(position).getContentTile());
+        holder.newPriceTV.setText(Integer.toString(gamesZoneArrayList.get(position).getNewPrice()));
         Glide.with(activity)
-                .load(shikkhaSohaYikaArrayList.get(position).getImageURL())
+                .load(gamesZoneArrayList.get(position).getContentUrl())
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         holder.progressBar.setVisibility(View.GONE);
                         return false;
                     }
+
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         holder.progressBar.setVisibility(View.GONE);
@@ -64,34 +63,32 @@ public class RecyclerAdapterForShikkhaSohayika extends RecyclerView.Adapter<Recy
                     }
                 })
                 .into(holder.imageView);
-
-        if(shikkhaSohaYikaArrayList.get(position).getContentType().equals("video")){
-            holder.videoPreviewPlayButton.setVisibility(View.VISIBLE);
-        }
     }
-
     @Override
     public int getItemCount() {
-        return shikkhaSohaYikaArrayList.size();
+        return gamesZoneArrayList.size();
     }
-
-    public  static  class  RecyclerViewHolder extends RecyclerView.ViewHolder
-    {
-        ImageView imageView, videoPreviewPlayButton;
-        TextView news;
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
+        TextView strikrthroughTextView;
+        TextView mullocharTV, newPriceTV;
+        Activity activity;
+        ArrayList<GamesZone> gamesZoneArrayList;
         ProgressBar progressBar;
-        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<ShikkhaSohaYika> shikkhaSohaYikaArrayList)
-        {
+        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<GamesZone> gamesZoneArrayList) {
             super(view);
-            news=view.findViewById(R.id.newsTV);
-            imageView =  view.findViewById(R.id.imgShikkhaSohayika);
-            videoPreviewPlayButton = view.findViewById(R.id.videoPreviewPlayButton);
-            progressBar=view.findViewById(R.id.progressBarInShikkhaSohayika);
+            this.activity = activity;
+            this.gamesZoneArrayList=gamesZoneArrayList;
+            mullocharTV = view.findViewById(R.id.gamesZoneTV);
+            imageView = view.findViewById(R.id.imgGamesZone);
+            newPriceTV = view.findViewById(R.id.newPriceTVInGamesZone);
+            progressBar=view.findViewById(R.id.progressBarInGamesZone);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent myIntent = new Intent(activity, ShikkhaSohaYikaDescriptionActivity.class);
-                    myIntent.putExtra("shikkha", (Serializable) shikkhaSohaYikaArrayList.get(getAdapterPosition()));
+                    Intent myIntent = new Intent(activity, ImageViewActivity.class);
+                    myIntent.putExtra("wallpaper", gamesZoneArrayList.get(getAdapterPosition()));
+                    myIntent.putExtra("cameFromWhichActivity","GameZone");
                     activity.startActivity(myIntent);
                 }
             });

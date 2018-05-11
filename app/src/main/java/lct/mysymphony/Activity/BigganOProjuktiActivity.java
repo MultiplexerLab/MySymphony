@@ -1,15 +1,11 @@
 package lct.mysymphony.Activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -27,7 +23,7 @@ import java.util.ArrayList;
 
 import lct.mysymphony.ModelClass.BigganOProjukti;
 import lct.mysymphony.R;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForBigganOProjukti;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForBigganOProjukti;
 import lct.mysymphony.helper.Endpoints;
 import lct.mysymphony.helper.ProgressDialog;
 

@@ -1,4 +1,4 @@
-package lct.mysymphony.RecycleerViewAdapter;
+package lct.mysymphony.RecyclerViewAdapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,41 +17,39 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import lct.mysymphony.Activity.ImageViewActivity;
-import lct.mysymphony.ModelClass.ShocolChobi;
+import lct.mysymphony.ModelClass.SeraChobi;
 import lct.mysymphony.R;
 
 /**
  * Created by USER on 01-Feb-17.
  */
 
-public class RecyclerAdapterForShocolChobi extends RecyclerView.Adapter<RecyclerAdapterForShocolChobi.RecyclerViewHolder> {
+public class RecyclerAdapterForSeraChobi extends RecyclerView.Adapter<RecyclerAdapterForSeraChobi.RecyclerViewHolder> {
+
+    ArrayList<SeraChobi> images;
     Activity activity;
-    ArrayList<ShocolChobi> shocolChobiArrayList;
-
-    public RecyclerAdapterForShocolChobi(Activity activity, ArrayList<ShocolChobi> shocolChobiArrayList) {
+    public RecyclerAdapterForSeraChobi(Activity activity, ArrayList<SeraChobi> images) {
         this.activity = activity;
-        this.shocolChobiArrayList = shocolChobiArrayList;
+        this.images = images;
     }
-
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_shocol_chobi, parent, false);
-        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, shocolChobiArrayList);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_sera_chobi, parent, false);
+        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, images);
         return recyclerViewHolder;
     }
-
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-        Glide.with(activity).load(shocolChobiArrayList.get(position).getContentUrl()).listener(new RequestListener<Drawable>() {
+        Glide.with(activity).load(images.get(position).getImage_url()).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 holder.progressBar.setVisibility(View.GONE);
                 return false;
             }
-
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                 holder.progressBar.setVisibility(View.GONE);
@@ -62,32 +60,29 @@ public class RecyclerAdapterForShocolChobi extends RecyclerView.Adapter<Recycler
 
     @Override
     public int getItemCount() {
-        return shocolChobiArrayList.size();
+        if (images.size() > 5) {
+            return 5;
+        } else {
+            return images.size();
+        }
     }
-
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        Activity activity;
-        ArrayList<ShocolChobi> shocolChobiArrayList;
         ProgressBar progressBar;
-
-        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<ShocolChobi> shocolChobiArrayList) {
+        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<SeraChobi> images) {
             super(view);
-            imageView = view.findViewById(R.id.imgShocholChobi);
-            this.activity = activity;
-            this.shocolChobiArrayList = shocolChobiArrayList;
-            progressBar = view.findViewById(R.id.progressBarInShocholChobi);
+            imageView = view.findViewById(R.id.img);
+            progressBar=view.findViewById(R.id.progressBarInSeraChobi);
+
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent myIntent = new Intent(activity, ImageViewActivity.class);
-                    myIntent.putExtra("wallpaper", shocolChobiArrayList.get(getAdapterPosition()));
-                    myIntent.putExtra("cameFromWhichActivity", "ShocolChobi");
+                    myIntent.putExtra("wallpaper", (Serializable) images.get(getAdapterPosition()));
+                    myIntent.putExtra("cameFromWhichActivity", "SeraChobi");
                     activity.startActivity(myIntent);
-                    ;
                 }
             });
         }
     }
 }
-

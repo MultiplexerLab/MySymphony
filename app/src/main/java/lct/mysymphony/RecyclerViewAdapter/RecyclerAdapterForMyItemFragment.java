@@ -1,4 +1,4 @@
-package lct.mysymphony.RecycleerViewAdapter;
+package lct.mysymphony.RecyclerViewAdapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import lct.mysymphony.Activity.ShowOnlyImage;

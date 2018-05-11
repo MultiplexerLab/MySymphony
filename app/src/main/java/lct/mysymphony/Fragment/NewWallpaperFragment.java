@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 import lct.mysymphony.ModelClass.SeraChobi;
 import lct.mysymphony.R;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForNewWallPaperFragment;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForNewWallPaperFragment;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -5,17 +5,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
-import android.view.Gravity;
 
 import com.android.volley.RequestQueue;
-import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import java.util.ArrayList;
 
 import lct.mysymphony.ModelClass.Notifications;
 import lct.mysymphony.R;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterNotification;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterNotification;
 
 public class NotificationActivity extends AppCompatActivity {
 

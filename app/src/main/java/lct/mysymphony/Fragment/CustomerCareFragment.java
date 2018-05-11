@@ -12,8 +12,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import lct.mysymphony.R;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForCustomerCareFragment;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForMyItemFragment;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForCustomerCareFragment;
 
 /**
  * A simple {@link Fragment} subclass.

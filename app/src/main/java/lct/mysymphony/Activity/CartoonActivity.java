@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 import lct.mysymphony.ModelClass.Cartoon;
 import lct.mysymphony.R;
-import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForCartoon;
+import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForCartoon;
 import lct.mysymphony.helper.Endpoints;
 
 public class CartoonActivity extends AppCompatActivity {
