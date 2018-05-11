@@ -57,7 +57,6 @@ public class MyItemFragmentInProfileActivity extends Fragment {
 
         @Override
         protected void onPreExecute() {
-
         }
         @Override
         protected Void doInBackground(Void... voids) {
@@ -66,7 +65,7 @@ public class MyItemFragmentInProfileActivity extends Fragment {
             {
                 dataBaseDataArrayList.add(dataHelper.getAllData(i+1));
 
-                if (dataBaseDataArrayList.get(i).getContentType().contains("audio") || dataBaseDataArrayList.get(i).getContentType().contains("video")|| dataBaseDataArrayList.get(i).getContentType().contains("song"))
+                if (dataBaseDataArrayList.get(i).getContentType().contains("audio") || dataBaseDataArrayList.get(i).getContentType().contains("video"))
                 {
                     bitmapArrayList.add(null);
                 }
@@ -77,10 +76,8 @@ public class MyItemFragmentInProfileActivity extends Fragment {
             }
             return null;
         }
-
         @Override
         protected void onPostExecute(Void aVoid) {
-
             ///progressDialog.hideProgressDialog();
             updateRecyclerView();
         }

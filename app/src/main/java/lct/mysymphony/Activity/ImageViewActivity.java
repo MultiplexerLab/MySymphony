@@ -77,7 +77,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 contentCat = Data.getContentCat();
                 contentDesc = "";
                 contentType = Data.getContentType();
-                if (contentType.contains("audio") || contentType.contains("song")) {
+                if (contentType.contains("audio")) {
                     audioUrl = Data.getContentUrl();
                 }
                 thumbNailImgUrl = Data.getThumbNailImgUrl();
@@ -103,7 +103,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 contentDesc = "";
                 contentType = Data.getContentType();
                 thumbNailImgUrl = Data.getThumbNailImgUrl();
-                if (contentType.contains("audio") || contentType.contains("song")) {
+                if (contentType.contains("audio")) {
                     audioUrl = Data.getContentUrl();
                 }
                 Log.d("newPrice", Integer.toString(Data.getNewPrice()));
@@ -138,7 +138,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 contentDesc = "";
                 contentType = Data.getContentType();
                 thumbNailImgUrl = Data.getThumbNailImgUrl();
-                if (contentType.contains("audio") || contentType.contains("song")) {
+                if (contentType.contains("audio")) {
                     audioUrl = Data.getContentUrl();
                 }
 
@@ -287,7 +287,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                         Log.i("VideoCOntent", "video");
                         DownloadVideo downLoadVideo = new DownloadVideo();
                         downLoadVideo.downloadVideo("http://jachaibd.com/files/sample.mp4", ImageViewActivity.this, dataBaseData);
-                    } else if (dataBaseData.getContentType().contains("audio") || contentType.contains("song")) {
+                    } else if (dataBaseData.getContentType().contains("audio")) {
                         Log.d("audioUrl", audioUrl);
                         if (audioUrl.length() > 0) {
                             progressDialog.showProgressDialog();
