@@ -36,7 +36,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.e(TAG, "From: " + remoteMessage.getFrom());
-
         try {
             if (remoteMessage.getData() != null) {
                 getDataFromRemoteMessage(remoteMessage);
@@ -62,7 +61,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private void initNotification(String title, String description, final String imageLink, String redirect) {
@@ -113,9 +111,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     }
                 }
             });
-
             notificationManager.notify(notificationId, notification);
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

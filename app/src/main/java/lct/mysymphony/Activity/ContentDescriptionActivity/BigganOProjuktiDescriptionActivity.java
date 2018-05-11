@@ -20,19 +20,14 @@ public class BigganOProjuktiDescriptionActivity extends AppCompatActivity {
 
     ImageView newsImageView;
     TextView newsTitle, newsDescription;
-    TextView newPrice,previousPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_biggan_oprojukti_description);
-
         newsImageView = findViewById(R.id.imgBigganOProjuktiDescription);
         newsTitle = findViewById(R.id.newsTitleBigganOProjuktiDescription);
         newsDescription = findViewById(R.id.newsdescriptionBigganOProjuktiDescription);
-//        newPrice=findViewById(R.id.newPriceTVinBigganOProjuktiDescription);
-//        previousPrice=findViewById(R.id.previousPriceTVinBigganOProjuktiDescription);
-        //previousPrice.setPaintFlags(previousPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         setDescripTionData();
     }
 
@@ -40,29 +35,23 @@ public class BigganOProjuktiDescriptionActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), BigganOProjuktiActivity.class);
-        
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
-        finish();
     }
 
     public void setDescripTionData() {
         BigganOProjukti object = (BigganOProjukti) getIntent().getSerializableExtra("Data");
         newsTitle.setText(object.getContentTitle());
         newsDescription.setText(object.getContentDescription());
-        Glide.with(BigganOProjuktiDescriptionActivity.this)
-                .load(object.getImageUrl())
-                .into(newsImageView);
+        Glide.with(BigganOProjuktiDescriptionActivity.this).load(object.getImageUrl()).into(newsImageView);
     }
 
     public void mullochar(View view) {
         BigganOProjukti object = (BigganOProjukti) getIntent().getSerializableExtra("Data");
         Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
-        DataBaseData dataBaseData=new DataBaseData(object.getContentTitle(),object.getContentCat(),object.getContentType(),object.getContentDescription(), object.getThumbnailImgUrl(), "free",object.getContentId());
-        purchase.putExtra("dataBaseData",dataBaseData);
-        purchase.putExtra("imageUrl",object.getImageUrl());
+        DataBaseData dataBaseData = new DataBaseData(object.getContentTitle(), object.getContentCat(), object.getContentType(), object.getContentDescription(), object.getThumbnailImgUrl(), "free", object.getContentId());
+        purchase.putExtra("dataBaseData", dataBaseData);
+        purchase.putExtra("imageUrl", object.getImageUrl());
+        purchase.putExtra("cameFromWhichActivity", "BigganOProjuktiDescriptionActivity");
         startActivity(purchase);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
     }
 }

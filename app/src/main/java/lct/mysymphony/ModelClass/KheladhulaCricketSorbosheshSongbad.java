@@ -2,12 +2,11 @@ package lct.mysymphony.ModelClass;
 
 import java.io.Serializable;
 
-public class Kheladhula_Cricket_sorboshesh_sobgbad implements Serializable {
+public class KheladhulaCricketSorbosheshSongbad implements Serializable {
 
     String contentTitle , contentDescription , contentType , imageUrl , publishedAt,contentcat, thumbnailImgUrl;
     int contentId;
-
-    public Kheladhula_Cricket_sorboshesh_sobgbad(String contentTitle, String contentType, String publishedAt, String contentDescription, String thumbnailImgUrl, String imageUrl,String contentcat,int id) {
+    public KheladhulaCricketSorbosheshSongbad(String contentTitle, String contentType, String publishedAt, String contentDescription, String thumbnailImgUrl, String imageUrl, String contentcat, int id) {
         this.contentTitle = contentTitle;
         this.contentDescription = contentDescription;
         this.contentType = contentType;
@@ -17,35 +16,27 @@ public class Kheladhula_Cricket_sorboshesh_sobgbad implements Serializable {
         this.contentId=id;
         this.thumbnailImgUrl = thumbnailImgUrl;
     }
-
     public String getContentcat() {
         return contentcat;
     }
-
     public int getContentId() {
         return contentId;
     }
-
     public String getContentTitle() {
         return contentTitle;
     }
-
     public String getContentDescription() {
         return contentDescription;
     }
-
     public String getContentType() {
         return contentType;
     }
-
     public String getThumbnailImgUrl() {
         return thumbnailImgUrl;
     }
-
     public String getImageUrl() {
         return imageUrl;
     }
-
     public String getPublishedAt() {
         return publishedAt;
     }

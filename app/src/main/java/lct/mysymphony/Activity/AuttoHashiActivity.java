@@ -39,15 +39,13 @@ public class AuttoHashiActivity extends AppCompatActivity {
     RecyclerView.LayoutManager mLayoutManager;
     ArrayList<Auttohashi> auttohashiArrayList;
     RequestQueue queue;
-    AlertDialog alertDialog;
-    AlertDialog.Builder dialogBuilder;
     lct.mysymphony.helper.ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_autto_hashi);
-        progressDialog=new lct.mysymphony.helper.ProgressDialog(this);
+        progressDialog = new lct.mysymphony.helper.ProgressDialog(this);
         toolbar = findViewById(R.id.toolbarlayoutinauttohashi);
         setSupportActionBar(toolbar);
         auttohashiArrayList = new ArrayList<>();
@@ -57,22 +55,19 @@ public class AuttoHashiActivity extends AppCompatActivity {
     }
 
     private void loadDataFromVolley() {
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Endpoints.AUTTOHASI_GET_URL,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        try {
-                            JSONArray AuttoHashiContentArr = response.getJSONArray("contents");
-                            setAuttoHashiContent(AuttoHashiContentArr);
-                            progressDialog.hideProgressDialog();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            progressDialog.hideProgressDialog();
-                        }
-                    }
-                }, new Response.ErrorListener() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Endpoints.AUTTOHASI_GET_URL, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray AuttoHashiContentArr = response.getJSONArray("contents");
+                    setAuttoHashiContent(AuttoHashiContentArr);
+                    progressDialog.hideProgressDialog();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    progressDialog.hideProgressDialog();
+                }
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
@@ -84,22 +79,21 @@ public class AuttoHashiActivity extends AppCompatActivity {
     }
 
     private void setAuttoHashiContent(JSONArray auttoHashiContentArr) {
-
         if (auttoHashiContentArr.length() > 0) {
             for (int i = 0; i < auttoHashiContentArr.length(); i++) {
                 try {
                     String contentTitle = auttoHashiContentArr.getJSONObject(i).getString("contentTitle");
                     String contentType = auttoHashiContentArr.getJSONObject(i).getString("contentType");
                     String contentDescription = auttoHashiContentArr.getJSONObject(i).getString("contentDescription");
-                    int contentId=auttoHashiContentArr.getJSONObject(i).getInt("contentId");
-                    String contentCat=auttoHashiContentArr.getJSONObject(i).getString("contentCat");
-                    String thumbNail_image=auttoHashiContentArr.getJSONObject(i).getString("thumbNail_image");
+                    int contentId = auttoHashiContentArr.getJSONObject(i).getInt("contentId");
+                    String contentCat = auttoHashiContentArr.getJSONObject(i).getString("contentCat");
+                    String thumbNail_image = auttoHashiContentArr.getJSONObject(i).getString("thumbNail_image");
 
                     if (contentType.equals("video")) {
                         String contentUrl = auttoHashiContentArr.getJSONObject(i).getString("thumbNail_image");
-                        auttohashiArrayList.add(new Auttohashi(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat,contentId));
+                        auttohashiArrayList.add(new Auttohashi(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentId));
                     } else {
-                        auttohashiArrayList.add(new Auttohashi(contentTitle, contentType, contentDescription, auttoHashiContentArr.getJSONObject(i).getString("contentUrl"),thumbNail_image,contentCat,contentId));
+                        auttohashiArrayList.add(new Auttohashi(contentTitle, contentType, contentDescription, auttoHashiContentArr.getJSONObject(i).getString("contentUrl"), thumbNail_image, contentCat, contentId));
                     }
 
                 } catch (JSONException e) {
@@ -117,9 +111,7 @@ public class AuttoHashiActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 
@@ -131,6 +123,4 @@ public class AuttoHashiActivity extends AppCompatActivity {
         adapterForAuttohashi = new RecyclerAdapterForAuttohashi(this, auttohashiArrayList);
         recyclerViewForAuttohashi.setAdapter(adapterForAuttohashi);
     }
-
-
 }

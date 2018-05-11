@@ -28,6 +28,4 @@
         android:drawableLeft="@drawable/dob_icon"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         />
-
-
 </LinearLayout>

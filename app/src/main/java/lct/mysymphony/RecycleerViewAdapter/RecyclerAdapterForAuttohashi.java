@@ -25,85 +25,52 @@ import lct.mysymphony.R;
 
 public class RecyclerAdapterForAuttohashi extends RecyclerView.Adapter<RecyclerAdapterForAuttohashi.RecyclerViewHolder> {
 
-
-    ///private int[] images = {R.drawable.shikkhya_sohayika_1, R.drawable.shikkhya_sohayika_2};
-
     Activity activity;
     private ArrayList<Auttohashi> auttohashiArrayList;
 
-
-    public RecyclerAdapterForAuttohashi(Activity activity, ArrayList<Auttohashi> auttohashiArrayList)
-    {
-
+    public RecyclerAdapterForAuttohashi(Activity activity, ArrayList<Auttohashi> auttohashiArrayList) {
         this.activity = activity;
-        this.auttohashiArrayList=auttohashiArrayList;
+        this.auttohashiArrayList = auttohashiArrayList;
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_auttohashi,parent,false);
-
-        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view,activity,auttohashiArrayList);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_auttohashi, parent, false);
+        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, auttohashiArrayList);
         return recyclerViewHolder;
     }
 
-
-
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-
-
         holder.auttohashiNewsTV.setText(auttohashiArrayList.get(position).getContentTitle());
-
-        Glide.with(activity)
-                .load(auttohashiArrayList.get(position).getImageUrl())
-                .into(holder.imageView);
+        Glide.with(activity).load(auttohashiArrayList.get(position).getImageUrl()).into(holder.imageView);
     }
-
     @Override
     public int getItemCount() {
         return auttohashiArrayList.size();
     }
-
-
-    public  static  class  RecyclerViewHolder extends RecyclerView.ViewHolder
-    {
-
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView auttohashiNewsTV;
         ArrayList<Auttohashi> auttohashiArrayList;
         Activity activity;
         CardView cardView;
-
-        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<Auttohashi> auttohashiArrayList)
-        {
+        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<Auttohashi> auttohashiArrayList) {
             super(view);
-            imageView =  view.findViewById(R.id.imgauttohashi);
-            auttohashiNewsTV=view.findViewById(R.id.auttohashiNewsTV);
-            cardView=view.findViewById(R.id.cardViewAuttoHashi);
-
-            this.activity=activity;
-            this.auttohashiArrayList=auttohashiArrayList;
-
+            imageView = view.findViewById(R.id.imgauttohashi);
+            auttohashiNewsTV = view.findViewById(R.id.auttohashiNewsTV);
+            cardView = view.findViewById(R.id.cardViewAuttoHashi);
+            this.activity = activity;
+            this.auttohashiArrayList = auttohashiArrayList;
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent myIntent = new Intent(activity, AuttohasiDescriptionActivity.class);
                     myIntent.putExtra("Data", (Serializable) auttohashiArrayList.get(getAdapterPosition()));
-                    myIntent.putExtra("imageUrl",auttohashiArrayList.get(getAdapterPosition()).getImageUrl());
-                    
+                    myIntent.putExtra("imageUrl", auttohashiArrayList.get(getAdapterPosition()).getImageUrl());
                     activity.startActivity(myIntent);
-                    activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                    activity.finish();
                 }
             });
-
-
-
-
         }
     }
-
-
 }

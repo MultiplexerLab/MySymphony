@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import lct.mysymphony.Activity.ContentDescriptionActivity.CricketSorbosheshSongbadDescriptionActivity;
-import lct.mysymphony.ModelClass.Kheladhula_Cricket_sorboshesh_sobgbad;
+import lct.mysymphony.ModelClass.KheladhulaCricketSorbosheshSongbad;
 import lct.mysymphony.R;
 
 /**
@@ -25,14 +25,9 @@ import lct.mysymphony.R;
 
 public class RecyclerAdapterForSorbosheshSongbadCricketfragment extends RecyclerView.Adapter<RecyclerAdapterForSorbosheshSongbadCricketfragment.RecyclerViewHolder> {
 
-
-    ArrayList<Kheladhula_Cricket_sorboshesh_sobgbad> kheladhulaCricketArrayList;
-
+    ArrayList<KheladhulaCricketSorbosheshSongbad> kheladhulaCricketArrayList;
     Activity activity;
-
-
-    public RecyclerAdapterForSorbosheshSongbadCricketfragment(Activity activity, ArrayList<Kheladhula_Cricket_sorboshesh_sobgbad> kheladhulaCricketArrayList) {
-
+    public RecyclerAdapterForSorbosheshSongbadCricketfragment(Activity activity, ArrayList<KheladhulaCricketSorbosheshSongbad> kheladhulaCricketArrayList) {
         this.activity = activity;
         this.kheladhulaCricketArrayList = kheladhulaCricketArrayList;
     }
@@ -41,23 +36,16 @@ public class RecyclerAdapterForSorbosheshSongbadCricketfragment extends Recycler
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_sorboshesh_songbad_in_cricket_fragment, parent, false);
-
         RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, kheladhulaCricketArrayList, activity);
         return recyclerViewHolder;
     }
 
-
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-
-
         holder.sorbosheshSongbadTV.setText(kheladhulaCricketArrayList.get(position).getContentTitle());
-
         Glide.with(activity)
                 .load(kheladhulaCricketArrayList.get(position).getImageUrl())
                 .into(holder.imageView);
-
-
     }
 
     @Override
@@ -65,42 +53,27 @@ public class RecyclerAdapterForSorbosheshSongbadCricketfragment extends Recycler
         return kheladhulaCricketArrayList.size();
     }
 
-
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
-
         ImageView imageView;
         TextView sorbosheshSongbadTV;
         Activity activity;
         CardView cardView;
-        ArrayList<Kheladhula_Cricket_sorboshesh_sobgbad> kheladhula_cricket_sorboshesh_sobgbadArrayList;
-
-
-        public RecyclerViewHolder(View view, final ArrayList<Kheladhula_Cricket_sorboshesh_sobgbad> kheladhula_cricket_sorboshesh_sobgbadArrayList, final Activity activity) {
+        ArrayList<KheladhulaCricketSorbosheshSongbad> kheladhula_cricket_sorbosheshSongbadArrayList;
+        public RecyclerViewHolder(View view, final ArrayList<KheladhulaCricketSorbosheshSongbad> kheladhula_cricket_sorbosheshSongbadArrayList, final Activity activity) {
             super(view);
-
             imageView = view.findViewById(R.id.imgSorbosheshShongbad);
             sorbosheshSongbadTV = view.findViewById(R.id.sorbosheshSongbadTV);
             cardView=view.findViewById(R.id.cardViewCricketSorbosheshSongBad);
-            this.kheladhula_cricket_sorboshesh_sobgbadArrayList = kheladhula_cricket_sorboshesh_sobgbadArrayList;
-
+            this.kheladhula_cricket_sorbosheshSongbadArrayList = kheladhula_cricket_sorbosheshSongbadArrayList;
             this.activity = activity;
-
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     Intent myIntent = new Intent(activity, CricketSorbosheshSongbadDescriptionActivity.class);
-                    myIntent.putExtra("Data", (Serializable) kheladhula_cricket_sorboshesh_sobgbadArrayList.get(getAdapterPosition()));
-                    
+                    myIntent.putExtra("Data", (Serializable) kheladhula_cricket_sorbosheshSongbadArrayList.get(getAdapterPosition()));
                     activity.startActivity(myIntent);
-                    activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                    activity.finish();
                 }
             });
-
-
-
         }
     }
-
 }

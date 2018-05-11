@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activity.PhoneNumberVerification">
+    tools:context=".Activity.SignUpActivity">
+
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbarLayout"
@@ -13,18 +13,18 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:fitsSystemWindows="true">
-
         <include
-            android:id="@+id/toolbarlayoutinsign"
-            layout="@layout/toolbar_layout_in_sign" />
-
+            android:id="@+id/toolbarlayoutinmainactivity"
+            layout="@layout/toolbar_layout_in_main_activity" />
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <TextView
             android:id="@+id/txtIntroduce"
@@ -32,11 +32,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:paddingTop="30dp"
+            android:paddingTop="10dp"
             android:singleLine="false"
-            android:text="@string/introductionInFirstsignUpPage"
+            android:text="দারুন ! আমরা সর্বশেষ ধাপে এসে গেছি। আপনার \n প্রোফাইল এর জন্যে তথ্য দিন"
             android:textColor="@color/Gray"
             android:textSize="17sp" />
+
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -45,22 +46,56 @@
             android:layout_gravity="center"
             android:orientation="vertical">
 
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="20dp"
-                android:paddingTop="20dp">
+                android:paddingTop="40dp">
 
                 <EditText
-                    android:inputType="phone"
-                    android:id="@+id/phoneNumberInPhoneVarification"
+                    android:id="@+id/txtUserName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_action_phone"
-                    android:hint=" আপনার ফোন নাম্বার লিখুন"
+                    android:drawableLeft="@drawable/ic_action_person"
+                    android:hint=" আপনার নাম লিখুন "
+                    android:imeActionId="6"
                     android:maxLines="1"
                     android:singleLine="true" />
+
             </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txtpassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_action_lock"
+                    android:hint="নতুন পাসওয়ার্ড লিখুন"
+                    android:imeActionId="6"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <EditText
+                android:focusable="false"
+                android:id="@+id/txtDOB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:drawableLeft="@drawable/ic_action_date"
+                android:hint="আপনার জন্মতারিখ সিলেক্ট করুন"
+                android:imeActionId="6"
+                android:maxLines="1"
+                android:onClick="showDatePickerDialog"
+                android:singleLine="true" />
+
 
             <Button
                 android:id="@+id/btn_email_sign_in_"
@@ -69,9 +104,21 @@
                 android:layout_centerHorizontal="true"
                 android:layout_margin="6dp"
                 android:background="@drawable/btn_style_red"
-                android:onClick="startPinActivity"
-                android:text="নেক্সট"
+                android:onClick="signUpRequest"
+                android:text="সাইন আপ সম্পন্ন করুন"
                 android:textColor="@color/White" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtAggrement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingTop="20dp"
+            android:singleLine="false"
+            android:text="@string/txtAggrement"
+            android:textColor="@color/Gray"
+            android:textSize="@dimen/textSize" />
     </LinearLayout>
 </LinearLayout>

@@ -23,12 +23,10 @@ public class NewsDescriptionActivity extends AppCompatActivity implements Serial
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_description);
-
         newsImageView = findViewById(R.id.imgNewsPaperinNewsDescription);
         newsTitle = findViewById(R.id.newsTitleInNewsDetailActivity);
         newsPublishedAt = findViewById(R.id.newsPublishedatNewsDetailsActivity);
         newsDescription = findViewById(R.id.newsdescriptionInNewsPaperActivity);
-
         setDescripTionData();
     }
 
@@ -37,13 +35,10 @@ public class NewsDescriptionActivity extends AppCompatActivity implements Serial
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), GoromKhoborActivity.class);
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
-        finish();
     }
 
     public void setDescripTionData() {
         GoromKhobor object = (GoromKhobor) getIntent().getSerializableExtra("Data");
-
         newsTitle.setText(object.getContentTitle());
         newsPublishedAt.setText(object.getPublishedAt());
         newsDescription.setText(object.getContentDescription());

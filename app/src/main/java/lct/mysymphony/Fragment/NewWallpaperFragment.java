@@ -24,24 +24,21 @@ import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForNewWallPaperFragmen
 /**
  * A simple {@link Fragment} subclass.
  */
-public class newwallPaperFragment extends Fragment {
+public class NewWallpaperFragment extends Fragment {
 
     ArrayList<SeraChobi> seraChobiArrayList;
 
     private RecyclerView recyclerViewForNewWallPaper;
     private RecyclerView.Adapter adapterForNewWallPaper;
     RecyclerView.LayoutManager mLayoutManager;
-
-    public newwallPaperFragment() {
+    public NewWallpaperFragment() {
         // Required empty public constructor
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_new_wall_paper, container, false);
-
 
         if (getActivity().getIntent()!=null)
         {
@@ -61,5 +58,4 @@ public class newwallPaperFragment extends Fragment {
         recyclerViewForNewWallPaper.setAdapter(adapterForNewWallPaper);
         return view;
     }
-
 }

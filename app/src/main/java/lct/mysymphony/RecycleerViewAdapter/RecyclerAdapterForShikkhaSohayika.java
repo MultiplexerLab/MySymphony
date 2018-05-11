@@ -21,7 +21,7 @@ import com.bumptech.glide.request.target.Target;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lct.mysymphony.Activity.ContentDescriptionActivity.ShikhaDetails;
+import lct.mysymphony.Activity.ContentDescriptionActivity.ShikkhaSohaYikaDescriptionActivity;
 import lct.mysymphony.ModelClass.ShikkhaSohaYika;
 import lct.mysymphony.R;
 
@@ -31,31 +31,24 @@ import lct.mysymphony.R;
 
 public class RecyclerAdapterForShikkhaSohayika extends RecyclerView.Adapter<RecyclerAdapterForShikkhaSohayika.RecyclerViewHolder> {
 
-
     ArrayList<ShikkhaSohaYika> shikkhaSohaYikaArrayList;
     Activity activity;
-
     public RecyclerAdapterForShikkhaSohayika(Activity activity,ArrayList<ShikkhaSohaYika> shikkhaSohaYikaArrayList)
     {
-
         this.activity = activity;
         this.shikkhaSohaYikaArrayList=shikkhaSohaYikaArrayList;
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_shikkha_sohayika,parent,false);
-
         RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, shikkhaSohaYikaArrayList);
         return recyclerViewHolder;
     }
 
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-
         holder.news.setText(shikkhaSohaYikaArrayList.get(position).getContentTitle());
-
         Glide.with(activity)
                 .load(shikkhaSohaYikaArrayList.get(position).getImageURL())
                 .listener(new RequestListener<Drawable>() {
@@ -64,7 +57,6 @@ public class RecyclerAdapterForShikkhaSohayika extends RecyclerView.Adapter<Recy
                         holder.progressBar.setVisibility(View.GONE);
                         return false;
                     }
-
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         holder.progressBar.setVisibility(View.GONE);
@@ -76,7 +68,6 @@ public class RecyclerAdapterForShikkhaSohayika extends RecyclerView.Adapter<Recy
         if(shikkhaSohaYikaArrayList.get(position).getContentType().equals("video")){
             holder.videoPreviewPlayButton.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override
@@ -84,36 +75,26 @@ public class RecyclerAdapterForShikkhaSohayika extends RecyclerView.Adapter<Recy
         return shikkhaSohaYikaArrayList.size();
     }
 
-
     public  static  class  RecyclerViewHolder extends RecyclerView.ViewHolder
     {
         ImageView imageView, videoPreviewPlayButton;
         TextView news;
         ProgressBar progressBar;
-
         public RecyclerViewHolder(View view, final Activity activity, final ArrayList<ShikkhaSohaYika> shikkhaSohaYikaArrayList)
         {
             super(view);
-
             news=view.findViewById(R.id.newsTV);
             imageView =  view.findViewById(R.id.imgShikkhaSohayika);
             videoPreviewPlayButton = view.findViewById(R.id.videoPreviewPlayButton);
-
             progressBar=view.findViewById(R.id.progressBarInShikkhaSohayika);
-
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent myIntent = new Intent(activity, ShikhaDetails.class);
+                    Intent myIntent = new Intent(activity, ShikkhaSohaYikaDescriptionActivity.class);
                     myIntent.putExtra("shikkha", (Serializable) shikkhaSohaYikaArrayList.get(getAdapterPosition()));
-                    
                     activity.startActivity(myIntent);
-                    activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                    activity.finish();
                 }
             });
-
         }
     }
-
 }

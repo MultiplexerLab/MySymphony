@@ -20,52 +20,38 @@ public class PachMishaliDescriptionActivity extends AppCompatActivity {
 
     ImageView newsImageView;
     TextView newsTitle, newsDescription;
-    TextView newPrice,previousPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pach_mishali_description);
-
         newsImageView = findViewById(R.id.imgPachMishaliDescription);
         newsTitle = findViewById(R.id.newsTitlePachMishaliDescription);
         newsDescription = findViewById(R.id.newsdescriptionPachMishaliDescription);
-//        newPrice=findViewById(R.id.newPriceTVinPachMishaliDescription);
-//        previousPrice=findViewById(R.id.previousPriceTVinPachMishaliDescription);
-        ///previousPrice.setPaintFlags(previousPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
         setDescripTionData();
     }
 
     @Override
     public void onBackPressed() {
-
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), PachMishaliActivity.class);
-        
         this.startActivity(myIntent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
-        finish();
     }
 
     public void setDescripTionData() {
         PacMishali object = (PacMishali) getIntent().getSerializableExtra("Data");
-
         newsTitle.setText(object.getContentTitle());
         newsDescription.setText(object.getContentDescription());
-        Glide.with(PachMishaliDescriptionActivity.this)
-                .load(object.getImageUrl())
-                .into(newsImageView);
-
+        Glide.with(PachMishaliDescriptionActivity.this).load(object.getImageUrl()).into(newsImageView);
     }
 
     public void mullochar(View view) {
         PacMishali object = (PacMishali) getIntent().getSerializableExtra("Data");
         Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
-        DataBaseData dataBaseData=new DataBaseData(object.getContentTitle(),object.getContentCat(),object.getContentType(),object.getContentDescription(), object.getThumbNail_image(), "free",object.getContentId());
-        purchase.putExtra("dataBaseData",dataBaseData);
-        purchase.putExtra("imageUrl",object.getImageUrl());
+        DataBaseData dataBaseData = new DataBaseData(object.getContentTitle(), object.getContentCat(), object.getContentType(), object.getContentDescription(), object.getThumbNail_image(), "free", object.getContentId());
+        purchase.putExtra("dataBaseData", dataBaseData);
+        purchase.putExtra("imageUrl", object.getImageUrl());
+        purchase.putExtra("cameFromWhichActivity", "PachMishaliDescriptionActivity");
         startActivity(purchase);
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 }

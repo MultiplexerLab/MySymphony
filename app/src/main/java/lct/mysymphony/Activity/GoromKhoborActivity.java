@@ -47,7 +47,6 @@ public class GoromKhoborActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gorom_khobor_activity);
-
         toolbar = findViewById(R.id.toolbarlayoutingoromkhobor);
         setSupportActionBar(toolbar);
         goromKhoborArrayList = new ArrayList<>();
@@ -112,7 +111,6 @@ public class GoromKhoborActivity extends AppCompatActivity {
     }
 
     private void initializeGoromKhoborRecyclerView() {
-
         recyclerViewForGoromKhobor = findViewById(R.id.RV_GoromKhobor);
         mLayoutManager = new LinearLayoutManager(GoromKhoborActivity.this);
         recyclerViewForGoromKhobor.setLayoutManager(mLayoutManager);
@@ -126,9 +124,5 @@ public class GoromKhoborActivity extends AppCompatActivity {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.right_in , R.anim.right_out);
-        finish();
     }
-
-
 }

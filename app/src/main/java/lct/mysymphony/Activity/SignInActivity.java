@@ -38,7 +38,6 @@ import lct.mysymphony.helper.Endpoints;
 
 public class SignInActivity extends AppCompatActivity {
 
-
     EditText userName, password;
     lct.mysymphony.helper.ProgressDialog progressDialog;
     RequestQueue queue;
@@ -53,10 +52,8 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         progressDialog=new lct.mysymphony.helper.ProgressDialog(this);
-
         userName = findViewById(R.id.txtUserName);
         password = findViewById(R.id.txtpassword);
-
         queue = Volley.newRequestQueue(SignInActivity.this);
         checkPermissions();
     }
@@ -64,20 +61,13 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
-        finish();
-
     }
 
     public void startForgotPasswordActivity(View view) {
-
         Intent myIntent = new Intent(getApplicationContext(), ForgetPasswordActivity.class);
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        //finish();
     }
 
     public void startHomePage(View view) {
@@ -107,8 +97,6 @@ public class SignInActivity extends AppCompatActivity {
         editor.apply();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
     }
 
     private boolean internetConnected() {
@@ -142,11 +130,8 @@ public class SignInActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        /// Toast.makeText(SignInActivity.this, "response : "+response, Toast.LENGTH_LONG).show();
                         Log.d("responseInSignIn ", response);
                        progressDialog.hideProgressDialog();
-
                         if (response.contains("SUCCESS")) {
                             if (internetConnected()) {
                                 SharedPreferences.Editor editor = getSharedPreferences("phoneNumber", MODE_PRIVATE).edit();
@@ -163,12 +148,8 @@ public class SignInActivity extends AppCompatActivity {
                             linearLayout.startAnimation(shake);
                             userName.getText().clear();
                             password.getText().clear();
-
                             Toast.makeText(SignInActivity.this, "আপনার তথ্য সঠিক নয় ", Toast.LENGTH_SHORT).show();
                         }
-
-
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -183,12 +164,9 @@ public class SignInActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("userid", userName.getText().toString());
                 params.put("password", password.getText().toString());
-
                 return params;
             }
         };
         queue.add(stringRequest);
     }
-
-
 }

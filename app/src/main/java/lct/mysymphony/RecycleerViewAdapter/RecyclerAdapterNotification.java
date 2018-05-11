@@ -20,21 +20,16 @@ public class RecyclerAdapterNotification extends RecyclerView.Adapter<RecyclerAd
 
     Activity activity;
     private ArrayList<Notifications> notificationsArrayList;
-
     public RecyclerAdapterNotification(Activity activity, ArrayList<Notifications> notificationsArrayList) {
         this.activity = activity;
         this.notificationsArrayList = notificationsArrayList;
     }
-
     @Override
     public RecyclerAdapterNotification.RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_notification_activity, parent, false);
-
         RecyclerAdapterNotification.RecyclerViewHolder recyclerViewHolder = new RecyclerAdapterNotification.RecyclerViewHolder(view);
         return recyclerViewHolder;
     }
-
 
     @Override
     public void onBindViewHolder(final RecyclerAdapterNotification.RecyclerViewHolder holder, int position) {
@@ -42,17 +37,13 @@ public class RecyclerAdapterNotification extends RecyclerView.Adapter<RecyclerAd
         holder.time.setText(notificationsArrayList.get(position).getTime());
         holder.description.setText(notificationsArrayList.get(position).getDescription());
     }
-
     @Override
     public int getItemCount() {
         return notificationsArrayList.size();
     }
 
-
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
-
         TextView title, description, time;
-
         public RecyclerViewHolder(View view) {
             super(view);
             title = view.findViewById(R.id.titleNotification);
@@ -60,5 +51,4 @@ public class RecyclerAdapterNotification extends RecyclerView.Adapter<RecyclerAd
             description = view.findViewById(R.id.descNotification);
         }
     }
-
 }

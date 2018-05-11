@@ -1,20 +1,17 @@
 package lct.mysymphony.Activity;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,7 +21,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -39,8 +35,7 @@ import java.util.ArrayList;
 
 import lct.mysymphony.CustomSwipeAdapter;
 import lct.mysymphony.ModelClass.GamesZone;
-import lct.mysymphony.ModelClass.GoromKhobor;
-import lct.mysymphony.ModelClass.JapitoJibonMC;
+import lct.mysymphony.ModelClass.JapitoJibon;
 import lct.mysymphony.ModelClass.MulloChar;
 import lct.mysymphony.ModelClass.SeraChobi;
 import lct.mysymphony.ModelClass.ShikkhaSohaYika;
@@ -61,7 +56,7 @@ public class HomePage extends AppCompatActivity {
 
     ArrayList<SliderImage> sliderImages;
     ArrayList<SeraChobi> seraChobiArrayList;
-    ArrayList<JapitoJibonMC> japitoJibonMCArrayList;
+    ArrayList<JapitoJibon> japitoJibonArrayList;
     ArrayList<MulloChar> mulloCharArrayList;
     ArrayList<ShocolChobi> shocolChobiArrayList;
     ArrayList<GamesZone> gamesZoneArrayList;
@@ -100,7 +95,7 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        progressDialog=new lct.mysymphony.helper.ProgressDialog(this);
+        progressDialog = new lct.mysymphony.helper.ProgressDialog(this);
         context = HomePage.this;
         queue = Volley.newRequestQueue(HomePage.this);
         sliderImages = new ArrayList<>();
@@ -109,7 +104,7 @@ public class HomePage extends AppCompatActivity {
         setSupportActionBar(toolbar);
         profileIcon = findViewById(R.id.profileIcon);
         notificationIcon = findViewById(R.id.notificationInHomePageToolbar);
-        japitoJibonMCArrayList = new ArrayList<>();
+        japitoJibonArrayList = new ArrayList<>();
         mulloCharArrayList = new ArrayList<>();
         gamesZoneArrayList = new ArrayList<>();
         shocolChobiArrayList = new ArrayList<>();
@@ -125,12 +120,10 @@ public class HomePage extends AppCompatActivity {
                 if (id == R.id.symphony_bottom_navigation) {
                     Intent symphony = new Intent(HomePage.this, SymphonyCareActivity.class);
                     startActivity(symphony);
-                    //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                }else if (id == R.id.news_bottom_navigation) {
+                } else if (id == R.id.news_bottom_navigation) {
                     Intent news = new Intent(HomePage.this, GoromKhoborActivity.class);
                     startActivity(news);
-                    //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                }else if(id == R.id.download_bottom_navigation){
+                } else if (id == R.id.download_bottom_navigation) {
                     Intent apps = new Intent(HomePage.this, ProfileActivity.class);
                     startActivity(apps);
                 }
@@ -143,7 +136,6 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View view) {
                 Intent profileIntent = new Intent(HomePage.this, ProfileActivity.class);
                 startActivity(profileIntent);
-                //overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
         });
         notificationIcon.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +143,6 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View view) {
                 Intent profileIntent = new Intent(HomePage.this, NotificationActivity.class);
                 startActivity(profileIntent);
-                //overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
         });
         //loadDataFromVolley();
@@ -159,55 +150,54 @@ public class HomePage extends AppCompatActivity {
     }
 
     private void newloadDataFromVolley() {
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, Endpoints.NEW_HOME_GET_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        JSONObject jsonObject = null;
-                        try {
-                            String jsonFormattedString = response.replaceAll("\\\\", "");
-                            jsonFormattedString = jsonFormattedString.substring(1, jsonFormattedString.length() - 1);
-                            jsonFormattedString = jsonFormattedString.replaceAll("\"\\[", "[");
-                            jsonFormattedString = jsonFormattedString.replaceAll("\\]\"", "]");
-                            Log.d("jsonFormattedString", jsonFormattedString);
-                            jsonObject = new JSONObject(jsonFormattedString);
-                            Log.d("obj", jsonObject.toString());
-                        } catch (JSONException e) {
-                            Log.d("JSON Error", e.getMessage());
-                        }
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, Endpoints.NEW_HOME_GET_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                JSONObject jsonObject = null;
+                try {
+                    String jsonFormattedString = response.replaceAll("\\\\", "");
+                    jsonFormattedString = jsonFormattedString.substring(1, jsonFormattedString.length() - 1);
+                    jsonFormattedString = jsonFormattedString.replaceAll("\"\\[", "[");
+                    jsonFormattedString = jsonFormattedString.replaceAll("\\]\"", "]");
+                    Log.d("jsonFormattedString", jsonFormattedString);
+                    jsonObject = new JSONObject(jsonFormattedString);
+                    Log.d("obj", jsonObject.toString());
+                } catch (JSONException e) {
+                    Log.d("JSON Error", e.getMessage());
+                }
 
-                        try {
-                            JSONArray jsonSliderContentArr = jsonObject.getJSONArray("slider_contents");
-                            Log.d("jsonSliderContentArr", jsonSliderContentArr.toString());
-                            setSliderContent(jsonSliderContentArr);
+                try {
+                    JSONArray jsonSliderContentArr = jsonObject.getJSONArray("slider_contents");
+                    Log.d("jsonSliderContentArr", jsonSliderContentArr.toString());
+                    setSliderContent(jsonSliderContentArr);
 
-                            JSONArray top_contentsArr = jsonObject.getJSONArray("top_contents");
-                            setTopContent(top_contentsArr);
+                    JSONArray top_contentsArr = jsonObject.getJSONArray("top_contents");
+                    setTopContent(top_contentsArr);
 
-                            JSONArray japito_jibon_content_Arr = jsonObject.getJSONArray("daily_life_contents");
-                            setJapitiJibonContent(japito_jibon_content_Arr);
+                    JSONArray japito_jibon_content_Arr = jsonObject.getJSONArray("daily_life_contents");
+                    setJapitiJibonContent(japito_jibon_content_Arr);
 
-                            JSONArray mullo_char_content_Arr = jsonObject.getJSONArray("discount_contents");
-                            setMulloCharContent(mullo_char_content_Arr);
+                    JSONArray mullo_char_content_Arr = jsonObject.getJSONArray("discount_contents");
+                    setMulloCharContent(mullo_char_content_Arr);
 
-                            JSONArray shikkha_sohayika__content_Arr = jsonObject.getJSONArray("education_contents");
-                            setShikkhaSohayikaContent(shikkha_sohayika__content_Arr);
+                    JSONArray shikkha_sohayika__content_Arr = jsonObject.getJSONArray("education_contents");
+                    setShikkhaSohayikaContent(shikkha_sohayika__content_Arr);
 
-                            JSONArray games_zone__content_Arr = jsonObject.getJSONArray("game_contents");
-                            setGamesZoneContent(games_zone__content_Arr);
+                    JSONArray games_zone__content_Arr = jsonObject.getJSONArray("game_contents");
+                    setGamesZoneContent(games_zone__content_Arr);
 
-                            JSONArray shocol_chobi__content_Arr = jsonObject.getJSONArray("moving_contents");
-                            setShocolChobiContent(shocol_chobi__content_Arr);
+                    JSONArray shocol_chobi__content_Arr = jsonObject.getJSONArray("moving_contents");
+                    setShocolChobiContent(shocol_chobi__content_Arr);
 
-                            progressDialog.hideProgressDialog();
+                    progressDialog.hideProgressDialog();
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("exceptionLoadData4rmvly",e.toString());
-                            progressDialog.hideProgressDialog();
-                        }
-                    }
-                }, new Response.ErrorListener() {
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("exceptionLoadData4rmvly", e.toString());
+                    progressDialog.hideProgressDialog();
+                }
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
@@ -219,42 +209,41 @@ public class HomePage extends AppCompatActivity {
     }
 
     private void loadDataFromVolley() {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Endpoints.NEW_UPDATED_HOME_GET_URL,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Endpoints.NEW_UPDATED_HOME_GET_URL, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
 
-                        try {
-                            JSONArray jsonSliderContentArr = response.getJSONArray("slider_contents");
-                            setSliderContent(jsonSliderContentArr);
+                try {
+                    JSONArray jsonSliderContentArr = response.getJSONArray("slider_contents");
+                    setSliderContent(jsonSliderContentArr);
 
-                            JSONArray top_contentsArr = response.getJSONArray("top_contents");
-                            setTopContent(top_contentsArr);
+                    JSONArray top_contentsArr = response.getJSONArray("top_contents");
+                    setTopContent(top_contentsArr);
 
-                            JSONArray japito_jibon_content_Arr = response.getJSONArray("daily_life_contents");
-                            setJapitiJibonContent(japito_jibon_content_Arr);
+                    JSONArray japito_jibon_content_Arr = response.getJSONArray("daily_life_contents");
+                    setJapitiJibonContent(japito_jibon_content_Arr);
 
-                            JSONArray mullo_char_content_Arr = response.getJSONArray("discount_contents");
-                            setMulloCharContent(mullo_char_content_Arr);
+                    JSONArray mullo_char_content_Arr = response.getJSONArray("discount_contents");
+                    setMulloCharContent(mullo_char_content_Arr);
 
-                            JSONArray shikkha_sohayika__content_Arr = response.getJSONArray("education_contents");
-                            setShikkhaSohayikaContent(shikkha_sohayika__content_Arr);
+                    JSONArray shikkha_sohayika__content_Arr = response.getJSONArray("education_contents");
+                    setShikkhaSohayikaContent(shikkha_sohayika__content_Arr);
 
-                            JSONArray games_zone__content_Arr = response.getJSONArray("game_contents");
-                            setGamesZoneContent(games_zone__content_Arr);
+                    JSONArray games_zone__content_Arr = response.getJSONArray("game_contents");
+                    setGamesZoneContent(games_zone__content_Arr);
 
-                            JSONArray shocol_chobi__content_Arr = response.getJSONArray("moving_contents");
-                            setShocolChobiContent(shocol_chobi__content_Arr);
-                            progressDialog.hideProgressDialog();
+                    JSONArray shocol_chobi__content_Arr = response.getJSONArray("moving_contents");
+                    setShocolChobiContent(shocol_chobi__content_Arr);
+                    progressDialog.hideProgressDialog();
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("exceptionLoadData4rmvly",e.toString());
-                            progressDialog.hideProgressDialog();
-                        }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("exceptionLoadData4rmvly", e.toString());
+                    progressDialog.hideProgressDialog();
+                }
 
-                    }
-                }, new Response.ErrorListener() {
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
@@ -275,17 +264,17 @@ public class HomePage extends AppCompatActivity {
                     String contentUrl = shocol_chobi__content_arr.getJSONObject(i).getString("contentUrl");
                     String contentTitle = shocol_chobi__content_arr.getJSONObject(i).getString("contentTitle");
                     String contentType = shocol_chobi__content_arr.getJSONObject(i).getString("contentType");
-                    int contentId=shocol_chobi__content_arr.getJSONObject(i).getInt("id");
-                    String contentCat=shocol_chobi__content_arr.getJSONObject(i).getString("contentCat");
-                    String thumbnailImgUrl=shocol_chobi__content_arr.getJSONObject(i).getString("thumbNail_image");
-                    if(shocol_chobi__content_arr.getJSONObject(i).has("contentPrice")){
-                        contentPrice=shocol_chobi__content_arr.getJSONObject(i).getInt("contentPrice");
+                    int contentId = shocol_chobi__content_arr.getJSONObject(i).getInt("id");
+                    String contentCat = shocol_chobi__content_arr.getJSONObject(i).getString("contentCat");
+                    String thumbnailImgUrl = shocol_chobi__content_arr.getJSONObject(i).getString("thumbNail_image");
+                    if (shocol_chobi__content_arr.getJSONObject(i).has("contentPrice")) {
+                        contentPrice = shocol_chobi__content_arr.getJSONObject(i).getInt("contentPrice");
                     }
-                    shocolChobiArrayList.add(new ShocolChobi(contentType, contentUrl, contentTitle,contentCat,thumbnailImgUrl,contentId,contentPrice));
+                    shocolChobiArrayList.add(new ShocolChobi(contentType, contentUrl, contentTitle, contentCat, thumbnailImgUrl, contentId, contentPrice));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.d("shocolChobi",e.toString());
+                    Log.d("shocolChobi", e.toString());
                 }
             }
             initializeShocolChobiRecyclerview();
@@ -303,15 +292,15 @@ public class HomePage extends AppCompatActivity {
                     String contentUrl = games_zone__content_arr.getJSONObject(i).getString("contentUrl");
                     String contentTitle = games_zone__content_arr.getJSONObject(i).getString("contentTitle");
                     String contentType = games_zone__content_arr.getJSONObject(i).getString("contentType");
-                    String thumbnailImgUrl=games_zone__content_arr.getJSONObject(i).getString("thumbNail_image");
+                    String thumbnailImgUrl = games_zone__content_arr.getJSONObject(i).getString("thumbNail_image");
                     ///int previousPrice = games_zone__content_arr.getJSONObject(i).getInt("previousPrice");
-                    if(games_zone__content_arr.getJSONObject(i).has("contentPrice")){
+                    if (games_zone__content_arr.getJSONObject(i).has("contentPrice")) {
                         newPrice = games_zone__content_arr.getJSONObject(i).getInt("contentPrice");
                     }
 
-                    int contentId=games_zone__content_arr.getJSONObject(i).getInt("id");
-                    String contentCat=games_zone__content_arr.getJSONObject(i).getString("contentCat");
-                    gamesZoneArrayList.add(new GamesZone(contentType, contentUrl, contentTitle, thumbnailImgUrl, 0, newPrice,contentCat,contentId));
+                    int contentId = games_zone__content_arr.getJSONObject(i).getInt("id");
+                    String contentCat = games_zone__content_arr.getJSONObject(i).getString("contentCat");
+                    gamesZoneArrayList.add(new GamesZone(contentType, contentUrl, contentTitle, thumbnailImgUrl, 0, newPrice, contentCat, contentId));
 
                 } catch (JSONException e) {
                     Log.d("exception", e.toString());
@@ -325,6 +314,7 @@ public class HomePage extends AppCompatActivity {
             Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void setShikkhaSohayikaContent(JSONArray shikkha_sohayika__content_arr) {
 
         if (shikkha_sohayika__content_arr.length() > 0) {
@@ -335,18 +325,18 @@ public class HomePage extends AppCompatActivity {
                     String contentType = shikkha_sohayika__content_arr.getJSONObject(i).getString("contentType");
                     String imageUrl = shikkha_sohayika__content_arr.getJSONObject(i).getString("thumbNail_image");
                     String contentDescription = shikkha_sohayika__content_arr.getJSONObject(i).getString("contentDescription");
-                    int contentId=shikkha_sohayika__content_arr.getJSONObject(i).getInt("id");
-                    String contentCat=shikkha_sohayika__content_arr.getJSONObject(i).getString("contentCat");
+                    int contentId = shikkha_sohayika__content_arr.getJSONObject(i).getInt("id");
+                    String contentCat = shikkha_sohayika__content_arr.getJSONObject(i).getString("contentCat");
 
-                    if(shikkha_sohayika__content_arr.getJSONObject(i).has("contentPrice")){
-                        contentPrice=shikkha_sohayika__content_arr.getJSONObject(i).getInt("contentPrice");
+                    if (shikkha_sohayika__content_arr.getJSONObject(i).has("contentPrice")) {
+                        contentPrice = shikkha_sohayika__content_arr.getJSONObject(i).getInt("contentPrice");
                     }
 
                     if (contentType.equals("video")) {
                         String contentUrl = shikkha_sohayika__content_arr.getJSONObject(i).getString("contentUrl");
-                        shikkhaSohaYikaArrayList.add(new ShikkhaSohaYika(contentType, contentDescription, contentUrl, contentTitle, imageUrl,contentCat,contentId,contentPrice));
+                        shikkhaSohaYikaArrayList.add(new ShikkhaSohaYika(contentType, contentDescription, contentUrl, contentTitle, imageUrl, contentCat, contentId, contentPrice));
                     } else {
-                        shikkhaSohaYikaArrayList.add(new ShikkhaSohaYika(contentType, contentDescription, "", contentTitle, imageUrl,contentCat,contentId,contentPrice));
+                        shikkhaSohaYikaArrayList.add(new ShikkhaSohaYika(contentType, contentDescription, "", contentTitle, imageUrl, contentCat, contentId, contentPrice));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -362,7 +352,7 @@ public class HomePage extends AppCompatActivity {
 
         if (mulloCharJsonArr.length() > 0) {
 
-            int newPrice=0;
+            int newPrice = 0;
             for (int i = 0; i < mulloCharJsonArr.length(); i++) {
                 try {
                     String contentUrl = mulloCharJsonArr.getJSONObject(i).getString("contentUrl");
@@ -370,17 +360,16 @@ public class HomePage extends AppCompatActivity {
                     String contentType = mulloCharJsonArr.getJSONObject(i).getString("contentType");
                     String image_url = mulloCharJsonArr.getJSONObject(i).getString("thumbNail_image");
                     int previousPrice = mulloCharJsonArr.getJSONObject(i).getInt("contentPrice");
-                    int contentId=mulloCharJsonArr.getJSONObject(i).getInt("id");
-                    String contentCat=mulloCharJsonArr.getJSONObject(i).getString("contentCat");
-                    String thumbNail_image=mulloCharJsonArr.getJSONObject(i).getString("thumbNail_image");
+                    int contentId = mulloCharJsonArr.getJSONObject(i).getInt("id");
+                    String contentCat = mulloCharJsonArr.getJSONObject(i).getString("contentCat");
+                    String thumbNail_image = mulloCharJsonArr.getJSONObject(i).getString("thumbNail_image");
 
                     JSONArray jsonArray = mulloCharJsonArr.getJSONObject(i).getJSONArray("discount");
 
-                    for (int j=0;j<jsonArray.length();j++)
-                    {
+                    for (int j = 0; j < jsonArray.length(); j++) {
                         newPrice = jsonArray.getJSONObject(j).getInt("discountPrice");
                     }
-                    mulloCharArrayList.add(new MulloChar(contentType, contentUrl, contentTitle, thumbNail_image, previousPrice, newPrice, image_url,contentCat,contentId));
+                    mulloCharArrayList.add(new MulloChar(contentType, contentUrl, contentTitle, thumbNail_image, previousPrice, newPrice, image_url, contentCat, contentId));
                 } catch (JSONException e) {
                     Log.d("mullochardata", e.toString());
                     e.printStackTrace();
@@ -401,20 +390,20 @@ public class HomePage extends AppCompatActivity {
                     String contentType = japito_jibon_content_arr.getJSONObject(i).getString("contentType");
                     String contentDescription = japito_jibon_content_arr.getJSONObject(i).getString("contentDescription");
                     String contentUrl = japito_jibon_content_arr.getJSONObject(i).getString("contentUrl");
-                    String contentCat=japito_jibon_content_arr.getJSONObject(i).getString("contentCat");
-                    String thumbNail_image=japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image");
-                    int contentid=japito_jibon_content_arr.getJSONObject(i).getInt("id");
-                    if(japito_jibon_content_arr.getJSONObject(i).has("contentPrice")){
-                        contentPrice=japito_jibon_content_arr.getJSONObject(i).getInt("contentPrice");
+                    String contentCat = japito_jibon_content_arr.getJSONObject(i).getString("contentCat");
+                    ///String thumbNail_image = japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image");
+                    int contentid = japito_jibon_content_arr.getJSONObject(i).getInt("id");
+                    if (japito_jibon_content_arr.getJSONObject(i).has("contentPrice")) {
+                        contentPrice = japito_jibon_content_arr.getJSONObject(i).getInt("contentPrice");
                     }
 
 
                     if (contentType.equals("video")) {
                         Log.i("Data", "Video");
-                        japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), "video", contentUrl,contentCat,thumbNail_image,contentid,contentPrice));
+                        japitoJibonArrayList.add(new JapitoJibon(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), "video", contentUrl,japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), contentCat,  contentid, contentPrice));
                     } else {
                         Log.i("Data", "Image");
-                        japitoJibonMCArrayList.add(new JapitoJibonMC(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("contentUrl"), "image", contentUrl,contentCat,thumbNail_image, contentid,contentPrice));
+                        japitoJibonArrayList.add(new JapitoJibon(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("contentUrl"), "image", contentUrl, contentCat, "", contentid, contentPrice));
                     }
                 } catch (JSONException e) {
                     Log.d("japito_jibon_exception", e.toString());
@@ -433,19 +422,19 @@ public class HomePage extends AppCompatActivity {
                 int contentPrice = 0;
                 try {
                     String contentUrl = top_contentsArr.getJSONObject(i).getString("contentUrl");
-                    String contentTitle=top_contentsArr.getJSONObject(i).getString("contentTitle");
-                    String contentType=top_contentsArr.getJSONObject(i).getString("contentType");
-                    String contentCat=top_contentsArr.getJSONObject(i).getString("contentCat");
-                    String thumbNail_image=top_contentsArr.getJSONObject(i).getString("thumbNail_image");
+                    String contentTitle = top_contentsArr.getJSONObject(i).getString("contentTitle");
+                    String contentType = top_contentsArr.getJSONObject(i).getString("contentType");
+                    String contentCat = top_contentsArr.getJSONObject(i).getString("contentCat");
+                    String thumbNail_image = top_contentsArr.getJSONObject(i).getString("thumbNail_image");
                     int contentId = top_contentsArr.getJSONObject(i).getInt("id");
-                    String contentDescription=top_contentsArr.getJSONObject(i).getString("contentDescription");
-                    if(top_contentsArr.getJSONObject(i).has("contentPrice")){
-                        contentPrice=top_contentsArr.getJSONObject(i).getInt("contentPrice");
+                    String contentDescription = top_contentsArr.getJSONObject(i).getString("contentDescription");
+                    if (top_contentsArr.getJSONObject(i).has("contentPrice")) {
+                        contentPrice = top_contentsArr.getJSONObject(i).getInt("contentPrice");
                     }
-                    seraChobiArrayList.add(new SeraChobi(contentUrl,"",contentType, contentTitle,thumbNail_image,contentCat,contentId,contentDescription,contentPrice));
+                    seraChobiArrayList.add(new SeraChobi(contentUrl, "", contentType, contentTitle, thumbNail_image, contentCat, contentId, contentDescription, contentPrice));
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.d("tpCntntExcptn",e.toString());
+                    Log.d("tpCntntExcptn", e.toString());
                 }
             }
             initializeTopContentRecyclerView();
@@ -461,19 +450,19 @@ public class HomePage extends AppCompatActivity {
                 try {
                     String contentUrl = jsonSliderContentArr.getJSONObject(i).getString("contentUrl");
                     String description = jsonSliderContentArr.getJSONObject(i).getString("contentDescription");
-                    String contentTitle=jsonSliderContentArr.getJSONObject(i).getString("contentTitle");
-                    String contentType=jsonSliderContentArr.getJSONObject(i).getString("contentType");
-                    String contentCat=jsonSliderContentArr.getJSONObject(i).getString("contentCat");
+                    String contentTitle = jsonSliderContentArr.getJSONObject(i).getString("contentTitle");
+                    String contentType = jsonSliderContentArr.getJSONObject(i).getString("contentType");
+                    String contentCat = jsonSliderContentArr.getJSONObject(i).getString("contentCat");
                     int contentId = jsonSliderContentArr.getJSONObject(i).getInt("id");
-                    String contentDescription=jsonSliderContentArr.getJSONObject(i).getString("contentDescription");
-                    String thumbNailImg=jsonSliderContentArr.getJSONObject(i).getString("thumbNail_image");
-                    if(jsonSliderContentArr.getJSONObject(i).has("contentPrice")){
-                        contentPrice=jsonSliderContentArr.getJSONObject(i).getInt("contentPrice");
+                    String contentDescription = jsonSliderContentArr.getJSONObject(i).getString("contentDescription");
+                    String thumbNailImg = jsonSliderContentArr.getJSONObject(i).getString("thumbNail_image");
+                    if (jsonSliderContentArr.getJSONObject(i).has("contentPrice")) {
+                        contentPrice = jsonSliderContentArr.getJSONObject(i).getInt("contentPrice");
                     }
-                    sliderImages.add(new SliderImage(contentUrl, description,contentType,contentTitle,contentCat,contentId,contentDescription,thumbNailImg, contentPrice));
+                    sliderImages.add(new SliderImage(contentUrl, description, contentType, contentTitle, contentCat, contentId, contentDescription, thumbNailImg, contentPrice));
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.d("SldrCntntExcptn",e.toString());
+                    Log.d("SldrCntntExcptn", e.toString());
                 }
             }
             initialCustomSwipeAdapter();
@@ -484,24 +473,21 @@ public class HomePage extends AppCompatActivity {
 
     public void startLoginActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
         finish();
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        myIntent.putExtra("cameFromWhichActivity","HomePage");
+        myIntent.putExtra("cameFromWhichActivity", "HomePage");
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        finish();
-
     }
+
     public void startSportActivity(View view) {
         Intent myIntent = new Intent(getApplicationContext(), KheladhulaActivity.class);
-        
+
         this.startActivity(myIntent);
     }
 
@@ -547,8 +533,7 @@ public class HomePage extends AppCompatActivity {
 
     public void initializeTopContentRecyclerView() {
         recyclerViewForSeraChobi = findViewById(R.id.RV_SeraChobi);
-        recyclerViewForSeraChobi.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewForSeraChobi.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         SnapHelper snapHelperStart = new GravitySnapHelper(Gravity.START);
         snapHelperStart.attachToRecyclerView(recyclerViewForSeraChobi);
         recyclerViewForSeraChobi.setHasFixedSize(true);
@@ -558,20 +543,18 @@ public class HomePage extends AppCompatActivity {
 
     public void initializeJapitoJibonRecyclerView() {
         recyclerViewForJapitoJibon = findViewById(R.id.RV_japitoJibon);
-        recyclerViewForJapitoJibon.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false));
+        recyclerViewForJapitoJibon.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         SnapHelper snapHelperStartJapitoJibon = new GravitySnapHelper(Gravity.START);
         snapHelperStartJapitoJibon.attachToRecyclerView(recyclerViewForJapitoJibon);
         recyclerViewForJapitoJibon.setHasFixedSize(true);
-        adapterForJapitoJibon = new RecyclerAdapterForJapitoJibon(this, japitoJibonMCArrayList);
+        adapterForJapitoJibon = new RecyclerAdapterForJapitoJibon(this, japitoJibonArrayList);
         recyclerViewForJapitoJibon.setAdapter(adapterForJapitoJibon);
     }
 
 
     public void initializeMulloCharRecyclerView() {
         recyclerViewForMulloChar = findViewById(R.id.RV_mulloChar);
-        recyclerViewForMulloChar.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewForMulloChar.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         SnapHelper snapHelperStartMulloChar = new GravitySnapHelper(Gravity.START);
         snapHelperStartMulloChar.attachToRecyclerView(recyclerViewForMulloChar);
         recyclerViewForMulloChar.setHasFixedSize(true);
@@ -581,8 +564,7 @@ public class HomePage extends AppCompatActivity {
 
     public void initializeGamesZoneRecyclerView() {
         recyclerViewForGamesZone = findViewById(R.id.RV_gamesZone);
-        recyclerViewForGamesZone.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewForGamesZone.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         SnapHelper snapHelperStartMulloChar = new GravitySnapHelper(Gravity.START);
         snapHelperStartMulloChar.attachToRecyclerView(recyclerViewForGamesZone);
         recyclerViewForGamesZone.setHasFixedSize(true);
@@ -592,8 +574,7 @@ public class HomePage extends AppCompatActivity {
 
     public void initializeShocolChobiRecyclerview() {
         recyclerViewForShocolChobi = findViewById(R.id.RV_ShocolChobi);
-        recyclerViewForShocolChobi.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewForShocolChobi.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         SnapHelper snapHelperStartShocolChobi = new GravitySnapHelper(Gravity.START);
         snapHelperStartShocolChobi.attachToRecyclerView(recyclerViewForShocolChobi);
         recyclerViewForShocolChobi.setHasFixedSize(true);
@@ -603,8 +584,7 @@ public class HomePage extends AppCompatActivity {
 
     public void initializeShikkhaSohayikaRecyclerview() {
         recyclerViewForShikkhaSohayika = findViewById(R.id.RV_ShikkhaSohayika);
-        recyclerViewForShikkhaSohayika.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false));
+        recyclerViewForShikkhaSohayika.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         SnapHelper snapHelperStartShikkhaSohayika = new GravitySnapHelper(Gravity.START);
         snapHelperStartShikkhaSohayika.attachToRecyclerView(recyclerViewForShikkhaSohayika);
         recyclerViewForShikkhaSohayika.setHasFixedSize(true);
@@ -614,36 +594,28 @@ public class HomePage extends AppCompatActivity {
 
     public void startGoromKhoborPage(View view) {
         Intent myIntent = new Intent(getApplicationContext(), GoromKhoborActivity.class);
-        
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        //finish();
     }
 
     public void startGalleryActivity(View view) {
         Intent galleryIntent = new Intent(getApplicationContext(), GalleryActivity.class);
         galleryIntent.putExtra("galleryImageData", seraChobiArrayList);
         this.startActivity(galleryIntent);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-        //finish();
     }
 
     public void subscribe(View view) {
         Intent intentDailyLife = new Intent(HomePage.this, PaymentMethod.class);
         startActivity(intentDailyLife);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
     public void moreJapitoJibon(View view) {
         Intent intentDailyLife = new Intent(HomePage.this, JibonJaponActivity.class);
         startActivity(intentDailyLife);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
     public void moreShikha(View view) {
         Intent intentDailyLife = new Intent(HomePage.this, PorashunaActivity.class);
         startActivity(intentDailyLife);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
     public void jumpToHandsetFeature(View view) {
@@ -662,5 +634,11 @@ public class HomePage extends AppCompatActivity {
         Intent intent = new Intent(HomePage.this, SymphonyCareActivity.class);
         intent.putExtra("position", 2);
         startActivity(intent);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (progressDialog!=null)
+            progressDialog.hideProgressDialog();
     }
 }

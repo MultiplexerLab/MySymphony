@@ -23,8 +23,6 @@ public class NotificationActivity extends AppCompatActivity {
     private RecyclerView recyclerViewNotification;
     public RecyclerAdapterNotification adapterNotification;
     RecyclerView.LayoutManager mLayoutManager;
-
-
     ArrayList<Notifications> notificationsArrayList;
     RequestQueue queue;
 
@@ -35,13 +33,10 @@ public class NotificationActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbarlayoutNotification);
         setSupportActionBar(toolbar);
-
         notificationsArrayList = new ArrayList<>();
-
         notificationsArrayList.add(new Notifications("ট্র্যানজেক্শন সম্পন্ন হয়েছে", "আপনার ১০০ তম ট্রানজেকশন সম্পন্ন হয়েছে", "১০ মিনিট আগে"));
         notificationsArrayList.add(new Notifications("ট্র্যানজেক্শন সম্পন্ন হয়েছে", "আপনার ১০১ তম ট্রানজেকশন সম্পন্ন হয়েছে", "৬ মিনিট আগে"));
         notificationsArrayList.add(new Notifications("ট্র্যানজেক্শন সম্পন্ন হয়েছে", "আপনার ১০২ তম ট্রানজেকশন সম্পন্ন হয়েছে", "১ মিনিট আগে"));
-
         recyclerViewNotification = findViewById(R.id.RVNotification);
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerViewNotification.setLayoutManager(mLayoutManager);
@@ -52,13 +47,8 @@ public class NotificationActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
-        finish();
-
-
     }
 }

@@ -4,14 +4,13 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import lct.mysymphony.Fragment.CustomerCareFragment;
-import lct.mysymphony.Fragment.HandsetFitureFragment;
+import lct.mysymphony.Fragment.HandsetFeatureFragment;
 import lct.mysymphony.Fragment.ZogazogFragment;
 import lct.mysymphony.R;
 import lct.mysymphony.ViewpagerAdapter.ViewPagerAdapter;
@@ -28,10 +27,8 @@ public class SymphonyCareActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_symphony_care);
-
         bottomNavigationView = findViewById(R.id.btmNavigationInSymphonyCareActivity);
         bottomNavigationView.getMenu().findItem(R.id.symphony_bottom_navigation).setChecked(true);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -43,20 +40,17 @@ public class SymphonyCareActivity extends AppCompatActivity {
                 return true;
             }
         });
-
         tabLayout = findViewById(R.id.tabLayoutInSyphonyCare);
         viewPager = findViewById(R.id.viewPagerInSymphonyCare);
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setOffscreenPageLimit(3);
-        viewPagerAdapter.addFragments(new HandsetFitureFragment(), "হ্যান্ডসেট ফিচার");
+        viewPagerAdapter.addFragments(new HandsetFeatureFragment(), "হ্যান্ডসেট ফিচার");
         viewPagerAdapter.addFragments(new CustomerCareFragment(), "কাস্টোমার কেয়ার");
         viewPagerAdapter.addFragments(new ZogazogFragment(), "যোগাযোগ");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
-
         int fragmentPosition = getIntent().getIntExtra("position", 0);
         tabLayout.setScrollPosition(fragmentPosition, 0f, true);
         viewPager.setCurrentItem(fragmentPosition);
     }
-
 }

@@ -1,17 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:orientation="vertical"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <ImageView
+    <RelativeLayout
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        android:layout_margin="2dp"
-        android:padding="10dp"
-        android:id="@+id/imgNewWallpaper"
-        android:scaleType="centerCrop"
-        android:src="@drawable/image_1"
-        android:layout_width="140dp"
-        android:layout_height="140dp" />
+        <ProgressBar
+            android:layout_centerInParent="true"
+            android:id="@+id/progressBarInNewWallpaper"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="5dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/progress_diaog_color"
+            android:indeterminateTintMode="src_atop" />
+
+
+        <ImageView
+            android:id="@+id/imgNewWallpaper"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_margin="2dp"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image_1" />
+
+    </RelativeLayout>
 
 </LinearLayout>

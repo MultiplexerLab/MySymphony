@@ -39,82 +39,68 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     EditText userPhoneNumber;
     RequestQueue queue;
     SharedPreferences.Editor editor;
-
-    String[] permissions = new String[]{
-            Manifest.permission.READ_SMS,};
+    String[] permissions = new String[]{Manifest.permission.READ_SMS,};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
-
-        userPhoneNumber=findViewById(R.id.txtMobileNumInForgotPassword);
+        userPhoneNumber = findViewById(R.id.txtMobileNumInForgotPassword);
         editor = getSharedPreferences("phoneNumber", MODE_PRIVATE).edit();
         queue = Volley.newRequestQueue(this);
         checkPermissions();
-
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 
     public void resetPassword(View view) {
-        if (internetConnected())
-        {
+        if (internetConnected()) {
             sendUserPhoneNumberToServer();
-        }
-        else
-            Toast.makeText(this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-
+        } else Toast.makeText(this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
     }
 
     private void sendUserPhoneNumberToServer() {
-        String phoneNumber=userPhoneNumber.getText().toString();
+        String phoneNumber = userPhoneNumber.getText().toString();
         editor.putString("phoneNo", phoneNumber);
-        String url= "http://bot.sharedtoday.com:9500/ws/gen2FACode?prcName=forgotPass&uid="+userPhoneNumber.getText().toString();
-        final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+        String url = "http://bot.sharedtoday.com:9500/ws/gen2FACode?prcName=forgotPass&uid=" + userPhoneNumber.getText().toString();
+        final StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("responseprofile", response.toString());
+                String genRef = "";
+                JSONObject postInfo = null;
+                try {
+                    postInfo = new JSONObject(response);
+                    genRef = postInfo.getString("genRef");
+                    editor.putString("genRef", genRef);
+                    editor.putString("cameFromWhichActivity", "forgetPassword");
+                    editor.apply();
+                    Log.d("resultMobileNumber ", genRef);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (genRef.contains("-1") || genRef.contains("-2") || genRef.contains("-3")) {
+                    Toast.makeText(ForgetPasswordActivity.this, "মোবাইল পিন তৈরিতে সমস্যা", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ForgetPasswordActivity.this, "আপনার নাম্বার এ ছয় ডিজিটের পিন পাঠানো হয়েছে\nআপনার পিনের মেয়াদ পাচ মিনিট", Toast.LENGTH_SHORT).show();
+                    Intent myIntent = new Intent(getApplicationContext(), PinActivity.class);
+                    startActivity(myIntent);
+                    finish();
+                }
 
-                        Log.d("responseprofile",response.toString());
-
-                        String genRef = "";
-                        JSONObject postInfo = null;
-                        try {
-                            postInfo = new JSONObject(response);
-                            genRef = postInfo.getString("genRef");
-                            editor.putString("genRef", genRef);
-                            editor.putString("cameFromWhichActivity","forgetPassword");
-                            editor.apply();
-                            Log.d("resultMobileNumber ", genRef);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        if (genRef.contains("-1") || genRef.contains("-2") || genRef.contains("-3")) {
-                            Toast.makeText(ForgetPasswordActivity.this, "মোবাইল পিন তৈরিতে সমস্যা", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(ForgetPasswordActivity.this, "আপনার নাম্বার এ ছয় ডিজিটের পিন পাঠানো হয়েছে\nআপনার পিনের মেয়াদ পাচ মিনিট", Toast.LENGTH_SHORT).show();
-                            Intent myIntent = new Intent(getApplicationContext(), PinActivity.class);
-                            
-                            startActivity(myIntent);
-                            overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                            finish();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
-               Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+            }
         });
 
         queue.add(stringRequest);
@@ -130,7 +116,6 @@ public class ForgetPasswordActivity extends AppCompatActivity {
             return false;
         }
     }
-
 
     private boolean checkPermissions() {
         int result;

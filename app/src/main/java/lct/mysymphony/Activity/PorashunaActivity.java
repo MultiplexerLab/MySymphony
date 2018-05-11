@@ -25,68 +25,59 @@ import lct.mysymphony.ModelClass.Porashuna;
 import lct.mysymphony.R;
 import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForPorashuna;
 import lct.mysymphony.helper.Endpoints;
+import lct.mysymphony.helper.ProgressDialog;
 
 public class PorashunaActivity extends AppCompatActivity {
 
-
     private android.support.v7.widget.Toolbar toolbar;
-
-
     private RecyclerView recyclerViewForPorashuna;
     public RecyclerAdapterForPorashuna adapterForPorashuna;
     RecyclerView.LayoutManager mLayoutManager;
-
     ArrayList<Porashuna> porashunaArrayList;
     RequestQueue queue;
-
+    lct.mysymphony.helper.ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_porashuna);
-
         toolbar = findViewById(R.id.toolbarlayoutinporashuna);
         setSupportActionBar(toolbar);
         porashunaArrayList = new ArrayList<>();
+        progressDialog=new ProgressDialog(PorashunaActivity.this);
         queue = Volley.newRequestQueue(PorashunaActivity.this);
         loadDataFromVolley();
-
     }
-
-
     @Override
     public void onBackPressed() {
-
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
-
-
     }
 
     private void loadDataFromVolley() {
-
+        progressDialog.showProgressDialog();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Endpoints.PORASHUNA_GET_URL,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        progressDialog.hideProgressDialog();
 
                         try {
                             JSONArray porashunaContentArr = response.getJSONArray("contents");
                             setporashunaiContent(porashunaContentArr);
-                            //settop_contents(jsontop_contentsArr);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            progressDialog.hideProgressDialog();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Volley", error.toString());
+
+                progressDialog.hideProgressDialog();Log.e("Volley", error.toString());
             }
         });
-
         queue.add(jsonObjectRequest);
     }
 
@@ -108,7 +99,6 @@ public class PorashunaActivity extends AppCompatActivity {
                     } else {
                         porashunaArrayList.add(new Porashuna(contentTitle, contentType, contentDescription, porashunaContentArr.getJSONObject(i).getString("contentUrl"),thumbNail_image, contentCat,contentId));
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -122,7 +112,6 @@ public class PorashunaActivity extends AppCompatActivity {
 
     public void initializeRecyclerView() {
         recyclerViewForPorashuna = findViewById(R.id.RV_Porashuna);
-
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerViewForPorashuna.setLayoutManager(mLayoutManager);
         recyclerViewForPorashuna.setHasFixedSize(true);

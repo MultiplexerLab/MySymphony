@@ -32,7 +32,6 @@ public class RecyclerAdapterForShocolChobi extends RecyclerView.Adapter<Recycler
     ArrayList<ShocolChobi> shocolChobiArrayList;
 
     public RecyclerAdapterForShocolChobi(Activity activity, ArrayList<ShocolChobi> shocolChobiArrayList) {
-
         this.activity = activity;
         this.shocolChobiArrayList = shocolChobiArrayList;
     }
@@ -44,36 +43,29 @@ public class RecyclerAdapterForShocolChobi extends RecyclerView.Adapter<Recycler
         return recyclerViewHolder;
     }
 
-
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
+        Glide.with(activity).load(shocolChobiArrayList.get(position).getContentUrl()).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                holder.progressBar.setVisibility(View.GONE);
+                return false;
+            }
 
-        Glide.with(activity)
-                .load(shocolChobiArrayList.get(position).getContentUrl())
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        holder.progressBar.setVisibility(View.GONE);
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        holder.progressBar.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
-                .into(holder.imageView);
-        }
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                holder.progressBar.setVisibility(View.GONE);
+                return false;
+            }
+        }).into(holder.imageView);
+    }
 
     @Override
     public int getItemCount() {
         return shocolChobiArrayList.size();
     }
 
-
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
-
         ImageView imageView;
         Activity activity;
         ArrayList<ShocolChobi> shocolChobiArrayList;
@@ -81,23 +73,21 @@ public class RecyclerAdapterForShocolChobi extends RecyclerView.Adapter<Recycler
 
         public RecyclerViewHolder(View view, final Activity activity, final ArrayList<ShocolChobi> shocolChobiArrayList) {
             super(view);
-
             imageView = view.findViewById(R.id.imgShocholChobi);
             this.activity = activity;
             this.shocolChobiArrayList = shocolChobiArrayList;
-            progressBar=view.findViewById(R.id.progressBarInShocholChobi);
+            progressBar = view.findViewById(R.id.progressBarInShocholChobi);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent myIntent = new Intent(activity, ImageViewActivity.class);
                     myIntent.putExtra("wallpaper", shocolChobiArrayList.get(getAdapterPosition()));
-                    myIntent.putExtra("cameFromWhichActivity","ShocolChobi");
+                    myIntent.putExtra("cameFromWhichActivity", "ShocolChobi");
                     activity.startActivity(myIntent);
-                    activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                    activity.finish();
+                    ;
                 }
             });
         }
-        }
+    }
 }
 

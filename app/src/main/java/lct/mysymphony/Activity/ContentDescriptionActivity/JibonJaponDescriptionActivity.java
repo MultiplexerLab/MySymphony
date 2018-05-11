@@ -20,19 +20,14 @@ public class JibonJaponDescriptionActivity extends AppCompatActivity {
 
     ImageView newsImageView;
     TextView newsTitle, newsDescription;
-    TextView newPrice,previousPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jibon_japon_description);
-
         newsImageView = findViewById(R.id.imgJibonJaponDescription);
         newsTitle = findViewById(R.id.newsTitleJibonJaponDescription);
         newsDescription = findViewById(R.id.newsdescriptionJibonJaponDescription);
-//      newPrice=findViewById(R.id.newPriceTVinJibonJaponDescription);
-//      previousPrice=findViewById(R.id.previousPriceTVinJibonJaponDescription);
-// /    previousPrice.setPaintFlags(previousPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         setDescripTionData();
     }
 
@@ -41,13 +36,10 @@ public class JibonJaponDescriptionActivity extends AppCompatActivity {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), JibonJaponActivity.class);
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
-        finish();
     }
 
     public void setDescripTionData() {
         JibonJapon object = (JibonJapon) getIntent().getSerializableExtra("Data");
-
         newsTitle.setText(object.getContentTitle());
         newsDescription.setText(object.getContentDescription());
         Glide.with(JibonJaponDescriptionActivity.this)
@@ -61,7 +53,7 @@ public class JibonJaponDescriptionActivity extends AppCompatActivity {
         DataBaseData dataBaseData=new DataBaseData(object.getContentTitle(),object.getContentCat(),object.getContentType(),object.getContentDescription(), object.getThumbnailImgUrl(), "free",object.getContentId());
         purchase.putExtra("dataBaseData",dataBaseData);
         purchase.putExtra("imageUrl",object.getImageUrl());
+        purchase.putExtra("cameFromWhichActivity", "JibonJaponDescriptionActivity");
         startActivity(purchase);
-        //overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 }

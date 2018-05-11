@@ -47,25 +47,20 @@ public class PinActivity extends AppCompatActivity {
     String phoneNumber;
     boolean isResendAlreadyused = false;
     String cameFromWhichActivity = "";
-
-
-    lct.mysymphony.helper.SimpleSmsReciever simpleSmsReceiver=new lct.mysymphony.helper.SimpleSmsReciever();
+    lct.mysymphony.helper.SimpleSmsReciever simpleSmsReceiver = new lct.mysymphony.helper.SimpleSmsReciever();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pin);
-
         toolbar = findViewById(R.id.toolbarlayoutinpin);
         setSupportActionBar(toolbar);
         queue = Volley.newRequestQueue(PinActivity.this);
         SharedPreferences prefs = getSharedPreferences("phoneNumber", MODE_PRIVATE);
         genref = prefs.getString("genRef", "");
         cameFromWhichActivity = prefs.getString("cameFromWhichActivity", "");
-
         phoneNumber = prefs.getString("phoneNo", "");
         pinview = findViewById(R.id.pinView);
-
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
@@ -73,42 +68,32 @@ public class PinActivity extends AppCompatActivity {
             String message = extras.getString("Message");
             Log.d("MessageNumber", address);
             Log.d("Message", message);
-
             if (address.contains("01552146213")) {
                 message = message.replaceAll("Generated Code is:", "");
                 message = message.replaceAll(" ", "");
                 pinview.setText(message);
                 pinText = message;
-
                 SharedPreferences.Editor editor = getSharedPreferences("isBroadcastAlreadyUsed", MODE_PRIVATE).edit();
                 editor.putString("used", "true");
                 editor.apply();
-
                 if (internetConnected()) {
                     if (cameFromWhichActivity.contains("forgetPassword")) {
                         sendVerificationCodeForReset();
-
-                    } else
-                        sendVarificationCodeToServer();
+                    } else sendVarificationCodeToServer();
 
                 } else {
                     Toast.makeText(PinActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
                     finish();
                     startActivity(getIntent());
-
                 }
             }
-
-        } else
-            {
-                Log.d("Bundle", "null");
-                }
-
+        } else {
+            Log.d("Bundle", "null");
+        }
 
         pinview.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -121,8 +106,7 @@ public class PinActivity extends AppCompatActivity {
                         if (cameFromWhichActivity.contains("forgetPassword")) {
                             sendVerificationCodeForReset();
 
-                        } else
-                            sendVarificationCodeToServer();
+                        } else sendVarificationCodeToServer();
 
                     } else {
                         Toast.makeText(PinActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
@@ -131,7 +115,6 @@ public class PinActivity extends AppCompatActivity {
                     }
                 }
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -145,87 +128,65 @@ public class PinActivity extends AppCompatActivity {
         Log.i("Pintext", pinText);
 
         if (isResendAlreadyused == false) {
-            isResendAlreadyused=true;
+            isResendAlreadyused = true;
             String url = "http://bot.sharedtoday.com:9500/ws/validate2FACode?prcName=forgotPass&uid=" + phoneNumber + "&genRef=" + genref + "&code=" + pinText;
 
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("reset", response);
-                            String result = "";
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d("reset", response);
+                    String result = "";
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
 
-                            try {
-                                JSONArray jsonArray = new JSONArray(response);
-
-                                if (jsonArray.length() == 0)
-                                    Toast.makeText(PinActivity.this, "jsonArray blank", Toast.LENGTH_SHORT).show();
-                                else {
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject postInfo = jsonArray.getJSONObject(i);
-                                        result = postInfo.getString("msgType");
-                                        ///Toast.makeText(PhoneNumberVerification.this, "array : "+postInfo.getString("result"), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Toast.makeText(PinActivity.this, "jsonException : " + e.toString(), Toast.LENGTH_SHORT).show();
+                        if (jsonArray.length() == 0)
+                            Toast.makeText(PinActivity.this, "jsonArray blank", Toast.LENGTH_SHORT).show();
+                        else {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject postInfo = jsonArray.getJSONObject(i);
+                                result = postInfo.getString("msgType");
+                                ///Toast.makeText(PhoneNumberVerification.this, "array : "+postInfo.getString("result"), Toast.LENGTH_SHORT).show();
                             }
-
-                            if (result.contains("SUCCESS")) {
-                                Toast.makeText(PinActivity.this, "আপনার পিন সঠিক হয়েছে", Toast.LENGTH_SHORT).show();
-
-                                Log.d("Enter", "enter");
-                                sendUserNewPassword();
-
-//                            Intent myIntent = new Intent(getApplicationContext(), SignUpActivity.class);
-//                            myIntent.putExtra("phoneNumber", phoneNumber);
-//
-//                            PinActivity.this.startActivity(myIntent);
-//                            overridePendingTransition(R.anim.left_in, R.anim.left_out);
-//                            finish();
-                            } else {
-                                Toast.makeText(PinActivity.this, "আপনার পিন ভুল হয়েছে" + "\n" + "আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-                                finish();
-
-                                startActivity(getIntent());
-                                //setIsBroadcastusedSharedPrefferenseFalse();
-                                ///pinview.setValue("");
-                            }
-                            Log.d("responsePin ", response);
                         }
-                    }, new Response.ErrorListener() {
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(PinActivity.this, "jsonException : " + e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (result.contains("SUCCESS")) {
+                        Toast.makeText(PinActivity.this, "আপনার পিন সঠিক হয়েছে", Toast.LENGTH_SHORT).show();
+
+                        Log.d("Enter", "enter");
+                        sendUserNewPassword();
+                    } else {
+                        Toast.makeText(PinActivity.this, "আপনার পিন ভুল হয়েছে" + "\n" + "আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+                        finish();
+                        startActivity(getIntent());
+                    }
+                    Log.d("responsePin ", response);
+                }
+            }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e("VolleyErrorInPinActvt", error.toString());
-                    Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();                }
+                    Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                }
             });
-
             queue.add(stringRequest);
         }
-
-
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         if (cameFromWhichActivity.contains("forgetPassword")) {
             Intent myIntent = new Intent(getApplicationContext(), ForgetPasswordActivity.class);
-            //();
             this.startActivity(myIntent);
-            //overridePendingTransition(R.anim.right_in, R.anim.right_out);
-            finish();
         } else {
             Intent myIntent = new Intent(getApplicationContext(), PhoneNumberVerification.class);
-            //setIsBroadcastusedSharedPrefferenseFalse();
             this.startActivity(myIntent);
-            //overridePendingTransition(R.anim.right_in, R.anim.right_out);
             finish();
         }
-
-
     }
 
     private void sendVarificationCodeToServer() {
@@ -233,93 +194,79 @@ public class PinActivity extends AppCompatActivity {
         Log.i("GenRef", genref);
 
         String url = "http://bot.sharedtoday.com:9500/ws/validate2FACode?prcName=signUp&uid=" + phoneNumber + "&genRef=" + genref + "&code=" + pinText;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        String result = "";
-
-                        try {
-                            JSONArray jsonArray = new JSONArray(response);
-
-                            if (jsonArray.length() == 0)
-                                Toast.makeText(PinActivity.this, "jsonArray blank", Toast.LENGTH_SHORT).show();
-                            else {
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject postInfo = jsonArray.getJSONObject(i);
-                                    result = postInfo.getString("msgType");
-                                    ///Toast.makeText(PhoneNumberVerification.this, "array : "+postInfo.getString("result"), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(PinActivity.this, "jsonException : " + e.toString(), Toast.LENGTH_SHORT).show();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                String result = "";
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    if (jsonArray.length() == 0)
+                        Toast.makeText(PinActivity.this, "jsonArray blank", Toast.LENGTH_SHORT).show();
+                    else {
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject postInfo = jsonArray.getJSONObject(i);
+                            result = postInfo.getString("msgType");
                         }
-
-                        if (result.contains("SUCCESS")) {
-                            Toast.makeText(PinActivity.this, "আপনার পিন সঠিক হয়েছে", Toast.LENGTH_SHORT).show();
-
-                            Intent myIntent = new Intent(getApplicationContext(), SignUpActivity.class);
-                            myIntent.putExtra("phoneNumber", phoneNumber);
-                            //setIsBroadcastusedSharedPrefferenseFalse();
-                            PinActivity.this.startActivity(myIntent);
-                            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                            finish();
-                        } else {
-                            Toast.makeText(PinActivity.this, "আপনার পিন ভুল হয়েছে" + "\n" + "আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-                            finish();
-                            startActivity(getIntent());
-                            //setIsBroadcastusedSharedPrefferenseFalse();
-                            ///pinview.setValue("");
-                        }
-                        Log.d("responsePin ", response);
                     }
-                }, new Response.ErrorListener() {
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(PinActivity.this, "jsonException : " + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+
+                if (result.contains("SUCCESS")) {
+                    Toast.makeText(PinActivity.this, "আপনার পিন সঠিক হয়েছে", Toast.LENGTH_SHORT).show();
+                    Intent myIntent = new Intent(getApplicationContext(), SignUpActivity.class);
+                    myIntent.putExtra("phoneNumber", phoneNumber);
+                    PinActivity.this.startActivity(myIntent);
+                    finish();
+                } else {
+                    Toast.makeText(PinActivity.this, "আপনার পিন ভুল হয়েছে" + "\n" + "আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+                    finish();
+                    startActivity(getIntent());
+                }
+                Log.d("responsePin ", response);
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInPinActvt", error.toString());
-                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+            }
         });
-
         queue.add(stringRequest);
     }
 
     public void resendMobileVerificationNumber() {
         String url = Endpoints.SEND_MOBILE_NUMBER_TO_SERVER_URL + phoneNumber;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //Toast.makeText(PhoneNumberVerification.this, response, Toast.LENGTH_LONG).show();
-                        Log.d("responsePhone ", response);
-
-                        String genRef = "";
-                        JSONObject postInfo = null;
-                        try {
-                            postInfo = new JSONObject(response);
-                            genRef = postInfo.getString("genRef");
-                            Log.d("resultMobileNumber ", genRef);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        if (genRef.contains("-1") || genRef.contains("-2") || genRef.contains("-3")) {
-                            Toast.makeText(PinActivity.this, "কিছুক্ষন পরে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-                        } else {
-                            SharedPreferences.Editor editor = getSharedPreferences("isBroadcastAlreadyUsed", MODE_PRIVATE).edit();
-                            editor.putString("used", "true");
-                            editor.apply();
-                            Toast.makeText(PinActivity.this, "আপনার নাম্বার এ ছয় ডিজিটের পিন পাঠানো হয়েছে", Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                }, new Response.ErrorListener() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("responsePhone ", response);
+                String genRef = "";
+                JSONObject postInfo = null;
+                try {
+                    postInfo = new JSONObject(response);
+                    genRef = postInfo.getString("genRef");
+                    Log.d("resultMobileNumber ", genRef);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (genRef.contains("-1") || genRef.contains("-2") || genRef.contains("-3")) {
+                    Toast.makeText(PinActivity.this, "কিছুক্ষন পরে আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+                } else {
+                    SharedPreferences.Editor editor = getSharedPreferences("isBroadcastAlreadyUsed", MODE_PRIVATE).edit();
+                    editor.putString("used", "true");
+                    editor.apply();
+                    Toast.makeText(PinActivity.this, "আপনার নাম্বার এ ছয় ডিজিটের পিন পাঠানো হয়েছে", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInPhoneNumbe", error.toString());
-               Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+            }
         });
-
         queue.add(stringRequest);
     }
 
@@ -336,121 +283,44 @@ public class PinActivity extends AppCompatActivity {
     public void resendVerificationNumber(View view) {
 
         if (internetConnected()) {
-            ///setIsBroadcastusedSharedPrefferenseFalse();
             resendMobileVerificationNumber();
-
         } else
             Toast.makeText(PinActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
     }
 
     public void sendUserNewPassword() {
         Log.d("newpassword", "new password");
-
         String url = "http://bot.sharedtoday.com:9500/ws/resetRandomPassword?userid=" + phoneNumber;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("responseNewPassword", response);
+                if (response.contains("SUCCESS")) {
+                    Intent myIntent = new Intent(getApplicationContext(), SignInActivity.class);
+                    PinActivity.this.startActivity(myIntent);
+                }
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //Toast.makeText(PhoneNumberVerification.this, response, Toast.LENGTH_LONG).show();
-                        Log.d("responseNewPassword", response);
-
-                        if (response.contains("SUCCESS")) {
-                            Intent myIntent = new Intent(getApplicationContext(), SignInActivity.class);
-                            //setIsBroadcastusedSharedPrefferenseFalse();
-                            PinActivity.this.startActivity(myIntent);
-                            ///setIsBroadcastusedSharedPrefferenseFalse();
-                            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                            finish();
-                        }
-
-//                        String genRef = "";
-//                        JSONObject postInfo = null;
-//                        try {
-//                            postInfo = new JSONObject(response);
-//                            genRef = postInfo.getString("genRef");
-//                            Log.d("resultMobileNumber ", genRef);
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                        if (genRef.contains("-1") || genRef.contains("-2") || genRef.contains("-3")) {
-//                            Toast.makeText(PinActivity.this, "কিছুক্ষন পরে আবার চেষ্টা করুনা", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            Toast.makeText(PinActivity.this, "আপনার নাম্বার এ ছয় ডিজিটের পিন পাঠানো হয়েছে", Toast.LENGTH_SHORT).show();
-//                        }
-                    }
-                }, new Response.ErrorListener() {
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInPhoneNumbe", error.toString());
-                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+            }
         });
         queue.add(stringRequest);
     }
 
-    public void readSms() {
-        Log.d("entersms", "enter");
-        StringBuilder smsBuilder = new StringBuilder();
-        final String SMS_URI_INBOX = "content://sms/inbox";
-        final String SMS_URI_ALL = "content://sms/";
-        try {
-            Uri uri = Uri.parse(SMS_URI_INBOX);
-            String[] projection = new String[]{"_id", "address", "person", "body", "date", "type"};
-            Cursor cur = getContentResolver().query(uri, projection, "address='+8801552146213'", null, "date desc");
-            if (cur.moveToFirst()) {
-                int index_Address = cur.getColumnIndex("address");
-                int index_Person = cur.getColumnIndex("person");
-                int index_Body = cur.getColumnIndex("body");
-                int index_Date = cur.getColumnIndex("date");
-                int index_Type = cur.getColumnIndex("type");
-                do {
-                    String strAddress = cur.getString(index_Address);
-                    int intPerson = cur.getInt(index_Person);
-                    String strbody = cur.getString(index_Body);
-                    long longDate = cur.getLong(index_Date);
-                    int int_Type = cur.getInt(index_Type);
-
-                    smsBuilder.append("[ ");
-                    smsBuilder.append(strAddress + ", ");
-                    smsBuilder.append(intPerson + ", ");
-                    smsBuilder.append(strbody + ", ");
-                    smsBuilder.append(longDate + ", ");
-                    smsBuilder.append(int_Type);
-                    smsBuilder.append(" ]\n\n");
-                } while (cur.moveToNext());
-
-                if (!cur.isClosed()) {
-                    cur.close();
-                    cur = null;
-                }
-            } else {
-                smsBuilder.append("no result!");
-            } // end if
-        } catch (SQLiteException ex) {
-            Log.d("SQLiteException", ex.getMessage());
-        }
-        Log.d("strngbldr", smsBuilder.toString());
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.registerReceiver(simpleSmsReceiver, new android.content.IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
     }
 
-//    public void setIsBroadcastusedSharedPrefferenseFalse() {
-//        SharedPreferences.Editor editor = getSharedPreferences("isBroadcastAlreadyUsed", MODE_PRIVATE).edit();
-//        editor.putString("used", "false");
-//        editor.apply();
-//
-//    }
-
-@Override
-public void onResume(){
-    super.onResume();
-    this.registerReceiver(simpleSmsReceiver,new android.content.IntentFilter(
-            "android.provider.Telephony.SMS_RECEIVED"));
-
-}
- @Override
+    @Override
     protected void onPause() {
-     super.onPause();
-
-     this.unregisterReceiver(simpleSmsReceiver);
+        super.onPause();
+        this.unregisterReceiver(simpleSmsReceiver);
     }
 
 

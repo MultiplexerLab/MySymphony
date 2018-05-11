@@ -53,7 +53,6 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
         nameTV = view.findViewById(R.id.nameTVinMyinfoFragment);
         birthDateTV = view.findViewById(R.id.birthDateTVMyInfoFragment);
         loadDataFromVolley();
-
         return view;
     }
 
@@ -65,29 +64,34 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-
                         Log.d("responseprofile", response.toString());
-
-
                         try {
                             JSONObject postInfo = response.getJSONObject(0);
                             if (postInfo != null) {
                                 birthDateTV.setText("   " + postInfo.getString("applicantBirthDate"));
                                 userName=postInfo.getString("applicantBirthDate");
-                                nameTV.setText("   " + postInfo.getString("partnerName"));
 
-                                ActivityCommunicator activityCommunicator=(ActivityCommunicator)getActivity();
-                                activityCommunicator.passDataToActivity(postInfo.getString("partnerName"));
+                                if (postInfo.has("partnerName") && postInfo.getString("partnerName")!=null)
+                                {
+                                    nameTV.setText("   " + postInfo.getString("partnerName"));
+                                    ActivityCommunicator activityCommunicator=(ActivityCommunicator)getActivity();
+                                    activityCommunicator.passDataToActivity("   " + postInfo.getString("partnerName"));
+                                }
+
+                                else
+                                {
+                                    nameTV.setText("   " + postInfo.getString("error"));
+                                    ActivityCommunicator activityCommunicator=(ActivityCommunicator)getActivity();
+                                    activityCommunicator.passDataToActivity("Error");
+                                }
 
                             } else {
                                 Log.d("json", "null");
                             }
-                            //settop_contents(jsontop_contentsArr);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.d("error", e.toString());
                         }
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -99,7 +103,6 @@ public class MyInfoFragmentInProfileActivity extends Fragment {
 
         queue.add(jsonArrayRequest);
     }
-
     public interface ActivityCommunicator{
          void passDataToActivity(String someValue);
     }

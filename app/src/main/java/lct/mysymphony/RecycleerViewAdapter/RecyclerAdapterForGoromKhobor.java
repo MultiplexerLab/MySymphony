@@ -28,25 +28,20 @@ import lct.mysymphony.R;
 
 
 public class RecyclerAdapterForGoromKhobor extends RecyclerView.Adapter<RecyclerAdapterForGoromKhobor.RecyclerViewHolder> {
-
     Activity activity;
     private ArrayList<GoromKhobor> goromKhoborArrayList;
-
     public RecyclerAdapterForGoromKhobor(Activity activity, ArrayList<GoromKhobor> goromKhoborArrayList) {
         this.activity = activity;
         this.goromKhoborArrayList = goromKhoborArrayList;
     }
-
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_gorom_khobor, parent, false);
         RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, goromKhoborArrayList);
         return recyclerViewHolder;
     }
-
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-        ///holder.japitoJebonNewsTV.setText(japitoJibonMCArrayList.get(position).getContentTitle());
         holder.goromKhoborTitle.setText(goromKhoborArrayList.get(position).getContentTitle());
         holder.publishedAt.setText(goromKhoborArrayList.get(position).getPublishedAt());
         Glide.with(activity)
@@ -57,7 +52,6 @@ public class RecyclerAdapterForGoromKhobor extends RecyclerView.Adapter<Recycler
                         holder.progressBar.setVisibility(View.GONE);
                         return false;
                     }
-
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         holder.progressBar.setVisibility(View.GONE);
@@ -71,10 +65,7 @@ public class RecyclerAdapterForGoromKhobor extends RecyclerView.Adapter<Recycler
     public int getItemCount() {
         return goromKhoborArrayList.size();
     }
-
-
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
-
         ImageView imageView;
         CardView cardView;
         Activity activity;
@@ -84,26 +75,19 @@ public class RecyclerAdapterForGoromKhobor extends RecyclerView.Adapter<Recycler
 
         public RecyclerViewHolder(View view, final Activity activity, final ArrayList<GoromKhobor> goromKhoborArrayList) {
             super(view);
-
             this.activity = activity;
             this.goromKhoborArrayList = goromKhoborArrayList;
             progressBar = view.findViewById(R.id.progressBarInGoromKhobor);
-
             imageView = view.findViewById(R.id.imgGoromKhobor);
             goromKhoborTitle = view.findViewById(R.id.titleGoromKhobor);
             publishedAt = view.findViewById(R.id.publishedAtGoromKhobor);
             cardView = view.findViewById(R.id.goromKhoborCardView);
-            ///japitoJebonNewsTV = view.findViewById(R.id.japitoJibonNewsTV);
-
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent myIntent = new Intent(activity, NewsDescriptionActivity.class);
                     myIntent.putExtra("Data", (Serializable) goromKhoborArrayList.get(getAdapterPosition()));
-
                     activity.startActivity(myIntent);
-                    //activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                    //activity.finish();
                 }
             });
         }

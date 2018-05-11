@@ -50,7 +50,6 @@ public class CartoonActivity extends AppCompatActivity {
     }
 
     private void loadDataFromVolley() {
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Endpoints.AUTTOHASI_GET_URL,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -77,12 +76,9 @@ public class CartoonActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 

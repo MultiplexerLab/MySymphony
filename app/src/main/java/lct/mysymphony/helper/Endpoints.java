@@ -21,6 +21,4 @@ public class Endpoints {
     public static final String UPDATE_DEFAULT_PASSWORD_POST_URL="http://bot.sharedtoday.com:9500/ws/changePassword?pass=01717&newpass=";
     public static final String GET_USER_INFO_URL="http://bot.sharedtoday.com:9500/ws/commonGetFromTable?tbl=Partner&key=partnerId&val=";
     public static final String GET_REFEREL_CODE_URL="http://bot.sharedtoday.com:9500/ws/mysymphony/getPaymentRefCode";
-
-
 }

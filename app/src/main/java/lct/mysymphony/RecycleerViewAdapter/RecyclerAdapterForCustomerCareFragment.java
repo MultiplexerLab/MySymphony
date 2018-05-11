@@ -25,43 +25,27 @@ import lct.mysymphony.R;
 
 public class RecyclerAdapterForCustomerCareFragment extends RecyclerView.Adapter<RecyclerAdapterForCustomerCareFragment.RecyclerViewHolder> {
 
-
-   /// private int[] images = {R.drawable.japito_jibon_1, R.drawable.japito_jibon_2};
-
     Activity activity;
     private ArrayList<String> goromKhoborArrayList;
-
-
     public RecyclerAdapterForCustomerCareFragment(Activity activity, ArrayList<String> goromKhoborArrayList) {
-
         this.activity = activity;
         this.goromKhoborArrayList=goromKhoborArrayList;
-
     }
-
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_customer_care_fragment, parent, false);
         RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view,activity, goromKhoborArrayList);
         return recyclerViewHolder;
     }
-
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-
-        ///holder.japitoJebonNewsTV.setText(japitoJibonMCArrayList.get(position).getContentTitle());
         holder.customerCareTitle.setText(goromKhoborArrayList.get(position));
     }
-
     @Override
     public int getItemCount() {
         return goromKhoborArrayList.size();
     }
-
-
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
-
         ImageView imageView;
         CardView cardView;
         Activity activity;
@@ -70,34 +54,9 @@ public class RecyclerAdapterForCustomerCareFragment extends RecyclerView.Adapter
 
         public RecyclerViewHolder(View view, final Activity activity, final ArrayList<String> goromKhoborArrayList) {
             super(view);
-
             this.activity=activity;
             this.goromKhoborArrayList=goromKhoborArrayList;
             customerCareTitle=view.findViewById(R.id.titleCustomerCare);
-
-
-//            imageView = view.findViewById(R.id.imgGoromKhobor);
-//            goromKhoborTitle=view.findViewById(R.id.titleGoromKhobor);
-//            publishedAt=view.findViewById(R.id.publishedAtGoromKhobor);
-//            cardView=view.findViewById(R.id.goromKhoborCardView);
-//            ///japitoJebonNewsTV = view.findViewById(R.id.japitoJibonNewsTV);
-//
-//            cardView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent myIntent = new Intent(activity, NewsDescriptionActivity.class);
-//                    myIntent.putExtra("Data", (Serializable) goromKhoborArrayList.get(getAdapterPosition()));
-//                    
-//                    activity.startActivity(myIntent);
-//                    activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
-//                    activity.finish();
-//
-//
-//                }
-//            });
-
         }
     }
-
-
 }

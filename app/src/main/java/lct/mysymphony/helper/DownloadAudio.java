@@ -14,27 +14,27 @@ import java.net.URL;
 
 import lct.mysymphony.ModelClass.DataBaseData;
 
-public class DownloadVideo {
+public class DownloadAudio {
 
     Context context;
-    String videoUrl;
+    String audioUrl;
     private DataBaseData dataBaseData;
 
-    public void downloadVideo(String videoUrl, Context context, DataBaseData dataBaseData) {
+    public void downloadAudio(String audioUrl, Context context, DataBaseData dataBaseData) {
         this.context = context;
-        this.videoUrl = videoUrl;
+        this.audioUrl = audioUrl;
         this.dataBaseData = dataBaseData;
-        Log.i("DonwloadVideoEnter", "Downloading the video. Please wait...");
-        DownloadVideo.RetrieveVideoTask bt = new DownloadVideo.RetrieveVideoTask();
-        bt.execute(videoUrl);
+        Log.i("DonwloadAudioEnter", "Downloading the Audio. Please wait...");
+        DownloadAudio.RetrieveAudioTask bt = new DownloadAudio.RetrieveAudioTask();
+        bt.execute(audioUrl);
     }
-    class RetrieveVideoTask extends AsyncTask<String, Void, String> {
+    class RetrieveAudioTask extends AsyncTask<String, Void, String> {
 
         private Exception exception;
         DataHelper dbHelper = new DataHelper(context);
 
         protected void onPreExecute() {
-            Log.i("DonwloadVideo", "Downloading the video. Please wait...");
+            Log.i("DonwloadAudio", "Downloading the Audio. Please wait...");
         }
         protected String doInBackground(String... urls) {
             String video = "";
@@ -55,7 +55,7 @@ public class DownloadVideo {
                     }
                     byte[] data = bao.toByteArray();
                     video = Base64.encodeToString(data, Base64.DEFAULT);
-                    Log.i("videoStr", video);
+                    Log.i("audioStr", video);
                 }
             } catch (MalformedURLException mue) {
                 Log.e("URLException", mue.toString());
@@ -74,10 +74,10 @@ public class DownloadVideo {
         }
 
         protected void onPostExecute(String result) {
-            Log.d("postExecuteVideo","postExecuteVideo");
+            Log.d("postExecuteAudio","postExecuteAudio");
             DownloadImage.AsyncResponse asyncResponse = (DownloadImage.AsyncResponse) context;
             asyncResponse.processFinish("complete");
-            dbHelper.insertVideoStr(result, dataBaseData);
+            dbHelper.insertAudioStr(result, dataBaseData);
         }
     }
 

@@ -23,8 +23,7 @@ import com.bumptech.glide.request.target.Target;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import lct.mysymphony.Activity.ContentDescriptionActivity.SliderContentActivity;
+import lct.mysymphony.Activity.ContentDescriptionActivity.SliderContentDescriptionActivity;
 import lct.mysymphony.ModelClass.SliderImage;
 
 /**
@@ -32,33 +31,24 @@ import lct.mysymphony.ModelClass.SliderImage;
  */
 
 public class CustomSwipeAdapter extends PagerAdapter {
-
-    ///private int[] images = {R.drawable.japito_jibon_1, R.drawable.japito_jibon_2, R.drawable.shikkhya_sohayika_4};
     private LayoutInflater inflater;
-
     ArrayList<SliderImage> sliderImages;
     private Context context;
-
-
     public CustomSwipeAdapter(Context context, ArrayList<SliderImage> images) {
         this.context = context;
         this.sliderImages=images;
     }
-
     @Override
     public int getCount() {
         return sliderImages.size();
     }
-
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return view ==  object;
     }
-
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((RelativeLayout) object);
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -67,7 +57,6 @@ public class CustomSwipeAdapter extends PagerAdapter {
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View item_view = inflater.inflate(R.layout.swipelayout, view, false);
-
         assert item_view != null;
         final ImageView imageView = item_view
                 .findViewById(R.id.image);
@@ -89,15 +78,13 @@ public class CustomSwipeAdapter extends PagerAdapter {
                 })
                 .into(imageView);
 
-
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Activity activity= (Activity) context;
-                Intent intent = new Intent(context, SliderContentActivity.class);
+                Intent intent = new Intent(context, SliderContentDescriptionActivity.class);
                 intent.putExtra("wallpaper", (Serializable) sliderImages.get(position));
                 context.startActivity(intent);
-                //activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
         });
 

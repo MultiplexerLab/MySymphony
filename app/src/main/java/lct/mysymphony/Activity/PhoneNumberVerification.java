@@ -43,10 +43,8 @@ public class PhoneNumberVerification extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
-
+        setContentView(R.layout.phone_number_verification);
         editor = getSharedPreferences("phoneNumber", MODE_PRIVATE).edit();
-
         toolbar = findViewById(R.id.toolbarlayoutinsign);
         setSupportActionBar(toolbar);
         phoneNumberET = findViewById(R.id.phoneNumberInPhoneVarification);
@@ -57,15 +55,10 @@ public class PhoneNumberVerification extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
-        finish();
     }
 
     public void startPinActivity(View view) {
-        //sendMobileNumberToServer();
-
         if (internetConnected()) {
             phoneNumber = phoneNumberET.getText().toString();
 
@@ -77,11 +70,9 @@ public class PhoneNumberVerification extends AppCompatActivity {
             {
                 Toast.makeText(this, "ফোন নাম্বার দিন", Toast.LENGTH_SHORT).show();
             }
-
         } else
             Toast.makeText(this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
     }
-
 
     private void sendMobileNumberToServer() {
         editor.putString("phoneNo", phoneNumber);
@@ -91,9 +82,7 @@ public class PhoneNumberVerification extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        //Toast.makeText(PhoneNumberVerification.this, response, Toast.LENGTH_LONG).show();
                         Log.d("responsePhone ", response);
-
                         String genRef = "";
                         JSONObject postInfo = null;
                         try {
@@ -111,10 +100,7 @@ public class PhoneNumberVerification extends AppCompatActivity {
                         } else {
                             Toast.makeText(PhoneNumberVerification.this, "আপনার নাম্বার এ ছয় ডিজিটের পিন পাঠানো হয়েছে\nআপনার পিনের মেয়াদ পাচ মিনিট", Toast.LENGTH_SHORT).show();
                             Intent myIntent = new Intent(getApplicationContext(), PinActivity.class);
-                            
                             startActivity(myIntent);
-                            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                            finish();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -123,7 +109,6 @@ public class PhoneNumberVerification extends AppCompatActivity {
                 Log.e("VolleyErrorInPhoneNumbe", error.toString());
                 Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();            }
         });
-
         queue.add(stringRequest);
     }
 
@@ -132,7 +117,6 @@ public class PhoneNumberVerification extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        ///Toast.makeText(PhoneNumberVerification.this, response, Toast.LENGTH_SHORT).show();
                         Log.i("Response", response);
                         String result = "";
                         try {
@@ -144,14 +128,11 @@ public class PhoneNumberVerification extends AppCompatActivity {
                                     JSONObject postInfo = jsonArray.getJSONObject(i);
                                     result = postInfo.getString("msgType");
                                     Log.d("resultSignUp ", result);
-                                    ///Toast.makeText(PhoneNumberVerification.this, "array : "+postInfo.getString("result"), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            ///Toast.makeText(PhoneNumberVerification.this, "jsonException : " + e.toString(), Toast.LENGTH_SHORT).show();
                         }
-
                         if (result.contains("SUCCESS")) {
                             sendMobileNumberToServer();
                         } else {
@@ -183,7 +164,6 @@ public class PhoneNumberVerification extends AppCompatActivity {
                 return params;
             }
         };
-
         queue.add(stringRequest);
     }
 

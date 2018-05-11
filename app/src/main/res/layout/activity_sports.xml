@@ -17,8 +17,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
            >
-
-
             <include
                 android:id="@+id/toolbarlayoutinsports"
                 layout="@layout/toolbar_layout_in_sports" />
@@ -38,8 +36,6 @@
 
 
         </android.support.design.widget.AppBarLayout>
-
-
         <android.support.v4.view.ViewPager
             android:background="@color/White"
             android:id="@+id/viewPagerInSports"
@@ -48,9 +44,5 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/appbarLayout"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-
     </RelativeLayout>
-
-
 </android.support.design.widget.CoordinatorLayout>

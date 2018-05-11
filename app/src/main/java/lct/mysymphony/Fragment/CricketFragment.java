@@ -27,7 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import lct.mysymphony.ModelClass.Kheladhula_Cricket_sorboshesh_sobgbad;
+import lct.mysymphony.ModelClass.KheladhulaCricketSorbosheshSongbad;
 import lct.mysymphony.R;
 import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForKheladhulaCricket;
 import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForSorbosheshSongbadCricketfragment;
@@ -36,7 +36,7 @@ import lct.mysymphony.helper.Endpoints;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Cricket_fragment extends Fragment {
+public class CricketFragment extends Fragment {
 
     private RecyclerView recyclerViewForWallPaper;
     private RecyclerView.Adapter adapterForWallPaper;
@@ -45,27 +45,21 @@ public class Cricket_fragment extends Fragment {
     private RecyclerView.Adapter adapterForSorbosheshSongbad;
 
     RecyclerView.LayoutManager mLayoutManager;
-    ArrayList<Kheladhula_Cricket_sorboshesh_sobgbad> kheladhulaCricketArrayList;
+    ArrayList<KheladhulaCricketSorbosheshSongbad> kheladhulaCricketArrayList;
     RequestQueue queue;
 
-    public Cricket_fragment() {
+    public CricketFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_cricket_fragment, container, false);
-
         kheladhulaCricketArrayList = new ArrayList<>();
         queue = Volley.newRequestQueue(getActivity());
         loadDataFromVolley();
         recyclerViewForSorbosheshSongbad = view.findViewById(R.id.RV_sorboshesh_songbad_cricket_fragment);
-
-
-        //Recyclerview for cricket wallpaper
 
         ArrayList<String> wallpaperData = new ArrayList<>();
         wallpaperData.add("সওয়ালপেপার বান্ডিল");
@@ -80,10 +74,6 @@ public class Cricket_fragment extends Fragment {
         recyclerViewForWallPaper.setHasFixedSize(true);
         adapterForWallPaper = new RecyclerAdapterForKheladhulaCricket(getActivity(), wallpaperData);
         recyclerViewForWallPaper.setAdapter(adapterForWallPaper);
-
-
-
-
         return view;
     }
 
@@ -97,7 +87,6 @@ public class Cricket_fragment extends Fragment {
                         try {
                             JSONArray pachMishaliContentArr = response.getJSONArray("contents");
                             setporashunaiContent(pachMishaliContentArr);
-                            //settop_contents(jsontop_contentsArr);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -122,11 +111,14 @@ public class Cricket_fragment extends Fragment {
                     String contentType = jsonHotNewsContentArr.getJSONObject(i).getString("contentType");
                     String contentDescription = jsonHotNewsContentArr.getJSONObject(i).getString("contentDescription");
                     String publishedAt = jsonHotNewsContentArr.getJSONObject(i).getString("publishedAt");
-//                    String contentCat=jsonHotNewsContentArr.getJSONObject(i).getString("contentCat");
                     int contentId=jsonHotNewsContentArr.getJSONObject(i).getInt("contentId");
-                    String thumbNail_image=jsonHotNewsContentArr.getJSONObject(i).getString("thumbNail_image");
+                    String thumbNail_image;
+                    if (jsonHotNewsContentArr.getJSONObject(i).has("thumbNail_image"))
+                        thumbNail_image=jsonHotNewsContentArr.getJSONObject(i).getString("thumbNail_image");
+                    else
+                        thumbNail_image="empty";
 
-                    kheladhulaCricketArrayList.add(new Kheladhula_Cricket_sorboshesh_sobgbad(contentTitle, contentType, publishedAt, contentDescription, thumbNail_image, imageUrl,"Cricket_sorboshesh_songbad",contentId));
+                    kheladhulaCricketArrayList.add(new KheladhulaCricketSorbosheshSongbad(contentTitle, contentType, publishedAt, contentDescription, thumbNail_image, imageUrl,"Cricket_sorboshesh_songbad",contentId));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("exceptionIncricket",e.toString());
@@ -136,21 +128,14 @@ public class Cricket_fragment extends Fragment {
 
         } else {
             Toast.makeText(getActivity(), "No data found", Toast.LENGTH_SHORT).show();
-
         }
     }
 
     private void initializerRecyclerView() {
-
-
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewForSorbosheshSongbad.setLayoutManager(mLayoutManager);
         recyclerViewForSorbosheshSongbad.setHasFixedSize(true);
         adapterForSorbosheshSongbad = new RecyclerAdapterForSorbosheshSongbadCricketfragment(getActivity(), kheladhulaCricketArrayList);
         recyclerViewForSorbosheshSongbad.setAdapter(adapterForSorbosheshSongbad);
-
-;
     }
-
-
 }

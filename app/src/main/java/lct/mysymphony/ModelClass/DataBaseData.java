@@ -10,11 +10,9 @@ public class DataBaseData implements Serializable {
     String contentStatus;
     String thumbNailImgUrl;
     int contentId;
-
     public String getContentStatus() {
         return contentStatus;
     }
-
     public DataBaseData(String contentTitle, String contentCat, String contentType, String contentDesc, String thumbNailImgUrl, String contentStatus,int contentId) {
         this.contentTitle = contentTitle;
         this.contentCat = contentCat;
@@ -28,23 +26,18 @@ public class DataBaseData implements Serializable {
     public String getContentTitle() {
         return contentTitle;
     }
-
     public String getContentCat() {
         return contentCat;
     }
-
     public String getContentType() {
         return contentType;
     }
-
     public String getContentDesc() {
         return contentDesc;
     }
-
     public String getThumbNailImgUrl() {
         return thumbNailImgUrl;
     }
-
     public int getContentId() {
         return contentId;
     }

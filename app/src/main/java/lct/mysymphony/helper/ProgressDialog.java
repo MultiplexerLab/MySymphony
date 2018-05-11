@@ -28,6 +28,10 @@ public class ProgressDialog {
         alertDialog.show();
     }
 
+    public AlertDialog getAlertDialog() {
+        return alertDialog;
+    }
+
     public void showProgressDialog(String message) {
         dialogBuilder = new AlertDialog.Builder(context);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
@@ -39,9 +43,7 @@ public class ProgressDialog {
         alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
-
     public void hideProgressDialog(){
-
         alertDialog.dismiss();
     }
 }

@@ -21,31 +21,24 @@ public class GamesZone implements Serializable {
     public String getContentCat() {
         return contentCat;
     }
-
     public int getContentId() {
         return contentId;
     }
-
     public String getContentType() {
         return contentType;
     }
-
     public String getContentUrl() {
         return contentUrl;
     }
-
     public String getContentTile() {
         return contentTile;
     }
-
     public String getThumbNailImgUrl() {
         return thumbNailImgUrl;
     }
-
     public int getPreviousPrice() {
         return previousPrice;
     }
-
     public int getNewPrice() {
         return newPrice;
     }

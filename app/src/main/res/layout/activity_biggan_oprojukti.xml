@@ -11,16 +11,12 @@
         android:id="@+id/appbarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:fitsSystemWindows="true">
-
         <include
             android:id="@+id/toolbarlayoutinbigganOProjukti"
             layout="@layout/toolbar_layout_in_biggan_o_projukti_activity"
             />
-
     </android.support.design.widget.AppBarLayout>
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/RV_BigganOProjukti"
@@ -28,9 +24,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:nestedScrollingEnabled="false">
-
-
     </android.support.v7.widget.RecyclerView>
-
-
 </LinearLayout>

@@ -66,9 +66,5 @@
             android:layout_marginLeft="10dp"
             android:text="৳১০"
             android:textColor="@color/green" />
-
-
     </LinearLayout>
-
-
 </LinearLayout>

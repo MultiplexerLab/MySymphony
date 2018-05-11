@@ -27,13 +27,33 @@
             android:layout_below="@id/appbarLayoutInWallpaperBundle"
             android:orientation="vertical"
             android:padding="7dp">
-
-            <ImageView
-                android:id="@+id/imageViewWallpaper"
+            <RelativeLayout
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="330dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/kheladhula_2" />
+                android:layout_height="wrap_content">
+
+                <ProgressBar
+                    android:layout_centerInParent="true"
+                    android:id="@+id/progressBarInImageView"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginEnd="5dp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/progress_diaog_color"
+                    android:indeterminateTintMode="src_atop" />
+
+
+                <ImageView
+                    android:id="@+id/imageViewWallpaper"
+                    android:layout_width="match_parent"
+                    android:layout_height="330dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/kheladhula_2" />
+
+            </RelativeLayout>
+
+
 
             <LinearLayout
                 android:id="@+id/buyOrDownloadLL"

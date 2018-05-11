@@ -7,19 +7,17 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-import lct.mysymphony.Fragment.newwallPaperFragment;
+import lct.mysymphony.Fragment.NewWallpaperFragment;
 import lct.mysymphony.R;
 import lct.mysymphony.ViewpagerAdapter.ViewPagerAdapter;
 
 public class GalleryActivity extends AppCompatActivity {
-
 
     private android.support.v7.widget.Toolbar toolbar;
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapterForGallery;
     Context context;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +30,8 @@ public class GalleryActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPagerInGallery);
         viewPagerAdapterForGallery = new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setOffscreenPageLimit(2);
-        viewPagerAdapterForGallery.addFragments(new newwallPaperFragment(), "নতুন");
-        viewPagerAdapterForGallery.addFragments(new newwallPaperFragment(), "জনপ্রিয়");
+        viewPagerAdapterForGallery.addFragments(new NewWallpaperFragment(), "নতুন");
+        viewPagerAdapterForGallery.addFragments(new NewWallpaperFragment(), "জনপ্রিয়");
         viewPager.setAdapter(viewPagerAdapterForGallery);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -60,9 +58,7 @@ public class GalleryActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 }

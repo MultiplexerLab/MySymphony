@@ -27,21 +27,13 @@ import lct.mysymphony.R;
 
 public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<RecyclerAdapterForMyItemFragment.RecyclerViewHolder> {
 
-
-    /// private int[] images = {R.drawable.japito_jibon_1, R.drawable.japito_jibon_2};
-
     Activity activity;
     ArrayList<Bitmap> bitmapArrayList;
     ArrayList<DataBaseData> dataHelperArrayList;
-
-
     public RecyclerAdapterForMyItemFragment(Activity activity, ArrayList<Bitmap> bitmapArrayList, ArrayList<DataBaseData> dataHelperArrayList) {
-
         this.activity = activity;
         this.bitmapArrayList = bitmapArrayList;
         this.dataHelperArrayList = dataHelperArrayList;
-
-
     }
 
     @Override
@@ -51,11 +43,8 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
         RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, dataHelperArrayList, bitmapArrayList);
         return recyclerViewHolder;
     }
-
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-
-        ///holder.japitoJebonNewsTV.setText(japitoJibonMCArrayList.get(position).getContentTitle());
         String contentType = dataHelperArrayList.get(position).getContentType();
         if (dataHelperArrayList.get(position).getContentStatus().contains("free"))
             holder.downloadIcon.setVisibility(View.GONE);
@@ -66,14 +55,26 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
             text = "গেম";
         } else if (contentType.contains("video")) {
             text = "ভিডিও";
+        } else if (contentType.contains("audio")) {
+            text = "গান";
         } else {
             text = "ছবি";
         }
         holder.textView.setText(text);
 
-        Glide.with(activity)
-                .load(bitmapArrayList.get(position))
-                .into(holder.imageView);
+        if (contentType.contains("audio")||contentType.contains("video"))
+        {
+            Glide.with(activity)
+                    .load(dataHelperArrayList.get(position).getThumbNailImgUrl())
+                    .into(holder.imageView);
+        }
+        else
+        {
+            Glide.with(activity)
+                    .load(bitmapArrayList.get(position))
+                    .into(holder.imageView);
+        }
+
     }
 
     @Override
@@ -81,9 +82,7 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
         return bitmapArrayList.size();
     }
 
-
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
-
         ImageView imageView;
         CardView cardView;
         Activity activity;
@@ -91,11 +90,8 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
         ArrayList<DataBaseData> dataHelperArrayList;
         ArrayList<Bitmap> bitmapArrayList;
         ImageView downloadIcon;
-
-
         public RecyclerViewHolder(View view, final Activity activity, final ArrayList<DataBaseData> dataHelperArrayList, final ArrayList<Bitmap> bitmapArrayList) {
             super(view);
-
             this.activity = activity;
             this.dataHelperArrayList = dataHelperArrayList;
             this.bitmapArrayList = bitmapArrayList;
@@ -104,42 +100,19 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
             cardView = view.findViewById(R.id.myItemFragmentCardView);
             downloadIcon = view.findViewById(R.id.downLoadIcon);
             view.setDrawingCacheEnabled(false);
-
-
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     view.setDrawingCacheEnabled(false);
-//                    Intent myIntent = new Intent(activity, NewsDescriptionActivity.class);
-//                    myIntent.putExtra("Data", (Serializable) goromKhoborArrayList.get(getAdapterPosition()));
-//                    
-//                    activity.startActivity(myIntent);
-//                    activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
-//                    activity.finish();
-
                     if (dataHelperArrayList.get(getAdapterPosition()).getContentStatus().contains("free")) {
-//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-////                        bitmapArrayList.get(getAdapterPosition()).compress(Bitmap.CompressFormat.PNG, 100, stream);
-////                        byte[] byteArray = stream.toByteArray();
-////
-////
                         Intent myIntent = new Intent(activity, ShowOnlyImage.class);
                         myIntent.putExtra("id", getAdapterPosition());
-                        
                         activity.startActivity(myIntent);
-                        activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                        activity.finish();
                     } else {
-                        Toast.makeText(activity, "এখন ডাউনলোড করার সুযোগটি নেই\n" +
-                                "পেমেন্ট যাচাই করা হলে ডাউললোড করার সুযোগ পাবেন", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "এখন ডাউনলোড করার সুযোগটি নেই\n" + "পেমেন্ট যাচাই করা হলে ডাউললোড করার সুযোগ পাবেন", Toast.LENGTH_SHORT).show();
                     }
-
-
                 }
             });
-
         }
     }
-
-
 }

@@ -29,27 +29,27 @@ import lct.mysymphony.ModelClass.JibonJapon;
 import lct.mysymphony.R;
 import lct.mysymphony.RecycleerViewAdapter.RecyclerAdapterForJibonJapon;
 import lct.mysymphony.helper.Endpoints;
+import lct.mysymphony.helper.ProgressDialog;
 
 public class JibonJaponActivity extends AppCompatActivity {
 
     private android.support.v7.widget.Toolbar toolbar;
     private RecyclerView recyclerViewForJibonJapon;
     public RecyclerAdapterForJibonJapon adapterForJibonJapon;
-
     RecyclerView.LayoutManager mLayoutManager;
     ArrayList<JibonJapon> jibonJaponActivityArrayList;
     RequestQueue queue;
+    lct.mysymphony.helper.ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jibon_japon);
-
         toolbar = findViewById(R.id.toolbarlayoutinjibonjapon);
         setSupportActionBar(toolbar);
-
         jibonJaponActivityArrayList = new ArrayList<>();
         queue = Volley.newRequestQueue(JibonJaponActivity.this);
+        progressDialog = new ProgressDialog(JibonJaponActivity.this);
         loadDataFromVolley();
     }
 
@@ -58,33 +58,35 @@ public class JibonJaponActivity extends AppCompatActivity {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 
     private void loadDataFromVolley() {
-
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, Endpoints.JAPITO_JIBON_GET_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        JSONObject jsonObject;
-                        try {
-                            String jsonFormattedString = response.replaceAll("\\\\", "");
-                            jsonFormattedString = jsonFormattedString.substring(1, jsonFormattedString.length() - 1);
-                            jsonFormattedString = jsonFormattedString.replaceAll("\"\\[", "[");
-                            jsonFormattedString = jsonFormattedString.replaceAll("\\]\"", "]");
-                            Log.d("jsonFormattedString", jsonFormattedString);
-                            jsonObject = new JSONObject(jsonFormattedString);
-                            Log.d("obj", jsonObject.toString());
-                            setJibonJaponContent(jsonObject.getJSONArray("contents"));
-                        } catch (JSONException e) {
-                            Log.d("JSON Error", e.getMessage());
-                        }
-                    }
-                }, new Response.ErrorListener() {
+        progressDialog.showProgressDialog();
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, Endpoints.JAPITO_JIBON_GET_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.hideProgressDialog();
+                JSONObject jsonObject;
+                try {
+                    String jsonFormattedString = response.replaceAll("\\\\", "");
+                    jsonFormattedString = jsonFormattedString.substring(1, jsonFormattedString.length() - 1);
+                    jsonFormattedString = jsonFormattedString.replaceAll("\"\\[", "[");
+                    jsonFormattedString = jsonFormattedString.replaceAll("\\]\"", "]");
+                    Log.d("jsonFormattedString", jsonFormattedString);
+                    jsonObject = new JSONObject(jsonFormattedString);
+                    Log.d("obj", jsonObject.toString());
+                    setJibonJaponContent(jsonObject.getJSONArray("contents"));
+                } catch (JSONException e) {
+                    progressDialog.hideProgressDialog();
+                    Log.d("JSON Error", e.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                progressDialog.hideProgressDialog();
                 Log.e("Volley", error.toString());
             }
         });
@@ -100,15 +102,15 @@ public class JibonJaponActivity extends AppCompatActivity {
                     String contentTitle = jsonJibonJaponContentArr.getJSONObject(i).getString("contentTitle");
                     String contentType = jsonJibonJaponContentArr.getJSONObject(i).getString("contentType");
                     String contentDescription = jsonJibonJaponContentArr.getJSONObject(i).getString("contentDescription");
-                    int contentId=jsonJibonJaponContentArr.getJSONObject(i).getInt("id");
-                    String contentCat=jsonJibonJaponContentArr.getJSONObject(i).getString("contentCat");
-                    String thumbNail_image=jsonJibonJaponContentArr.getJSONObject(i).getString("thumbNail_image");
+                    int contentId = jsonJibonJaponContentArr.getJSONObject(i).getInt("id");
+                    String contentCat = jsonJibonJaponContentArr.getJSONObject(i).getString("contentCat");
+                    String thumbNail_image = jsonJibonJaponContentArr.getJSONObject(i).getString("thumbNail_image");
 
                     if (contentType.equals("video")) {
                         String contentUrl = jsonJibonJaponContentArr.getJSONObject(i).getString("thumbNail_image");
-                        jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat,contentId));
+                        jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentId));
                     } else {
-                        jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, jsonJibonJaponContentArr.getJSONObject(i).getString("contentUrl"), thumbNail_image, contentCat,contentId));
+                        jibonJaponActivityArrayList.add(new JibonJapon(contentTitle, contentType, contentDescription, jsonJibonJaponContentArr.getJSONObject(i).getString("contentUrl"), thumbNail_image, contentCat, contentId));
                     }
 
                 } catch (JSONException e) {

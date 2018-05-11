@@ -28,7 +28,6 @@ public class CustomerCareFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,8 +49,6 @@ public class CustomerCareFragment extends Fragment {
         adapterForMyItem = new RecyclerAdapterForCustomerCareFragment(getActivity(),customerCareTitleArraylist);
         recyclerViewForMyItem.setAdapter(adapterForMyItem);
 
-        // Inflate the layout for this fragment
         return view;
     }
-
 }

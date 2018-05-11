@@ -25,28 +25,20 @@ import lct.mysymphony.R;
 
 public class RecyclerAdapterForPachMishali extends RecyclerView.Adapter<RecyclerAdapterForPachMishali.RecyclerViewHolder> {
 
-
-
     Activity activity;
     private ArrayList<PacMishali> pacMishaliArrayList;
-
 
     public RecyclerAdapterForPachMishali(Activity activity, ArrayList<PacMishali> pacMishaliArrayList)
     {
         this.activity = activity;
         this.pacMishaliArrayList=pacMishaliArrayList;
     }
-
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_pach_mishali,parent,false);
-
         RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view,activity,pacMishaliArrayList);
         return recyclerViewHolder;
     }
-
-
-
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
         holder.pachMishaliNewsTV.setText(pacMishaliArrayList.get(position).getContentTitle());
@@ -60,7 +52,6 @@ public class RecyclerAdapterForPachMishali extends RecyclerView.Adapter<Recycler
         return pacMishaliArrayList.size();
     }
 
-
     public  static  class  RecyclerViewHolder extends RecyclerView.ViewHolder
     {
         ImageView imageView;
@@ -68,33 +59,22 @@ public class RecyclerAdapterForPachMishali extends RecyclerView.Adapter<Recycler
         CardView cardView;
         Activity activity;
         ArrayList<PacMishali> pacMishaliArrayLis;
-
-
         public RecyclerViewHolder(View view, final Activity activity, final ArrayList<PacMishali> pacMishaliArrayList)
         {
             super(view);
             imageView=view.findViewById(R.id.imgPachMishali);
             pachMishaliNewsTV=view.findViewById(R.id.PachMishaliNewsTV);
-
             cardView=view.findViewById(R.id.cardViewPachMishali);
             this.activity=activity;
             this.pacMishaliArrayLis=pacMishaliArrayList;
-
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent myIntent = new Intent(activity, PachMishaliDescriptionActivity.class);
                     myIntent.putExtra("Data", (Serializable) pacMishaliArrayList.get(getAdapterPosition()));
-                    
-                    activity.startActivity(myIntent);
-                    activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                    activity.finish();
+                    activity.startActivity(myIntent);;
                 }
             });
-
-
         }
     }
-
-
 }

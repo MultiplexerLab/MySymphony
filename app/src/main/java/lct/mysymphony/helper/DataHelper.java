@@ -41,11 +41,9 @@ public class DataHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
     }
-
     public void onCreate(SQLiteDatabase db) {
         // Create the table
         db.execSQL(CREATE_TABLE);
-
     }
 
     @Override
@@ -82,17 +80,14 @@ public class DataHelper extends SQLiteOpenHelper {
             Log.d("contentcat", dataBaseData.getContentCat());
             Log.d("contentid", Integer.toString(dataBaseData.getContentId()));
 
-
             // Insert Row
             long i = db.insert(TABLE_NAME, null, values);
-            Log.i("Insert", i + "");
+            Log.i("InsertBitmap", i + "");
             // Insert into database successfully.
             db.setTransactionSuccessful();
-
         } catch (SQLiteException e) {
             e.printStackTrace();
             Log.d("problem", e.toString());
-
         } finally {
             db.endTransaction();
             // End the transaction.
@@ -116,6 +111,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 Log.d("cursor", "found");
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {
+                ///String contentType=cursor.getString(cursor.getColumnIndex("contentData"));
                 byte[] blob = cursor.getBlob(cursor.getColumnIndex("contentData"));
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(blob);
                 Log.d("getBitmap", "blob lenght: " + blob.length);
@@ -141,7 +137,6 @@ public class DataHelper extends SQLiteOpenHelper {
         return count;
     }
 
-
     public String getContentType(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         String contentType = null;
@@ -161,7 +156,6 @@ public class DataHelper extends SQLiteOpenHelper {
                 Log.d("contentType", contentType);
 
             }
-
 
         } catch (SQLiteException e) {
             e.printStackTrace();
@@ -189,9 +183,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 // Convert blob data to byte array
                 contentType = cursor.getString(cursor.getColumnIndex(COL_CONTENT_TITLE));
                 Log.d("contentTitle", contentType);
-
             }
-
 
         } catch (SQLiteException e) {
             e.printStackTrace();
@@ -210,7 +202,6 @@ public class DataHelper extends SQLiteOpenHelper {
         try {
             String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + id;
             Cursor cursor = db.rawQuery(selectQuery, null);
-
             if (cursor.getCount() == 0)
                 Log.d("cursorAll", "0");
             else if (cursor.getCount() > 0)
@@ -273,6 +264,36 @@ public class DataHelper extends SQLiteOpenHelper {
 
             long i = db.insert(TABLE_NAME, null, values);
             Log.i("Insert", values.toString());
+            Log.i("InsertVideo", i + "");
+            db.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            Log.d("insertErr", e.toString());
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
+    public void insertAudioStr(String result, DataBaseData dataBaseData) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        ContentValues values;
+        try {
+            values = new ContentValues();
+            values.put(COL_CONTENT_CAT, dataBaseData.getContentCat());
+            values.put(COL_CONTENT_TYPE, dataBaseData.getContentType());
+            values.put(COL_CONTENT_TITLE, dataBaseData.getContentTitle());
+            values.put(COL_CONTENT_DESC, dataBaseData.getContentDesc());
+            values.put(COL_CONTENT_TEXT, "ContentText");
+            values.put(COL_CONTENT_THUMBNAILIMG, dataBaseData.getThumbNailImgUrl());
+            values.put(COL_CONTENT_DATA, result);
+            values.put(COL_DOWLOAD_TIMESTAMP, "11/12/13");
+            values.put(COL_CONTENT_STATUS, dataBaseData.getContentStatus());
+            values.put(COL_CONTENT_ID, dataBaseData.getContentId());
+
+            long i = db.insert(TABLE_NAME, null, values);
+            Log.i("InsertAudio", i + "");
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();

@@ -12,12 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:fitsSystemWindows="true">
-
-
         <include
             android:id="@+id/toolbarlayoutinwallpaperBundle"
             layout="@layout/toolbar_layout_in_wallpaper_bundle_activity" />
-
 
     </android.support.design.widget.AppBarLayout>
 
@@ -92,13 +89,8 @@
                             android:layout_marginLeft="10dp"
                             android:text="৳১০"
                             android:textColor="@color/green" />
-
-
                     </LinearLayout>
-
-
                 </LinearLayout>
-
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
@@ -107,12 +99,6 @@
                     android:text="কিনুন / ডাউনলোড করুন"
                     android:textColor="@color/White" />
             </LinearLayout>
-
-
         </LinearLayout>
-
-
     </ScrollView>
-
-
 </RelativeLayout>

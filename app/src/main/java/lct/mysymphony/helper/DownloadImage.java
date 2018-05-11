@@ -29,29 +29,26 @@ public class DownloadImage {
         if (!imgURL.trim().equals("")) {
             bt.execute(imgURL);
         }
+        else
+            Log.d("noContain","noContain");
     }
 
     private class BackTask extends AsyncTask<String, Void, Bitmap> {
         TextView tv;
         DataHelper dbHelper = new DataHelper(context);
 
-        ///ProgressDialog asyncDialog = new ProgressDialog(context);
         protected void onPreExecute() {
             Log.i("Donwload", "Downloading the image. Please wait...");
-            //asyncDialog.setMessage("কিছুক্ষন অপেক্ষা করুন");
-            ///asyncDialog.show();
         }
 
         protected Bitmap doInBackground(String... params) {
             Bitmap bitmap = null;
             try {
-                // Download the image
                 URL url = new URL(params[0]);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);
                 connection.connect();
                 InputStream is = connection.getInputStream();
-                // Decode image to get smaller image to save memory
                 final BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = false;
                 options.inSampleSize = 4;
@@ -67,13 +64,8 @@ public class DownloadImage {
             AsyncResponse asyncResponse = (AsyncResponse) context;
             asyncResponse.processFinish("complete");
             dbHelper.insertBitmap(result, dataBaseData);
-            //ImageView imgView=(ImageView)findViewById(R.id.imgview);
-            // Read the first image from database and show it in ImageView
-            //imgView.setImageBitmap(dbHelper.getBitmap(1));
-            ///Log.i("downlaoded image", dbHelper.getBitmap(1).toString());
         }
     }
-
     public interface AsyncResponse {
         void processFinish(String output);
     }

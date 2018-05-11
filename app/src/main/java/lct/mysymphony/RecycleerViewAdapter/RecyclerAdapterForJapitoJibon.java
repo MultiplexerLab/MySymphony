@@ -24,42 +24,32 @@ import java.util.ArrayList;
 
 import lct.mysymphony.Activity.ContentDescriptionActivity.JapitiJibonDescriptionActivity;
 import lct.mysymphony.R;
-import lct.mysymphony.ModelClass.JapitoJibonMC;
+import lct.mysymphony.ModelClass.JapitoJibon;
 
 /**
  * Created by USER on 01-Feb-17.
  */
 
 public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<RecyclerAdapterForJapitoJibon.RecyclerViewHolder> {
-
-
-    ///private int[] images = {R.drawable.japito_jibon_1, R.drawable.japito_jibon_2};
-
     Activity activity;
-    private ArrayList<JapitoJibonMC> japitoJibonMCArrayList;
-
-
-    public RecyclerAdapterForJapitoJibon(Activity activity, ArrayList<JapitoJibonMC> japitoJibonMCArrayLis) {
+    private ArrayList<JapitoJibon> japitoJibonArrayList;
+    public RecyclerAdapterForJapitoJibon(Activity activity, ArrayList<JapitoJibon> japitoJibonArrayLis) {
 
         this.activity = activity;
-        this.japitoJibonMCArrayList = japitoJibonMCArrayLis;
+        this.japitoJibonArrayList = japitoJibonArrayLis;
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_japito_jibon, parent, false);
-        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, japitoJibonMCArrayList);
+        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, japitoJibonArrayList);
         return recyclerViewHolder;
     }
-
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-
-        holder.japitoJebonNewsTV.setText(japitoJibonMCArrayList.get(position).getContentTitle());
-
+        holder.japitoJebonNewsTV.setText(japitoJibonArrayList.get(position).getContentTitle());
         Glide.with(activity)
-                .load(japitoJibonMCArrayList.get(position).getImageUrl())
+                .load(japitoJibonArrayList.get(position).getImageUrl())
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -75,34 +65,29 @@ public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<Recycler
                 })
                 .into(holder.imageView);
 
-        if (japitoJibonMCArrayList.get(position).getContentType().equals("video")) {
+        if (japitoJibonArrayList.get(position).getContentType().equals("video")) {
             holder.videoPreviewPlayButton.setVisibility(View.VISIBLE);
         }
     }
-
     @Override
     public int getItemCount() {
-        if(japitoJibonMCArrayList.size()>3){
+        if(japitoJibonArrayList.size()>3){
             return 3;
         }else{
-            return japitoJibonMCArrayList.size();
+            return japitoJibonArrayList.size();
         }
     }
 
-
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
-
         ImageView imageView, videoPreviewPlayButton;
         TextView japitoJebonNewsTV;
         ProgressBar progressBar;
-
         Activity activity;
-        ArrayList<JapitoJibonMC> japitoJibonMCArrayList;
+        ArrayList<JapitoJibon> japitoJibonArrayList;
         CardView cardView;
 
-        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<JapitoJibonMC> japitoJibonMCArrayLis) {
+        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<JapitoJibon> japitoJibonArrayLis) {
             super(view);
-
             imageView = view.findViewById(R.id.imgJapitoJibon);
             japitoJebonNewsTV = view.findViewById(R.id.japitoJibonNewsTV);
             videoPreviewPlayButton = view.findViewById(R.id.videoPreviewPlayButton);
@@ -110,19 +95,16 @@ public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<Recycler
             progressBar=view.findViewById(R.id.progressBarInJapitoJibon);
 
             this.activity = activity;
-            this.japitoJibonMCArrayList = japitoJibonMCArrayLis;
+            this.japitoJibonArrayList = japitoJibonArrayLis;
 
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent myIntent = new Intent(activity, JapitiJibonDescriptionActivity.class);
-                    myIntent.putExtra("Data", (Serializable) japitoJibonMCArrayLis.get(getAdapterPosition()));
+                    myIntent.putExtra("Data", (Serializable) japitoJibonArrayLis.get(getAdapterPosition()));
                     activity.startActivity(myIntent);
-                    activity.overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                    activity.finish();
                 }
             });
         }
     }
-
 }

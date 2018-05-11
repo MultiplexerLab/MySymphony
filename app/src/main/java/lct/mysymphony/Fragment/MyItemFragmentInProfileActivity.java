@@ -35,13 +35,11 @@ public class MyItemFragmentInProfileActivity extends Fragment {
 
     private RecyclerView recyclerViewForMyItem;
     private RecyclerView.Adapter adapterForMyItem;
-    private ProgressDialog dialog;
     RecyclerView.LayoutManager mLayoutManager;
     DataHelper dataHelper;
     Activity activity;
     int rowCount;
     private ArrayList<Bitmap> bitmapArrayList;
-    private ArrayList<String> contentTypeArrayList;
     private ArrayList<DataBaseData> dataBaseDataArrayList;
     View view;
     lct.mysymphony.helper.ProgressDialog progressDialog;
@@ -49,19 +47,17 @@ public class MyItemFragmentInProfileActivity extends Fragment {
     public MyItemFragmentInProfileActivity() {
         // Required empty public constructor
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_my_item_fragment_in_profile, container, false);
-
         dataHelper=new DataHelper(getActivity());
         bitmapArrayList=new ArrayList<>();
-        contentTypeArrayList=new ArrayList<>();
         dataBaseDataArrayList=new ArrayList<>() ;
         activity=getActivity();
         progressDialog=new lct.mysymphony.helper.ProgressDialog(getActivity());
+        progressDialog.showProgressDialog();
         new RetriveBitMapFromDatabase().execute();
         return view;
     }
@@ -70,24 +66,32 @@ public class MyItemFragmentInProfileActivity extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            progressDialog.showProgressDialog();
+
         }
         @Override
         protected Void doInBackground(Void... voids) {
-
             rowCount =(int) dataHelper.getRowCount();
             for (int i=0;i<rowCount;i++)
             {
-                bitmapArrayList.add(dataHelper.getBitmap(i+1));
                 dataBaseDataArrayList.add(dataHelper.getAllData(i+1));
+
+                if (dataBaseDataArrayList.get(i).getContentType().contains("audio") || dataBaseDataArrayList.get(i).getContentType().contains("video")|| dataBaseDataArrayList.get(i).getContentType().contains("song"))
+                {
+                    bitmapArrayList.add(null);
+                }
+                else
+                {
+                    bitmapArrayList.add(dataHelper.getBitmap(i+1));
+                }
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            
-                updateRecyclerView();
+
+            ///progressDialog.hideProgressDialog();
+            updateRecyclerView();
         }
     }
     public void updateRecyclerView()
@@ -100,6 +104,10 @@ public class MyItemFragmentInProfileActivity extends Fragment {
         recyclerViewForMyItem.setAdapter(adapterForMyItem);
         progressDialog.hideProgressDialog();
     }
-
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (progressDialog.getAlertDialog()!=null)
+            progressDialog.hideProgressDialog();
+    }
 }

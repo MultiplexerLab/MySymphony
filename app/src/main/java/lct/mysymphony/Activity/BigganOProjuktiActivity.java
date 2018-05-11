@@ -56,7 +56,6 @@ public class BigganOProjuktiActivity extends AppCompatActivity {
     }
 
     private void loadDataFromVolley() {
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Endpoints.BIGGAN_O_PROJUKTI_GET_URL,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -95,7 +94,6 @@ public class BigganOProjuktiActivity extends AppCompatActivity {
                     String contentCat=pachMishaliContentArr.getJSONObject(i).getString("contentCat");
                     String thumbNail_image=pachMishaliContentArr.getJSONObject(i).getString("thumbNail_image");
 
-
                     if (contentType.equals("video")) {
                         String contentUrl = pachMishaliContentArr.getJSONObject(i).getString("thumbNail_image");
                         bigganOProjuktiArrayList.add(new BigganOProjukti(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat,contentId));
@@ -113,7 +111,6 @@ public class BigganOProjuktiActivity extends AppCompatActivity {
             Toast.makeText(BigganOProjuktiActivity.this, "No data found", Toast.LENGTH_SHORT).show();
         }
     }
-
     private void initializeRecyclerView() {
 
         recyclerViewForBigganOProjukti = findViewById(R.id.RV_BigganOProjukti);
@@ -123,16 +120,11 @@ public class BigganOProjuktiActivity extends AppCompatActivity {
         adapterForBigganOProjukti= new RecyclerAdapterForBigganOProjukti(this, bigganOProjuktiArrayList);
         recyclerViewForBigganOProjukti.setAdapter(adapterForBigganOProjukti);
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
-
-
 }

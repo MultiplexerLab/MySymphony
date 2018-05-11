@@ -21,15 +21,10 @@ import lct.mysymphony.R;
 
 public class RecyclerAdapterForPopularWallpaperFragment extends RecyclerView.Adapter<RecyclerAdapterForPopularWallpaperFragment.RecyclerViewHolder> {
 
-
-   /// private int[] images = {R.drawable.japito_jibon_1, R.drawable.japito_jibon_2};
-
     Activity activity;
     private ArrayList<GoromKhobor> goromKhoborArrayList;
 
-
     public RecyclerAdapterForPopularWallpaperFragment(Activity activity, ArrayList<GoromKhobor> goromKhoborArrayList) {
-
         this.activity = activity;
         this.goromKhoborArrayList=goromKhoborArrayList;
 
@@ -37,16 +32,12 @@ public class RecyclerAdapterForPopularWallpaperFragment extends RecyclerView.Ada
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_gorom_khobor, parent, false);
         RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view);
         return recyclerViewHolder;
     }
-
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-
-        ///holder.japitoJebonNewsTV.setText(japitoJibonMCArrayList.get(position).getContentTitle());
         holder.goromKhoborTitle.setText(goromKhoborArrayList.get(position).getContentTitle());
         holder.publishedAt.setText(goromKhoborArrayList.get(position).getPublishedAt());
         Glide.with(activity)
@@ -58,23 +49,14 @@ public class RecyclerAdapterForPopularWallpaperFragment extends RecyclerView.Ada
     public int getItemCount() {
         return goromKhoborArrayList.size();
     }
-
-
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
-
         ImageView imageView;
         TextView goromKhoborTitle,publishedAt;
-
         public RecyclerViewHolder(View view) {
             super(view);
-
             imageView = view.findViewById(R.id.imgGoromKhobor);
             goromKhoborTitle=view.findViewById(R.id.publishedAtGoromKhobor);
             publishedAt=view.findViewById(R.id.publishedAtGoromKhobor);
-            ///japitoJebonNewsTV = view.findViewById(R.id.japitoJibonNewsTV);
-
         }
     }
-
-
 }

@@ -1,23 +1,25 @@
 package lct.mysymphony.Activity;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 
 import lct.mysymphony.ModelClass.DataBaseData;
@@ -27,6 +29,7 @@ import lct.mysymphony.ModelClass.SeraChobi;
 import lct.mysymphony.ModelClass.ShocolChobi;
 import lct.mysymphony.R;
 import lct.mysymphony.helper.DataHelper;
+import lct.mysymphony.helper.DownloadAudio;
 import lct.mysymphony.helper.DownloadImage;
 import lct.mysymphony.helper.DownloadVideo;
 import lct.mysymphony.helper.PushDataToSharedPref;
@@ -34,8 +37,7 @@ import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
 public class ImageViewActivity extends AppCompatActivity implements DownloadImage.AsyncResponse {
 
-    ///int price;
-    String imageUrl;
+    String imageUrl, audioUrl;
     LinearLayout bisheshOfferLinearLayout;
     String contentTitle, contentCat, contentDesc, contentType, thumbNailImgUrl;
     TextView previousPrice, newPrice;
@@ -46,6 +48,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
     boolean isItFree = false;
     DataHelper dataHelper;
     LinearLayout buyOrDownloadLinearLayout;
+    ProgressBar progressBar;
     lct.mysymphony.helper.ProgressDialog progressDialog;
     SharedPreferences preferences;
 
@@ -61,7 +64,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         previousPrice = findViewById(R.id.previousPriceTVinImageViewActivity);
         newPrice = findViewById(R.id.newPriceTVinImageViewActivity);
         progressDialog = new lct.mysymphony.helper.ProgressDialog(this);
-
+        progressBar = findViewById(R.id.progressBarInImageView);
         preferences = getSharedPreferences("tempData", MODE_PRIVATE);
 
         cameFromWhichActivity = getIntent().getStringExtra("cameFromWhichActivity");
@@ -69,18 +72,20 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         if (cameFromWhichActivity != null) {
             if (cameFromWhichActivity.contains("MulloChar")) {
                 MulloChar Data = (MulloChar) getIntent().getSerializableExtra("wallpaper");
-                imageUrl = Data.getContentUrl();
+                imageUrl = Data.getImageUrl();
                 contentTitle = Data.getContentTile();
                 contentCat = Data.getContentCat();
                 contentDesc = "";
                 contentType = Data.getContentType();
+                if (contentType.contains("audio") || contentType.contains("song")) {
+                    audioUrl = Data.getContentUrl();
+                }
                 thumbNailImgUrl = Data.getThumbNailImgUrl();
 
                 newPrice.setText(Integer.toString(Data.getNewPrice()));
                 previousPrice.setText(Integer.toString(Data.getPreviousPrice()));
                 dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, "paid", Data.getContentId());
-                Glide.with(this).load(Data.getImageUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
-
+                setImage(Data.getImageUrl());
                 PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
                 pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, ImageViewActivity.this);
 
@@ -98,6 +103,9 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 contentDesc = "";
                 contentType = Data.getContentType();
                 thumbNailImgUrl = Data.getThumbNailImgUrl();
+                if (contentType.contains("audio") || contentType.contains("song")) {
+                    audioUrl = Data.getContentUrl();
+                }
                 Log.d("newPrice", Integer.toString(Data.getNewPrice()));
                 Log.d("previousPrice", Integer.toString(Data.getPreviousPrice()));
                 previousPrice.setVisibility(View.GONE);
@@ -113,7 +121,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 }
 
                 dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, priceStatus, Data.getContentId());
-                Glide.with(this).load(Data.getContentUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
+                setImage(Data.getContentUrl());
                 PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
                 pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, ImageViewActivity.this);
 
@@ -130,6 +138,9 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 contentDesc = "";
                 contentType = Data.getContentType();
                 thumbNailImgUrl = Data.getThumbNailImgUrl();
+                if (contentType.contains("audio") || contentType.contains("song")) {
+                    audioUrl = Data.getContentUrl();
+                }
 
                 String priceStatus;
                 if (Data.getContentPrice() == 0) {
@@ -141,7 +152,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 }
 
                 dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, priceStatus, Data.getContentId());
-                Glide.with(this).load(Data.getContentUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
+                setImage(Data.getContentUrl());
                 PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
                 pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, ImageViewActivity.this);
 
@@ -168,7 +179,9 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 contentDesc = "";
                 contentType = Data.getContentType();
                 thumbNailImgUrl = Data.getThumbNailImgUrl();
-
+               /* if (contentType.contains("audio")||contentType.contains("song")) {
+                    audioUrl = Data.getC;
+                }*/
                 String priceStatus;
                 if (Data.getContentPrice() == 0) {
                     isItFree = true;
@@ -179,10 +192,9 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 }
 
                 dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, priceStatus, Data.getContentId());
-                Glide.with(this).load(Data.getImage_url()).into((ImageView) findViewById(R.id.imageViewWallpaper));
+                setImage(Data.getImage_url());
                 PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
                 pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, ImageViewActivity.this);
-
                 if (dataHelper.checkDownLoadedOrNot(Data.getContentCat(), Data.getContentId())) {
                     isDownloaded = true;
                     Log.d("enter", "SeraChobi");
@@ -206,32 +218,20 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         previousPrice.setPaintFlags(previousPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
     }
 
-
     public void purChase(View view) {
         if (dataBaseData == null) Log.d("databaseDataImageView", "null");
-
-        /*if (!dataBaseData.getContentType().contains("video") && !imageUrl.contains("mp4") && !imageUrl.contains("youtube") && !imageUrl.contains("music") && !imageUrl.contains("videos")) {
-*/
-            Log.d("isItFreeInPurchase", String.valueOf(isItFree));
-            Intent myIntent;
-            if (isItFree == false) {
-                SharedPreferences preferences = getSharedPreferences("phoneNumber", MODE_PRIVATE);
-                myIntent = new Intent(getApplicationContext(), PaymentMethod.class);
-                myIntent.putExtra("userId", preferences.getString("phoneNo", ""));
-                this.startActivityForResult(myIntent, 1);
-                //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                //finish();
-            } else {
-                progressDialog.showProgressDialog();
-                DownloadImage downloadImage = new DownloadImage();
-                downloadImage.downloadImage(imageUrl, ImageViewActivity.this, dataBaseData);
-            }
-        /*} else {
-            Toast.makeText(ImageViewActivity.this, "ভিডিও কন্টেন্ট পরবর্তীতে পাবেন", Toast.LENGTH_LONG).show();
-            Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-            myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
-            this.startActivity(myIntent);
-        }*/
+        Log.d("isItFreeInPurchase", String.valueOf(isItFree));
+        Intent myIntent;
+        if (isItFree == false) {
+            SharedPreferences preferences = getSharedPreferences("phoneNumber", MODE_PRIVATE);
+            myIntent = new Intent(getApplicationContext(), PaymentMethod.class);
+            myIntent.putExtra("userId", preferences.getString("phoneNo", ""));
+            this.startActivityForResult(myIntent, 1);
+        } else {
+            progressDialog.showProgressDialog();
+            DownloadImage downloadImage = new DownloadImage();
+            downloadImage.downloadImage(imageUrl, ImageViewActivity.this, dataBaseData);
+        }
     }
 
     @Override
@@ -239,7 +239,6 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         this.startActivity(myIntent);
-        //overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
 
@@ -250,13 +249,12 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         if (output.contains("complete")) {
             Intent myIntent;
             myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
-            Toast.makeText(ImageViewActivity.this, "ধন্যবাদ কিছুক্ষন পরে মাইআইটেম লিস্ট এ আপনার আইটেমটি দেখতে পারবেন", Toast.LENGTH_SHORT).show();
+            ///Toast.makeText(ImageViewActivity.this, "ধন্যবাদ কিছুক্ষন পরে মাইআইটেম লিস্ট এ আপনার আইটেমটি দেখতে পারবেন", Toast.LENGTH_SHORT).show();
             myIntent.putExtra("imageUrl", imageUrl);
             myIntent.putExtra("dataBaseData", dataBaseData);
-            myIntent.putExtra("cameFromWhichActivity", "payWithRocket");
+            myIntent.putExtra("cameFromWhichActivity", "ImageViewActivity");
             this.startActivity(myIntent);
-            //overridePendingTransition(R.anim.left_in, R.anim.left_out);
-            //finish();
+            Log.d("onProcessFinished", "onProcessFinished");
         }
     }
 
@@ -266,17 +264,10 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 String returnedResult = data.getData().toString();
                 Log.i("ResultFromLib", returnedResult);
                 if (returnedResult.equals("Success")) {
-/*                    Gson gson = new Gson();
-                    SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
-                    String json = preferences.getString("databaseData", "");
-                    String imageURL = preferences.getString("imageUrl", "");
-                    DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
-                    DownloadImage downloadImage = new DownloadImage();
-                    downloadImage.downloadImage(imageURL, ImageViewActivity.this, dataBaseData);*/
 
                     Log.i("TagContent", dataBaseData.getContentType());
 
-                    if (dataBaseData.getContentType().contains("image")) {
+                    if (dataBaseData.getContentType().contains("image") || dataBaseData.getContentType().contains("game") || dataBaseData.getContentType().contains("apk")) {
                         progressDialog.showProgressDialog();
                         Log.i("ImageContent", "image");
                         Gson gson = new Gson();
@@ -286,20 +277,69 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                         DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
                         DownloadImage downloadImage = new DownloadImage();
                         downloadImage.downloadImage(imageURL, ImageViewActivity.this, dataBaseData);
-                    } else if (dataBaseData.getContentType().contains("video")){
+                    } else if (dataBaseData.getContentType().contains("video")) {
                         progressDialog.showProgressDialog();
+                        Log.d("videoInImageView", "videoInImageView");
                         Gson gson = new Gson();
                         SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
                         String json = preferences.getString("databaseData", "");
-                        //String imageURL = preferences.getString("imageUrl", "");
                         DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
                         Log.i("VideoCOntent", "video");
                         DownloadVideo downLoadVideo = new DownloadVideo();
-                        downLoadVideo.downloadVideo("http://jachaibd.com/files/videoplayback.mp4", ImageViewActivity.this, dataBaseData);
-                    }
-                }
+                        downLoadVideo.downloadVideo("http://jachaibd.com/files/sample.mp4", ImageViewActivity.this, dataBaseData);
+                    } else if (dataBaseData.getContentType().contains("audio") || contentType.contains("song")) {
+                        Log.d("audioEnter", "audioEnter");
+                        Log.d("audioUrl", audioUrl);
+                        if (audioUrl.length() > 0) {
+                            progressDialog.showProgressDialog();
+                            Gson gson = new Gson();
+                            SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
+                            String json = preferences.getString("databaseData", "");
+                            DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
+                            DownloadAudio downloadAudio = new DownloadAudio();
+                            //downloadAudio.downloadAudio("http://hindisongs.fusionbd.com/downloads/mp3/hindi/Single_Tracks/Buzz-Aastha_Gill_And_Badshah_FusionBD.Com.mp3", ImageViewActivity.this, dataBaseData);
 
+                          /*  downloadAudio.downloadAudio(" http://hindisongs.fusionbd.com/downloads/mp3/hindi/Single_Tracks/Raahat-Mohammad_Irfan_And_Jonita_Gandhi_FusionBD.Com.mp3", ImageViewActivity.this, dataBaseData);
+                             downloadAudio.downloadAudio("http://banglasongs.fusionbd.com/downloads/mp3/bangla/Adorer_Shuktara-Miftah_Zaman/08.Amader_Chottoghore-Miftah_Zaman_FusionBD.Com.mp3", ImageViewActivity.this, dataBaseData);downloadAudio.downloadAudio(audioUrl, ImageViewActivity.this, dataBaseData);*/
+                           downloadAudio.downloadAudio("https://fsa.zobj.net/download/bztTqNHqgr0dug1iOwSoDq7Pp6Czdcalekon2tBpAJFeTMZa2WVQka2Dm18rAvddZw9JmlX3IQladYbM4PYgBASpPB-yBUIUBbm91yAK0QvANRE2dB8ZzCy-hFRY/?a=web&c=72&f=let_me_love_you.mp3&special=1525951411-ky2356gba1OZDBXCdm4ekc2OWgrp%2FZ1brCOPlJo1Aro%3D", ImageViewActivity.this, dataBaseData);
+                        } else Log.d("audioUrlNotFound", "audioUrlNotFound");
+
+                    } /*else if (dataBaseData.getContentType().contains("game")) {
+                        Log.d("gameEnter", "gameEnter");
+                        Gson gson = new Gson();
+                        SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
+                        String json = preferences.getString("databaseData", "");
+                        String imageURL = preferences.getString("imageUrl", "");
+                        DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
+                        DownloadImage downloadImage = new DownloadImage();
+                        downloadImage.downloadImage(imageURL, ImageViewActivity.this, dataBaseData);
+
+                    }*/
+                }
             }
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("progressDialog", progressDialog.toString());
+        if (progressDialog.getAlertDialog() != null) progressDialog.hideProgressDialog();
+    }
+
+    public void setImage(String url) {
+        Glide.with(ImageViewActivity.this).load(url).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                progressBar.setVisibility(View.GONE);
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                progressBar.setVisibility(View.GONE);
+                return false;
+            }
+        }).into((ImageView) findViewById(R.id.imageViewWallpaper));
     }
 }
