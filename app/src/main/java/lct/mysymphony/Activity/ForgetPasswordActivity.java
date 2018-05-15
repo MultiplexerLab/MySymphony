@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -68,10 +69,11 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     private void sendUserPhoneNumberToServer() {
         String phoneNumber = userPhoneNumber.getText().toString();
         editor.putString("phoneNo", phoneNumber);
-        String url = "http://bot.sharedtoday.com:9500/ws/gen2FACode?prcName=forgotPass&uid=" + userPhoneNumber.getText().toString();
+        final String url = "http://bot.sharedtoday.com:9500/ws/gen2FACode?prcName=forgotPass&uid=" + userPhoneNumber.getText().toString();
         final StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.d("url", url);
                 Log.d("responseprofile", response.toString());
                 String genRef = "";
                 JSONObject postInfo = null;
@@ -102,7 +104,6 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         });
-
         queue.add(stringRequest);
     }
 

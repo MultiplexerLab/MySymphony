@@ -139,7 +139,7 @@ public class SignInActivity extends AppCompatActivity {
                                 editor.apply();
                                 homePageStart();
                             } else
-                                Toast.makeText(SignInActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignInActivity.this, "আপনার তথ্য সঠিক নয় ", Toast.LENGTH_SHORT).show();
 
                         } else
                         {
