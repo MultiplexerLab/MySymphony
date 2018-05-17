@@ -15,7 +15,6 @@
         <include
             android:id="@+id/toolbarlayoutinhome_page"
             layout="@layout/toolbar_layout_in_homepage" />
-
     </android.support.design.widget.AppBarLayout>
 
     <requestFocus />

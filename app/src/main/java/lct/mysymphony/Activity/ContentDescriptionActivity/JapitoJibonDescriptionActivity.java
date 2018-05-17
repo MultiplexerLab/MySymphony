@@ -6,11 +6,16 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -26,6 +31,7 @@ import lct.mysymphony.R;
 import lct.mysymphony.helper.DataHelper;
 import lct.mysymphony.helper.DownloadImage;
 import lct.mysymphony.helper.DownloadVideo;
+import lct.mysymphony.helper.FullScreenMediaController;
 import lct.mysymphony.helper.PushDataToSharedPref;
 import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
@@ -107,13 +113,25 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
 
     public void setDescripTionData() {
         JapitoJibon object = (JapitoJibon) getIntent().getSerializableExtra("Data");
-
+        videoProgressBar.setVisibility(View.VISIBLE);
         if (object.getContentType().equals("video")) {
             newsImageView.setVisibility(View.GONE);
             videoView.setVisibility(View.VISIBLE);
-            videoView.setVideoURI(Uri.parse("http://jachaibd.com/files/sample.mp4"));
-            videoView.start();
-            videoProgressBar.setVisibility(View.VISIBLE);
+
+            MediaController mediaController;
+
+            if(isLandScape()){
+                mediaController = new FullScreenMediaController(this);
+                videoView.setMediaController(mediaController);
+                videoView.setVideoURI(Uri.parse("https://ia800201.us.archive.org/22/items/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4"));
+                videoView.start();
+            }else {
+                mediaController = new FullScreenMediaController(this);
+                videoView.setMediaController(mediaController);
+                videoView.setVideoURI(Uri.parse("https://ia800201.us.archive.org/22/items/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4"));
+                videoView.start();
+            }
+
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
@@ -138,7 +156,24 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
                 }
             });
 
-            Log.i("japitojibon", "japitojibon");
+            /*if(isLandScape()){
+                DisplayMetrics metrics = new DisplayMetrics(); getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                android.widget.RelativeLayout.LayoutParams params = (android.widget.RelativeLayout.LayoutParams) videoView.getLayoutParams();
+                params.width =  metrics.widthPixels;
+                params.height = metrics.heightPixels;
+                params.leftMargin = 0;
+                videoView.setLayoutParams(params);
+                videoView.start();
+            }else{
+                DisplayMetrics metrics = new DisplayMetrics(); getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                android.widget.RelativeLayout.LayoutParams params = (android.widget.RelativeLayout.LayoutParams) videoView.getLayoutParams();
+                params.width =  (int) (300*metrics.density);
+                params.height = (int) (250*metrics.density);
+                params.leftMargin = 30;
+                videoView.setLayoutParams(params);
+                videoView.start();
+            }*/
+
         } else {
             newsImageView.setVisibility(View.VISIBLE);
             videoView.setVisibility(View.GONE);
@@ -156,6 +191,18 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
         SharedPreferences preferences = getSharedPreferences("phoneNumber", MODE_PRIVATE);
         purchase.putExtra("userId", preferences.getString("phoneNo", ""));
         startActivityForResult(purchase, 1);
+    }
+
+    private boolean isLandScape(){
+        Display display = ((WindowManager) getSystemService(WINDOW_SERVICE))
+                .getDefaultDisplay();
+        int rotation = display.getRotation();
+
+        if (rotation == Surface.ROTATION_90
+                || rotation == Surface.ROTATION_270) {
+            return true;
+        }
+        return false;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

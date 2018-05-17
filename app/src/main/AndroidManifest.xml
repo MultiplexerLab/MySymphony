@@ -82,6 +82,8 @@
         <!--<activity android:name=".Activity.PayWithPinActivity" />-->
         <activity android:name=".Activity.SymphonyCareActivity"></activity>
         <activity android:name=".Activity.ShowOnlyImage"></activity>
+        <activity android:name=".Activity.ContentDescriptionActivity.FullScreenVideoActivity"
+            android:screenOrientation="landscape"></activity>
 
 
     </application>
