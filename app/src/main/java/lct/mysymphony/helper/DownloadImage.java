@@ -5,13 +5,17 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Random;
 
 import lct.mysymphony.Activity.MainActivity;
 import lct.mysymphony.ModelClass.DataBaseData;
@@ -53,6 +57,7 @@ public class DownloadImage {
                 options.inJustDecodeBounds = false;
                 options.inSampleSize = 4;
                 bitmap = BitmapFactory.decodeStream(is, null, options);
+                saveImage(bitmap);
                 is.close();
             } catch (IOException e) {
                 return null;
@@ -68,5 +73,27 @@ public class DownloadImage {
     }
     public interface AsyncResponse {
         void processFinish(String output);
+    }
+
+    private void saveImage(Bitmap finalBitmap) {
+
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/mySymphony");
+        myDir.mkdirs();
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fname = "Image-"+ n +".jpg";
+        File file = new File (myDir, fname);
+        if (file.exists ()) file.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
