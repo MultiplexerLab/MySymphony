@@ -48,6 +48,7 @@ public class PinActivity extends AppCompatActivity {
     boolean isResendAlreadyused = false;
     String cameFromWhichActivity = "";
     lct.mysymphony.helper.SimpleSmsReciever simpleSmsReceiver = new lct.mysymphony.helper.SimpleSmsReciever();
+    Bundle extras;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +56,17 @@ public class PinActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pin);
         toolbar = findViewById(R.id.toolbarlayoutinpin);
         setSupportActionBar(toolbar);
+        Log.d("enterOncreate", "enterOncreate");
         queue = Volley.newRequestQueue(PinActivity.this);
         SharedPreferences prefs = getSharedPreferences("phoneNumber", MODE_PRIVATE);
         genref = prefs.getString("genRef", "");
         cameFromWhichActivity = prefs.getString("cameFromWhichActivity", "");
         phoneNumber = prefs.getString("phoneNo", "");
         pinview = findViewById(R.id.pinView);
-        Bundle extras = getIntent().getExtras();
+        extras = getIntent().getExtras();
 
         if (extras != null) {
+            Log.d("EnterVerification", "EnterVerification");
             String address = extras.getString("MessageNumber");
             String message = extras.getString("Message");
             Log.d("MessageNumber", address);
@@ -73,9 +76,12 @@ public class PinActivity extends AppCompatActivity {
                 message = message.replaceAll(" ", "");
                 pinview.setText(message);
                 pinText = message;
+                isResendAlreadyused = false;
                 SharedPreferences.Editor editor = getSharedPreferences("isBroadcastAlreadyUsed", MODE_PRIVATE).edit();
                 editor.putString("used", "true");
                 editor.apply();
+                extras = null;
+                unregisterReceiver();
                 if (internetConnected()) {
                     if (cameFromWhichActivity.contains("forgetPassword")) {
                         sendVerificationCodeForReset();
@@ -84,11 +90,12 @@ public class PinActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(PinActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
                     finish();
+                    unregisterReceiver();
                     startActivity(getIntent());
                 }
             }
         } else {
-            Log.d("Bundle", "null");
+            Log.d("BundleIsNull", "null");
         }
 
         pinview.addTextChangedListener(new TextWatcher() {
@@ -101,11 +108,11 @@ public class PinActivity extends AppCompatActivity {
 
                 if (charSequence.length() == 6) {
                     pinText = String.valueOf(charSequence);
+                    isResendAlreadyused = false;
                     Log.d("cameFromWhichActivity", cameFromWhichActivity);
                     if (internetConnected()) {
                         if (cameFromWhichActivity.contains("forgetPassword")) {
                             sendVerificationCodeForReset();
-
                         } else sendVarificationCodeToServer();
 
                     } else {
@@ -115,6 +122,7 @@ public class PinActivity extends AppCompatActivity {
                     }
                 }
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -129,6 +137,7 @@ public class PinActivity extends AppCompatActivity {
 
         if (isResendAlreadyused == false) {
             isResendAlreadyused = true;
+            Log.d("isResendAlreadyused", String.valueOf(isResendAlreadyused));
             String url = "http://bot.sharedtoday.com:9500/ws/validate2FACode?prcName=forgotPass&uid=" + phoneNumber + "&genRef=" + genref + "&code=" + pinText;
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -155,13 +164,15 @@ public class PinActivity extends AppCompatActivity {
 
                     if (result.contains("SUCCESS")) {
                         Toast.makeText(PinActivity.this, "আপনার পিন সঠিক হয়েছে", Toast.LENGTH_SHORT).show();
-
                         Log.d("Enter", "enter");
                         sendUserNewPassword();
                     } else {
+                        extras = null;
                         Toast.makeText(PinActivity.this, "আপনার পিন ভুল হয়েছে" + "\n" + "আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-                        finish();
+                        Log.d("wrongInReset", "wrong");
+                        unregisterReceiver();
                         startActivity(getIntent());
+                        finish();
                     }
                     Log.d("responsePin ", response);
                 }
@@ -220,6 +231,8 @@ public class PinActivity extends AppCompatActivity {
                     PinActivity.this.startActivity(myIntent);
                     finish();
                 } else {
+                    extras = null;
+                    unregisterReceiver();
                     Toast.makeText(PinActivity.this, "আপনার পিন ভুল হয়েছে" + "\n" + "আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
                     finish();
                     startActivity(getIntent());
@@ -314,15 +327,48 @@ public class PinActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("onresume", "onresume");
         this.registerReceiver(simpleSmsReceiver, new android.content.IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        this.unregisterReceiver(simpleSmsReceiver);
+
+        try {
+            this.unregisterReceiver(simpleSmsReceiver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.d("onpause", "onpause");
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("onDestroy", "onDestroy");
+        try {
+            this.unregisterReceiver(simpleSmsReceiver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void registerReceiver() {
+        try {
+            this.registerReceiver(simpleSmsReceiver, new android.content.IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void unregisterReceiver() {
+        try {
+            this.unregisterReceiver(simpleSmsReceiver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 

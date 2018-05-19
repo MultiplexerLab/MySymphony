@@ -1,11 +1,16 @@
 package lct.mysymphony.Activity;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +27,8 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
+
+import java.io.Serializable;
 
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.ModelClass.GamesZone;
@@ -32,6 +40,7 @@ import lct.mysymphony.helper.DataHelper;
 import lct.mysymphony.helper.DownloadAudio;
 import lct.mysymphony.helper.DownloadImage;
 import lct.mysymphony.helper.DownloadVideo;
+import lct.mysymphony.helper.PlayAudioInBackgroundService;
 import lct.mysymphony.helper.PushDataToSharedPref;
 import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
@@ -44,13 +53,16 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
     String cameFromWhichActivity;
     DataBaseData dataBaseData;
     Button buyOrDownloadBTN;
+    Button playAudioBTN;
     boolean isDownloaded = false;
     boolean isItFree = false;
     DataHelper dataHelper;
     LinearLayout buyOrDownloadLinearLayout;
     ProgressBar progressBar;
+    Context context;
     lct.mysymphony.helper.ProgressDialog progressDialog;
     SharedPreferences preferences;
+    private String audioTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +74,12 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         bisheshOfferLinearLayout = findViewById(R.id.bisheshOfferLL);
         buyOrDownloadLinearLayout = findViewById(R.id.buyOrDownloadLL);
         previousPrice = findViewById(R.id.previousPriceTVinImageViewActivity);
+        playAudioBTN = findViewById(R.id.playAudioBTN);
         newPrice = findViewById(R.id.newPriceTVinImageViewActivity);
         progressDialog = new lct.mysymphony.helper.ProgressDialog(this);
         progressBar = findViewById(R.id.progressBarInImageView);
         preferences = getSharedPreferences("tempData", MODE_PRIVATE);
-
+        context = ImageViewActivity.this;
         cameFromWhichActivity = getIntent().getStringExtra("cameFromWhichActivity");
 
         if (cameFromWhichActivity != null) {
@@ -79,6 +92,10 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 contentType = Data.getContentType();
                 if (contentType.contains("audio")) {
                     audioUrl = Data.getContentUrl();
+                    audioTitle = Data.getContentTile();
+                    playAudioBTN.setVisibility(View.VISIBLE);
+                } else {
+                    playAudioBTN.setVisibility(View.GONE);
                 }
                 thumbNailImgUrl = Data.getThumbNailImgUrl();
 
@@ -105,6 +122,9 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 thumbNailImgUrl = Data.getThumbNailImgUrl();
                 if (contentType.contains("audio")) {
                     audioUrl = Data.getContentUrl();
+                    playAudioBTN.setVisibility(View.VISIBLE);
+                } else {
+                    playAudioBTN.setVisibility(View.GONE);
                 }
                 Log.d("newPrice", Integer.toString(Data.getNewPrice()));
                 Log.d("previousPrice", Integer.toString(Data.getPreviousPrice()));
@@ -140,6 +160,9 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 thumbNailImgUrl = Data.getThumbNailImgUrl();
                 if (contentType.contains("audio")) {
                     audioUrl = Data.getContentUrl();
+                    playAudioBTN.setVisibility(View.VISIBLE);
+                } else {
+                    playAudioBTN.setVisibility(View.GONE);
                 }
 
                 String priceStatus;
@@ -337,4 +360,48 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
             }
         }).into((ImageView) findViewById(R.id.imageViewWallpaper));
     }
+
+    public void startPlayAudioActivity(View view) {
+        Log.d("audioUrlstartPlayAudio", audioUrl);
+        /*Intent intent=new Intent(ImageViewActivity.this,PlayAudioActivity.class);
+        intent.putExtra("audioUrl",audioUrl);
+        startActivity(intent);*/
+        showNotification();
+        Intent intent = new Intent(ImageViewActivity.this, PlayAudioInBackgroundService.class);
+        intent.putExtra("audioUrl", audioUrl);
+        startService(intent);
+    }
+
+    public void showNotification() {
+       /* notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        builder = new NotificationCompat.Builder(this);
+        remoteViews = new RemoteViews(getPackageName(),R.layout.audio_controller_notification_layout);
+        remoteViews.setImageViewResource(R.id.notif_icon,R.mipmap.ic_launcher);
+        remoteViews.setTextViewText(R.id.notif_title,"TEXT");
+        notification_id = (int) System.currentTimeMillis();
+        Intent button_intent = new Intent("button_click");
+        button_intent.putExtra("id",notification_id);
+        PendingIntent button_pending_event = PendingIntent.getBroadcast(context,notification_id,
+                button_intent,0);
+        remoteViews.setOnClickPendingIntent(R.id.button,button_pending_event);
+        Intent notification_intent = new Intent(context,HomePage.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context,0,notification_intent,0);
+        builder.setSmallIcon(R.mipmap.ic_launcher)
+                .setAutoCancel(true)
+                .setCustomBigContentView(remoteViews)
+                .setContentIntent(pendingIntent);
+        notificationManager.notify(notification_id,builder.build());*/
+
+        Intent stopButton = new Intent("button_click");
+        PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 0, stopButton, 0);
+        RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.audio_controller_notification_layout);
+        notificationView.setTextViewText(R.id.notif_title, audioTitle);
+        stopButton.putExtra("notificationView", notificationView);
+        notificationView.setImageViewUri(R.id.audioImage, Uri.parse(audioUrl));
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this).setSmallIcon(R.mipmap.ic_launcher).setTicker("Ticker Text").setContent(notificationView);
+        notificationView.setOnClickPendingIntent(R.id.button, pendingSwitchIntent);
+        notificationManager.notify(1, builder.build());
+    }
+
 }

@@ -105,6 +105,16 @@
                     android:text="কিনুন / ডাউনলোড করুন"
                     android:textColor="@color/White" />
             </LinearLayout>
+            <Button
+                android:visibility="invisible"
+                android:onClick="startPlayAudioActivity"
+                android:text="গানটি প্লে করুন"
+                android:textColor="@color/White"
+                android:layout_marginTop="10dp"
+                android:id="@+id/playAudioBTN"
+                android:background="@drawable/btn_style_red"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
