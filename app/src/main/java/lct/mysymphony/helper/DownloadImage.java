@@ -66,10 +66,9 @@ public class DownloadImage {
         }
 
         protected void onPostExecute(Bitmap result) {
-            Log.d("onPostExecuteImage","onPostExecute");
             AsyncResponse asyncResponse = (AsyncResponse) context;
             asyncResponse.processFinish("complete");
-            /*dbHelper.insertBitmap(result, dataBaseData);*/
+            dbHelper.insertBitmap(result, dataBaseData);
         }
     }
     public interface AsyncResponse {
@@ -77,7 +76,6 @@ public class DownloadImage {
     }
 
     private void saveImage(Bitmap finalBitmap) {
-        Log.d("saveImage","saveImage");
 
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/mySymphony");
@@ -96,7 +94,6 @@ public class DownloadImage {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d("saveImageExcptn",e.toString());
         }
     }
 }
