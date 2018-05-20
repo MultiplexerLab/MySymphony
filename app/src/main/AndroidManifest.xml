@@ -78,7 +78,9 @@
         <activity android:name=".Activity.ContentDescriptionActivity.PachMishaliDescriptionActivity" />
         <activity android:name=".Activity.ContentDescriptionActivity.BigganOProjuktiDescriptionActivity" />
         <activity android:name=".Activity.ContentDescriptionActivity.CartoonDescriptionActivity" />
-        <activity android:name=".Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity" />
+        <activity android:name=".Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+          </activity>
         <!-- <activity android:name=".Activity.PayWithRocketActivity" /> -->
         <!-- <activity android:name=".Activity.PayWithPinActivity" /> -->
         <activity android:name=".Activity.SymphonyCareActivity" />

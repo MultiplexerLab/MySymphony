@@ -91,7 +91,9 @@ public class PinActivity extends AppCompatActivity {
                     Toast.makeText(PinActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
                     finish();
                     unregisterReceiver();
-                    startActivity(getIntent());
+                    Intent intent=new Intent(PinActivity.this,PinActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
             }
         } else {
@@ -117,8 +119,9 @@ public class PinActivity extends AppCompatActivity {
 
                     } else {
                         Toast.makeText(PinActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-                        finish();
-                        startActivity(getIntent());
+                        Intent intent=new Intent(PinActivity.this,PinActivity.class);
+                        startActivity(intent);
+                        finish();finish();
                     }
                 }
             }
@@ -171,7 +174,8 @@ public class PinActivity extends AppCompatActivity {
                         Toast.makeText(PinActivity.this, "আপনার পিন ভুল হয়েছে" + "\n" + "আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
                         Log.d("wrongInReset", "wrong");
                         unregisterReceiver();
-                        startActivity(getIntent());
+                        Intent intent=new Intent(PinActivity.this,PinActivity.class);
+                        startActivity(intent);
                         finish();
                     }
                     Log.d("responsePin ", response);
@@ -234,8 +238,9 @@ public class PinActivity extends AppCompatActivity {
                     extras = null;
                     unregisterReceiver();
                     Toast.makeText(PinActivity.this, "আপনার পিন ভুল হয়েছে" + "\n" + "আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(PinActivity.this,PinActivity.class);
+                    startActivity(intent);
                     finish();
-                    startActivity(getIntent());
                 }
                 Log.d("responsePin ", response);
             }

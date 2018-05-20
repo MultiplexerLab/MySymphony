@@ -4,7 +4,6 @@
     android:background="@color/dark_red"
     android:orientation="horizontal"
     android:padding="5dp"
-    android:layout_margin="2dp"
     >
 
 <!--    <ImageView
@@ -46,6 +45,7 @@
                 android:text="SOME TEXT" />
 
             <ImageButton
+                android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/button"

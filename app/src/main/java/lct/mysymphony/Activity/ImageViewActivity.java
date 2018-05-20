@@ -2,15 +2,23 @@ package lct.mysymphony.Activity;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -25,10 +33,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 
 import java.io.Serializable;
+import java.util.concurrent.ExecutionException;
 
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.ModelClass.GamesZone;
@@ -41,6 +52,7 @@ import lct.mysymphony.helper.DownloadAudio;
 import lct.mysymphony.helper.DownloadImage;
 import lct.mysymphony.helper.DownloadVideo;
 import lct.mysymphony.helper.PlayAudioInBackgroundService;
+import lct.mysymphony.helper.ProgressDialog;
 import lct.mysymphony.helper.PushDataToSharedPref;
 import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
@@ -81,6 +93,8 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         preferences = getSharedPreferences("tempData", MODE_PRIVATE);
         context = ImageViewActivity.this;
         cameFromWhichActivity = getIntent().getStringExtra("cameFromWhichActivity");
+        /*LocalBroadcastManager.getInstance(ImageViewActivity.this).registerReceiver(
+                mMessageReceiver, new IntentFilter("intentKey"));*/
 
         if (cameFromWhichActivity != null) {
             if (cameFromWhichActivity.contains("MulloChar")) {
@@ -363,45 +377,69 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
 
     public void startPlayAudioActivity(View view) {
         Log.d("audioUrlstartPlayAudio", audioUrl);
-        /*Intent intent=new Intent(ImageViewActivity.this,PlayAudioActivity.class);
-        intent.putExtra("audioUrl",audioUrl);
-        startActivity(intent);*/
         showNotification();
-        Intent intent = new Intent(ImageViewActivity.this, PlayAudioInBackgroundService.class);
-        intent.putExtra("audioUrl", audioUrl);
-        startService(intent);
     }
 
     public void showNotification() {
-       /* notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        builder = new NotificationCompat.Builder(this);
-        remoteViews = new RemoteViews(getPackageName(),R.layout.audio_controller_notification_layout);
-        remoteViews.setImageViewResource(R.id.notif_icon,R.mipmap.ic_launcher);
-        remoteViews.setTextViewText(R.id.notif_title,"TEXT");
-        notification_id = (int) System.currentTimeMillis();
-        Intent button_intent = new Intent("button_click");
-        button_intent.putExtra("id",notification_id);
-        PendingIntent button_pending_event = PendingIntent.getBroadcast(context,notification_id,
-                button_intent,0);
-        remoteViews.setOnClickPendingIntent(R.id.button,button_pending_event);
-        Intent notification_intent = new Intent(context,HomePage.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,0,notification_intent,0);
-        builder.setSmallIcon(R.mipmap.ic_launcher)
-                .setAutoCancel(true)
-                .setCustomBigContentView(remoteViews)
-                .setContentIntent(pendingIntent);
-        notificationManager.notify(notification_id,builder.build());*/
-
         Intent stopButton = new Intent("button_click");
-        PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 0, stopButton, 0);
-        RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.audio_controller_notification_layout);
+        final PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 0, stopButton, 0);
+        final RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.audio_controller_notification_layout);
         notificationView.setTextViewText(R.id.notif_title, audioTitle);
         stopButton.putExtra("notificationView", notificationView);
-        notificationView.setImageViewUri(R.id.audioImage, Uri.parse(audioUrl));
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this).setSmallIcon(R.mipmap.ic_launcher).setTicker("Ticker Text").setContent(notificationView);
-        notificationView.setOnClickPendingIntent(R.id.button, pendingSwitchIntent);
-        notificationManager.notify(1, builder.build());
+        try {
+            progressDialog.showProgressDialog();
+            Glide.with(this).asBitmap().load(imageUrl).into(new SimpleTarget<Bitmap>() {
+
+                @Override
+                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                    notificationView.setImageViewBitmap(R.id.audioImage, resource);
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(ImageViewActivity.this).setSmallIcon(R.mipmap.ic_launcher).setTicker("Ticker Text").setContent(notificationView);
+                    notificationView.setOnClickPendingIntent(R.id.button, pendingSwitchIntent);
+                    notificationManager.notify(1, builder.build());
+                    startAudioBackgroundService();
+                    progressDialog.hideProgressDialog();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            progressDialog.hideProgressDialog();
+            Log.d("glideException", e.toString());
+            notificationView.setImageViewUri(R.id.audioImage, Uri.parse(imageUrl));
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(ImageViewActivity.this).setSmallIcon(R.mipmap.ic_launcher).setTicker("Ticker Text").setContent(notificationView);
+            notificationView.setOnClickPendingIntent(R.id.button, pendingSwitchIntent);
+            notificationManager.notify(1, builder.build());
+            startAudioBackgroundService();
+        }
     }
+
+
+    public void startAudioBackgroundService()
+    {
+        /*progressDialog.showProgressDialog();*/
+        Intent intent = new Intent(ImageViewActivity.this, PlayAudioInBackgroundService.class);
+        intent.putExtra("audioUrl", audioUrl);
+        /*intent.putExtra("context", (Serializable) ImageViewActivity.this);*/
+        startService(intent);
+    }
+    /*private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("gotDataFromService",intent.getStringExtra("key"));
+            if (progressDialog.getAlertDialog()!=null)
+            {
+                Log.d("notNull","notNull");
+                progressDialog.hideProgressDialog();
+                progressDialog.setAlertdialogNull();
+                progressDialog=new ProgressDialog(ImageViewActivity.this);
+            }
+           *//* progressDialog.hideProgressDialog();*//*
+            // Get extra data included in the Intent
+            *//*String message = intent.getStringExtra("key");
+            tvStatus.setText(message);*//*
+            // Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        }
+    };*/
 
 }

@@ -1,6 +1,7 @@
 package lct.mysymphony.helper;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -8,6 +9,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.io.IOException;
@@ -20,6 +22,7 @@ public class PlayAudioInBackgroundService extends Service {
     }
     MediaPlayer mediaPlayer;
     ProgressDialog progressDialog;
+    static Context context;
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent!=null)
@@ -27,6 +30,9 @@ public class PlayAudioInBackgroundService extends Service {
             Log.d("serviceEntered","serviceEntered");
             String audioUrl=intent.getStringExtra("audioUrl");
             String message=intent.getStringExtra("message");
+            context= (Context) intent.getSerializableExtra("context");
+            if (context==null)
+                Log.d("contextIsNull","contextIsNull");
 
             if (message!=null)
             {
@@ -60,13 +66,29 @@ public class PlayAudioInBackgroundService extends Service {
                 } else {
                     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 }
+                ///try {
+                    /*mediaPlayer.prepare();
+                    mediaPlayer.start();*/
                 try {
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                } catch (IOException e) {
+                    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
+
+                        @Override
+                        public void onPrepared(MediaPlayer mp) {
+                            mp.start();
+                            /*sendMessageToActivity("success");*/
+                        }
+                    });
+                    mediaPlayer.prepareAsync();
+                } catch (IllegalStateException e) {
+                    /*sendMessageToActivity("failed");*/
+                    e.printStackTrace();
+                }
+
+
+                /*} catch (IOException e) {
                     e.printStackTrace();
                     Log.d("medipalyerException",e.toString());
-                }
+                }*/
             }
         }
         return START_STICKY;
@@ -77,4 +99,11 @@ public class PlayAudioInBackgroundService extends Service {
         mediaPlayer.stop();
         mediaPlayer.release();
     }
+
+    /*private void sendMessageToActivity(String msg) {
+        Intent intent = new Intent("intentKey");
+// You can also include some extra data.
+        intent.putExtra("key", msg);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }*/
 }

@@ -46,4 +46,8 @@ public class ProgressDialog {
     public void hideProgressDialog(){
         alertDialog.dismiss();
     }
+    public void setAlertdialogNull()
+    {
+        alertDialog=null;
+    }
 }
