@@ -107,7 +107,6 @@ public class DownloadImage {
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
-
         } catch (Exception e) {
             Log.e("ErrorImage", e.toString());
         }
