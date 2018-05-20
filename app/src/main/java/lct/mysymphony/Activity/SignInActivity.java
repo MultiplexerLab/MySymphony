@@ -45,7 +45,8 @@ public class SignInActivity extends AppCompatActivity {
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.RECEIVE_SMS,
             Manifest.permission.READ_SMS,
-            Manifest.permission.READ_PHONE_STATE,};
+            Manifest.permission.READ_PHONE_STATE,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE,};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

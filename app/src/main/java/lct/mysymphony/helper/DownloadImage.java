@@ -1,11 +1,15 @@
 package lct.mysymphony.helper;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -29,6 +33,7 @@ public class DownloadImage {
         this.context = context;
         Log.i("downloadImage", "Inside download image");
         this.dataBaseData = dataBaseData;
+
         DownloadImage.BackTask bt = new DownloadImage.BackTask();
         if (!imgURL.trim().equals("")) {
             bt.execute(imgURL);
@@ -78,13 +83,24 @@ public class DownloadImage {
     private void saveImage(Bitmap finalBitmap) {
 
         String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/mySymphony");
-        myDir.mkdirs();
+        File dir = new File(root + "/mySymphony/");
+        try{
+            dir.mkdir();
+            Log.i("Folder", "Directory Created");
+        }catch(Exception e){
+           Log.e("FolderErr", e.toString());
+        }
+        /*if (!myDir.exists()) {
+            boolean flag = myDir.mkdirs();
+            Log.i("Folder", String.valueOf(flag));
+        }else{
+            Log.i("Folder", "Created");
+        }*/
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
-        String fname = "Image-"+ n +".jpg";
-        File file = new File (myDir, fname);
+        String fname = "img"+ n +".jpg";
+        File file = new File (dir, fname);
         if (file.exists ()) file.delete ();
         try {
             FileOutputStream out = new FileOutputStream(file);
@@ -93,7 +109,7 @@ public class DownloadImage {
             out.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("ErrorImage", e.toString());
         }
     }
 }
