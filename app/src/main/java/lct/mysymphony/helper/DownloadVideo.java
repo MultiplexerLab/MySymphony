@@ -2,15 +2,19 @@ package lct.mysymphony.helper;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 
 import lct.mysymphony.ModelClass.DataBaseData;
 
@@ -18,13 +22,16 @@ public class DownloadVideo {
 
     Context context;
     String videoUrl;
+    String videoTitle;
     private DataBaseData dataBaseData;
 
     public void downloadVideo(String videoUrl, Context context, DataBaseData dataBaseData) {
         this.context = context;
         this.videoUrl = videoUrl;
         this.dataBaseData = dataBaseData;
+        videoTitle=dataBaseData.getContentTitle();
         Log.i("DonwloadVideoEnter", "Downloading the video. Please wait...");
+
         DownloadVideo.RetrieveVideoTask bt = new DownloadVideo.RetrieveVideoTask();
         bt.execute(videoUrl);
     }
@@ -53,9 +60,10 @@ public class DownloadVideo {
                     while ((bytesRead = inputStream.read(buff)) != -1) {
                         bao.write(buff, 0, bytesRead);
                     }
-                    byte[] data = bao.toByteArray();
+                    saveVideo(bao);
+                    /*byte[] data = bao.toByteArray();
                     video = Base64.encodeToString(data, Base64.DEFAULT);
-                    Log.i("videoStr", video);
+                    Log.i("videoStr", video);*/
                 }
             } catch (MalformedURLException mue) {
                 Log.e("URLException", mue.toString());
@@ -77,11 +85,38 @@ public class DownloadVideo {
             Log.d("postExecuteVideo","postExecuteVideo");
             DownloadImage.AsyncResponse asyncResponse = (DownloadImage.AsyncResponse) context;
             asyncResponse.processFinish("complete");
-            dbHelper.insertVideoStr(result, dataBaseData);
+            ///dbHelper.insertVideoStr(result, dataBaseData);
         }
     }
 
     public interface AsyncResponse {
         void processFinish(String output);
+    }
+
+    private void saveVideo(ByteArrayOutputStream bao) {
+        Log.d("entersaveVideo","entersaveVideo");
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/mySymphony");
+        myDir.mkdirs();
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fname;
+        if (videoTitle.length()>0)
+            fname = videoTitle +"-"+n+".mp4";
+        else
+            fname = "Video-"+ n +".mp4";
+        File file = new File (myDir, fname);
+        if (file.exists ()) file.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            out.write(bao.toByteArray());
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("saveVideoExcptn",e.toString());
+        }
     }
 }

@@ -1,5 +1,6 @@
 package lct.mysymphony.Activity;
 
+import android.Manifest;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -7,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,7 +19,9 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -39,6 +43,8 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import lct.mysymphony.ModelClass.DataBaseData;
@@ -47,6 +53,7 @@ import lct.mysymphony.ModelClass.MulloChar;
 import lct.mysymphony.ModelClass.SeraChobi;
 import lct.mysymphony.ModelClass.ShocolChobi;
 import lct.mysymphony.R;
+import lct.mysymphony.helper.CheckPermission;
 import lct.mysymphony.helper.DataHelper;
 import lct.mysymphony.helper.DownloadAudio;
 import lct.mysymphony.helper.DownloadImage;
@@ -75,6 +82,9 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
     lct.mysymphony.helper.ProgressDialog progressDialog;
     SharedPreferences preferences;
     private String audioTitle;
+    String[] permissions = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +101,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         progressDialog = new lct.mysymphony.helper.ProgressDialog(this);
         progressBar = findViewById(R.id.progressBarInImageView);
         preferences = getSharedPreferences("tempData", MODE_PRIVATE);
+        checkPermissions();
         context = ImageViewActivity.this;
         cameFromWhichActivity = getIntent().getStringExtra("cameFromWhichActivity");
         /*LocalBroadcastManager.getInstance(ImageViewActivity.this).registerReceiver(
@@ -283,6 +294,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
     public void processFinish(String output) {
         progressDialog.hideProgressDialog();
         Log.d("processFinished", "processFinished");
+        Log.d("outputAudio",output);
         if (output.contains("complete")) {
             Intent myIntent;
             myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
@@ -291,7 +303,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
             myIntent.putExtra("dataBaseData", dataBaseData);
             myIntent.putExtra("cameFromWhichActivity", "ImageViewActivity");
             this.startActivity(myIntent);
-            Log.d("onProcessFinished", "onProcessFinished");
+            Log.d("onProcessFinishedComplt", "onProcessFinishedComplt");
         }
     }
 
@@ -333,7 +345,8 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                             String json = preferences.getString("databaseData", "");
                             DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
                             DownloadAudio downloadAudio = new DownloadAudio();
-                            downloadAudio.downloadAudio("https://fsa.zobj.net/download/bztTqNHqgr0dug1iOwSoDq7Pp6Czdcalekon2tBpAJFeTMZa2WVQka2Dm18rAvddZw9JmlX3IQladYbM4PYgBASpPB-yBUIUBbm91yAK0QvANRE2dB8ZzCy-hFRY/?a=web&c=72&f=let_me_love_you.mp3&special=1525951411-ky2356gba1OZDBXCdm4ekc2OWgrp%2FZ1brCOPlJo1Aro%3D", ImageViewActivity.this, dataBaseData);
+                            downloadAudio.downloadAudio(audioUrl,ImageViewActivity.this, dataBaseData);
+                            ///downloadAudio.downloadAudio("https://fsa.zobj.net/download/bztTqNHqgr0dug1iOwSoDq7Pp6Czdcalekon2tBpAJFeTMZa2WVQka2Dm18rAvddZw9JmlX3IQladYbM4PYgBASpPB-yBUIUBbm91yAK0QvANRE2dB8ZzCy-hFRY/?a=web&c=72&f=let_me_love_you.mp3&special=1525951411-ky2356gba1OZDBXCdm4ekc2OWgrp%2FZ1brCOPlJo1Aro%3D", ImageViewActivity.this, dataBaseData);
                         } else Log.d("audioUrlNotFound", "audioUrlNotFound");
 
                     } /*else if (dataBaseData.getContentType().contains("game")) {
@@ -441,5 +454,19 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
             // Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
         }
     };*/
-
+    public boolean checkPermissions() {
+        int result;
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for (String p : permissions) {
+            result = ContextCompat.checkSelfPermission(this, p);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(p);
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 100);
+            return false;
+        }
+        return true;
+    }
 }

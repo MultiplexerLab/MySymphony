@@ -21,6 +21,7 @@ import lct.mysymphony.Activity.ProfileActivity;
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.ModelClass.SliderImage;
 import lct.mysymphony.R;
+import lct.mysymphony.helper.CheckPermission;
 import lct.mysymphony.helper.DataHelper;
 import lct.mysymphony.helper.DownloadImage;
 import lct.mysymphony.helper.DownloadVideo;
@@ -45,6 +46,8 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_slider_details_view);
+        CheckPermission checkPermission=new CheckPermission(this);
+        checkPermission.checkPermissions();
         buyOrDownLoadLL = findViewById(R.id.buyOrDownLoadLLInSliderDetails);
         bishesOfferLL = findViewById(R.id.bisheshOfferLLInSliderDetails);
         dataHelper = new DataHelper(SliderContentDescriptionActivity.this);

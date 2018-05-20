@@ -1,11 +1,16 @@
 package lct.mysymphony.Activity.ContentDescriptionActivity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -18,16 +23,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lct.mysymphony.Activity.HomePage;
+import lct.mysymphony.Activity.ImageViewActivity;
 import lct.mysymphony.Activity.ProfileActivity;
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.ModelClass.JapitoJibon;
 import lct.mysymphony.R;
+import lct.mysymphony.helper.CheckPermission;
 import lct.mysymphony.helper.DataHelper;
 import lct.mysymphony.helper.DownloadImage;
 import lct.mysymphony.helper.DownloadVideo;
@@ -58,7 +69,11 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
     private int cachedHeight;
     private boolean isFullscreen;
     private int mSeekPosition;
+    RelativeLayout imageLayout;
     private static final String SEEK_POSITION_KEY = "SEEK_POSITION_KEY";
+    String[] permissions = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +81,12 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_japiti_jibon_description);
         toolbar = findViewById(R.id.toolbarLayoutInnJapitoJibonDescriptionActivity);
         setSupportActionBar(toolbar);
+        checkPermissions();
         dataHelper = new DataHelper(JapitoJibonDescriptionActivity.this);
         newsImageView = findViewById(R.id.imgJapitiJibonDescription);
         newsTitle = findViewById(R.id.newsTitleJapitiJibonDescription);
         newsDescription = findViewById(R.id.newsdescriptionJapitiJibonDescription);
+        imageLayout=findViewById(R.id.imageLayout);
         ///videoView = findViewById(R.id.videoViewJapitojibon);
         newPrice = findViewById(R.id.newPriceTVinJapitoJibonDescription);
         dataHelper = new DataHelper(JapitoJibonDescriptionActivity.this);
@@ -141,8 +158,9 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
             playVideo();
 
         } else {
+            videoLayout.setVisibility(View.GONE);
+            imageLayout.setVisibility(View.VISIBLE);
             newsImageView.setVisibility(View.VISIBLE);
-            videoView.setVisibility(View.GONE);
             Glide.with(JapitoJibonDescriptionActivity.this).load(object.getImageUrl()).into(newsImageView);
         }
         newsTitle.setText(object.getContentTitle());
@@ -185,7 +203,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
                         ///downLoadVideo.downloadVideo("http://mp4videos.fusionbd.com/All_Files/320x240_Pixels/Bollywood_Promo_Videos-MP4/O_Saathi-Baaghi_2-Promo_FusionBD.Com.mp4", JapitoJibonDescriptionActivity.this, dataBaseData);
                         ///http://jachaibd.com/files/sample.mp4
                         ///downLoadVideo.downloadVideo("http://jachaibd.com/files/sample.mp4", JapitoJibonDescriptionActivity.this, dataBaseData);
-                        downLoadVideo.downloadVideo("https://fsa.zobj.net/download/bztTqNHqgr0dug1iOwSoDq7Pp6Czdcalekon2tBpAJFeTMZa2WVQka2Dm18rAvddZw9JmlX3IQladYbM4PYgBASpPB-yBUIUBbm91yAK0QvANRE2dB8ZzCy-hFRY/?a=web&c=72&f=let_me_love_you.mp3&special=1525951411-ky2356gba1OZDBXCdm4ekc2OWgrp%2FZ1brCOPlJo1Aro%3D", JapitoJibonDescriptionActivity.this, dataBaseData);
+                        downLoadVideo.downloadVideo("https://ia800201.us.archive.org/22/items/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4", JapitoJibonDescriptionActivity.this, dataBaseData);
                         ///downLoadVideo.downloadVideo(" https://doc-08-18-docs.googleusercontent.com/docs/securesc/ttgc3apsofa38nborrtf61rcpkosuqub/5n6ltam4bar31f4v8in8fodjf639o32i/1526040000000/03058776128903223293/08098124281392257082/1dIUl53KTJOJADmLvlIcL8bJ7Uxr8YD7_?e=download&nonce=ka6t7ersmglss&user=08098124281392257082&hash=m7tvis9qiqvpn9evhp4e9le3rnksjrbu", JapitoJibonDescriptionActivity.this, dataBaseData);
                     }
                 }
@@ -324,5 +342,20 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
             }
 
         });
+    }
+    public boolean checkPermissions() {
+        int result;
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for (String p : permissions) {
+            result = ContextCompat.checkSelfPermission(this, p);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(p);
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 100);
+            return false;
+        }
+        return true;
     }
 }
