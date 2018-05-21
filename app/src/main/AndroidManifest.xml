@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:allowBackup="true"
@@ -58,7 +59,9 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:enabled="true" android:name=".helper.PlayAudioInBackgroundService" />
+        <service
+            android:name=".helper.PlayAudioInBackgroundService"
+            android:enabled="true" />
         <service
             android:name=".Notification.MyFirebaseInstanceIDService"
             android:exported="false">
@@ -79,9 +82,9 @@
         <activity android:name=".Activity.ContentDescriptionActivity.PachMishaliDescriptionActivity" />
         <activity android:name=".Activity.ContentDescriptionActivity.BigganOProjuktiDescriptionActivity" />
         <activity android:name=".Activity.ContentDescriptionActivity.CartoonDescriptionActivity" />
-        <activity android:name=".Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize">
-          </activity>
+        <activity
+            android:name=".Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"></activity>
         <!-- <activity android:name=".Activity.PayWithRocketActivity" /> -->
         <!-- <activity android:name=".Activity.PayWithPinActivity" /> -->
         <activity android:name=".Activity.SymphonyCareActivity" />
@@ -92,9 +95,20 @@
 
         <receiver android:name=".helper.Audio_Controle_button_click_listener">
             <intent-filter>
-                <action android:name="button_click"/>
+                <action android:name="button_click" />
             </intent-filter>
         </receiver>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
     </application>
 
 </manifest>

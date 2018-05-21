@@ -26,6 +26,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONArray;
@@ -95,6 +96,8 @@ public class HomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+
+        FirebaseMessaging.getInstance().subscribeToTopic("All");
 
         progressDialog = new lct.mysymphony.helper.ProgressDialog(this);
         context = HomePage.this;
@@ -206,7 +209,7 @@ public class HomePage extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         });
-        jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
+        /*jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
             @Override
             public int getCurrentTimeout() {
                 return 2000;
@@ -221,7 +224,7 @@ public class HomePage extends AppCompatActivity {
             public void retry(VolleyError error) throws VolleyError {
 
             }
-        });
+        });*/
         queue.add(jsonObjectRequest);
     }
 

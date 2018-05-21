@@ -107,14 +107,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     Log.e(TAG, "getDataFromRemoteMessage: " + button.toString());
                     listBtn.add(button);
                 }
-
                 initNotificationForImageWithMultipleButton(totalButton, listBtn, title, description, imageLink, userName);
             }
-
-
             Log.e(TAG, "getDataFromRemoteMessage: " + notificationId);
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -124,12 +119,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void initNotificationForImageWithMultipleButton(int totalButton, List<NotificationButton> listBtn, String title, String description, final String imgeLink, String userName) {
         try {
-
             if (title.contains(USERNAME)) {
                 Log.e(TAG, "initNotificationForImageWithMultipleButton: " + userName );
                 title = title.replace(USERNAME, userName);
             }
-
 
             RemoteViews remoteView1 = null;
             final int notificationId = 1459756;
@@ -146,17 +139,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Intent notificationIntent1 = getIntentForActivity(listBtn.get(0).getActivityName());
                 PendingIntent pendingIntent1 = PendingIntent.getActivity(this, 0, notificationIntent1, PendingIntent.FLAG_CANCEL_CURRENT);
 
-
                 remoteView1 = new RemoteViews(getPackageName(), R.layout.notification_image_btn_one);
                 remoteView1.setTextViewText(R.id.notificationTitle, title);
-                remoteView1.setTextViewText(R.id.notificationDes, description);
+                remoteView1.setTextViewText(R.id.notificationDes, "Dear "+userName+", "+description);
                 remoteView1.setTextViewText(R.id.notificationButton1, listBtn.get(0).getButtonLabel());
                 remoteView1.setOnClickPendingIntent(R.id.notificationButton1, pendingIntent1);
 
                 notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), channel)
                         .setSmallIcon(R.drawable.notification)
                         .setContentTitle(title)
-                        .setContentText(description)
+                        .setContentText("Dear "+userName+", "+description)
                         .setAutoCancel(true)
                         .setContentIntent(pendingIntent1)
                         .setCustomBigContentView(remoteView1)
@@ -174,7 +166,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 remoteView1 = new RemoteViews(getPackageName(), R.layout.notification_image_btn_two);
 
                 remoteView1.setTextViewText(R.id.notificationTitle, title);
-                remoteView1.setTextViewText(R.id.notificationDes, description);
+                remoteView1.setTextViewText(R.id.notificationDes, "Dear "+userName+", "+description);
                 remoteView1.setTextViewText(R.id.notificationButton1, listBtn.get(0).getButtonLabel());
                 remoteView1.setTextViewText(R.id.notificationButton2, listBtn.get(1).getButtonLabel());
                 remoteView1.setOnClickPendingIntent(R.id.notificationButton1, pendingIntent1);
@@ -184,7 +176,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), channel)
                         .setSmallIcon(R.drawable.notification)
                         .setContentTitle(title)
-                        .setContentText(description)
+                        .setContentText("Dear "+userName+", "+description)
                         .setAutoCancel(true)
                         .setContentIntent(pendingIntent1)
                         .setCustomBigContentView(remoteView1)
@@ -204,7 +196,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 remoteView1 = new RemoteViews(getPackageName(), R.layout.notification_image_btn_three);
 
                 remoteView1.setTextViewText(R.id.notificationTitle, title);
-                remoteView1.setTextViewText(R.id.notificationDes, description);
+                remoteView1.setTextViewText(R.id.notificationDes, "Dear "+userName+", "+description);
                 remoteView1.setTextViewText(R.id.notificationButton1, listBtn.get(0).getButtonLabel());
                 remoteView1.setTextViewText(R.id.notificationButton2, listBtn.get(1).getButtonLabel());
                 remoteView1.setTextViewText(R.id.notificationButton3, listBtn.get(2).getButtonLabel());
@@ -215,16 +207,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), channel)
                         .setSmallIcon(R.drawable.notification)
                         .setContentTitle(title)
-                        .setContentText(description)
+                        .setContentText("Dear "+userName+", "+description)
                         .setAutoCancel(true)
                         .setContentIntent(pendingIntent1)
                         .setCustomBigContentView(remoteView1)
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                         .setSound(defaultSoundUri)
                         .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
-
             }
-
 
             final Notification notification = notificationBuilder.build();
             Handler uiHandler = new Handler(Looper.getMainLooper());
@@ -242,12 +232,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     }
                 }
             });
-
             notificationManager.notify(notificationId, notification);
 
-
         } catch (Exception e)
-
         {
             e.printStackTrace();
         }
@@ -266,19 +253,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
             Intent notificationIntent = getIntentForActivity(redirect);
 
-
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
             final RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notification_image_only);
 
             remoteViews.setTextViewText(R.id.notificationTitle, title);
-            remoteViews.setTextViewText(R.id.notificationDes, description);
+            remoteViews.setTextViewText(R.id.notificationDes, "Dear "+userName+", "+description);
             final int notificationId = 1459756;
             Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), channel)
                     .setSmallIcon(R.drawable.notification)
                     .setContentTitle(title)
-                    .setContentText(description)
+                    .setContentText("Dear "+userName+", "+description)
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
                     .setCustomBigContentView(remoteViews)
@@ -309,8 +295,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } finally {
 
         }
-
-
     }
 
     private Intent getIntentForActivity(String action) {

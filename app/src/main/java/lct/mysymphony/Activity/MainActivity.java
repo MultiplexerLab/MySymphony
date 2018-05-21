@@ -40,10 +40,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FirebaseMessaging.getInstance().subscribeToTopic("NewOffer");
+        /*FirebaseMessaging.getInstance().subscribeToTopic("NewOffer");
         FirebaseMessaging.getInstance().subscribeToTopic("NewsLink");
         FirebaseMessaging.getInstance().subscribeToTopic("NewApp");
-        FirebaseMessaging.getInstance().subscribeToTopic("Male");
+        FirebaseMessaging.getInstance().subscribeToTopic("Male");*/
 
         SharedPreferences prefs = getSharedPreferences("login", MODE_PRIVATE);
         int loginStatus = prefs.getInt("loginStatus", 0);

@@ -37,7 +37,7 @@ public class ProgressDialog {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View dialogView = inflater.inflate(R.layout.progress_dialog, null);
         TextView loading_msg = dialogView.findViewById(R.id.loading_msg);
-        loading_msg.setText("ভিডিও ডাওনলোড হচ্ছে");
+        loading_msg.setText(message);
         dialogBuilder.setView(dialogView);
         dialogBuilder.setCancelable(false);
         alertDialog = dialogBuilder.create();

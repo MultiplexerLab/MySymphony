@@ -25,8 +25,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +49,8 @@ public class SignInActivity extends AppCompatActivity {
             Manifest.permission.RECEIVE_SMS,
             Manifest.permission.READ_SMS,
             Manifest.permission.READ_PHONE_STATE,
-    Manifest.permission.WRITE_EXTERNAL_STORAGE,};
+    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    Manifest.permission.REQUEST_INSTALL_PACKAGES,};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,12 +139,25 @@ public class SignInActivity extends AppCompatActivity {
                        progressDialog.hideProgressDialog();
                         if (response.contains("SUCCESS")) {
                             if (internetConnected()) {
+                                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "http://bot.sharedtoday.com:9500/getSessionInfo",
+                                        new Response.Listener<JSONObject>() {
+                                            @Override
+                                            public void onResponse(JSONObject response) {
+                                                Log.i("LoginData", response.toString());
+                                            }
+                                        }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.e("LoginData", error.toString());
+                                    }
+                                });
+                                queue.add(jsonObjectRequest);
                                 SharedPreferences.Editor editor = getSharedPreferences("phoneNumber", MODE_PRIVATE).edit();
                                 editor.putString("phoneNo", userName.getText().toString());
                                 editor.apply();
                                 homePageStart();
                             } else
-                                Toast.makeText(SignInActivity.this, "আপনার তথ্য সঠিক নয় ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignInActivity.this, "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
 
                         } else
                         {

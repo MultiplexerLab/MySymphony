@@ -11,8 +11,13 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 
 import java.io.IOException;
+
+import lct.mysymphony.R;
 
 public class PlayAudioInBackgroundService extends Service {
     @Nullable
@@ -66,31 +71,27 @@ public class PlayAudioInBackgroundService extends Service {
                 } else {
                     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 }
-                ///try {
-                    /*mediaPlayer.prepare();
-                    mediaPlayer.start();*/
                 try {
                     mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
 
                         @Override
                         public void onPrepared(MediaPlayer mp) {
                             mp.start();
-                            /*sendMessageToActivity("success");*/
                         }
                     });
                     mediaPlayer.prepareAsync();
                 } catch (IllegalStateException e) {
-                    /*sendMessageToActivity("failed");*/
                     e.printStackTrace();
                 }
-
-
-                /*} catch (IOException e) {
-                    e.printStackTrace();
-                    Log.d("medipalyerException",e.toString());
-                }*/
             }
         }
+        /*if(mediaPlayer.isPlaying()){
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View customView = inflater.inflate(R.layout.activity_image_view,null, false);
+            Button playBtn = customView.findViewById(R.id.playAudioBTN);
+            playBtn.setBackgroundResource(R.drawable.pause);
+        }*/
+
         return START_STICKY;
     }
     @Override
@@ -99,11 +100,4 @@ public class PlayAudioInBackgroundService extends Service {
         mediaPlayer.stop();
         mediaPlayer.release();
     }
-
-    /*private void sendMessageToActivity(String msg) {
-        Intent intent = new Intent("intentKey");
-// You can also include some extra data.
-        intent.putExtra("key", msg);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-    }*/
 }
