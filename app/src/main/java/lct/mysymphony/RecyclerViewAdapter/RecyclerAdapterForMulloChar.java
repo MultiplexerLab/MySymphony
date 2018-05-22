@@ -22,6 +22,7 @@ import com.bumptech.glide.request.target.Target;
 import java.util.ArrayList;
 
 import lct.mysymphony.Activity.ImageViewActivity;
+import lct.mysymphony.Activity.MusicPlayerActivity;
 import lct.mysymphony.ModelClass.MulloChar;
 import lct.mysymphony.R;
 
@@ -97,7 +98,7 @@ public class RecyclerAdapterForMulloChar extends RecyclerView.Adapter<RecyclerAd
                 @Override
                 public void onClick(View view) {
 
-                    Intent myIntent = new Intent(activity, ImageViewActivity.class);
+                    Intent myIntent = new Intent(activity, MusicPlayerActivity.class);
                     myIntent.putExtra("mullochar", mulloCharArrayList.get(getAdapterPosition()));
                     myIntent.putExtra("cameFromWhichActivity", "MulloChar");
                     activity.startActivity(myIntent);

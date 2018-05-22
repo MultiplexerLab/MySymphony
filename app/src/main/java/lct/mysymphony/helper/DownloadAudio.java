@@ -26,6 +26,15 @@ public class DownloadAudio {
     String audioTitle;
     private DataBaseData dataBaseData;
 
+    public void downloadAudio(String audioUrl, Context context, String title) {
+        this.context = context;
+        this.audioUrl = audioUrl;
+        audioTitle=title;
+        Log.i("DonwloadAudioEnter", "Downloading the Audio. Please wait...");
+        DownloadAudio.RetrieveAudioTask bt = new DownloadAudio.RetrieveAudioTask();
+        bt.execute(audioUrl);
+    }
+
     public void downloadAudio(String audioUrl, Context context, DataBaseData dataBaseData) {
         this.context = context;
         this.audioUrl = audioUrl;
@@ -83,7 +92,7 @@ public class DownloadAudio {
 
         protected void onPostExecute(String result) {
             Log.d("postExecuteAudio","postExecuteAudio");
-            DownloadImage.AsyncResponse asyncResponse = (DownloadImage.AsyncResponse) context;
+            DownloadAudio.AsyncResponse asyncResponse = (DownloadAudio.AsyncResponse) context;
             asyncResponse.processFinish("complete");
            /* dbHelper.insertAudioStr(result, dataBaseData);*/
         }
