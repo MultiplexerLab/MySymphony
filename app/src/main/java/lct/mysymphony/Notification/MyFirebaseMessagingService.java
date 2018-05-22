@@ -55,7 +55,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private String channel = "Exclusive Offer";
     private final String USERNAME = "[NAME]";
 
-
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.e(TAG, "From: " + remoteMessage.getFrom());
@@ -228,7 +227,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                 .into(finalRemoteView, R.id.imageLarge, notificationId, notification);
                     } catch (Exception e) {
                         e.printStackTrace();
-
                     }
                 }
             });

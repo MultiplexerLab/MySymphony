@@ -442,6 +442,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
     private Intent getServiceIntent(String tag) {
         Intent intent = new Intent(ImageViewActivity.this, PlayAudioInBackgroundService.class);
         intent.putExtra("message", tag);
+        startService(intent);
         return intent;
     }
 
