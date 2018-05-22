@@ -15,22 +15,33 @@ import java.util.Random;
 
 import lct.mysymphony.Activity.ImageViewActivity;
 import lct.mysymphony.BuildConfig;
+import lct.mysymphony.ModelClass.DataBaseData;
 
 public class DownloadApk {
     Context context;
     String apkUrl;
+    String contentSdCardUrl;
+    DataBaseData dataBaseData;
+    DataHelper dbHelper;
 
-    public void downLoadAPK(final String apkUrl, final Context context) {
+    public void downLoadAPK(final String apkUrl, final Context context,DataBaseData dataBaseData) {
         this.context = context;
         this.apkUrl = apkUrl;
-
+        dbHelper=new DataHelper(context);
+        this.dataBaseData=dataBaseData;
         String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
+        /*String destination = Environment.getExternalStorageDirectory() + "/mySymphony";*/
+/*
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/mySymphony");
+        myDir.mkdirs();*/
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
-        String fname = "apk"+ n +".apk";
+        final String fname = "apk"+ n +".apk";
         destination += fname;
         final Uri uri = Uri.parse("file://" + destination);
+       /* final Uri uri = Uri.parse("file://" + myDir);*/
 
         File file = new File(destination);
         if (file.exists())
@@ -57,13 +68,20 @@ public class DownloadApk {
                             manager.getMimeTypeForDownloadedFile(downloadId));
                     install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     context.startActivity(install);
-                    Log.i("Running", apkUri.toString());
+                    Log.i("RunningDownloadApk", apkUri.toString());
                     context.unregisterReceiver(this);
+                   /* contentSdCardUrl=fname;*/
+                    insertDataInDatabaseWithContentSdcardUl();
                 }catch (Exception e){
-                    Log.e("Errr", e.toString());
+                    Log.e("ErrrInDownloadApk", e.toString());
                 }
             }
         };
         context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+    }
+    public void insertDataInDatabaseWithContentSdcardUl()
+    {
+        Log.d("enterInsertAudioToDB","enterInsertAudioToDB");
+        dbHelper.insertContentDataWithSdCardUrl(contentSdCardUrl,dataBaseData);
     }
 }

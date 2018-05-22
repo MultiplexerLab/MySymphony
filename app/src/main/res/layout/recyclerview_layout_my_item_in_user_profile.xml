@@ -63,14 +63,14 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/downLoadIcon"
+                android:id="@+id/shareIcon"
                 android:padding="3dp"
                 android:layout_weight=".000001"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/download_icon" />
+                android:src="@drawable/share" />
 
         </LinearLayout>
 

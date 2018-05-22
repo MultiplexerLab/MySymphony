@@ -2,7 +2,6 @@ package lct.mysymphony.Fragment;
 
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,7 +29,8 @@ public class MyItemFragmentInProfileActivity extends Fragment {
     DataHelper dataHelper;
     Activity activity;
     int rowCount;
-    private ArrayList<Bitmap> bitmapArrayList;
+    /*private ArrayList<Bitmap> bitmapArrayList;*/
+    private ArrayList<String> contentSdCardUrlArrayList;
     private ArrayList<DataBaseData> dataBaseDataArrayList;
     View view;
     lct.mysymphony.helper.ProgressDialog progressDialog;
@@ -44,8 +44,9 @@ public class MyItemFragmentInProfileActivity extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_my_item_fragment_in_profile, container, false);
         dataHelper=new DataHelper(getActivity());
-        bitmapArrayList=new ArrayList<>();
+        /*bitmapArrayList=new ArrayList<>();*/
         dataBaseDataArrayList=new ArrayList<>() ;
+        contentSdCardUrlArrayList =new ArrayList<>();
         activity=getActivity();
         progressDialog=new lct.mysymphony.helper.ProgressDialog(getActivity());
         progressDialog.showProgressDialog();
@@ -64,15 +65,16 @@ public class MyItemFragmentInProfileActivity extends Fragment {
             for (int i=0;i<rowCount;i++)
             {
                 dataBaseDataArrayList.add(dataHelper.getAllData(i+1));
+                contentSdCardUrlArrayList.add(dataHelper.getColContentSdCardUrl(i+1));
 
-                if (dataBaseDataArrayList.get(i).getContentType().contains("audio") || dataBaseDataArrayList.get(i).getContentType().contains("video"))
+               /* if (dataBaseDataArrayList.get(i).getContentType().contains("audio") || dataBaseDataArrayList.get(i).getContentType().contains("video"))
                 {
                     bitmapArrayList.add(null);
                 }
                 else
                 {
                     bitmapArrayList.add(dataHelper.getBitmap(i+1));
-                }
+                }*/
             }
             return null;
         }
@@ -88,7 +90,8 @@ public class MyItemFragmentInProfileActivity extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewForMyItem.setLayoutManager(mLayoutManager);
         recyclerViewForMyItem.setHasFixedSize(true);
-        adapterForMyItem = new RecyclerAdapterForMyItemFragment(getActivity(),bitmapArrayList,dataBaseDataArrayList);
+        /*adapterForMyItem = new RecyclerAdapterForMyItemFragment(getActivity(),bitmapArrayList,dataBaseDataArrayList);*/
+        adapterForMyItem = new RecyclerAdapterForMyItemFragment(getActivity(),dataBaseDataArrayList, contentSdCardUrlArrayList);
         recyclerViewForMyItem.setAdapter(adapterForMyItem);
         progressDialog.hideProgressDialog();
     }

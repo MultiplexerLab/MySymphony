@@ -2,7 +2,10 @@ package lct.mysymphony.helper;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -28,15 +31,18 @@ public class DataHelper extends SQLiteOpenHelper {
     public static final String COL_CONTENT_DESC = "contentDesc";
     public static final String COL_CONTENT_THUMBNAILIMG = "contentThumbnailImg";
     public static final String COL_CONTENT_TEXT = "contentText";
-    public static final String COL_CONTENT_DATA = "contentData";
+    /*public static final String COL_CONTENT_DATA = "contentData";*/
+    public static final String COL_CONTENT_SD_CARD_URL = "contentSdCardUrl";
     public static final String COL_DOWLOAD_TIMESTAMP = "downloadTimestamp";
     public static final String COL_EXPIRE_TIMESTAMP = "expireTimestamp";
     public static final String COL_CONTENT_STATUS = "contentStatus";
 
     public static final int DATABASE_VERSION = 1;
-    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "( " + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT  , " + COL_CONTENT_ID + " INTEGER , " + COL_CONTENT_CAT + " TEXT , " + COL_CONTENT_TYPE + " TEXT , " + COL_CONTENT_TITLE + " TEXT , " + COL_CONTENT_DESC + " TEXT ," + COL_CONTENT_TEXT + " TEXT , " + COL_CONTENT_THUMBNAILIMG + " TEXT, " + COL_CONTENT_DATA + "  BLOB , " + COL_DOWLOAD_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_EXPIRE_TIMESTAMP + "DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_CONTENT_STATUS + " TEXT )";
+    /*
+        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "( " + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT  , " + COL_CONTENT_ID + " INTEGER , " + COL_CONTENT_CAT + " TEXT , " + COL_CONTENT_TYPE + " TEXT , " + COL_CONTENT_TITLE + " TEXT , " + COL_CONTENT_DESC + " TEXT ," + COL_CONTENT_TEXT + " TEXT , " + COL_CONTENT_THUMBNAILIMG + " TEXT, " + COL_CONTENT_DATA + "  BLOB , " + COL_DOWLOAD_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_EXPIRE_TIMESTAMP + "DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_CONTENT_STATUS + " TEXT )";
+    */
+    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "( " + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT  , " + COL_CONTENT_ID + " INTEGER , " + COL_CONTENT_CAT + " TEXT , " + COL_CONTENT_TYPE + " TEXT , " + COL_CONTENT_TITLE + " TEXT , " + COL_CONTENT_DESC + " TEXT ," + COL_CONTENT_TEXT + " TEXT , " + COL_CONTENT_THUMBNAILIMG + " TEXT, " + COL_CONTENT_SD_CARD_URL + "  TEXT , " + COL_DOWLOAD_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_EXPIRE_TIMESTAMP + "DATETIME DEFAULT CURRENT_TIMESTAMP , " + COL_CONTENT_STATUS + " TEXT )";
     public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
-
     public DataHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
@@ -72,7 +78,7 @@ public class DataHelper extends SQLiteOpenHelper {
             values.put(COL_CONTENT_TITLE, dataBaseData.getContentTitle());
             values.put(COL_CONTENT_DESC, dataBaseData.getContentDesc());
             values.put(COL_CONTENT_TEXT, "ContentText");
-            values.put(COL_CONTENT_DATA, buffer);
+            /*values.put(COL_CONTENT_DATA, buffer);*/
             values.put(COL_DOWLOAD_TIMESTAMP, "11/12/13");
             values.put(COL_CONTENT_STATUS, dataBaseData.getContentStatus());
             values.put(COL_CONTENT_ID, dataBaseData.getContentId());
@@ -105,10 +111,8 @@ public class DataHelper extends SQLiteOpenHelper {
         try {
             String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + id;
             Cursor cursor = db.rawQuery(selectQuery, null);
-            if (cursor.getCount() == 0)
-                Log.d("cursor", "0");
-            else if (cursor.getCount() > 0)
-                Log.d("cursor", "found");
+            if (cursor.getCount() == 0) Log.d("cursor", "0");
+            else if (cursor.getCount() > 0) Log.d("cursor", "found");
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {
                 ///String contentType=cursor.getString(cursor.getColumnIndex("contentData"));
@@ -144,10 +148,8 @@ public class DataHelper extends SQLiteOpenHelper {
         try {
             String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + id;
             Cursor cursor = db.rawQuery(selectQuery, null);
-            if (cursor.getCount() == 0)
-                Log.d("cursorType", "0");
-            else if (cursor.getCount() > 0)
-                Log.d("cursorType", "found");
+            if (cursor.getCount() == 0) Log.d("cursorType", "0");
+            else if (cursor.getCount() > 0) Log.d("cursorType", "found");
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {
                 ///while (cursor.moveToNext()) {
@@ -173,10 +175,8 @@ public class DataHelper extends SQLiteOpenHelper {
         try {
             String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + id;
             Cursor cursor = db.rawQuery(selectQuery, null);
-            if (cursor.getCount() == 0)
-                Log.d("cursorTitle", "0");
-            else if (cursor.getCount() > 0)
-                Log.d("cursorTitle", "found");
+            if (cursor.getCount() == 0) Log.d("cursorTitle", "0");
+            else if (cursor.getCount() > 0) Log.d("cursorTitle", "found");
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {
                 ///while (cursor.moveToNext()) {
@@ -202,10 +202,8 @@ public class DataHelper extends SQLiteOpenHelper {
         try {
             String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + id;
             Cursor cursor = db.rawQuery(selectQuery, null);
-            if (cursor.getCount() == 0)
-                Log.d("cursorAll", "0");
-            else if (cursor.getCount() > 0)
-                Log.d("cursorAll", "found");
+            if (cursor.getCount() == 0) Log.d("cursorAll", "0");
+            else if (cursor.getCount() > 0) Log.d("cursorAll", "found");
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {
                 dataBaseData = new DataBaseData(cursor.getString(cursor.getColumnIndex(COL_CONTENT_TITLE)), cursor.getString(cursor.getColumnIndex(COL_CONTENT_CAT)), cursor.getString(cursor.getColumnIndex(COL_CONTENT_TYPE)), cursor.getString(cursor.getColumnIndex(COL_CONTENT_DESC)), cursor.getString(cursor.getColumnIndex(COL_CONTENT_THUMBNAILIMG)), cursor.getString(cursor.getColumnIndex(COL_CONTENT_STATUS)), cursor.getInt(cursor.getColumnIndex(COL_CONTENT_ID)));
@@ -257,7 +255,7 @@ public class DataHelper extends SQLiteOpenHelper {
             values.put(COL_CONTENT_DESC, dataBaseData.getContentDesc());
             values.put(COL_CONTENT_TEXT, "ContentText");
             values.put(COL_CONTENT_THUMBNAILIMG, dataBaseData.getThumbNailImgUrl());
-            values.put(COL_CONTENT_DATA, result);
+            /*values.put(COL_CONTENT_DATA, result);*/
             values.put(COL_DOWLOAD_TIMESTAMP, "11/12/13");
             values.put(COL_CONTENT_STATUS, dataBaseData.getContentStatus());
             values.put(COL_CONTENT_ID, dataBaseData.getContentId());
@@ -287,7 +285,7 @@ public class DataHelper extends SQLiteOpenHelper {
             values.put(COL_CONTENT_DESC, dataBaseData.getContentDesc());
             values.put(COL_CONTENT_TEXT, "ContentText");
             values.put(COL_CONTENT_THUMBNAILIMG, dataBaseData.getThumbNailImgUrl());
-            values.put(COL_CONTENT_DATA, result);
+            /*values.put(COL_CONTENT_DATA, result);*/
             values.put(COL_DOWLOAD_TIMESTAMP, "11/12/13");
             values.put(COL_CONTENT_STATUS, dataBaseData.getContentStatus());
             values.put(COL_CONTENT_ID, dataBaseData.getContentId());
@@ -303,4 +301,70 @@ public class DataHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
+
+    public void insertContentDataWithSdCardUrl(String contentSdCardUrl,DataBaseData dataBaseData)
+    {
+        Log.d("insertDataWithSdCardUrl","insertContentDataWithSdCardUrl");
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        ContentValues values;
+        try {
+            values = new ContentValues();
+            values.put(COL_CONTENT_CAT, dataBaseData.getContentCat());
+            values.put(COL_CONTENT_TYPE, dataBaseData.getContentType());
+            values.put(COL_CONTENT_TITLE, dataBaseData.getContentTitle());
+            values.put(COL_CONTENT_DESC, dataBaseData.getContentDesc());
+            values.put(COL_CONTENT_TEXT, "ContentText");
+            values.put(COL_CONTENT_THUMBNAILIMG, dataBaseData.getThumbNailImgUrl());
+            values.put(COL_CONTENT_SD_CARD_URL, contentSdCardUrl);
+            values.put(COL_DOWLOAD_TIMESTAMP, getCurrentdate());
+            values.put(COL_CONTENT_STATUS, dataBaseData.getContentStatus());
+            values.put(COL_CONTENT_ID, dataBaseData.getContentId());
+
+            long i = db.insert(TABLE_NAME, null, values);
+            Log.i("InsertFileUrlResult", i + "");
+            db.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            Log.d("InsertFileUrlError", e.toString());
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
+    public String getCurrentdate()
+    {
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedDate = df.format(c);
+        Log.d("formattedDate",formattedDate);
+        return formattedDate;
+    }
+    public String getColContentSdCardUrl(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String contentSdcardUrl = null;
+        Log.d("enter", "enterTitle");
+        try {
+            String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + id;
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.getCount() == 0) Log.d("cursorTitle", "0");
+            else if (cursor.getCount() > 0) Log.d("cursorTitle", "found");
+            cursor.moveToFirst();
+            if (cursor.getCount() > 0) {
+                ///while (cursor.moveToNext()) {
+                // Convert blob data to byte array
+                contentSdcardUrl = cursor.getString(cursor.getColumnIndex(COL_CONTENT_SD_CARD_URL));
+                Log.d("contentSdCardUrl", contentSdcardUrl);
+            }
+
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            Log.d("excptionSdCardUrl", e.toString());
+
+        }
+        db.close();
+        return contentSdcardUrl;
+    }
+
 }

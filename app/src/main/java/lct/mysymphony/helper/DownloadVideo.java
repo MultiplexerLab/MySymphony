@@ -24,22 +24,21 @@ public class DownloadVideo {
     String videoUrl;
     String videoTitle;
     private DataBaseData dataBaseData;
+    String contentSdCardUrl;
+    DataHelper dbHelper;
 
     public void downloadVideo(String videoUrl, Context context, DataBaseData dataBaseData) {
         this.context = context;
         this.videoUrl = videoUrl;
+        dbHelper = new DataHelper(context);
         this.dataBaseData = dataBaseData;
         videoTitle=dataBaseData.getContentTitle();
         Log.i("DonwloadVideoEnter", "Downloading the video. Please wait...");
-
         DownloadVideo.RetrieveVideoTask bt = new DownloadVideo.RetrieveVideoTask();
         bt.execute(videoUrl);
     }
     class RetrieveVideoTask extends AsyncTask<String, Void, String> {
-
         private Exception exception;
-        DataHelper dbHelper = new DataHelper(context);
-
         protected void onPreExecute() {
             Log.i("DonwloadVideo", "Downloading the video. Please wait...");
         }
@@ -68,7 +67,7 @@ public class DownloadVideo {
             } catch (MalformedURLException mue) {
                 Log.e("URLException", mue.toString());
             } catch (IOException ioe) {
-                Log.e("IOException", ioe.toString());
+                Log.e("IOExceptionVideo", ioe.toString());
             } finally {
                 try {
                     if (is != null) {
@@ -102,10 +101,11 @@ public class DownloadVideo {
         int n = 10000;
         n = generator.nextInt(n);
         String fname;
-        if (videoTitle.length()>0)
+        /*if (videoTitle.length()>0)
             fname = videoTitle +"-"+n+".mp4";
-        else
+        else*/
             fname = "Video-"+ n +".mp4";
+        /*fname.replaceAll(" ","_");*/
         File file = new File (myDir, fname);
         if (file.exists ()) file.delete ();
         try {
@@ -113,10 +113,17 @@ public class DownloadVideo {
             out.write(bao.toByteArray());
             out.flush();
             out.close();
+            contentSdCardUrl=fname;
+            insertDataInDatabaseWithContentSdcardUl();
 
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("saveVideoExcptn",e.toString());
         }
+    }
+    public void insertDataInDatabaseWithContentSdcardUl()
+    {
+        Log.d("enterInsertVideoToDB","enterInsertVideoToDB");
+        dbHelper.insertContentDataWithSdCardUrl(contentSdCardUrl,dataBaseData);
     }
 }

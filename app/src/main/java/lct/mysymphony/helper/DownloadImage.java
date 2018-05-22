@@ -24,9 +24,14 @@ public class DownloadImage {
 
     Context context;
     DataBaseData dataBaseData;
+    String imageUrl;
+    String contentSdCardUrl;
+    DataHelper dbHelper;
 
     public void downloadImage(String imgURL, Context context, DataBaseData dataBaseData) {
         this.context = context;
+        this.imageUrl=imgURL;
+        dbHelper = new DataHelper(context);
         Log.i("downloadImage", "Inside download image");
         this.dataBaseData = dataBaseData;
         DownloadImage.BackTask bt = new DownloadImage.BackTask();
@@ -39,7 +44,7 @@ public class DownloadImage {
 
     private class BackTask extends AsyncTask<String, Void, Bitmap> {
         TextView tv;
-        DataHelper dbHelper = new DataHelper(context);
+
 
         protected void onPreExecute() {
             Log.i("Donwload", "Downloading the image. Please wait...");
@@ -68,7 +73,7 @@ public class DownloadImage {
         protected void onPostExecute(Bitmap result) {
             AsyncResponse asyncResponse = (AsyncResponse) context;
             asyncResponse.processFinish("complete");
-            dbHelper.insertBitmap(result, dataBaseData);
+            /*dbHelper.insertBitmap(result, dataBaseData);*/
         }
     }
     public interface AsyncResponse {
@@ -84,6 +89,7 @@ public class DownloadImage {
         int n = 10000;
         n = generator.nextInt(n);
         String fname = "Image-"+ n +".jpg";
+        fname.replaceAll(" ","_");
         File file = new File (myDir, fname);
         if (file.exists ()) file.delete ();
         try {
@@ -91,9 +97,23 @@ public class DownloadImage {
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
+            contentSdCardUrl=fname;
+            setImageUrlAsThumbnailImageUrl();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setImageUrlAsThumbnailImageUrl()
+    {
+        DataBaseData dataBaseData2=new DataBaseData(dataBaseData.getContentTitle(),dataBaseData.getContentCat(),dataBaseData.getContentType(),dataBaseData.getContentDesc(),imageUrl,dataBaseData.getContentStatus(),dataBaseData.getContentId());
+        this.dataBaseData=dataBaseData2;
+        insertDataInDatabaseWithContentSdcardUl();
+    }
+    public void insertDataInDatabaseWithContentSdcardUl()
+    {
+        Log.d("enterInsertImageToDB","enterInsertImageToDB");
+        dbHelper.insertContentDataWithSdCardUrl(contentSdCardUrl,dataBaseData);
     }
 }

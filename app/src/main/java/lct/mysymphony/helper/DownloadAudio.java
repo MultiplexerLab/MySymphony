@@ -111,10 +111,11 @@ public class DownloadAudio {
         int n = 10000;
         n = generator.nextInt(n);
         String fname;
-        if (audioTitle.length()>0)
+        /*if (audioTitle.length()>0)
             fname = audioTitle+"-"+n +".mp3";
-        else
+        else*/
             fname = "Audio-"+ n +".mp3";
+        fname.replaceAll(" ","_");
         File file = new File (myDir, fname);
         if (file.exists ()) file.delete ();
         try {

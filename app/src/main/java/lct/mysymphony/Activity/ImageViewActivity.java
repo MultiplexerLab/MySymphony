@@ -362,7 +362,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                         String json = preferences.getString("databaseData", "");
                         String imageURL = preferences.getString("imageUrl", "");
                         DownloadApk downloadApk = new DownloadApk();
-                        downloadApk.downLoadAPK("http://jachaibd.com/files/royalty.apk", ImageViewActivity.this);
+                        downloadApk.downLoadAPK("http://jachaibd.com/files/royalty.apk", ImageViewActivity.this,dataBaseData);
                     }
                 }
             }
