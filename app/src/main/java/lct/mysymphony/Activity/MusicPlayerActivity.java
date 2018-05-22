@@ -213,7 +213,9 @@ public class MusicPlayerActivity extends Activity implements MediaPlayerControl,
     }
 
     public void playSong(View view) {
-        musicSrv.setTitle(data.getContentTile());
+        if(data!=null) {
+            musicSrv.setTitle(data.getContentTile());
+        }
         musicSrv.playSong();
         if(playbackPaused){
             setController();
