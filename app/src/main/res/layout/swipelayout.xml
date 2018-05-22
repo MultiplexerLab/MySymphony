@@ -2,8 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="220dp">
-
-
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
@@ -20,6 +18,5 @@
             android:indeterminate="true"
             android:indeterminateTintMode="src_atop"
             android:indeterminateTint="@color/progress_diaog_color"/>
-
 
 </RelativeLayout>

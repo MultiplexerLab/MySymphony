@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import lct.mysymphony.Activity.ShowOnlyImage;
+import lct.mysymphony.BuildConfig;
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.R;
 
@@ -160,7 +162,10 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
                         }
 
                         /*intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+file));*/
-                        intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                        final Uri fileUri = FileProvider.getUriForFile(activity,
+                                BuildConfig.APPLICATION_ID + ".provider",
+                                file);
+                        intentShareFile.putExtra(Intent.EXTRA_STREAM, fileUri);
                         intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                                 "Sharing File...");
                         intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File...");
