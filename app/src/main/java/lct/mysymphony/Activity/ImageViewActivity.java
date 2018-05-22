@@ -60,6 +60,7 @@ import lct.mysymphony.ModelClass.ShocolChobi;
 import lct.mysymphony.R;
 import lct.mysymphony.helper.CheckPermission;
 import lct.mysymphony.helper.DataHelper;
+import lct.mysymphony.helper.DownloadApk;
 import lct.mysymphony.helper.DownloadAudio;
 import lct.mysymphony.helper.DownloadImage;
 import lct.mysymphony.helper.DownloadVideo;
@@ -321,7 +322,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
 
                     Log.i("TagContent", dataBaseData.getContentType());
 
-                    if (dataBaseData.getContentType().contains("image") || dataBaseData.getContentType().contains("game") || dataBaseData.getContentType().contains("apk")) {
+                    if (dataBaseData.getContentType().contains("image")) {
                         progressDialog.showProgressDialog();
                         Log.i("ImageContent", "image");
                         Gson gson = new Gson();
@@ -332,7 +333,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                         DownloadImage downloadImage = new DownloadImage();
                         downloadImage.downloadImage(imageURL, ImageViewActivity.this, dataBaseData);
                     } else if (dataBaseData.getContentType().contains("video")) {
-                        progressDialog.showProgressDialog();
+                        progressDialog.showProgressDialog("ভিডিও ডাউনলোড হচ্ছে");
                         Log.d("videoInImageView", "videoInImageView");
                         Gson gson = new Gson();
                         SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
@@ -344,7 +345,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                     } else if (dataBaseData.getContentType().contains("audio")) {
                         Log.d("audioUrl", audioUrl);
                         if (audioUrl.length() > 0) {
-                            progressDialog.showProgressDialog();
+                            progressDialog.showProgressDialog("গান ডাউনলোড হচ্ছে");
                             Gson gson = new Gson();
                             SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
                             String json = preferences.getString("databaseData", "");
@@ -354,17 +355,15 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                             ///downloadAudio.downloadAudio("https://fsa.zobj.net/download/bztTqNHqgr0dug1iOwSoDq7Pp6Czdcalekon2tBpAJFeTMZa2WVQka2Dm18rAvddZw9JmlX3IQladYbM4PYgBASpPB-yBUIUBbm91yAK0QvANRE2dB8ZzCy-hFRY/?a=web&c=72&f=let_me_love_you.mp3&special=1525951411-ky2356gba1OZDBXCdm4ekc2OWgrp%2FZ1brCOPlJo1Aro%3D", ImageViewActivity.this, dataBaseData);
                         } else Log.d("audioUrlNotFound", "audioUrlNotFound");
 
-                    } /*else if (dataBaseData.getContentType().contains("game")) {
-                        Log.d("gameEnter", "gameEnter");
+                    } else if (dataBaseData.getContentType().contains("apk")) {
+                        progressDialog.showProgressDialog("APK ডাউনলোড হচ্ছে");
                         Gson gson = new Gson();
                         SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
                         String json = preferences.getString("databaseData", "");
                         String imageURL = preferences.getString("imageUrl", "");
-                        DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
-                        DownloadImage downloadImage = new DownloadImage();
-                        downloadImage.downloadImage(imageURL, ImageViewActivity.this, dataBaseData);
-
-                    }*/
+                        DownloadApk downloadApk = new DownloadApk();
+                        downloadApk.downLoadAPK("http://jachaibd.com/files/royalty.apk", ImageViewActivity.this);
+                    }
                 }
             }
         }
@@ -442,7 +441,6 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
     private Intent getServiceIntent(String tag) {
         Intent intent = new Intent(ImageViewActivity.this, PlayAudioInBackgroundService.class);
         intent.putExtra("message", tag);
-        startService(intent);
         return intent;
     }
 

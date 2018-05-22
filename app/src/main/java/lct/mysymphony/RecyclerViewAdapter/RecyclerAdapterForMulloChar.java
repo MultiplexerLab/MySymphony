@@ -98,7 +98,7 @@ public class RecyclerAdapterForMulloChar extends RecyclerView.Adapter<RecyclerAd
                 public void onClick(View view) {
 
                     Intent myIntent = new Intent(activity, ImageViewActivity.class);
-                    myIntent.putExtra("wallpaper", mulloCharArrayList.get(getAdapterPosition()));
+                    myIntent.putExtra("mullochar", mulloCharArrayList.get(getAdapterPosition()));
                     myIntent.putExtra("cameFromWhichActivity", "MulloChar");
                     activity.startActivity(myIntent);
                 }
