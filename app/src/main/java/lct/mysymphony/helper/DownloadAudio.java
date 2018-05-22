@@ -25,20 +25,26 @@ public class DownloadAudio {
     String audioUrl;
     String audioTitle;
     private DataBaseData dataBaseData;
+    String contentSdCardUrl;
+    DataHelper dbHelper;
 
-    public void downloadAudio(String audioUrl, Context context, String title) {
+   /* public void downloadAudio(String audioUrl, Context context, String title) {
         this.context = context;
         this.audioUrl = audioUrl;
+        dbHelper = new DataHelper(context);
         audioTitle=title;
         Log.i("DonwloadAudioEnter", "Downloading the Audio. Please wait...");
         DownloadAudio.RetrieveAudioTask bt = new DownloadAudio.RetrieveAudioTask();
         bt.execute(audioUrl);
-    }
+    }*/
 
     public void downloadAudio(String audioUrl, Context context, DataBaseData dataBaseData) {
         this.context = context;
         this.audioUrl = audioUrl;
         this.dataBaseData = dataBaseData;
+        dbHelper=new DataHelper(context);
+        if (dataBaseData==null)
+            Log.d("dataBaseDataNull","dataBaseDataNull");
         audioTitle=dataBaseData.getContentTitle();
         Log.i("DonwloadAudioEnter", "Downloading the Audio. Please wait...");
         DownloadAudio.RetrieveAudioTask bt = new DownloadAudio.RetrieveAudioTask();
@@ -47,7 +53,7 @@ public class DownloadAudio {
     class RetrieveAudioTask extends AsyncTask<String, Void, String> {
 
         private Exception exception;
-        DataHelper dbHelper = new DataHelper(context);
+
 
         protected void onPreExecute() {
             Log.i("DonwloadAudio", "Downloading the Audio. Please wait...");
@@ -116,6 +122,7 @@ public class DownloadAudio {
         else*/
             fname = "Audio-"+ n +".mp3";
         fname.replaceAll(" ","_");
+        contentSdCardUrl=fname;
         File file = new File (myDir, fname);
         if (file.exists ()) file.delete ();
         try {
@@ -123,10 +130,18 @@ public class DownloadAudio {
             out.write(bao.toByteArray());
             out.flush();
             out.close();
+            insertDataInDatabaseWithContentSdcardUl();
 
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("saveAudioExcptn",e.toString());
         }
+    }
+    public void insertDataInDatabaseWithContentSdcardUl()
+    {
+        Log.d("enterInsertVideoToDB","enterInsertVideoToDB");
+        if (dataBaseData==null)
+            Log.d("dataBaseDataNull2","dataBaseDataNull");
+        dbHelper.insertContentDataWithSdCardUrl(contentSdCardUrl,dataBaseData);
     }
 }

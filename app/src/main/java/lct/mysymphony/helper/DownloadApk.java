@@ -62,6 +62,8 @@ public class DownloadApk {
         BroadcastReceiver onComplete = new BroadcastReceiver() {
             public void onReceive(Context ctxt, Intent intent) {
                 try {
+                    Log.d("onComplete","onComplete");
+                    /*insertDataInDatabaseWithContentSdcardUl();*/
                     Intent install = new Intent(Intent.ACTION_VIEW);
                     install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     install.setDataAndType(apkUri,
@@ -71,7 +73,7 @@ public class DownloadApk {
                     Log.i("RunningDownloadApk", apkUri.toString());
                     context.unregisterReceiver(this);
                    /* contentSdCardUrl=fname;*/
-                    insertDataInDatabaseWithContentSdcardUl();
+
                 }catch (Exception e){
                     Log.e("ErrrInDownloadApk", e.toString());
                 }
@@ -81,7 +83,7 @@ public class DownloadApk {
     }
     public void insertDataInDatabaseWithContentSdcardUl()
     {
-        Log.d("enterInsertAudioToDB","enterInsertAudioToDB");
+        Log.d("enterInsertApkToDB","enterInsertAudioToDB");
         dbHelper.insertContentDataWithSdCardUrl(contentSdCardUrl,dataBaseData);
     }
 }
