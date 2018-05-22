@@ -237,6 +237,9 @@ public class MusicService extends Service implements
         stopForeground(true);
     }
 
+    public void onBackPressed() {
+        stopForeground(true);
+    }
     //toggle shuffle
     public void setShuffle() {
         if (shuffle) shuffle = false;

@@ -11,7 +11,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,7 +30,7 @@ import lct.mysymphony.helper.MusicController;
 import lct.mysymphony.helper.MusicService;
 
 
-public class MusicPlayerActivity extends Activity implements MediaPlayerControl, DownloadAudio.AsyncResponse {
+public class MusicPlayerActivity extends AppCompatActivity implements MediaPlayerControl, DownloadAudio.AsyncResponse {
 
     lct.mysymphony.helper.ProgressDialog progressDialog;
     private MusicService musicSrv;
@@ -231,11 +233,22 @@ public class MusicPlayerActivity extends Activity implements MediaPlayerControl,
     }
 
     @Override
+    public void onBackPressed() {
+        controller.hide();
+        Log.i("Pressed", "Pressed");
+        Intent myIntent = new Intent(MusicPlayerActivity.this, HomePage.class);
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(myIntent);
+        finish();
+        return;
+    }
+
+    /*@Override
     public void onBackPressed(){
         super.onBackPressed();
         stopService(playIntent);
         musicSrv=null;
-    }
+    }*/
     @Override
     public void processFinish(String output) {
         progressDialog.hideProgressDialog();
