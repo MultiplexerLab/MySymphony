@@ -26,6 +26,7 @@ import lct.mysymphony.R;
 import lct.mysymphony.helper.DownloadAudio;
 import lct.mysymphony.helper.MusicController;
 import lct.mysymphony.helper.MusicService;
+import lct.mysymphony.helper.ProgressDialog;
 
 
 public class MusicPlayerActivity extends Activity implements MediaPlayerControl, DownloadAudio.AsyncResponse {
@@ -37,17 +38,24 @@ public class MusicPlayerActivity extends Activity implements MediaPlayerControl,
     private MusicController controller;
     private boolean paused=false, playbackPaused=false;
     MulloChar data;
+    DataBaseData dataBaseData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
 
-        progressDialog = new lct.mysymphony.helper.ProgressDialog(this);
+        progressDialog = new ProgressDialog(this);
         data = (MulloChar) getIntent().getSerializableExtra("mullochar");
         if(data!=null) {
             String imageUrl = data.getImageUrl();
             Glide.with(this).load(imageUrl).into((ImageView) findViewById(R.id.coverPic));
+            String contentTitle = data.getContentTile();
+            String contentCat = data.getContentCat();
+            String contentDesc = "";
+            String contentType = data.getContentType();
+            String thumbNailImgUrl = data.getThumbNailImgUrl();
+            dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, "paid", data.getContentId());
         }
         setController();
 
@@ -227,7 +235,7 @@ public class MusicPlayerActivity extends Activity implements MediaPlayerControl,
     public void downLoadAudio(View view) {
         progressDialog.showProgressDialog("গান ডাউনলোড হচ্ছে");
         DownloadAudio downloadAudio = new DownloadAudio();
-        downloadAudio.downloadAudio("http://jachaibd.com/files/eminem.mp3", MusicPlayerActivity.this, data.getContentTile());
+        downloadAudio.downloadAudio("http://jachaibd.com/files/eminem.mp3", MusicPlayerActivity.this, dataBaseData);
     }
 
     @Override
