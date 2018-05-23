@@ -42,14 +42,14 @@
         </RelativeLayout>
 
 
-        <ImageView
+       <!-- <ImageView
             android:id="@+id/videoPreviewPlayButton"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:layout_gravity="center_vertical|center_horizontal"
             android:alpha="0.8"
             android:src="@drawable/play_icon"
-            android:visibility="visible" />
+            android:visibility="visible" />-->
     </FrameLayout>
 
     <TextView
