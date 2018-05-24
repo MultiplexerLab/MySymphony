@@ -136,7 +136,6 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                         }
                     }
                 }, new Response.ErrorListener() {
-
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("ErrorInSignUp", error.toString());

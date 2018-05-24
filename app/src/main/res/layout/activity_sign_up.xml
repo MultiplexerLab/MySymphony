@@ -61,6 +61,7 @@
                     android:hint=" আপনার নাম লিখুন "
                     android:imeActionId="6"
                     android:maxLines="1"
+                    android:maxLength="30"
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>

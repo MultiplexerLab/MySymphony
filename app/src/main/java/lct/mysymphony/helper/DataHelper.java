@@ -355,7 +355,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 ///while (cursor.moveToNext()) {
                 // Convert blob data to byte array
                 contentSdcardUrl = cursor.getString(cursor.getColumnIndex(COL_CONTENT_SD_CARD_URL));
-                Log.d("contentSdCardUrl", contentSdcardUrl);
+                Log.d("contentSdCardUrl", contentSdcardUrl+"AS");
             }
 
         } catch (SQLiteException e) {

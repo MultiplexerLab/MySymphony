@@ -117,7 +117,7 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
                     String contentType=dataHelperArrayList.get(getAdapterPosition()).getContentType();
                     String root = Environment.getExternalStorageDirectory().toString();
                     Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                    File file;
+                    File file = null;
                     if (contentType.contains("apk"))
                     {
                         Log.d("contentTypeApk","contentTypeApk");
@@ -128,12 +128,10 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
                             e.printStackTrace();
                             Log.d("fileProblemInApk","fileProblemInApk");
                         }
-
-
                     }
-                    /*String fileName=contentSdCardUrl.get(getAdapterPosition());
-                    fileName=fileName.replaceAll(" ","_");*/
-                    file = new File(root + "/mySymphony/"+contentSdCardUrl.get(getAdapterPosition()));
+                    else {
+                        file = new File(root + "/mySymphony/" + contentSdCardUrl.get(getAdapterPosition()));
+                    }
                     if (file.exists())
                     {
                         if (contentType.contains("image"))

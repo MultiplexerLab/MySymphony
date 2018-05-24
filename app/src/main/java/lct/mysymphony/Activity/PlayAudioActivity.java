@@ -109,9 +109,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             PlayerInService.mp.stop();
             stopService(playerService);
             utility.cancelNotification();
-
         } else {
-
             btnPlay.setBackgroundResource(R.drawable.pause);
             /*utility.cancelNotification();*/
         }

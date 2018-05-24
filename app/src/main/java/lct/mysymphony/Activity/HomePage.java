@@ -2,6 +2,7 @@ package lct.mysymphony.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -27,6 +28,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONArray;
@@ -50,10 +52,12 @@ import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForMulloChar;
 import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForSeraChobi;
 import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForShikkhaSohayika;
 import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForShocolChobi;
+import lct.mysymphony.helper.DownloadApk;
+import lct.mysymphony.helper.DownloadImage;
 import lct.mysymphony.helper.Endpoints;
 import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
-public class HomePage extends AppCompatActivity {
+public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResponse{
     Context context;
 
     ArrayList<SliderImage> sliderImages;
@@ -115,8 +119,17 @@ public class HomePage extends AppCompatActivity {
         shikkhaSohaYikaArrayList = new ArrayList<>();
         bottomNavigationView = findViewById(R.id.btmNavigation);
         bottomNavigationView.getMenu().findItem(R.id.home_bottom_navigation).setChecked(true);
-        progressDialog.showProgressDialog();
 
+
+        String tag = getIntent().getStringExtra("apk");
+        if(tag!=null && tag.equals("apk")){
+            Log.i("APK", "ON");
+            progressDialog.showProgressDialog("APK ডাউনলোড হচ্ছে");
+            DownloadApk downloadApk = new DownloadApk();
+            downloadApk.downLoadAPK("http://jachaibd.com/files/maxis.apk", HomePage.this);
+        }
+
+        progressDialog.showProgressDialog();
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -661,4 +674,13 @@ public class HomePage extends AppCompatActivity {
         if (progressDialog!=null)
             progressDialog.hideProgressDialog();
     }
+
+    @Override
+    public void processFinish(String output) {
+            progressDialog.hideProgressDialog();
+            if (output.contains("complete")) {
+                Log.d("onProcessFinishedComplt", "onProcessFinishedComplt");
+            }
+    }
+
 }

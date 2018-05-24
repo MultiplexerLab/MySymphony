@@ -40,6 +40,7 @@ import lct.mysymphony.Activity.AuttoHashiActivity;
 import lct.mysymphony.Activity.BigganOProjuktiActivity;
 import lct.mysymphony.Activity.CartoonActivity;
 import lct.mysymphony.Activity.GoromKhoborActivity;
+import lct.mysymphony.Activity.HomePage;
 import lct.mysymphony.Activity.JibonJaponActivity;
 import lct.mysymphony.Activity.KheladhulaActivity;
 import lct.mysymphony.Activity.MainActivity;
@@ -47,6 +48,7 @@ import lct.mysymphony.Activity.PachMishaliActivity;
 import lct.mysymphony.Activity.PorashunaActivity;
 import lct.mysymphony.Activity.WallpaperBundleActivity;
 import lct.mysymphony.R;
+import lct.mysymphony.helper.DownloadApk;
 
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -112,7 +114,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -134,7 +135,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 setupChannels();
             }
             if (totalButton == 1) {
-
                 Intent notificationIntent1 = getIntentForActivity(listBtn.get(0).getActivityName());
                 PendingIntent pendingIntent1 = PendingIntent.getActivity(this, 0, notificationIntent1, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -318,8 +318,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             return new Intent(this, CartoonActivity.class);
         } else if (action.equals("wallpaper")) {
             return new Intent(this, WallpaperBundleActivity.class);
+        }else if (action.equals("apk")) {
+            Intent downLoadIntent = new Intent(this, HomePage.class);
+            downLoadIntent.putExtra("apk", "apk");
+            return downLoadIntent;
         }
-
 
         return new Intent(this, MainActivity.class);
     }
