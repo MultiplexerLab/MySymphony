@@ -32,6 +32,7 @@ public class MyItemFragmentInProfileActivity extends Fragment {
     /*private ArrayList<Bitmap> bitmapArrayList;*/
     private ArrayList<String> contentSdCardUrlArrayList;
     private ArrayList<DataBaseData> dataBaseDataArrayList;
+    private ArrayList<String> contentDownloadTimestampArrayList;
     View view;
     lct.mysymphony.helper.ProgressDialog progressDialog;
 
@@ -47,6 +48,7 @@ public class MyItemFragmentInProfileActivity extends Fragment {
         /*bitmapArrayList=new ArrayList<>();*/
         dataBaseDataArrayList=new ArrayList<>() ;
         contentSdCardUrlArrayList =new ArrayList<>();
+        contentDownloadTimestampArrayList=new ArrayList<>();
         activity=getActivity();
         progressDialog=new lct.mysymphony.helper.ProgressDialog(getActivity());
         progressDialog.showProgressDialog();
@@ -66,6 +68,7 @@ public class MyItemFragmentInProfileActivity extends Fragment {
             {
                 dataBaseDataArrayList.add(dataHelper.getAllData(i+1));
                 contentSdCardUrlArrayList.add(dataHelper.getColContentSdCardUrl(i+1));
+                contentDownloadTimestampArrayList.add(dataHelper.getContentDownloadTimestamp(i+1));
 
                /* if (dataBaseDataArrayList.get(i).getContentType().contains("audio") || dataBaseDataArrayList.get(i).getContentType().contains("video"))
                 {
@@ -91,7 +94,7 @@ public class MyItemFragmentInProfileActivity extends Fragment {
         recyclerViewForMyItem.setLayoutManager(mLayoutManager);
         recyclerViewForMyItem.setHasFixedSize(true);
         /*adapterForMyItem = new RecyclerAdapterForMyItemFragment(getActivity(),bitmapArrayList,dataBaseDataArrayList);*/
-        adapterForMyItem = new RecyclerAdapterForMyItemFragment(getActivity(),dataBaseDataArrayList, contentSdCardUrlArrayList);
+        adapterForMyItem = new RecyclerAdapterForMyItemFragment(getActivity(),dataBaseDataArrayList, contentSdCardUrlArrayList,contentDownloadTimestampArrayList);
         recyclerViewForMyItem.setAdapter(adapterForMyItem);
         progressDialog.hideProgressDialog();
     }

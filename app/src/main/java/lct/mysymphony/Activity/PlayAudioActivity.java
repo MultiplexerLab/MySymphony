@@ -27,7 +27,7 @@ import paymentgateway.lct.lctpaymentgateway.ProgressDialog;
 
 public class PlayAudioActivity extends AppCompatActivity implements DownloadAudio.AsyncResponse {
 
-    public static ImageButton btnPlay, btnStop;
+    public static ImageButton btnPlay, btnStop,btnFastForward,btnRewind;
     public static TextView textViewSongTime;
     private Intent playerService;
     public static SeekBar seekBar;
@@ -35,7 +35,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
     MulloChar data;
     DataBaseData dataBaseData;
     ImageView imageView;
-    lct.mysymphony.helper.ProgressDialog progressDialog;
+    public lct.mysymphony.helper.ProgressDialog progressDialog;
 
 
     @Override
@@ -96,10 +96,12 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
     }
 
     private void initView() {
-        btnPlay = (ImageButton) findViewById(R.id.btnPlay);
-        btnStop = (ImageButton) findViewById(R.id.btnStop);
-        seekBar = (SeekBar) findViewById(R.id.seekBar);
-        textViewSongTime = (TextView) findViewById(R.id.textViewSongTime);
+        btnPlay =  findViewById(R.id.btnPlay);
+        /*btnStop = (ImageButton) findViewById(R.id.btnStop);*/
+        btnFastForward=findViewById(R.id.btnFastForward);
+        btnRewind=findViewById(R.id.btnRewind);
+        seekBar =  findViewById(R.id.seekBar);
+        textViewSongTime = findViewById(R.id.textViewSongTime);
     }
 
     @Override

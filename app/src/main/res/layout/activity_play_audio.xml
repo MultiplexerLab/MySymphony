@@ -2,12 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_margin="7dp">
 
     <ImageView
         android:id="@+id/songimageView"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="300dp"
+        android:adjustViewBounds="true"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,18 +35,43 @@
         android:layout_below="@+id/textViewSongTime"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
-
-    <ImageButton
-        android:layout_below="@+id/seekBar"
-        android:id="@+id/btnPlay"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+    <LinearLayout
+        android:gravity="center"
+        android:layout_margin="5dp"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="105dp"
-        android:background="@drawable/player"
-       />
+        android:id="@+id/musicPlayerControle"
+        android:layout_below="@+id/seekBar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageButton
+        <ImageButton
+            android:layout_gravity="start"
+            android:id="@+id/btnRewind"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/rewind_icon"
+            />
+
+        <ImageButton
+            android:layout_marginLeft="50dp"
+            android:layout_gravity="center"
+            android:id="@+id/btnPlay"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/player"
+            />
+        <ImageButton
+            android:id="@+id/btnFastForward"
+            android:layout_marginLeft="50dp"
+            android:layout_gravity="right"
+            android:background="@drawable/fast_forward_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+
+<!--    <ImageButton
         android:id="@+id/btnStop"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -52,11 +80,11 @@
         android:layout_marginStart="21dp"
         android:layout_toEndOf="@+id/btnPlay"
         android:layout_toRightOf="@+id/btnPlay"
-        android:background="@drawable/stop" />
+        android:background="@drawable/stop" />-->
 
     <Button
-        android:layout_marginTop="15dp"
-        android:layout_below="@+id/btnStop"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/musicPlayerControle"
         android:id="@+id/buyOrDownloadBTN"
         android:layout_width="match_parent"
         android:layout_height="70dp"

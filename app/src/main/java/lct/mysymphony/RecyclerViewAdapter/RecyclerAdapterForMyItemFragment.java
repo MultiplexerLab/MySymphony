@@ -36,23 +36,26 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
     /*ArrayList<Bitmap> bitmapArrayList;*/
     ArrayList<String> contentSdCardUrl;
     ArrayList<DataBaseData> dataHelperArrayList;
-    public RecyclerAdapterForMyItemFragment(Activity activity, ArrayList<DataBaseData> dataHelperArrayList,ArrayList<String> contentSdCardUrl) {
+   ArrayList<String> contentDownloadTimestampArrayList;
+    public RecyclerAdapterForMyItemFragment(Activity activity, ArrayList<DataBaseData> dataHelperArrayList,ArrayList<String> contentSdCardUrl,ArrayList<String> contentDownloadTimestampArrayLis) {
         this.activity = activity;
         /*this.bitmapArrayList = bitmapArrayList;*/
         this.dataHelperArrayList = dataHelperArrayList;
         this.contentSdCardUrl=contentSdCardUrl;
+        this.contentDownloadTimestampArrayList=contentDownloadTimestampArrayLis;
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_my_item_in_user_profile, parent, false);
         /*RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, dataHelperArrayList, bitmapArrayList);*/
-        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, dataHelperArrayList,contentSdCardUrl);
+        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, dataHelperArrayList,contentSdCardUrl,contentDownloadTimestampArrayList);
         return recyclerViewHolder;
     }
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
         String contentType = dataHelperArrayList.get(position).getContentType();
+        holder.contentDownloadTimestampTV.setText(contentDownloadTimestampArrayList.get(position));
       /*  if (dataHelperArrayList.get(position).getContentStatus().contains("free"))
             holder.downloadIcon.setVisibility(View.GONE);*/
         String text;
@@ -94,21 +97,24 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
         ImageView imageView;
         CardView cardView;
         Activity activity;
-        TextView textView;
+        TextView textView,contentDownloadTimestampTV;
         ArrayList<DataBaseData> dataHelperArrayList;
+        private ArrayList<String> contentDownloadTimestampArrayList;
        /* ArrayList<Bitmap> bitmapArrayList;*/
        ArrayList<String> contentSdCardUrl;
         /*ImageView downloadIcon;*/
        ImageView shareIcon;
-        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<DataBaseData> dataHelperArrayList,final ArrayList<String> contentSdCardUrl) {
+        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<DataBaseData> dataHelperArrayList,final ArrayList<String> contentSdCardUrl,final ArrayList<String> contentDownloadTimestampArrayList) {
             super(view);
             this.activity = activity;
             this.dataHelperArrayList = dataHelperArrayList;
+            this.contentDownloadTimestampArrayList=contentDownloadTimestampArrayList;
        /*     this.bitmapArrayList = bitmapArrayList;*/
             imageView = view.findViewById(R.id.imgMyitemFragment);
             textView = view.findViewById(R.id.titleMyItemFragment);
             cardView = view.findViewById(R.id.myItemFragmentCardView);
             shareIcon = view.findViewById(R.id.shareIcon);
+            contentDownloadTimestampTV=view.findViewById(R.id.contentDownloadTimestampTV);
             view.setDrawingCacheEnabled(false);
             this.contentSdCardUrl=contentSdCardUrl;
             cardView.setOnClickListener(new View.OnClickListener() {

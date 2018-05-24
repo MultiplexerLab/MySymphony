@@ -68,43 +68,51 @@ public class ForgetPasswordActivity extends AppCompatActivity {
 
     private void sendUserPhoneNumberToServer() {
         String phoneNumber = userPhoneNumber.getText().toString();
-        editor.putString("phoneNo", phoneNumber);
-        final String url = "http://bot.sharedtoday.com:9500/ws/gen2FACode?prcName=forgotPass&uid=" + userPhoneNumber.getText().toString();
-        final StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("url", url);
-                Log.d("responseprofile", response.toString());
-                String genRef = "";
-                JSONObject postInfo = null;
-                try {
-                    postInfo = new JSONObject(response);
-                    genRef = postInfo.getString("genRef");
-                    editor.putString("genRef", genRef);
-                    editor.putString("cameFromWhichActivity", "forgetPassword");
-                    editor.apply();
-                    Log.d("resultMobileNumber ", genRef);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if (genRef.contains("-1") || genRef.contains("-2") || genRef.contains("-3")) {
-                    Toast.makeText(ForgetPasswordActivity.this, "মোবাইল পিন তৈরিতে সমস্যা", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(ForgetPasswordActivity.this, "আপনার নাম্বার এ ছয় ডিজিটের পিন পাঠানো হয়েছে\nআপনার পিনের মেয়াদ পাচ মিনিট", Toast.LENGTH_SHORT).show();
-                    Intent myIntent = new Intent(getApplicationContext(), PinActivity.class);
-                    startActivity(myIntent);
-                    finish();
-                }
+        if (phoneNumber.length() > 0) {
+            if (phoneNumber.length() == 11 && (phoneNumber.startsWith("017") || phoneNumber.startsWith("018") || phoneNumber.startsWith("019") || phoneNumber.startsWith("016") || phoneNumber.startsWith("015"))) {
+                editor.putString("phoneNo", phoneNumber);
+                final String url = "http://bot.sharedtoday.com:9500/ws/gen2FACode?prcName=forgotPass&uid=" + userPhoneNumber.getText().toString();
+                final StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("url", url);
+                        Log.d("responseprofile", response.toString());
+                        String genRef = "";
+                        JSONObject postInfo = null;
+                        try {
+                            postInfo = new JSONObject(response);
+                            genRef = postInfo.getString("genRef");
+                            editor.putString("genRef", genRef);
+                            editor.putString("cameFromWhichActivity", "forgetPassword");
+                            editor.apply();
+                            Log.d("resultMobileNumber ", genRef);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (genRef.contains("-1") || genRef.contains("-2") || genRef.contains("-3")) {
+                            Toast.makeText(ForgetPasswordActivity.this, "মোবাইল পিন তৈরিতে সমস্যা", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ForgetPasswordActivity.this, "আপনার নাম্বার এ ছয় ডিজিটের পিন পাঠানো হয়েছে\nআপনার পিনের মেয়াদ পাচ মিনিট", Toast.LENGTH_SHORT).show();
+                            Intent myIntent = new Intent(getApplicationContext(), PinActivity.class);
+                            startActivity(myIntent);
+                            finish();
+                        }
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Volley", error.toString());
-                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
-            }
-        });
-        queue.add(stringRequest);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", error.toString());
+                        Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                queue.add(stringRequest);
+            } else Toast.makeText(this, "সঠিক ফোন নাম্বার প্রদান করুন", Toast.LENGTH_SHORT).show();
+
+        } else {
+            Toast.makeText(this, "ফোন নাম্বার দিন", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private boolean internetConnected() {

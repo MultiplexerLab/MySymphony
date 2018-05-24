@@ -367,4 +367,30 @@ public class DataHelper extends SQLiteOpenHelper {
         return contentSdcardUrl;
     }
 
+    public String getContentDownloadTimestamp(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String contentType = null;
+        Log.d("enter", "enterTitle");
+        try {
+            String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + id;
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.getCount() == 0) Log.d("cursorTitle", "0");
+            else if (cursor.getCount() > 0) Log.d("cursorTitle", "found");
+            cursor.moveToFirst();
+            if (cursor.getCount() > 0) {
+                ///while (cursor.moveToNext()) {
+                // Convert blob data to byte array
+                contentType = cursor.getString(cursor.getColumnIndex(COL_DOWLOAD_TIMESTAMP));
+                Log.d("DownloadTimestamp", contentType);
+            }
+
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            Log.d("excptionTitle", e.toString());
+
+        }
+        db.close();
+        return contentType;
+    }
+
 }

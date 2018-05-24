@@ -43,7 +43,7 @@ public class PhoneNumberVerification extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.phone_number_verification);
+        setContentView(R.layout.activity_phone_number_verification);
         editor = getSharedPreferences("phoneNumber", MODE_PRIVATE).edit();
         toolbar = findViewById(R.id.toolbarlayoutinsign);
         setSupportActionBar(toolbar);
@@ -64,7 +64,11 @@ public class PhoneNumberVerification extends AppCompatActivity {
 
             if (phoneNumber.length()>0)
             {
-                phoneNumberEntry();
+                if (phoneNumber.length() == 11 && (phoneNumber.startsWith("017") || phoneNumber.startsWith("018") || phoneNumber.startsWith("019") || phoneNumber.startsWith("016") || phoneNumber.startsWith("015"))){
+                    phoneNumberEntry();
+                }
+                else Toast.makeText(this, "সঠিক ফোন নাম্বার প্রদান করুন", Toast.LENGTH_SHORT).show();
+
             }
             else
             {

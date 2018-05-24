@@ -131,60 +131,63 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void signInRequest() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.USER_SIGN_IN_POST_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("responseInSignIn ", response);
-                       progressDialog.hideProgressDialog();
-                        if (response.contains("SUCCESS")) {
-                            if (internetConnected()) {
-                                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "http://bot.sharedtoday.com:9500/getSessionInfo",
-                                        new Response.Listener<JSONObject>() {
-                                            @Override
-                                            public void onResponse(JSONObject response) {
-                                                Log.i("LoginData", response.toString());
-                                            }
-                                        }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Log.e("LoginData", error.toString());
-                                    }
-                                });
-                                queue.add(jsonObjectRequest);
-                                SharedPreferences.Editor editor = getSharedPreferences("phoneNumber", MODE_PRIVATE).edit();
-                                editor.putString("phoneNo", userName.getText().toString());
-                                editor.apply();
-                                homePageStart();
-                            } else
-                                Toast.makeText(SignInActivity.this, "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+        String name = userName.getText().toString();
+        String passwordS = password.getText().toString();
+        if (name.length() == 0 || passwordS.length() == 0) {
+            if (progressDialog.getAlertDialog() != null) progressDialog.hideProgressDialog();
+            Toast.makeText(this, "সবগুলো তথ্য প্রদান করুন", Toast.LENGTH_SHORT).show();
+        } else {
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.USER_SIGN_IN_POST_URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d("responseInSignIn ", response);
+                    progressDialog.hideProgressDialog();
+                    if (response.contains("SUCCESS")) {
+                        if (internetConnected()) {
+                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "http://bot.sharedtoday.com:9500/getSessionInfo", new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Log.i("LoginData", response.toString());
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("LoginData", error.toString());
+                                }
+                            });
+                            queue.add(jsonObjectRequest);
+                            SharedPreferences.Editor editor = getSharedPreferences("phoneNumber", MODE_PRIVATE).edit();
+                            editor.putString("phoneNo", userName.getText().toString());
+                            editor.apply();
+                            homePageStart();
+                        } else Toast.makeText(SignInActivity.this, "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
 
-                        } else
-                        {
-                            LinearLayout linearLayout=findViewById(R.id.shake);
-                            Animation shake = AnimationUtils.loadAnimation(SignInActivity.this, R.anim.shake);
-                            linearLayout.startAnimation(shake);
-                            userName.getText().clear();
-                            password.getText().clear();
-                            Toast.makeText(SignInActivity.this, "আপনার তথ্য সঠিক নয় ", Toast.LENGTH_SHORT).show();
-                        }
+                    } else {
+                        LinearLayout linearLayout = findViewById(R.id.shake);
+                        Animation shake = AnimationUtils.loadAnimation(SignInActivity.this, R.anim.shake);
+                        linearLayout.startAnimation(shake);
+                        userName.getText().clear();
+                        password.getText().clear();
+                        Toast.makeText(SignInActivity.this, "আপনার তথ্য সঠিক নয় ", Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("VolleyErrorInSignIn", error.toString());
-                progressDialog.hideProgressDialog();
-               Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            public Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("userid", userName.getText().toString());
-                params.put("password", password.getText().toString());
-                return params;
-            }
-        };
-        queue.add(stringRequest);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("VolleyErrorInSignIn", error.toString());
+                    progressDialog.hideProgressDialog();
+                    Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                @Override
+                public Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("userid", userName.getText().toString());
+                    params.put("password", password.getText().toString());
+                    return params;
+                }
+            };
+            queue.add(stringRequest);
+        }
     }
 }

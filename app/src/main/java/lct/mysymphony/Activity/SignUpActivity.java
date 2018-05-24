@@ -39,11 +39,10 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     private android.support.v7.widget.Toolbar toolbar;
     RequestQueue queue;
     EditText DOB;
-    String DOBTV;
+    String DOBTV="";
     String phoneNumber = "";
     private EditText txtpassword, txtUserName;
-    String[] permissions = new String[]{
-            Manifest.permission.ACCESS_NETWORK_STATE,};
+    String[] permissions = new String[]{Manifest.permission.ACCESS_NETWORK_STATE,};
     lct.mysymphony.helper.ProgressDialog progressDialog;
 
     @Override
@@ -58,7 +57,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         phoneNumber = getIntent().getStringExtra("phoneNumber");
         queue = Volley.newRequestQueue(SignUpActivity.this);
         checkPermissions();
-        progressDialog=new lct.mysymphony.helper.ProgressDialog(this);
+        progressDialog = new lct.mysymphony.helper.ProgressDialog(this);
     }
 
     private boolean checkPermissions() {
@@ -81,7 +80,8 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        this.startActivity(myIntent);;
+        this.startActivity(myIntent);
+        ;
     }
 
     private boolean internetConnected() {
@@ -111,125 +111,127 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
 
     public void showDatePickerDialog(View view) {
         Calendar now = Calendar.getInstance();
-        DatePickerDialog dpd = DatePickerDialog.newInstance(
-                SignUpActivity.this,
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-        );
+        DatePickerDialog dpd = DatePickerDialog.newInstance(SignUpActivity.this, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
         dpd.show(getFragmentManager(), "Datepickerdialog");
     }
 
     public void signUpRequest() {
-        String url = "http://bot.sharedtoday.com:9500/ws/commonUpdateForArrayJSON?tbl=Partner&keyname=partnerId&id=" + phoneNumber;
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.i("ResponseSignUp", response);
-                        if(response.contains("SUCCESS")){
-                            SharedPreferences.Editor editor;
-                            editor = getSharedPreferences("login", MODE_PRIVATE).edit();
-                            editor.putString("username", txtUserName.getText().toString());
-                            editor.apply();
-                            sendUpdatedPasswordToserver();
-                        }
+        final String name = txtUserName.getText().toString();
+        final String password = txtpassword.getText().toString();
+            String url = "http://bot.sharedtoday.com:9500/ws/commonUpdateForArrayJSON?tbl=Partner&keyname=partnerId&id=" + phoneNumber;
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("ResponseSignUp", response);
+                    if (response.contains("SUCCESS")) {
+                        SharedPreferences.Editor editor;
+                        editor = getSharedPreferences("login", MODE_PRIVATE).edit();
+                        editor.putString("username", txtUserName.getText().toString());
+                        editor.apply();
+                        sendUpdatedPasswordToserver();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("ErrorInSignUp", error.toString());
-                progressDialog.hideProgressDialog();
-                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            public String getBodyContentType() {
-                return "application/x-www-form-urlencoded; charset=UTF-8";
-            }
-            @Override
-            public Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("partnerType", "Retailer");
-                params.put("defaultPassword", txtpassword.getText().toString());
-                params.put("partnerStatus", "Signup complete");
-                params.put("applicantBirthDate", DOBTV);
-                params.put("partnerId", phoneNumber);
-                params.put("partnerName", txtUserName.getText().toString());
-                params.put("orgId", "maxis");
-                return params;
-            }
-        };
-        queue.add(stringRequest);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("ErrorInSignUp", error.toString());
+                    progressDialog.hideProgressDialog();
+                    Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/x-www-form-urlencoded; charset=UTF-8";
+                }
+
+                @Override
+                public Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("partnerType", "Retailer");
+                    params.put("defaultPassword", password);
+                    params.put("partnerStatus", "Signup complete");
+                    params.put("applicantBirthDate", DOBTV);
+                    params.put("partnerId", phoneNumber);
+                    params.put("partnerName", name);
+                    params.put("orgId", "maxis");
+                    return params;
+                }
+            };
+            queue.add(stringRequest);
+
     }
 
     public void signInRequest() {
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.USER_SIGN_IN_POST_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("responseInSignIn", response);
-
-                        if (response.contains("SUCCESS")) {
-                            if (internetConnected()) {
-                                signUpRequest();
-                            } else
-                            {
-                                progressDialog.hideProgressDialog();
-                                Toast.makeText(SignUpActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-                            }
-
-                        } else
-                        {
-                            progressDialog.hideProgressDialog();
-                            Toast.makeText(SignUpActivity.this, "আপনার তথ্য সঠিক নয় ", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("VolleyErrorInSignIn", error.toString());
+        String name = txtUserName.getText().toString();
+        String password = txtpassword.getText().toString();
+        Log.d("nameLength",Integer.toString(name.length()));
+        Log.d("passwordLength",Integer.toString(password.length()));
+        Log.d("dobTvLength",Integer.toString(DOBTV.length()));
+        if (name.length() ==0 || password.length() ==0 || DOBTV.length() ==0) {
+            if (progressDialog.getAlertDialog()!=null)
                 progressDialog.hideProgressDialog();
-                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            public Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("userid", phoneNumber);
-                params.put("password", "01717");
-                return params;
-            }
-        };
-        queue.add(stringRequest);
-    }
-    public void sendUpdatedPasswordToserver() {
-        String url = Endpoints.UPDATE_DEFAULT_PASSWORD_POST_URL+txtpassword.getText().toString()+"&userid="+phoneNumber;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("responseInSetUpdtedPass", response);
+            Toast.makeText(this, "সবগুলো তথ্য প্রদান করুন", Toast.LENGTH_SHORT).show();
+        } else {
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.USER_SIGN_IN_POST_URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d("responseInSignIn", response);
 
-                        if(response.contains("SUCCESS")){
+                    if (response.contains("SUCCESS")) {
+                        if (internetConnected()) {
+                            signUpRequest();
+                        } else {
                             progressDialog.hideProgressDialog();
-                            SharedPreferences.Editor editor;
-                            editor = getSharedPreferences("login", MODE_PRIVATE).edit();
-                            editor.putInt("loginStatus", 1);
-                            editor.apply();
-                            Toast.makeText(SignUpActivity.this, "আপনার সাইন আপ সম্পন্ন হয়েছে", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(SignUpActivity.this, HomePage.class);
-                            startActivity(intent);
+                            Toast.makeText(SignUpActivity.this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
                         }
-                        else
-                        {
-                            progressDialog.hideProgressDialog();
-                            Toast.makeText(SignUpActivity.this, "আপনার সাইন আপ সম্পন্ন হয়নি\n" +
-                                    "আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-                        }
+
+                    } else {
+                        progressDialog.hideProgressDialog();
+                        Toast.makeText(SignUpActivity.this, "আপনার তথ্য সঠিক নয় ", Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("VolleyErrorInSignIn", error.toString());
+                    progressDialog.hideProgressDialog();
+                    Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                @Override
+                public Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("userid", phoneNumber);
+                    params.put("password", "01717");
+                    return params;
+                }
+            };
+            queue.add(stringRequest);
+        }
+    }
+
+    public void sendUpdatedPasswordToserver() {
+        String url = Endpoints.UPDATE_DEFAULT_PASSWORD_POST_URL + txtpassword.getText().toString() + "&userid=" + phoneNumber;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("responseInSetUpdtedPass", response);
+
+                if (response.contains("SUCCESS")) {
+                    progressDialog.hideProgressDialog();
+                    SharedPreferences.Editor editor;
+                    editor = getSharedPreferences("login", MODE_PRIVATE).edit();
+                    editor.putInt("loginStatus", 1);
+                    editor.apply();
+                    Toast.makeText(SignUpActivity.this, "আপনার সাইন আপ সম্পন্ন হয়েছে", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(SignUpActivity.this, HomePage.class);
+                    startActivity(intent);
+                } else {
+                    progressDialog.hideProgressDialog();
+                    Toast.makeText(SignUpActivity.this, "আপনার সাইন আপ সম্পন্ন হয়নি\n" + "আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInSignIn", error.toString());

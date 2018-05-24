@@ -22,11 +22,15 @@ import lct.mysymphony.R;
 
 public class PlayerInService extends Service implements OnClickListener, MediaPlayer.OnCompletionListener, SeekBar.OnSeekBarChangeListener {
     private WeakReference<ImageButton> btnPlay;
-    private WeakReference<ImageButton> btnStop;
+    private WeakReference<ImageButton> btnFastForward;
+    private WeakReference<ImageButton> btnRewind;
+    /*private WeakReference<ImageButton> btnStop;*/
     public static WeakReference<TextView> textViewSongTime;
     public static WeakReference<SeekBar> songProgressBar;
     static Handler progressBarHandler = new Handler();
-
+    private int seekForwardTime = 5 * 1000;
+    private int seekBackwardTime = 5 * 1000;
+    ProgressDialog progressDialog;
     public static MediaPlayer mp;
     private boolean isPause = false;
 
@@ -56,12 +60,17 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
 
     private void initUI() {
         btnPlay = new WeakReference<>(PlayAudioActivity.btnPlay);
-        btnStop = new WeakReference<>(PlayAudioActivity.btnStop);
+        btnRewind = new WeakReference<>(PlayAudioActivity.btnRewind);
+        btnFastForward = new WeakReference<>(PlayAudioActivity.btnFastForward);
+        btnRewind = new WeakReference<>(PlayAudioActivity.btnRewind);
+        /*btnStop = new WeakReference<>(PlayAudioActivity.btnStop);*/
         textViewSongTime = new WeakReference<>(PlayAudioActivity.textViewSongTime);
         songProgressBar = new WeakReference<>(PlayAudioActivity.seekBar);
         songProgressBar.get().setOnSeekBarChangeListener(this);
         btnPlay.get().setOnClickListener(this);
-        btnStop.get().setOnClickListener(this);
+        btnFastForward.get().setOnClickListener(this);
+        btnRewind.get().setOnClickListener(this);
+        /*btnStop.get().setOnClickListener(this);*/
         mp.setOnCompletionListener(this);
 
     }
@@ -90,11 +99,20 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
                 }
 
                 break;
-            case R.id.btnStop:
+            case R.id.btnFastForward:
+                Log.d("btnFastForward","btnFastForward");
+                forwardSong();
+                break;
+            case R.id.btnRewind:
+                Log.d("btnRewind","btnRewind");
+                rewindSong();
+                break;
+
+            /*case R.id.btnStop:
                 mp.stop();
                 onCompletion(mp);
                 textViewSongTime.get().setText("0.00/0.00"); // Displaying time completed playing
-                break;
+                break;*/
 
         }
     }
@@ -184,6 +202,32 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
         int currentPosition = Utility.progressToTimer(seekBar.getProgress(), totalDuration);
         mp.seekTo(currentPosition);
         updateProgressBar();
+    }
+
+    public void forwardSong() {
+        if (mp != null) {
+            int currentPosition = mp.getCurrentPosition();
+            Log.d("currentPosition",Integer.toString(currentPosition));
+            if (currentPosition + seekForwardTime <= mp.getDuration()) {
+                Log.d("enterForward","enterForward");
+                mp.seekTo(currentPosition + seekForwardTime);
+                updateProgressBar();
+            } else {
+                mp.seekTo(mp.getDuration());
+                updateProgressBar();
+            }
+        }
+    }
+
+    public void rewindSong() {
+        if (mp != null) {
+            int currentPosition = mp.getCurrentPosition();
+            if (currentPosition - seekBackwardTime >= 0) {
+                mp.seekTo(currentPosition - seekBackwardTime);
+            } else {
+                mp.seekTo(0);
+            }
+        }
     }
 
 }
