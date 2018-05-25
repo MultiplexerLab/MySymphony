@@ -111,7 +111,7 @@ public class DownloadAudio {
     private void saveAudio(ByteArrayOutputStream bao) {
         Log.d("entersaveAudio","entersaveAudio");
         String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/mySymphony");
+        File myDir = new File(root + "/appstore");
         myDir.mkdirs();
         Random generator = new Random();
         int n = 10000;

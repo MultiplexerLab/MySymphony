@@ -83,7 +83,7 @@ public class DownloadImage {
     private void saveImage(Bitmap finalBitmap) {
 
         String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/mySymphony");
+        File myDir = new File(root + "/appstore");
         myDir.mkdirs();
         Random generator = new Random();
         int n = 10000;

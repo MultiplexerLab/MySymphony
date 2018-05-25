@@ -40,6 +40,7 @@ public class DownloadApk {
         n = generator.nextInt(n);
         final String fname = "apk"+ n +".apk";
         destination += fname;
+        contentSdCardUrl=fname;
         final Uri uri = Uri.parse("file://" + destination);
        /* final Uri uri = Uri.parse("file://" + myDir);*/
 
@@ -91,6 +92,7 @@ public class DownloadApk {
         int n = 10000;
         n = generator.nextInt(n);
         final String fname = "apk"+ n +".apk";
+        contentSdCardUrl=fname;
         destination += fname;
         final Uri uri = Uri.parse("file://" + destination);
         /* final Uri uri = Uri.parse("file://" + myDir);*/

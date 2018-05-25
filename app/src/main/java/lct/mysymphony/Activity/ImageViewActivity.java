@@ -151,6 +151,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 contentDesc = "";
                 contentType = Data.getContentType();
                 thumbNailImgUrl = Data.getThumbNailImgUrl();
+                Log.d("thumbNailImgUrl",thumbNailImgUrl);
                 if (contentType.contains("audio")) {
                     audioUrl = Data.getContentUrl();
                     playAudioBTN.setVisibility(View.VISIBLE);

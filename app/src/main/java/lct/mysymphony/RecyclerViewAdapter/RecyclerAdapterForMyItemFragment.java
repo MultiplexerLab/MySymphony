@@ -127,6 +127,7 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
                     if (contentType.contains("apk"))
                     {
                         Log.d("contentTypeApk","contentTypeApk");
+                        Log.d("contentSdCardUrl",contentSdCardUrl.get(getAdapterPosition()));
                         String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/"+contentSdCardUrl.get(getAdapterPosition());
                         try {
                             file = new File(destination);
@@ -136,7 +137,7 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
                         }
                     }
                     else {
-                        file = new File(root + "/mySymphony/" + contentSdCardUrl.get(getAdapterPosition()));
+                        file = new File(root + "/appstore/" + contentSdCardUrl.get(getAdapterPosition()));
                     }
                     if (file.exists())
                     {

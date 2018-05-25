@@ -95,7 +95,7 @@ public class DownloadVideo {
     private void saveVideo(ByteArrayOutputStream bao) {
         Log.d("entersaveVideo","entersaveVideo");
         String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/mySymphony");
+        File myDir = new File(root + "/appstore");
         myDir.mkdirs();
         Random generator = new Random();
         int n = 10000;

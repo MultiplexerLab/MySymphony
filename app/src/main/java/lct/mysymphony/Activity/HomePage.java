@@ -326,6 +326,9 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     String contentTitle = games_zone__content_arr.getJSONObject(i).getString("contentTitle");
                     String contentType = games_zone__content_arr.getJSONObject(i).getString("contentType");
                     String thumbnailImgUrl = games_zone__content_arr.getJSONObject(i).getString("thumbNail_image");
+                    Log.d("thumbnailImgUrlGa",thumbnailImgUrl);
+                    if (thumbnailImgUrl.length()==0)
+                        thumbnailImgUrl=contentUrl;
                     ///int previousPrice = games_zone__content_arr.getJSONObject(i).getInt("previousPrice");
                     if (games_zone__content_arr.getJSONObject(i).has("contentPrice")) {
                         newPrice = games_zone__content_arr.getJSONObject(i).getInt("contentPrice");
@@ -336,7 +339,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     gamesZoneArrayList.add(new GamesZone(contentType, contentUrl, contentTitle, thumbnailImgUrl, 0, newPrice, contentCat, contentId));
 
                 } catch (JSONException e) {
-                    Log.d("exception", e.toString());
+                    Log.d("exceptionGamesZone", e.toString());
                     e.printStackTrace();
                 }
             }
@@ -396,6 +399,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     int contentId = mulloCharJsonArr.getJSONObject(i).getInt("id");
                     String contentCat = mulloCharJsonArr.getJSONObject(i).getString("contentCat");
                     String thumbNail_image = mulloCharJsonArr.getJSONObject(i).getString("thumbNail_image");
+
 
                     JSONArray jsonArray = mulloCharJsonArr.getJSONObject(i).getJSONArray("discount");
 
