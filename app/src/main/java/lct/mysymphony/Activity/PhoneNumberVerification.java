@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -62,16 +63,15 @@ public class PhoneNumberVerification extends AppCompatActivity {
         if (internetConnected()) {
             phoneNumber = phoneNumberET.getText().toString();
 
-            if (phoneNumber.length()>0)
-            {
-                if (phoneNumber.length() == 11 && (phoneNumber.startsWith("017") || phoneNumber.startsWith("018") || phoneNumber.startsWith("019") || phoneNumber.startsWith("016") || phoneNumber.startsWith("015"))){
+            if (phoneNumber.length() > 0) {
+                if (phoneNumber.startsWith("+88") || phoneNumber.startsWith("880")) {
+                    Toast.makeText(this, "+880 ছাড়া নম্বর প্রদান করুন", Toast.LENGTH_SHORT).show();
+                } else if (phoneNumber.length() == 11 && (phoneNumber.startsWith("017") || phoneNumber.startsWith("018") || phoneNumber.startsWith("019") || phoneNumber.startsWith("016") || phoneNumber.startsWith("015"))) {
                     phoneNumberEntry();
-                }
-                else Toast.makeText(this, "সঠিক ফোন নাম্বার প্রদান করুন", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(this, "সঠিক ফোন নাম্বার প্রদান করুন", Toast.LENGTH_SHORT).show();
 
-            }
-            else
-            {
+            } else {
                 Toast.makeText(this, "ফোন নাম্বার দিন", Toast.LENGTH_SHORT).show();
             }
         } else
@@ -93,7 +93,7 @@ public class PhoneNumberVerification extends AppCompatActivity {
                             postInfo = new JSONObject(response);
                             genRef = postInfo.getString("genRef");
                             editor.putString("genRef", genRef);
-                            editor.putString("cameFromWhichActivity","PhoneNumberVerification");
+                            editor.putString("cameFromWhichActivity", "PhoneNumberVerification");
                             editor.apply();
                             Log.d("resultMobileNumber ", genRef);
                         } catch (JSONException e) {
@@ -111,12 +111,13 @@ public class PhoneNumberVerification extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyErrorInPhoneNumbe", error.toString());
-                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+            }
         });
         queue.add(stringRequest);
     }
 
-    public void  phoneNumberEntry() {
+    public void phoneNumberEntry() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.PHONE_NUMBER_ENTRY_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -141,7 +142,8 @@ public class PhoneNumberVerification extends AppCompatActivity {
                             sendMobileNumberToServer();
                         } else {
                             Log.e("VolleyErrorInPhoneNumbe", result.toString());
-                           Toast.makeText(getApplicationContext(), "এই নাম্বারটি দিয়ে পুর্বে রেজিস্টার করা হয়েছে", Toast.LENGTH_SHORT).show();                        }
+                            Toast.makeText(getApplicationContext(), "এই নাম্বারটি দিয়ে পুর্বে রেজিস্টার করা হয়েছে", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override

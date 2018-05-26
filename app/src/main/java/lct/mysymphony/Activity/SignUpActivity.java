@@ -112,6 +112,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     public void showDatePickerDialog(View view) {
         Calendar now = Calendar.getInstance();
         DatePickerDialog dpd = DatePickerDialog.newInstance(SignUpActivity.this, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+        dpd.setMaxDate(now);
         dpd.show(getFragmentManager(), "Datepickerdialog");
     }
 
@@ -164,10 +165,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     public void signInRequest() {
         String name = txtUserName.getText().toString();
         String password = txtpassword.getText().toString();
-        Log.d("nameLength",Integer.toString(name.length()));
-        Log.d("passwordLength",Integer.toString(password.length()));
-        Log.d("dobTvLength",Integer.toString(DOBTV.length()));
-        if (name.length() ==0 || password.length() ==0 || DOBTV.length() ==0) {
+        if (name.isEmpty() || password.isEmpty() || DOBTV.isEmpty()) {
             if (progressDialog.getAlertDialog()!=null)
                 progressDialog.hideProgressDialog();
             Toast.makeText(this, "সবগুলো তথ্য প্রদান করুন", Toast.LENGTH_SHORT).show();

@@ -124,7 +124,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         String tag = getIntent().getStringExtra("apk");
         if(tag!=null && tag.equals("apk")){
             Log.i("APK", "ON");
-            progressDialog.showProgressDialog("APK ডাউনলোড হচ্ছে");
+            progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
             DownloadApk downloadApk = new DownloadApk();
             downloadApk.downLoadAPK("http://jachaibd.com/files/maxis.apk", HomePage.this);
         }
@@ -517,9 +517,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        myIntent.putExtra("cameFromWhichActivity", "HomePage");
-        this.startActivity(myIntent);
+        this.finishAffinity();
     }
 
     public void startSportActivity(View view) {

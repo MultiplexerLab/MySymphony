@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -47,25 +48,22 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("login", MODE_PRIVATE);
         int loginStatus = prefs.getInt("loginStatus", 0);
-        if(loginStatus==1){
+        if (loginStatus == 1) {
 
-            String cameFromWhichActivity=getIntent().getStringExtra("cameFromWhichActivity");
-            if (cameFromWhichActivity!=null)
-            {
-                if (cameFromWhichActivity.contains("HomePage"))
-                {
+            String cameFromWhichActivity = getIntent().getStringExtra("cameFromWhichActivity");
+            if (cameFromWhichActivity != null) {
+                if (cameFromWhichActivity.contains("HomePage")) {
                     ActivityCompat.finishAffinity(this);
                 }
-            }
-            else
-            {
+            } else {
                 Intent intent = new Intent(MainActivity.this, HomePage.class);
                 startActivity(intent);
+                finish();
             }
         }
         imageView = findViewById(R.id.IV);
         Glide.with(this).load(R.drawable.symphoni).into(imageView);
-        dbHelper=new DataHelper(this);
+        dbHelper = new DataHelper(this);
     }
 
     public void startSignUpActivity(View view) {

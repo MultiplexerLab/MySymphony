@@ -357,7 +357,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                         } else Log.d("audioUrlNotFound", "audioUrlNotFound");
 
                     } else if (dataBaseData.getContentType().contains("apk")) {
-                        progressDialog.showProgressDialog("APK ডাউনলোড হচ্ছে");
+                        progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
                         Gson gson = new Gson();
                         SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
                         String json = preferences.getString("databaseData", "");
