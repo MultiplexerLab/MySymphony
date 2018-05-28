@@ -121,12 +121,11 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         bottomNavigationView.getMenu().findItem(R.id.home_bottom_navigation).setChecked(true);
 
 
-        String tag = getIntent().getStringExtra("apk");
-        if(tag!=null && tag.equals("apk")){
-            Log.i("APK", "ON");
+        String apkUrl = getIntent().getStringExtra("apk");
+        if(apkUrl!=null){
             progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
             DownloadApk downloadApk = new DownloadApk();
-            downloadApk.downLoadAPK("http://jachaibd.com/files/maxis.apk", HomePage.this);
+            downloadApk.downLoadAPK(apkUrl, HomePage.this);
         }
 
         progressDialog.showProgressDialog();

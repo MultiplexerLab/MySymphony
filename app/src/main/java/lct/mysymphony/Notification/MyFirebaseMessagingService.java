@@ -79,6 +79,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String description = data.get("description");
             String KEY = data.get("KEY");
             String notificationCategory = data.get("notificationCategory");
+            Log.i("Cat", notificationCategory);
             String imageLink = data.get("imageLink");
             SharedPreferences prefs = getSharedPreferences("login", MODE_PRIVATE);
             String userName = prefs.getString("username", "");
@@ -109,6 +110,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     listBtn.add(button);
                 }
                 initNotificationForImageWithMultipleButton(totalButton, listBtn, title, description, imageLink, userName);
+            }else if (notificationCategory.equals("apkLink")) {
+                Intent downLoadIntent = new Intent(this, HomePage.class);
+                downLoadIntent.putExtra("apk", data.get("apkLink"));
+                this.startActivity(downLoadIntent);
             }
             Log.e(TAG, "getDataFromRemoteMessage: " + notificationId);
         } catch (Exception e) {
@@ -318,11 +323,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             return new Intent(this, CartoonActivity.class);
         } else if (action.equals("wallpaper")) {
             return new Intent(this, WallpaperBundleActivity.class);
-        }else if (action.equals("apk")) {
+       }/*else if (action.equals("apk")) {
             Intent downLoadIntent = new Intent(this, HomePage.class);
             downLoadIntent.putExtra("apk", "apk");
-            return downLoadIntent;
-        }
+           return downLoadIntent;
+       }*/
 
         return new Intent(this, MainActivity.class);
     }

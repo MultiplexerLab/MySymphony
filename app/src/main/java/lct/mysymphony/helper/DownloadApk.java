@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
@@ -120,15 +121,15 @@ public class DownloadApk {
                     AsyncResponse asyncResponse = (AsyncResponse) context;
                     asyncResponse.processFinish("complete");
                     //insertDataInDatabaseWithContentSdcardUl();
-                    Intent install = new Intent(Intent.ACTION_VIEW);
+                   Intent install = new Intent(Intent.ACTION_VIEW);
                     install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     install.setDataAndType(apkUri,
                             manager.getMimeTypeForDownloadedFile(downloadId));
                     install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     context.startActivity(install);
+
                     Log.i("RunningDownloadApk", apkUri.toString());
                     context.unregisterReceiver(this);
-
 
                 }catch (Exception e){
                     Log.e("ErrrInDownloadApk", e.toString());
