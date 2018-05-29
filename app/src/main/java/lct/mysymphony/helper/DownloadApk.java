@@ -1,8 +1,11 @@
 package lct.mysymphony.helper;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
@@ -10,6 +13,7 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.Random;
@@ -17,6 +21,7 @@ import java.util.Random;
 import lct.mysymphony.Activity.ImageViewActivity;
 import lct.mysymphony.BuildConfig;
 import lct.mysymphony.ModelClass.DataBaseData;
+import lct.mysymphony.R;
 
 public class DownloadApk {
     Context context;
@@ -25,11 +30,11 @@ public class DownloadApk {
     DataBaseData dataBaseData;
     DataHelper dbHelper;
 
-    public void downLoadAPK(final String apkUrl, final Context context,DataBaseData dataBaseData) {
+    public void downLoadAPK(final String apkUrl, final Context context, DataBaseData dataBaseData) {
         this.context = context;
         this.apkUrl = apkUrl;
-        dbHelper=new DataHelper(context);
-        this.dataBaseData=dataBaseData;
+        dbHelper = new DataHelper(context);
+        this.dataBaseData = dataBaseData;
         String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
         /*String destination = Environment.getExternalStorageDirectory() + "/mySymphony";*/
 /*
@@ -39,11 +44,11 @@ public class DownloadApk {
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
-        final String fname = "apk"+ n +".apk";
+        final String fname = "apk" + n + ".apk";
         destination += fname;
-        contentSdCardUrl=fname;
+        contentSdCardUrl = fname;
         final Uri uri = Uri.parse("file://" + destination);
-       /* final Uri uri = Uri.parse("file://" + myDir);*/
+        /* final Uri uri = Uri.parse("file://" + myDir);*/
 
         File file = new File(destination);
         if (file.exists())
@@ -64,7 +69,7 @@ public class DownloadApk {
         BroadcastReceiver onComplete = new BroadcastReceiver() {
             public void onReceive(Context ctxt, Intent intent) {
                 try {
-                    Log.d("onComplete","onComplete");
+                    Log.d("onComplete", "onComplete");
                     insertDataInDatabaseWithContentSdcardUl();
                     Intent install = new Intent(Intent.ACTION_VIEW);
                     install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -74,9 +79,9 @@ public class DownloadApk {
                     context.startActivity(install);
                     Log.i("RunningDownloadApk", apkUri.toString());
                     context.unregisterReceiver(this);
-                   /* contentSdCardUrl=fname;*/
+                    /* contentSdCardUrl=fname;*/
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     Log.e("ErrrInDownloadApk", e.toString());
                 }
             }
@@ -92,8 +97,8 @@ public class DownloadApk {
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
-        final String fname = "apk"+ n +".apk";
-        contentSdCardUrl=fname;
+        final String fname = "apk" + n + ".apk";
+        contentSdCardUrl = fname;
         destination += fname;
         final Uri uri = Uri.parse("file://" + destination);
         /* final Uri uri = Uri.parse("file://" + myDir);*/
@@ -117,11 +122,12 @@ public class DownloadApk {
         BroadcastReceiver onComplete = new BroadcastReceiver() {
             public void onReceive(Context ctxt, Intent intent) {
                 try {
-                    Log.d("onComplete","onComplete");
+                    Log.d("onComplete", "onComplete");
                     AsyncResponse asyncResponse = (AsyncResponse) context;
                     asyncResponse.processFinish("complete");
                     //insertDataInDatabaseWithContentSdcardUl();
-                   Intent install = new Intent(Intent.ACTION_VIEW);
+
+                    Intent install = new Intent(Intent.ACTION_VIEW);
                     install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     install.setDataAndType(apkUri,
                             manager.getMimeTypeForDownloadedFile(downloadId));
@@ -131,17 +137,17 @@ public class DownloadApk {
                     Log.i("RunningDownloadApk", apkUri.toString());
                     context.unregisterReceiver(this);
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     Log.e("ErrrInDownloadApk", e.toString());
                 }
             }
         };
         context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
-    public void insertDataInDatabaseWithContentSdcardUl()
-    {
-        Log.d("enterInsertApkToDB","enterInsertAudioToDB");
-        dbHelper.insertContentDataWithSdCardUrl(contentSdCardUrl,dataBaseData);
+
+    public void insertDataInDatabaseWithContentSdcardUl() {
+        Log.d("enterInsertApkToDB", "enterInsertAudioToDB");
+        dbHelper.insertContentDataWithSdCardUrl(contentSdCardUrl, dataBaseData);
     }
 
     public interface AsyncResponse {

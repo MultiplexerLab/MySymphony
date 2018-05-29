@@ -21,6 +21,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -47,6 +48,8 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -357,14 +360,45 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                         } else Log.d("audioUrlNotFound", "audioUrlNotFound");
 
                     } else if (dataBaseData.getContentType().contains("apk")) {
-                        progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
+                        //progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
                         Gson gson = new Gson();
                         SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
                         String json = preferences.getString("databaseData", "");
                         String imageURL = preferences.getString("imageUrl", "");
-                        DownloadApk downloadApk = new DownloadApk();
+
+                        /*Process p = null;
+                        try {
+                            p = Runtime.getRuntime().exec("su");
+                            DataOutputStream os = new DataOutputStream(p.getOutputStream());
+                            os.writeBytes("settings put global install_non_market_apps 1");
+                            os.writeBytes("exit\n");
+                            os.flush();
+                        } catch (IOException e) {
+                            Log.i("Errr",e.toString());
+                        }*/
+
+                        int isNonPlayAppAllowed = 0;
+                        try {
+                            isNonPlayAppAllowed = Settings.Secure.getInt(getContentResolver(),
+                                    Settings.Secure.INSTALL_NON_MARKET_APPS, 0);
+                            Log.i("Tag", String.valueOf(isNonPlayAppAllowed));
+                        } catch (Exception e) {
+                            Log.e("UnknownSource", e.toString());
+                        }
+                        if(isNonPlayAppAllowed==0){
+                            progressDialog.showProgressDialogAPK();
+                            DownloadApk downloadApk = new DownloadApk();
+                            downloadApk.downLoadAPK("http://jachaibd.com/files/royalty.apk", ImageViewActivity.this, dataBaseData);
+                        }else{
+                            progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
+                            DownloadApk downloadApk = new DownloadApk();
+                            downloadApk.downLoadAPK("http://jachaibd.com/files/royalty.apk", ImageViewActivity.this, dataBaseData);
+                        }
+
+
+                      /*  DownloadApk downloadApk = new DownloadApk();
                         downloadApk.downLoadAPK("http://jachaibd.com/files/royalty.apk", ImageViewActivity.this,dataBaseData);
-                    }
+                    */}
                 }
             }
         }

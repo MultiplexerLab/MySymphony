@@ -25,24 +25,8 @@ public class Utility {
     private static Notification myNotication;
     public static final String NOTIFICATION_CHANNEL_ID = "10001";
 
-    // Create Notification
-    @SuppressWarnings("deprecation")
     public static void initNotification(String songTitle, Context mContext) {
         try {
-            /*String ns = Context.NOTIFICATION_SERVICE;
-            mNotificationManager = (NotificationManager) mContext.getSystemService(ns);
-            int icon = R.drawable.music_showcase;
-            CharSequence tickerText = "Playing your song";
-            long when = System.currentTimeMillis();
-
-            Notification notification = new Notification(icon, tickerText, when);
-            notification.flags = Notification.FLAG_ONGOING_EVENT;
-            Context context = mContext.getApplicationContext();
-            CharSequence songName = "" + songTitle;
-            Intent notificationIntent = new Intent(mContext, MainActivity.class);
-            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-            notification.setLatestEventInfo(context, songName, null, contentIntent);
-            mNotificationManager.notify(NOTIFICATION_ID, notification);*/
 
             manager = (NotificationManager) mContext.getSystemService(NOTIFICATION_SERVICE);
 
@@ -51,7 +35,7 @@ public class Utility {
             Notification.Builder builder = new Notification.Builder(mContext);
 
             builder.setAutoCancel(false);
-            builder.setTicker("this is ticker text");
+            //builder.setTicker("this is ticker text");
             builder.setContentTitle("Song is playing");
           /*  builder.setContentText("You have a new message");*/
             builder.setSmallIcon(R.mipmap.ic_launcher);

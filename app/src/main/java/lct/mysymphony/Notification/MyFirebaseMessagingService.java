@@ -56,6 +56,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private NotificationManager notificationManager;
     private String channel = "Exclusive Offer";
     private final String USERNAME = "[NAME]";
+    private String apkUrl;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -78,6 +79,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String title = data.get("title");
             String description = data.get("description");
             String KEY = data.get("KEY");
+            apkUrl = data.get("apkLink");
             String notificationCategory = data.get("notificationCategory");
             Log.i("Cat", notificationCategory);
             String imageLink = data.get("imageLink");
@@ -111,16 +113,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 }
                 initNotificationForImageWithMultipleButton(totalButton, listBtn, title, description, imageLink, userName);
             }else if (notificationCategory.equals("apkLink")) {
-                Intent downLoadIntent = new Intent(this, HomePage.class);
-                downLoadIntent.putExtra("apk", data.get("apkLink"));
-                this.startActivity(downLoadIntent);
+                int totalButton = Integer.parseInt(data.get("totalButton"));
+                String s = data.get("buttonList");
+                JsonParser jsonParser = new JsonParser();
+                String jsonArrayString = s.toString();
+                JsonArray arrayFromString = jsonParser.parse(jsonArrayString).getAsJsonArray();
+                List<NotificationButton> listBtn = new ArrayList<>();
+                for (int i = 0; i < arrayFromString.size(); i++) {
+                    String dat = arrayFromString.get(i).toString();
+                    Gson gson = new Gson();
+                    NotificationButton button = gson.fromJson(dat, NotificationButton.class);
+                    Log.e(TAG, "getDataFromRemoteMessage: " + button.toString());
+                    listBtn.add(button);
+                }
+                initNotificationForImageWithMultipleButton(totalButton, listBtn, title, description, imageLink, userName);
+
             }
             Log.e(TAG, "getDataFromRemoteMessage: " + notificationId);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     private void initNotificationForImageWithMultipleButton(int totalButton, List<NotificationButton> listBtn, String title, String description, final String imgeLink, String userName) {
         try {
@@ -323,11 +336,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             return new Intent(this, CartoonActivity.class);
         } else if (action.equals("wallpaper")) {
             return new Intent(this, WallpaperBundleActivity.class);
-       }/*else if (action.equals("apk")) {
+       }else if (action.equals("apkDownload")) {
             Intent downLoadIntent = new Intent(this, HomePage.class);
-            downLoadIntent.putExtra("apk", "apk");
-           return downLoadIntent;
-       }*/
+            downLoadIntent.putExtra("apk", apkUrl);
+            return  downLoadIntent;
+       }
 
         return new Intent(this, MainActivity.class);
     }

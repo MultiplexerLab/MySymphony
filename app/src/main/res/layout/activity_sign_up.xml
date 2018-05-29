@@ -51,7 +51,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="40dp">
+                android:paddingTop="10dp">
 
                 <EditText
                     android:id="@+id/txtUserName"
@@ -117,10 +117,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:paddingTop="20dp"
+            android:paddingTop="10dp"
             android:singleLine="false"
             android:text="@string/txtAggrement"
             android:textColor="@color/Gray"
             android:textSize="@dimen/textSize" />
+
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_style_red"
+            android:onClick="guestLogin"
+            android:text="SKip Registration"
+            android:textColor="@color/White" />
     </LinearLayout>
 </LinearLayout>

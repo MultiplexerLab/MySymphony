@@ -1,9 +1,11 @@
 package lct.mysymphony.Activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
@@ -16,6 +18,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -123,9 +126,22 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
 
         String apkUrl = getIntent().getStringExtra("apk");
         if(apkUrl!=null){
-            progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
-            DownloadApk downloadApk = new DownloadApk();
-            downloadApk.downLoadAPK(apkUrl, HomePage.this);
+            boolean isNonPlayAppAllowed = false;
+            try {
+                isNonPlayAppAllowed = Settings.Secure.getInt(getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS) == 1;
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+            }
+            if(isNonPlayAppAllowed==false){
+                progressDialog.showProgressDialogAPK();
+                DownloadApk downloadApk = new DownloadApk();
+                downloadApk.downLoadAPK(apkUrl, HomePage.this);
+            }else{
+                progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
+                DownloadApk downloadApk = new DownloadApk();
+                downloadApk.downLoadAPK(apkUrl, HomePage.this);
+            }
+
         }
 
         progressDialog.showProgressDialog();
