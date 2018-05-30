@@ -36,11 +36,6 @@ public class DownloadApk {
         dbHelper = new DataHelper(context);
         this.dataBaseData = dataBaseData;
         String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
-        /*String destination = Environment.getExternalStorageDirectory() + "/mySymphony";*/
-/*
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/mySymphony");
-        myDir.mkdirs();*/
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);

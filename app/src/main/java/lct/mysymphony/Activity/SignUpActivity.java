@@ -1,18 +1,23 @@
 package lct.mysymphony.Activity;
 
 import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -26,11 +31,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import lct.mysymphony.R;
 import lct.mysymphony.helper.Endpoints;
@@ -45,6 +54,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     private EditText txtpassword, txtUserName;
     String[] permissions = new String[]{Manifest.permission.ACCESS_NETWORK_STATE,};
     lct.mysymphony.helper.ProgressDialog progressDialog;
+    String emailId, devicePhoneNumber, deviceName, osVersion, carrierName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +69,39 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         queue = Volley.newRequestQueue(SignUpActivity.this);
         checkPermissions();
         progressDialog = new lct.mysymphony.helper.ProgressDialog(this);
+
+        TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        carrierName = manager.getNetworkOperatorName();
+        try {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            devicePhoneNumber = manager.getLine1Number();
+            Log.i("PhoneNo", devicePhoneNumber);
+        } catch (Exception e) {
+            Log.e("Excep", e.toString());
+        }
+        Log.i("carrierName", carrierName);
+        deviceName = android.os.Build.MODEL;
+        Log.i("ModelName", deviceName);
+        osVersion = Build.VERSION.RELEASE;
+        Log.i("osVersion", osVersion);
+
+        Pattern gmailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
+        Account[] accounts = AccountManager.get(this).getAccounts();
+        for (Account account : accounts) {
+            if (gmailPattern.matcher(account.name).matches()) {
+                emailId = account.name;
+                Log.i("GmailId", emailId);
+            }
+        }
     }
 
     private boolean checkPermissions() {
@@ -154,6 +197,8 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
 
             @Override
             public Map<String, String> getParams() throws AuthFailureError {
+                DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                Date date = new Date();
                 Map<String, String> params = new HashMap<>();
                 params.put("partnerType", "Retailer");
                 params.put("defaultPassword", password);
@@ -161,7 +206,12 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                 params.put("applicantBirthDate", DOBTV);
                 params.put("partnerId", phoneNumber);
                 params.put("partnerName", name);
-                params.put("orgId", "maxis");
+                params.put("contactNum", devicePhoneNumber);
+                params.put("email", emailId);
+                params.put("registrationDate", dateFormat.format(date));
+                params.put("accountName", carrierName);
+                params.put("partnerIdentificationInfo", osVersion);
+                params.put("channel", deviceName);
                 return params;
             }
         };

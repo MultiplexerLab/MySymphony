@@ -110,7 +110,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="50dp"
                 android:background="@drawable/btn_style_red"
-                android:onClick="guestLogin"
+                android:onClick="guestLoginSignIn"
                 android:text="Skip Registration"
                 android:textColor="@color/White" />
 

@@ -78,7 +78,7 @@ import lct.mysymphony.helper.DownloadImage;
 import lct.mysymphony.helper.Endpoints;
 import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
-public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResponse, LoaderManager.LoaderCallbacks<Cursor> {
+public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResponse {
     Context context;
 
     ArrayList<SliderImage> sliderImages;
@@ -124,23 +124,6 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
 
         FirebaseMessaging.getInstance().subscribeToTopic("All");
 
-        TelephonyManager tMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-        String mPhoneNumber = tMgr.getLine1Number();
-        Log.i("PhoneNo", mPhoneNumber);
-
-        TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        String carrierName = manager.getNetworkOperatorName();
-        Log.i("carrierName", carrierName);
-        String str = android.os.Build.MODEL;
-        Log.i("ModelName", str);
-        String osVersion = Build.VERSION.RELEASE;
-        Log.i("osVersion", osVersion);
-
-
         progressDialog = new lct.mysymphony.helper.ProgressDialog(this);
         context = HomePage.this;
         queue = Volley.newRequestQueue(HomePage.this);
@@ -159,27 +142,14 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         bottomNavigationView.getMenu().findItem(R.id.home_bottom_navigation).setChecked(true);
 
         String apkUrl = getIntent().getStringExtra("apk");
-        if(apkUrl!=null){
-           /*boolean isNonPlayAppAllowed = false;
-            try {
-                isNonPlayAppAllowed = Settings.Secure.getInt(getContentResolver(), Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES) == 1;
-            } catch (Settings.SettingNotFoundException e) {
-                e.printStackTrace();
-            }
-            if(isNonPlayAppAllowed==false){
-
-            }else{
-                progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
-                DownloadApk downloadApk = new DownloadApk();
-                downloadApk.downLoadAPK(apkUrl, HomePage.this);
-            }*/
+        if (apkUrl != null) {
             SharedPreferences preferences = context.getSharedPreferences("tempData", context.MODE_PRIVATE);
             int flag = preferences.getInt("unknownSource", 0);
-            if(flag==0) {
+            if (flag == 0) {
                 progressDialog.showProgressDialogAPK();
                 DownloadApk downloadApk = new DownloadApk();
                 downloadApk.downLoadAPK(apkUrl, HomePage.this);
-            }else{
+            } else {
                 progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
                 DownloadApk downloadApk = new DownloadApk();
                 downloadApk.downLoadAPK(apkUrl, HomePage.this);
@@ -223,7 +193,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         newloadDataFromVolley();
     }
 
-    @Override
+    /*@Override
     public Loader<Cursor> onCreateLoader(int id, Bundle arguments) {
         return new CursorLoader(this,
                 Uri.withAppendedPath(
@@ -259,7 +229,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
-    }
+    }*/
 
     public String emailId() {
         AccountManager accountManager = AccountManager.get(HomePage.this);
@@ -270,6 +240,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             return account.name;
         }
     }
+
     private static Account getAccount(AccountManager accountManager) {
         Account[] accounts = accountManager.getAccountsByType("com.google");
         Account account;
@@ -441,9 +412,9 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     String contentTitle = games_zone__content_arr.getJSONObject(i).getString("contentTitle");
                     String contentType = games_zone__content_arr.getJSONObject(i).getString("contentType");
                     String thumbnailImgUrl = games_zone__content_arr.getJSONObject(i).getString("thumbNail_image");
-                    Log.d("thumbnailImgUrlGa",thumbnailImgUrl);
-                    if (thumbnailImgUrl.length()==0)
-                        thumbnailImgUrl=contentUrl;
+                    Log.d("thumbnailImgUrlGa", thumbnailImgUrl);
+                    if (thumbnailImgUrl.length() == 0)
+                        thumbnailImgUrl = contentUrl;
                     ///int previousPrice = games_zone__content_arr.getJSONObject(i).getInt("previousPrice");
                     if (games_zone__content_arr.getJSONObject(i).has("contentPrice")) {
                         newPrice = games_zone__content_arr.getJSONObject(i).getInt("contentPrice");
@@ -552,7 +523,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
 
                     if (contentType.equals("video")) {
                         Log.i("Data", "Video");
-                        japitoJibonArrayList.add(new JapitoJibon(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), "video", contentUrl,japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), contentCat,  contentid, contentPrice));
+                        japitoJibonArrayList.add(new JapitoJibon(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), "video", contentUrl, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), contentCat, contentid, contentPrice));
                     } else {
                         Log.i("Data", "Image");
                         japitoJibonArrayList.add(new JapitoJibon(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("contentUrl"), "image", contentUrl, contentCat, "", contentid, contentPrice));
@@ -785,19 +756,20 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         intent.putExtra("position", 2);
         startActivity(intent);
     }
+
     @Override
     public void onPause() {
         super.onPause();
-        if (progressDialog!=null)
+        if (progressDialog != null)
             progressDialog.hideProgressDialog();
     }
 
     @Override
     public void processFinish(String output) {
-            progressDialog.hideProgressDialog();
-            if (output.contains("complete")) {
-                Log.d("onProcessFinishedComplt", "onProcessFinishedComplt");
-            }
+        progressDialog.hideProgressDialog();
+        if (output.contains("complete")) {
+            Log.d("onProcessFinishedComplt", "onProcessFinishedComplt");
+        }
     }
 
 }

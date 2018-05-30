@@ -1,6 +1,8 @@
 package lct.mysymphony.Activity;
 
 import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,13 +11,16 @@ import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -38,10 +43,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import lct.mysymphony.R;
 import lct.mysymphony.helper.Endpoints;
@@ -61,6 +70,7 @@ public class SignInActivity extends AppCompatActivity {
             Manifest.permission.REQUEST_INSTALL_PACKAGES,
             Manifest.permission.GET_ACCOUNTS,
             Manifest.permission.READ_PHONE_NUMBERS,};
+    String emailId, devicePhoneNumber, deviceName, osVersion, carrierName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +84,39 @@ public class SignInActivity extends AppCompatActivity {
         forgotPassTitle.setPaintFlags(forgotPassTitle.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         queue = Volley.newRequestQueue(SignInActivity.this);
         checkPermissions();
+
+        TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        carrierName = manager.getNetworkOperatorName();
+        try {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            devicePhoneNumber = manager.getLine1Number();
+            Log.i("PhoneNo", devicePhoneNumber);
+        } catch (Exception e) {
+            Log.e("Excep", e.toString());
+        }
+        Log.i("carrierName", carrierName);
+        deviceName = android.os.Build.MODEL;
+        Log.i("ModelName", deviceName);
+        osVersion = Build.VERSION.RELEASE;
+        Log.i("osVersion", osVersion);
+
+        Pattern gmailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
+        Account[] accounts = AccountManager.get(this).getAccounts();
+        for (Account account : accounts) {
+            if (gmailPattern.matcher(account.name).matches()) {
+                emailId = account.name;
+                Log.i("GmailId", emailId);
+            }
+        }
     }
 
     @Override
@@ -198,6 +241,7 @@ public class SignInActivity extends AppCompatActivity {
     public void guestLogin(View view) {
         SharedPreferences prefs = getSharedPreferences("login", MODE_PRIVATE);
         String userName = prefs.getString("username", "");
+        Log.i("userName", userName);
         if (userName.equals("Guest")) {
             Intent intent = new Intent(SignInActivity.this, HomePage.class);
             startActivity(intent);
@@ -342,6 +386,8 @@ public class SignInActivity extends AppCompatActivity {
 
             @Override
             public Map<String, String> getParams() throws AuthFailureError {
+                DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                Date date = new Date();
 
                 Map<String, String> params = new HashMap<>();
                 params.put("partnerType", "Retailer");
@@ -351,6 +397,12 @@ public class SignInActivity extends AppCompatActivity {
                 params.put("partnerId", deviceId);
                 params.put("partnerName", userName);
                 params.put("orgId", "maxis");
+                params.put("contactNum", devicePhoneNumber);
+                params.put("email", emailId);
+                params.put("registrationDate", dateFormat.format(date));
+                params.put("accountName", carrierName);
+                params.put("partnerIdentificationInfo", osVersion);
+                params.put("channel", deviceName);
                 return params;
             }
         };
