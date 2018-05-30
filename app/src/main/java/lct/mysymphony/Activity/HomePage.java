@@ -1,19 +1,34 @@
 package lct.mysymphony.Activity;
 
+import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Dialog;
+import android.app.LoaderManager;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +54,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import lct.mysymphony.CustomSwipeAdapter;
 import lct.mysymphony.ModelClass.GamesZone;
@@ -60,7 +78,7 @@ import lct.mysymphony.helper.DownloadImage;
 import lct.mysymphony.helper.Endpoints;
 import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
-public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResponse{
+public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResponse, LoaderManager.LoaderCallbacks<Cursor> {
     Context context;
 
     ArrayList<SliderImage> sliderImages;
@@ -106,6 +124,23 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
 
         FirebaseMessaging.getInstance().subscribeToTopic("All");
 
+        TelephonyManager tMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        String mPhoneNumber = tMgr.getLine1Number();
+        Log.i("PhoneNo", mPhoneNumber);
+
+        TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        String carrierName = manager.getNetworkOperatorName();
+        Log.i("carrierName", carrierName);
+        String str = android.os.Build.MODEL;
+        Log.i("ModelName", str);
+        String osVersion = Build.VERSION.RELEASE;
+        Log.i("osVersion", osVersion);
+
+
         progressDialog = new lct.mysymphony.helper.ProgressDialog(this);
         context = HomePage.this;
         queue = Volley.newRequestQueue(HomePage.this);
@@ -123,16 +158,24 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         bottomNavigationView = findViewById(R.id.btmNavigation);
         bottomNavigationView.getMenu().findItem(R.id.home_bottom_navigation).setChecked(true);
 
-
         String apkUrl = getIntent().getStringExtra("apk");
         if(apkUrl!=null){
-            boolean isNonPlayAppAllowed = false;
+           /*boolean isNonPlayAppAllowed = false;
             try {
-                isNonPlayAppAllowed = Settings.Secure.getInt(getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS) == 1;
+                isNonPlayAppAllowed = Settings.Secure.getInt(getContentResolver(), Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES) == 1;
             } catch (Settings.SettingNotFoundException e) {
                 e.printStackTrace();
             }
             if(isNonPlayAppAllowed==false){
+
+            }else{
+                progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
+                DownloadApk downloadApk = new DownloadApk();
+                downloadApk.downLoadAPK(apkUrl, HomePage.this);
+            }*/
+            SharedPreferences preferences = context.getSharedPreferences("tempData", context.MODE_PRIVATE);
+            int flag = preferences.getInt("unknownSource", 0);
+            if(flag==0) {
                 progressDialog.showProgressDialogAPK();
                 DownloadApk downloadApk = new DownloadApk();
                 downloadApk.downLoadAPK(apkUrl, HomePage.this);
@@ -141,7 +184,6 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 DownloadApk downloadApk = new DownloadApk();
                 downloadApk.downLoadAPK(apkUrl, HomePage.this);
             }
-
         }
 
         progressDialog.showProgressDialog();
@@ -179,6 +221,64 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         });
         //loadDataFromVolley();
         newloadDataFromVolley();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle arguments) {
+        return new CursorLoader(this,
+                Uri.withAppendedPath(
+                        ContactsContract.Profile.CONTENT_URI,
+                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
+                ProfileQuery.PROJECTION,
+                ContactsContract.Contacts.Data.MIMETYPE + " = ?",
+                new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE},
+
+                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        List<String> emails = new ArrayList<String>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            emails.add(cursor.getString(ProfileQuery.ADDRESS));
+            Log.i("EmailId", cursor.getString(ProfileQuery.ADDRESS));
+            cursor.moveToNext();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+    }
+
+    private interface ProfileQuery {
+        String[] PROJECTION = {
+                ContactsContract.CommonDataKinds.Email.ADDRESS,
+                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+        };
+
+        int ADDRESS = 0;
+        int IS_PRIMARY = 1;
+    }
+
+    public String emailId() {
+        AccountManager accountManager = AccountManager.get(HomePage.this);
+        Account account = getAccount(accountManager);
+        if (account == null) {
+            return null;
+        } else {
+            return account.name;
+        }
+    }
+    private static Account getAccount(AccountManager accountManager) {
+        Account[] accounts = accountManager.getAccountsByType("com.google");
+        Account account;
+        if (accounts.length > 0) {
+            account = accounts[0];
+        } else {
+            account = null;
+        }
+        return account;
     }
 
     private void newloadDataFromVolley() {

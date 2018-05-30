@@ -154,7 +154,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 contentDesc = "";
                 contentType = Data.getContentType();
                 thumbNailImgUrl = Data.getThumbNailImgUrl();
-                Log.d("thumbNailImgUrl",thumbNailImgUrl);
+                Log.d("thumbNailImgUrl", thumbNailImgUrl);
                 if (contentType.contains("audio")) {
                     audioUrl = Data.getContentUrl();
                     playAudioBTN.setVisibility(View.VISIBLE);
@@ -237,9 +237,6 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                 contentDesc = "";
                 contentType = Data.getContentType();
                 thumbNailImgUrl = Data.getThumbNailImgUrl();
-               /* if (contentType.contains("audio")||contentType.contains("song")) {
-                    audioUrl = Data.getC;
-                }*/
                 String priceStatus;
                 if (Data.getContentPrice() == 0) {
                     isItFree = true;
@@ -377,19 +374,29 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                             Log.i("Errr",e.toString());
                         }*/
 
-                        int isNonPlayAppAllowed = 0;
+                        /*boolean isNonPlayAppAllowed = false;
                         try {
-                            isNonPlayAppAllowed = Settings.Secure.getInt(getContentResolver(),
-                                    Settings.Secure.INSTALL_NON_MARKET_APPS, 0);
-                            Log.i("Tag", String.valueOf(isNonPlayAppAllowed));
-                        } catch (Exception e) {
-                            Log.e("UnknownSource", e.toString());
+                            isNonPlayAppAllowed = Settings.Secure.getInt(getContentResolver(), Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES) == 1;
+                        } catch (Settings.SettingNotFoundException e) {
+                            e.printStackTrace();
                         }
-                        if(isNonPlayAppAllowed==0){
+                        if(isNonPlayAppAllowed==false){
                             progressDialog.showProgressDialogAPK();
                             DownloadApk downloadApk = new DownloadApk();
                             downloadApk.downLoadAPK("http://jachaibd.com/files/royalty.apk", ImageViewActivity.this, dataBaseData);
                         }else{
+                            progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
+                            DownloadApk downloadApk = new DownloadApk();
+                            downloadApk.downLoadAPK("http://jachaibd.com/files/royalty.apk", ImageViewActivity.this, dataBaseData);
+                        }*/
+
+                        SharedPreferences preferences1 = context.getSharedPreferences("tempData", context.MODE_PRIVATE);
+                        int flag = preferences1.getInt("unknownSource", 0);
+                        if (flag == 0) {
+                            progressDialog.showProgressDialogAPK();
+                            DownloadApk downloadApk = new DownloadApk();
+                            downloadApk.downLoadAPK("http://jachaibd.com/files/royalty.apk", ImageViewActivity.this, dataBaseData);
+                        } else {
                             progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
                             DownloadApk downloadApk = new DownloadApk();
                             downloadApk.downLoadAPK("http://jachaibd.com/files/royalty.apk", ImageViewActivity.this, dataBaseData);
@@ -398,7 +405,8 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
 
                       /*  DownloadApk downloadApk = new DownloadApk();
                         downloadApk.downLoadAPK("http://jachaibd.com/files/royalty.apk", ImageViewActivity.this,dataBaseData);
-                    */}
+                    */
+                    }
                 }
             }
         }

@@ -101,7 +101,6 @@ public class DownloadApk {
         contentSdCardUrl = fname;
         destination += fname;
         final Uri uri = Uri.parse("file://" + destination);
-        /* final Uri uri = Uri.parse("file://" + myDir);*/
 
         File file = new File(destination);
         if (file.exists())

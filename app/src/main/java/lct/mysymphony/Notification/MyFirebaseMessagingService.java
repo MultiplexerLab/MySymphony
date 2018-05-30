@@ -254,7 +254,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         {
             e.printStackTrace();
         }
-
     }
 
     private void initNotificationForImageWithOutButton(boolean isOpenActivity, String title, String description, final String imageLink, String redirect, String userName) {
@@ -299,13 +298,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                 .into(remoteViews, R.id.imageLarge, notificationId, notification);
                     } catch (Exception e) {
                         e.printStackTrace();
-
                     }
                 }
             });
-
             notificationManager.notify(notificationId, notification);
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -341,7 +337,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             downLoadIntent.putExtra("apk", apkUrl);
             return  downLoadIntent;
        }
-
         return new Intent(this, MainActivity.class);
     }
 

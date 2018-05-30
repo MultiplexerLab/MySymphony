@@ -27,23 +27,22 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/notificationTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:id="@+id/notificationTitle"
-
                     android:paddingLeft="10dp"
                     android:singleLine="true"
                     android:text="Dear Majid, Eid Mubarak!"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                 <TextView
+                    android:id="@+id/notificationDes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:id="@+id/notificationDes"
+                    android:singleLine="false"
                     android:paddingLeft="10dp"
-                    android:singleLine="true"
                     android:text="We found a great offer for you. 25% offer in every Deals."
                     android:textAppearance="@style/TextAppearance.AppCompat.Small" />
             </LinearLayout>
@@ -79,8 +78,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#009CFF"
-                android:text=""
                 android:gravity="center"
+                android:text=""
                 android:textColor="#FFFF"
                 android:visibility="visible" />
 

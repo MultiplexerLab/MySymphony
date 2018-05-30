@@ -1,6 +1,7 @@
 package lct.mysymphony.helper;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.google.gson.Gson;
 
 import lct.mysymphony.R;
 
@@ -52,6 +54,10 @@ public class ProgressDialog {
     }
 
     public void showProgressDialogAPK() {
+        SharedPreferences preferences = context.getSharedPreferences("tempData", context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = preferences.edit();
+        prefsEditor.putInt("unknownSource", 1);
+        prefsEditor.commit();
         dialogBuilder = new AlertDialog.Builder(context);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.progress_dialog, null);
@@ -59,8 +65,8 @@ public class ProgressDialog {
         TextView animatedText = dialogView.findViewById(R.id.animatedText);
         loading_msg.setText("App is downloading!");
         animatedText.setText("You need to enable Unknown Source for once when prompted the screen! After enabling for this AppStore you don't need to do it again, so Click on the Settings and Enable it when it requires");
-        YoYo.with(Techniques.Tada)
-                .duration(2000)
+        YoYo.with(Techniques.Pulse)
+                .duration(3000)
                 .repeat(5)
                 .playOn(animatedText);
         dialogBuilder.setView(dialogView);
