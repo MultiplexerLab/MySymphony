@@ -19,30 +19,19 @@
             android:layout_weight="1"
             android:src="@drawable/ic_action_person"
             android:textColor="#FFFFFF"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="invisible" />
 
-        <!--<ImageView
+        <ImageView
+            android:id="@+id/imageLogo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="45dp"
             android:layout_weight="7"
             android:foregroundGravity="center"
             android:src="@drawable/symphoni"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="18sp" />-->
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="App Store"
-            android:layout_gravity="center"
-            android:layout_marginLeft="45dp"
-            android:layout_weight="7"
-            android:foregroundGravity="center"
-            android:src="@drawable/symphoni"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
         <ImageView
             android:layout_width="0dp"

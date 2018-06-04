@@ -17,7 +17,7 @@
            android:textColor="#FFFFFF"
            android:textSize="20sp"
            android:layout_width="match_parent"
-           android:text="পড়াশুনা"
+           android:text="সংক্ষিপ্ত"
            android:layout_height="wrap_content" />
    </LinearLayout>
 </android.support.v7.widget.Toolbar>

@@ -85,6 +85,7 @@ public class DownloadApk {
     }
 
     public void downLoadAPK(final String apkUrl, final Context context) {
+        Log.i("apkUrlDownload", apkUrl);
         this.context = context;
         this.apkUrl = apkUrl;
         //dbHelper=new DataHelper(context);

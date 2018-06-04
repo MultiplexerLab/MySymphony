@@ -8,15 +8,15 @@
     app:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:id="@+id/toolBar">
 
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-       <TextView
-           android:textColor="#FFFFFF"
-           android:textSize="20sp"
-           android:layout_width="match_parent"
-           android:text="সম্পূর্ণ"
-           android:layout_height="wrap_content" />
-   </LinearLayout>
+        <TextView
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:text="অ্যাপসমুহ"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </android.support.v7.widget.Toolbar>

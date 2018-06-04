@@ -10,31 +10,23 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/news_bottom_navigation"
+        android:id="@+id/about_bottom_navigation"
         android:enabled="true"
         android:icon="@drawable/ic_action_khoboradi_bottom_navigation"
-        android:title="খবরাদি"
+        android:title="আমাদের কথা"
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/app_bottom_navigation"
+        android:id="@+id/contact_bottom_navigation"
         android:enabled="true"
         android:icon="@drawable/ic_action_app_bottom_navigation"
-        android:title="এ্যাপ"
+        android:title="যোগাযোগ"
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/download_bottom_navigation"
+        android:id="@+id/terms_bottom_navigation"
         android:enabled="true"
         android:icon="@drawable/ic_action_download_bottom_navigation"
-        android:title="ডাউনলোড"
+        android:title="শর্তাবলি"
         app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/symphony_bottom_navigation"
-        android:enabled="true"
-        android:icon="@drawable/ic_action_symphony_bottom_navigation"
-        android:title="সিম্ফনি"
-        app:showAsAction="ifRoom"/>
-
 </menu>

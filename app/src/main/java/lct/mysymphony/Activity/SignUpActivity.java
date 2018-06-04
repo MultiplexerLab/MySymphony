@@ -44,6 +44,9 @@ import java.util.regex.Pattern;
 import lct.mysymphony.R;
 import lct.mysymphony.helper.Endpoints;
 
+import static android.Manifest.permission.GET_ACCOUNTS;
+import static android.Manifest.permission.READ_PHONE_STATE;
+
 public class SignUpActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private android.support.v7.widget.Toolbar toolbar;
@@ -55,6 +58,8 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
     String[] permissions = new String[]{Manifest.permission.ACCESS_NETWORK_STATE,};
     lct.mysymphony.helper.ProgressDialog progressDialog;
     String emailId, devicePhoneNumber, deviceName, osVersion, carrierName;
+    Pattern pattern;
+    Account[] account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         carrierName = manager.getNetworkOperatorName();
         try {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -101,6 +106,53 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                 emailId = account.name;
                 Log.i("GmailId", emailId);
             }
+        }
+
+        pattern = Patterns.EMAIL_ADDRESS;
+        enableRuntimePermission();
+        getAccountsName();
+    }
+
+    public void getAccountsName() {
+        try {
+            account = AccountManager.get(SignUpActivity.this).getAccounts();
+        } catch (SecurityException e) {
+            Log.e("ExecptionAcc", e.toString());
+
+        }
+
+        for (Account TempAccount : account) {
+            if (pattern.matcher(TempAccount.name).matches()) {
+                Log.i("Emails", TempAccount.name);
+            }
+        }
+    }
+
+    public void enableRuntimePermission() {
+
+        ActivityCompat.requestPermissions(SignUpActivity.this, new String[]
+                {
+                        GET_ACCOUNTS,
+                        READ_PHONE_STATE
+                }, 1);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0) {
+                    boolean GetAccountPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean ReadPhoneStatePermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+
+                    if (GetAccountPermission && ReadPhoneStatePermission) {
+                        Toast.makeText(SignUpActivity.this, "Permission Granted", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(SignUpActivity.this, "Permission Denied", Toast.LENGTH_LONG).show();
+                    }
+                }
+                break;
         }
     }
 

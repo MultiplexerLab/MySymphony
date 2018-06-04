@@ -32,8 +32,8 @@ public class PlayAudioInBackgroundService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent!=null)
         {
-            Log.d("serviceEntered","serviceEntered");
             String audioUrl=intent.getStringExtra("audioUrl");
+            Log.i("audioUrlnew",audioUrl);
             String message=intent.getStringExtra("message");
             context= (Context) intent.getSerializableExtra("context");
             if (context==null)

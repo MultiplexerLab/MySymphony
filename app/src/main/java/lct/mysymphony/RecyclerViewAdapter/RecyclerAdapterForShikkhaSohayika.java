@@ -72,7 +72,11 @@ public class RecyclerAdapterForShikkhaSohayika extends RecyclerView.Adapter<Recy
 
     @Override
     public int getItemCount() {
-        return shikkhaSohaYikaArrayList.size();
+        if(shikkhaSohaYikaArrayList.size()>2){
+            return 2;
+        }else{
+            return shikkhaSohaYikaArrayList.size();
+        }
     }
 
     public  static  class  RecyclerViewHolder extends RecyclerView.ViewHolder

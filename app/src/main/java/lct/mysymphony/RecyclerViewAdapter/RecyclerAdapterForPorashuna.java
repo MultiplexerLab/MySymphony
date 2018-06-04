@@ -43,7 +43,7 @@ public class RecyclerAdapterForPorashuna extends RecyclerView.Adapter<RecyclerAd
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
         holder.porashunaNewsTV.setText(porashunaArrayList.get(position).getContentTitle());
         Glide.with(activity)
-                .load(porashunaArrayList.get(position).getImageUrl())
+                .load(porashunaArrayList.get(position).getThumbnailImgUrl())
                 .into(holder.imageView);
     }
 

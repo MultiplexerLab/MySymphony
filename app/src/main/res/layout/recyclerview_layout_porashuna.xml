@@ -23,7 +23,6 @@
                 android:id="@+id/imgPorashuna"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-
                 android:scaleType="centerCrop"
                 android:src="@drawable/image_1" />
 
@@ -39,6 +38,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="3dp"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="wrap_content">
 
                 <LinearLayout

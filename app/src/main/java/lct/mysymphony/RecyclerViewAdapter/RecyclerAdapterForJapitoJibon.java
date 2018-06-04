@@ -23,6 +23,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import lct.mysymphony.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
+import lct.mysymphony.Activity.ContentDescriptionActivity.PorashunaDescriptionActivity;
+import lct.mysymphony.ModelClass.Porashuna;
 import lct.mysymphony.R;
 import lct.mysymphony.ModelClass.JapitoJibon;
 
@@ -32,8 +34,8 @@ import lct.mysymphony.ModelClass.JapitoJibon;
 
 public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<RecyclerAdapterForJapitoJibon.RecyclerViewHolder> {
     Activity activity;
-    private ArrayList<JapitoJibon> japitoJibonArrayList;
-    public RecyclerAdapterForJapitoJibon(Activity activity, ArrayList<JapitoJibon> japitoJibonArrayLis) {
+    private ArrayList<Porashuna> japitoJibonArrayList;
+    public RecyclerAdapterForJapitoJibon(Activity activity, ArrayList<Porashuna> japitoJibonArrayLis) {
 
         this.activity = activity;
         this.japitoJibonArrayList = japitoJibonArrayLis;
@@ -49,7 +51,7 @@ public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<Recycler
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
         holder.japitoJebonNewsTV.setText(japitoJibonArrayList.get(position).getContentTitle());
         Glide.with(activity)
-                .load(japitoJibonArrayList.get(position).getImageUrl())
+                .load(japitoJibonArrayList.get(position).getThumbnailImgUrl())
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -71,8 +73,8 @@ public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<Recycler
     }
     @Override
     public int getItemCount() {
-        if(japitoJibonArrayList.size()>3){
-            return 3;
+        if(japitoJibonArrayList.size()>2){
+            return 2;
         }else{
             return japitoJibonArrayList.size();
         }
@@ -83,10 +85,10 @@ public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<Recycler
         TextView japitoJebonNewsTV;
         ProgressBar progressBar;
         Activity activity;
-        ArrayList<JapitoJibon> japitoJibonArrayList;
+        ArrayList<Porashuna> japitoJibonArrayList;
         CardView cardView;
 
-        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<JapitoJibon> japitoJibonArrayLis) {
+        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<Porashuna> japitoJibonArrayLis) {
             super(view);
             imageView = view.findViewById(R.id.imgJapitoJibon);
             japitoJebonNewsTV = view.findViewById(R.id.japitoJibonNewsTV);
@@ -100,7 +102,7 @@ public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<Recycler
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent myIntent = new Intent(activity, JapitoJibonDescriptionActivity.class);
+                    Intent myIntent = new Intent(activity, PorashunaDescriptionActivity.class);
                     myIntent.putExtra("Data", (Serializable) japitoJibonArrayLis.get(getAdapterPosition()));
                     activity.startActivity(myIntent);
                 }

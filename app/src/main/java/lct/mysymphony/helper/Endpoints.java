@@ -3,12 +3,14 @@ package lct.mysymphony.helper;
 public class Endpoints {
     public static final String UPDATED_HOME_GET_URL = "http://jachaibd.com/api/sample_home_updated.json";
     public static final String NEW_UPDATED_HOME_GET_URL = "http://jachaibd.com/api/new_home_discount.json";
-    public static final String NEW_HOME_GET_URL = "http://bot.sharedtoday.com:9500/ws/mysymphony/getAllHomeContents";
+    public static final String NEW_HOME_GET_URL = "http://bot.sharedtoday.com:9500/ws/mysymphony/getCategorisedContentFromTable?cat=ALL";
+    public static final String ICON_GET_URL = "http://bot.sharedtoday.com:9500/ws/mysymphony/getAllCategory";
     public static final String JAPITO_JIBON_GET_URL = "http://bot.sharedtoday.com:9500/ws/mysymphony/getCategorizedContents?cat=daily_life";
     public static final String HOT_NEWS_GET_URL="http://jachaibd.com/api/hot_news_sample.json";
     public static final String JIBON_JAPON_GET_URL="http://jachaibd.com/api/daily_life_sample.json";
-    public static final String AUTTOHASI_GET_URL="http://jachaibd.com/api/ottohashi_sample.json";
-    public static final String PORASHUNA_GET_URL="http://jachaibd.com/api/study_sample.json";
+    public static final String CATEGORY_BASE_URL="http://bot.sharedtoday.com:9500/ws/mysymphony/getCategorisedContentFromTable?cat=";
+    public static final String AUTTOHASI_GET_URL="http://bot.sharedtoday.com:9500/ws/mysymphony/getCategorisedContentFromTable?cat=autto_hashi";
+    public static final String PORASHUNA_GET_URL="http://bot.sharedtoday.com:9500/ws/mysymphony/getCategorisedContentFromTable?cat=education";
     public static final String PACHMISHALI_GET_URL="http://jachaibd.com/api/pachmisheli_sample.json";
     public static final String BIGGAN_O_PROJUKTI_GET_URL="http://jachaibd.com/api/science_sample.json";
     public static final String KHELADHULA_CRICKET_GET_URL="http://jachaibd.com/api/games_sample.json";
@@ -21,4 +23,5 @@ public class Endpoints {
     public static final String UPDATE_DEFAULT_PASSWORD_POST_URL="http://bot.sharedtoday.com:9500/ws/changePassword?pass=01717&newpass=";
     public static final String GET_USER_INFO_URL="http://bot.sharedtoday.com:9500/ws/commonGetFromTable?tbl=Partner&key=partnerId&val=";
     public static final String GET_REFEREL_CODE_URL="http://bot.sharedtoday.com:9500/ws/mysymphony/getPaymentRefCode";
+    public static final String APPLOGS_POST_URL="http://bot.sharedtoday.com:9500/ws/mysymphony/insertAppLogs";
 }

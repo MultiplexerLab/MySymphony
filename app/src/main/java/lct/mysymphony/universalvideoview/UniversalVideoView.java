@@ -1,20 +1,3 @@
-/*
-* Copyright (C) 2015 Author <dictfb#gmail.com>
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
-
-
 package lct.mysymphony.universalvideoview;
 
 import android.annotation.TargetApi;
@@ -430,8 +413,6 @@ public class UniversalVideoView extends SurfaceView
                         boolean a = mMediaPlayer.isPlaying();
                         int b = mCurrentState;
                         mMediaController.showComplete();
-                        //FIXME 播放完成后,视频中央会显示一个播放按钮,点击播放按钮会调用start重播,
-                        // 但start后竟然又回调到这里,导致第一次点击按钮不会播放视频,需要点击第二次.
                         Log.d(TAG, String.format("a=%s,b=%d", a, b));
                     }
                     if (mOnCompletionListener != null) {
@@ -821,20 +802,19 @@ public class UniversalVideoView extends SurfaceView
 
     @Override
     public void setFullscreen(boolean fullscreen, int screenOrientation) {
-        // Activity需要设置为: android:configChanges="keyboardHidden|orientation|screenSize"
         Activity activity = (Activity) mContext;
 
         if (fullscreen) {
             if (mVideoViewLayoutWidth == 0 && mVideoViewLayoutHeight == 0) {
                 ViewGroup.LayoutParams params = getLayoutParams();
-                mVideoViewLayoutWidth = params.width;//保存全屏之前的参数
+                mVideoViewLayoutWidth = params.width;
                 mVideoViewLayoutHeight = params.height;
             }
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             activity.setRequestedOrientation(screenOrientation);
         } else {
             ViewGroup.LayoutParams params = getLayoutParams();
-            params.width = mVideoViewLayoutWidth;//使用全屏之前的参数
+            params.width = mVideoViewLayoutWidth;
             params.height = mVideoViewLayoutHeight;
             setLayoutParams(params);
 

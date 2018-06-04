@@ -82,11 +82,11 @@ public class UniversalMediaController extends FrameLayout {
 
     Formatter mFormatter;
 
-    private ImageButton mTurnButton;// 开启暂停按钮
+    private ImageButton mTurnButton;
 
     private ImageButton mScaleButton;
 
-    private View mBackButton;// 返回按钮
+    private View mBackButton;
 
     private ViewGroup loadingLayout;
 
@@ -146,11 +146,11 @@ public class UniversalMediaController extends FrameLayout {
             }
         }
 
-        if (mCenterPlayButton != null) {//重新开始播放
+        if (mCenterPlayButton != null) {
             mCenterPlayButton.setOnClickListener(mCenterPlayListener);
         }
 
-        if (mBackButton != null) {//返回按钮仅在全屏状态下可见
+        if (mBackButton != null) {
             mBackButton.setOnClickListener(mBackListener);
         }
 
@@ -209,7 +209,7 @@ public class UniversalMediaController extends FrameLayout {
      * @param timeout The timeout in milliseconds. Use 0 to show
      *                the controller until hide() is called.
      */
-    public void show(int timeout) {//只负责上下两条bar的显示,不负责中央loading,error,playBtn的显示.
+    public void show(int timeout) {
         if (!mShowing) {
             setProgress();
             if (mTurnButton != null) {
@@ -414,7 +414,6 @@ public class UniversalMediaController extends FrameLayout {
     }
 
     boolean handled = false;
-    //如果正在显示,则使之消失
     private OnTouchListener mTouchListener = new OnTouchListener() {
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -500,7 +499,6 @@ public class UniversalMediaController extends FrameLayout {
         }
     };
 
-    //仅全屏时才有返回按钮
     private OnClickListener mBackListener = new OnClickListener() {
         public void onClick(View v) {
             if (mIsFullScreen) {
@@ -625,7 +623,7 @@ public class UniversalMediaController extends FrameLayout {
         if (mScalable) {
             mScaleButton.setEnabled(enabled);
         }
-        mBackButton.setEnabled(true);// 全屏状态下右上角的返回键总是可用.
+        mBackButton.setEnabled(true);
     }
 
     public void showLoading() {
@@ -655,11 +653,6 @@ public class UniversalMediaController extends FrameLayout {
     public void setTitle(String titile) {
         mTitle.setText(titile);
     }
-
-//    public void setFullscreenEnabled(boolean enabled) {
-//        mFullscreenEnabled = enabled;
-//        mScaleButton.setVisibility(mIsFullScreen ? VISIBLE : GONE);
-//    }
 
 
     public void setOnErrorView(int resId) {
@@ -709,7 +702,7 @@ public class UniversalMediaController extends FrameLayout {
 
         boolean canSeekForward();
 
-        void closePlayer();//关闭播放视频,使播放器处于idle状态
+        void closePlayer();
 
         void setFullscreen(boolean fullscreen);
 

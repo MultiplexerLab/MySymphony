@@ -33,6 +33,7 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
     ProgressDialog progressDialog;
     public static MediaPlayer mp;
     private boolean isPause = false;
+    String songUrl;
 
     @Override
     public void onCreate() {
@@ -47,6 +48,7 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             initUI();
+            songUrl=(String) intent.getExtras().get("songUrl");
             super.onStart(intent, startId);
         }
 
@@ -159,7 +161,7 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
         try {
             mp.reset();
             ///Uri myUri = Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.bangla);
-            mp.setDataSource(this, Uri.parse("http://jachaibd.com/files/eminem.mp3"));
+            mp.setDataSource(this, Uri.parse(songUrl));
             mp.prepareAsync();
             mp.setOnPreparedListener(new OnPreparedListener() {
                 public void onPrepared(MediaPlayer mp) {

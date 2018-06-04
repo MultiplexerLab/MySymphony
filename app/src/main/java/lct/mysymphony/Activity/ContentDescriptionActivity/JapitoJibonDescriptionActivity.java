@@ -37,6 +37,7 @@ import lct.mysymphony.Activity.ImageViewActivity;
 import lct.mysymphony.Activity.ProfileActivity;
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.ModelClass.JapitoJibon;
+import lct.mysymphony.ModelClass.Porashuna;
 import lct.mysymphony.R;
 import lct.mysymphony.helper.CheckPermission;
 import lct.mysymphony.helper.DataHelper;
@@ -57,7 +58,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
     LinearLayout buyOrDownloadLL, bisheshOfferLL;
     Button buyOrDownloadBTN;
     String imageUrl;
-    JapitoJibon object;
+    Porashuna object;
     ProgressBar imageProgressBar;
     lct.mysymphony.helper.ProgressDialog progressDialog;
     private android.support.v7.widget.Toolbar toolbar;
@@ -105,36 +106,35 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
     }
 
     private void setBuyOrDownLoadButtonVisibility() {
-        JapitoJibon object = (JapitoJibon) getIntent().getSerializableExtra("Data");
-        imageUrl = object.getImageUrl();
+        Porashuna object = (Porashuna) getIntent().getSerializableExtra("Data");
+        imageUrl = object.getThumbnailImgUrl();
         String contentTitle = object.getContentTitle();
         String contentCat = object.getContentCat();
         String contentDesc = "";
         String contentType = object.getContentType();
-        String thumbNail_image = object.getThumbNail_image();
-        Log.d("newPrice", Integer.toString(object.getContentPrice()));
-        Log.d("japitojibonid", Integer.toString(object.getContentId()));
-        Log.d("thumbNail_image", object.getThumbNail_image());
-        newPrice.setText(Integer.toString(object.getContentPrice()));
-        Log.d("japitojibonPrice", Integer.toString(object.getContentPrice()));
+        String thumbNail_image = object.getThumbnailImgUrl();
+
+       /* newPrice.setText(Integer.toString(object.getContentPrice()));
+        Log.d("japitojibonPrice", Integer.toString(object.getContentPrice()));*/
         String priceStatus;
-        if (object.getContentPrice() == 0) {
+        priceStatus = "free";
+        /*if (object.getContentPrice() == 0) {
             priceStatus = "free";
-        } else priceStatus = "paid";
+        } else priceStatus = "paid";*/
         dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNail_image, priceStatus, object.getContentId());
         Boolean check = dataHelper.checkDownLoadedOrNot(object.getContentCat(), object.getContentId());
         Log.d("checkJapitoJibon", check.toString());
         if (dataHelper.checkDownLoadedOrNot(object.getContentCat(), object.getContentId())) {
             Log.d("enter", "japitojibon");
             buyOrDownloadLL.setVisibility(View.GONE);
-        } else if (object.getContentPrice() == 0) {
+        } /*else if (object.getContentPrice() == 0) {
             Log.d("enter", "notjapitojibon");
             bisheshOfferLL.setVisibility(View.GONE);
             buyOrDownloadBTN.setText("ডাউনলোড করুন");
         } else if (object.getContentPrice() > 0) {
             Log.d("enter", "not");
             buyOrDownloadLL.setVisibility(View.VISIBLE);
-        }
+        }*/
     }
 
     @Override
@@ -144,14 +144,19 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
             videoView.setFullscreen(false);
         } else {
             super.onBackPressed();
-            Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-            this.startActivity(myIntent);
+            /*Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
+            this.startActivity(myIntent);*/
         }
 
     }
 
     public void setDescripTionData() {
-        object = (JapitoJibon) getIntent().getSerializableExtra("Data");
+        /*String tag = getIntent().getStringExtra("cameFromWhichActivity");
+        if (tag.equals("music_video")) {
+
+
+        }*/
+        object = (Porashuna) getIntent().getSerializableExtra("Data");
         if (object.getContentType().equals("video")) {
             videoTitle=object.getContentTitle();
             setVideoAreaSize();
@@ -161,7 +166,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
             videoLayout.setVisibility(View.GONE);
             imageLayout.setVisibility(View.VISIBLE);
             newsImageView.setVisibility(View.VISIBLE);
-            Glide.with(JapitoJibonDescriptionActivity.this).load(object.getImageUrl()).into(newsImageView);
+            Glide.with(JapitoJibonDescriptionActivity.this).load(object.getThumbnailImgUrl()).into(newsImageView);
         }
         newsTitle.setText(object.getContentTitle());
         newsDescription.setText(object.getContentDescription());
@@ -252,7 +257,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
                 videoLayoutParams.height = cachedHeight;
                 videoLayout.setLayoutParams(videoLayoutParams);
                 ///videoView.setVideoPath("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
-                videoView.setVideoPath("https://ia800201.us.archive.org/22/items/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4");
+                videoView.setVideoPath(object.getContentUrl());
                 videoView.requestFocus();
             }
         });

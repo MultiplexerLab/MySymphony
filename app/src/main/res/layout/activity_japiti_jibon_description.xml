@@ -14,7 +14,7 @@
         android:fitsSystemWindows="true">
         <include
             android:id="@+id/toolbarLayoutInnJapitoJibonDescriptionActivity"
-            layout="@layout/toolbar_layout_in_news_description" />
+            layout="@layout/toolbar_layout_common" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -169,6 +169,7 @@
                         android:background="@drawable/btn_style_red"
                         android:onClick="mullochar"
                         android:text="কিনুন/ডাউনলোড করুন"
+                        android:visibility="visible"
                         android:textColor="@color/White" />
                 </LinearLayout>
             </LinearLayout>

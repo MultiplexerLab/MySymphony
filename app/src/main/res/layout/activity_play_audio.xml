@@ -1,94 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-
     android:layout_margin="7dp">
 
     <ImageView
         android:id="@+id/songimageView"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:adjustViewBounds="true"/>
+        android:adjustViewBounds="true"
+        android:src="@drawable/musicvideo" />
 
     <TextView
+        android:id="@+id/textViewSongTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0.00/0.00"
-        android:id="@+id/textViewSongTime"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/songimageView"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:layout_below="@+id/songimageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:text="0.00/0.00" />
 
     <SeekBar
-        android:theme="@style/TabLayoutTheme"
         android:id="@+id/seekBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/textViewSongTime"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:theme="@style/TabLayoutTheme" />
+
     <LinearLayout
-        android:gravity="center"
+        android:id="@+id/musicPlayerControle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBar"
         android:layout_margin="5dp"
         android:layout_marginTop="20dp"
-        android:id="@+id/musicPlayerControle"
-        android:layout_below="@+id/seekBar"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <ImageButton
-            android:layout_gravity="start"
             android:id="@+id/btnRewind"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/rewind_icon"
-            />
+            android:layout_gravity="start"
+            android:background="@drawable/rewind_icon" />
 
         <ImageButton
-            android:layout_marginLeft="50dp"
-            android:layout_gravity="center"
             android:id="@+id/btnPlay"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/player"
-            />
+            android:layout_gravity="center"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/player" />
+
         <ImageButton
             android:id="@+id/btnFastForward"
-            android:layout_marginLeft="50dp"
-            android:layout_gravity="right"
-            android:background="@drawable/fast_forward_icon"
             android:layout_width="40dp"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/fast_forward_icon" />
 
     </LinearLayout>
 
-<!--    <ImageButton
-        android:id="@+id/btnStop"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignTop="@+id/btnPlay"
-        android:layout_marginLeft="21dp"
-        android:layout_marginStart="21dp"
-        android:layout_toEndOf="@+id/btnPlay"
-        android:layout_toRightOf="@+id/btnPlay"
-        android:background="@drawable/stop" />-->
+    <!--    <ImageButton
+            android:id="@+id/btnStop"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignTop="@+id/btnPlay"
+            android:layout_marginLeft="21dp"
+            android:layout_marginStart="21dp"
+            android:layout_toEndOf="@+id/btnPlay"
+            android:layout_toRightOf="@+id/btnPlay"
+            android:background="@drawable/stop" />-->
 
     <Button
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/musicPlayerControle"
         android:id="@+id/buyOrDownloadBTN"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_below="@+id/musicPlayerControle"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/btn_style_red"
         android:onClick="downLoadAudio"
         android:text="ডাউনলোড করুন"

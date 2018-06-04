@@ -28,7 +28,7 @@ public class SymphonyCareActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_symphony_care);
         bottomNavigationView = findViewById(R.id.btmNavigationInSymphonyCareActivity);
-        bottomNavigationView.getMenu().findItem(R.id.symphony_bottom_navigation).setChecked(true);
+        //bottomNavigationView.getMenu().findItem(R.id.symphony_bottom_navigation).setChecked(true);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

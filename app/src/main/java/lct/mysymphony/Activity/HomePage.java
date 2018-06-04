@@ -13,12 +13,16 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
@@ -30,6 +34,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -41,27 +46,39 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import lct.mysymphony.CustomSwipeAdapter;
+import lct.mysymphony.ModelClass.AppData;
 import lct.mysymphony.ModelClass.GamesZone;
+import lct.mysymphony.ModelClass.Icon;
 import lct.mysymphony.ModelClass.JapitoJibon;
 import lct.mysymphony.ModelClass.MulloChar;
+import lct.mysymphony.ModelClass.Porashuna;
 import lct.mysymphony.ModelClass.SeraChobi;
 import lct.mysymphony.ModelClass.ShikkhaSohaYika;
 import lct.mysymphony.ModelClass.ShocolChobi;
@@ -73,6 +90,7 @@ import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForMulloChar;
 import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForSeraChobi;
 import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForShikkhaSohayika;
 import lct.mysymphony.RecyclerViewAdapter.RecyclerAdapterForShocolChobi;
+import lct.mysymphony.helper.AppLogger;
 import lct.mysymphony.helper.DownloadApk;
 import lct.mysymphony.helper.DownloadImage;
 import lct.mysymphony.helper.Endpoints;
@@ -80,11 +98,14 @@ import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
 public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResponse {
     Context context;
+    Date currenTime;
+    DateFormat dateFormat;
 
     ArrayList<SliderImage> sliderImages;
     ArrayList<SeraChobi> seraChobiArrayList;
-    ArrayList<JapitoJibon> japitoJibonArrayList;
+    ArrayList<Porashuna> japitoJibonArrayList, musicVideoList, hotNewsArrayList, sportsArralyList, auttoHashiArrList, mixedArrList, scienceArrList, kidsArrList;
     ArrayList<MulloChar> mulloCharArrayList;
+    ArrayList<AppData> appList;
     ArrayList<ShocolChobi> shocolChobiArrayList;
     ArrayList<GamesZone> gamesZoneArrayList;
     ArrayList<ShikkhaSohaYika> shikkhaSohaYikaArrayList;
@@ -113,9 +134,12 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     private RecyclerView recyclerViewForShocolChobi;
     public RecyclerAdapterForShocolChobi adapterForShocolChobi;
 
+    ArrayList<Icon> iconImageUrls;
+
     RequestQueue queue;
     ImageView profileIcon, notificationIcon;
     lct.mysymphony.helper.ProgressDialog progressDialog;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +154,8 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         sliderImages = new ArrayList<>();
         seraChobiArrayList = new ArrayList<>();
         toolbar = findViewById(R.id.toolbarlayoutinhome_page);
+        ImageView imageLogo = toolbar.findViewById(R.id.imageLogo);
+        Glide.with(this).load("http://bot.sharedtoday.com:9500/images/logo/Symphony%20App%20Store%20Logo%20-%20v4.png").into(imageLogo);
         setSupportActionBar(toolbar);
         profileIcon = findViewById(R.id.profileIcon);
         notificationIcon = findViewById(R.id.notificationInHomePageToolbar);
@@ -138,8 +164,21 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         gamesZoneArrayList = new ArrayList<>();
         shocolChobiArrayList = new ArrayList<>();
         shikkhaSohaYikaArrayList = new ArrayList<>();
+        hotNewsArrayList = new ArrayList<>();
+        sportsArralyList = new ArrayList<>();
+        auttoHashiArrList = new ArrayList<>();
+        mixedArrList = new ArrayList<>();
+        scienceArrList = new ArrayList<>();
+        kidsArrList = new ArrayList<>();
+        appList = new ArrayList<>();
+        musicVideoList = new ArrayList<>();
+
         bottomNavigationView = findViewById(R.id.btmNavigation);
         bottomNavigationView.getMenu().findItem(R.id.home_bottom_navigation).setChecked(true);
+        bottomNavigationView.getMenu().getItem(0).setIcon(R.drawable.bottom1);
+        bottomNavigationView.getMenu().getItem(1).setIcon(R.drawable.bottom2);
+        bottomNavigationView.getMenu().getItem(2).setIcon(R.drawable.bottom3);
+        bottomNavigationView.getMenu().getItem(3).setIcon(R.drawable.bottom4);
 
         String apkUrl = getIntent().getStringExtra("apk");
         if (apkUrl != null) {
@@ -161,14 +200,14 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                if (id == R.id.symphony_bottom_navigation) {
-                    Intent symphony = new Intent(HomePage.this, SymphonyCareActivity.class);
+                if (id == R.id.about_bottom_navigation) {
+                    Intent symphony = new Intent(HomePage.this, HomePage.class);
                     startActivity(symphony);
-                } else if (id == R.id.news_bottom_navigation) {
-                    Intent news = new Intent(HomePage.this, GoromKhoborActivity.class);
+                } else if (id == R.id.contact_bottom_navigation) {
+                    Intent news = new Intent(HomePage.this, HomePage.class);
                     startActivity(news);
-                } else if (id == R.id.download_bottom_navigation) {
-                    Intent apps = new Intent(HomePage.this, ProfileActivity.class);
+                } else if (id == R.id.terms_bottom_navigation) {
+                    Intent apps = new Intent(HomePage.this, HomePage.class);
                     startActivity(apps);
                 }
                 return true;
@@ -190,73 +229,91 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             }
         });
         //loadDataFromVolley();
+        loadIconsFromServer();
         newloadDataFromVolley();
     }
 
-    /*@Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle arguments) {
-        return new CursorLoader(this,
-                Uri.withAppendedPath(
-                        ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-                ProfileQuery.PROJECTION,
-                ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-                new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE},
+    private void setIcons() {
+        Integer[] imageViews = {R.id.mainButton1, R.id.mainButton2, R.id.mainButton3, R.id.imageView1, R.id.imageView2, R.id.imageView3, R.id.imageView4, R.id.imageView5, R.id.imageView6, R.id.imageView7, R.id.imageView8};
+        Integer[] textViews = {R.id.textViewMain1, R.id.textViewMain2, R.id.textViewMain3, R.id.textView1, R.id.textView2, R.id.textView3, R.id.textView4, R.id.textView5, R.id.textView6, R.id.textView7, R.id.textView8};
 
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
+        for (int i = 0; i < iconImageUrls.size(); i++) {
+            Glide.with(HomePage.this).load(iconImageUrls.get(i).getImage()).into((ImageView) findViewById(imageViews[i]));
+            TextView temp = findViewById(textViews[i]);
+            temp.setText(iconImageUrls.get(i).getCategoryTitle());
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<String>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            Log.i("EmailId", cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
+            /*if (iconImageUrls.get(i).getType().equals("topic")) {
+                Log.i("LinkImages", iconImageUrls.get(i).getImage());
+
+            }*/
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+    protected void onResume(){
+        super.onResume();
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        currenTime = new Date();
+        AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "N", "HomePage",
+                "IN", "Entrance");
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "HomePage",
+                "OUT", "Leave");
     }
 
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
+  /*  public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        getMenuInflater().inflate(R.menu.bottom_navigation_menu, menu);
+        return true;
+    }
 
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        final MenuItem settingsItem = menu.findItem(R.id.home_bottom_navigation);
+        //Glide.with(HomePage.this).load(iconImageUrls.get(11).getImage()).into((settingsItem.getIcon())));
+
+        return super.onPrepareOptionsMenu(menu);
     }*/
 
-    public String emailId() {
-        AccountManager accountManager = AccountManager.get(HomePage.this);
-        Account account = getAccount(accountManager);
-        if (account == null) {
-            return null;
-        } else {
-            return account.name;
-        }
-    }
 
-    private static Account getAccount(AccountManager accountManager) {
-        Account[] accounts = accountManager.getAccountsByType("com.google");
-        Account account;
-        if (accounts.length > 0) {
-            account = accounts[0];
-        } else {
-            account = null;
-        }
-        return account;
+    private void loadIconsFromServer() {
+        iconImageUrls = new ArrayList<Icon>();
+        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.ICON_GET_URL, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<Icon>>() {
+                    }.getType();
+                    iconImageUrls = gson.fromJson(response.toString(), type);
+                    Log.i("IconImages", iconImageUrls.toString());
+                    setIcons();
+                    progressDialog.hideProgressDialog();
+                } catch (Exception e) {
+                    Log.d("exceptionLoadData4rmvly", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley", error.toString());
+                progressDialog.hideProgressDialog();
+                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+            }
+        });
+        queue.add(jsonObjectRequest);
     }
 
     private void newloadDataFromVolley() {
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, Endpoints.NEW_HOME_GET_URL, new Response.Listener<String>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.NEW_HOME_GET_URL, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(String response) {
-                JSONObject jsonObject = null;
+            public void onResponse(JSONArray response) {
+                /*JSONObject jsonObject = null;
+                JSONArray jsonArrayNew = null;
                 try {
                     String jsonFormattedString = response.replaceAll("\\\\", "");
                     jsonFormattedString = jsonFormattedString.substring(1, jsonFormattedString.length() - 1);
@@ -264,37 +321,23 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     jsonFormattedString = jsonFormattedString.replaceAll("\\]\"", "]");
                     Log.d("jsonFormattedString", jsonFormattedString);
                     jsonObject = new JSONObject(jsonFormattedString);
+                    jsonArrayNew = jsonObject.getJSONArray("Contents");
                     Log.d("obj", jsonObject.toString());
                 } catch (JSONException e) {
-                    Log.d("JSON Error", e.getMessage());
-                }
+                    Log.d("JSONExec", e.getMessage());
+                }*/
 
                 try {
-                    JSONArray jsonSliderContentArr = jsonObject.getJSONArray("slider_contents");
-                    Log.d("jsonSliderContentArr", jsonSliderContentArr.toString());
-                    setSliderContent(jsonSliderContentArr);
-
-                    JSONArray top_contentsArr = jsonObject.getJSONArray("top_contents");
-                    setTopContent(top_contentsArr);
-
-                    JSONArray japito_jibon_content_Arr = jsonObject.getJSONArray("daily_life_contents");
-                    setJapitiJibonContent(japito_jibon_content_Arr);
-
-                    JSONArray mullo_char_content_Arr = jsonObject.getJSONArray("discount_contents");
-                    setMulloCharContent(mullo_char_content_Arr);
-
-                    JSONArray shikkha_sohayika__content_Arr = jsonObject.getJSONArray("education_contents");
-                    setShikkhaSohayikaContent(shikkha_sohayika__content_Arr);
-
-                    JSONArray games_zone__content_Arr = jsonObject.getJSONArray("game_contents");
-                    setGamesZoneContent(games_zone__content_Arr);
-
-                    JSONArray shocol_chobi__content_Arr = jsonObject.getJSONArray("moving_contents");
-                    setShocolChobiContent(shocol_chobi__content_Arr);
-
+                    setSliderContent(response);
+                    setTopContent(response);
+                    setDailyLife(response);
+                    setMulloCharContent(response);
+                    setShikkhaSohayikaContent(response);
+                    setGamesZoneContent(response);
+                    setShocolChobiContent(response);
                     progressDialog.hideProgressDialog();
 
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     Log.d("exceptionLoadData4rmvly", e.toString());
                     progressDialog.hideProgressDialog();
@@ -324,54 +367,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
 
             }
         });*/
-        queue.add(jsonObjectRequest);
-    }
-
-    private void loadDataFromVolley() {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Endpoints.NEW_UPDATED_HOME_GET_URL, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-                try {
-                    JSONArray jsonSliderContentArr = response.getJSONArray("slider_contents");
-                    setSliderContent(jsonSliderContentArr);
-
-                    JSONArray top_contentsArr = response.getJSONArray("top_contents");
-                    setTopContent(top_contentsArr);
-
-                    JSONArray japito_jibon_content_Arr = response.getJSONArray("daily_life_contents");
-                    setJapitiJibonContent(japito_jibon_content_Arr);
-
-                    JSONArray mullo_char_content_Arr = response.getJSONArray("discount_contents");
-                    setMulloCharContent(mullo_char_content_Arr);
-
-                    JSONArray shikkha_sohayika__content_Arr = response.getJSONArray("education_contents");
-                    setShikkhaSohayikaContent(shikkha_sohayika__content_Arr);
-
-                    JSONArray games_zone__content_Arr = response.getJSONArray("game_contents");
-                    setGamesZoneContent(games_zone__content_Arr);
-
-                    JSONArray shocol_chobi__content_Arr = response.getJSONArray("moving_contents");
-                    setShocolChobiContent(shocol_chobi__content_Arr);
-                    progressDialog.hideProgressDialog();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.d("exceptionLoadData4rmvly", e.toString());
-                    progressDialog.hideProgressDialog();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Volley", error.toString());
-                progressDialog.hideProgressDialog();
-                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        queue.add(jsonObjectRequest);
+        queue.add(jsonArrayRequest);
     }
 
     private void setShocolChobiContent(JSONArray shocol_chobi__content_arr) {
@@ -389,11 +385,12 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     if (shocol_chobi__content_arr.getJSONObject(i).has("contentPrice")) {
                         contentPrice = shocol_chobi__content_arr.getJSONObject(i).getInt("contentPrice");
                     }
-                    shocolChobiArrayList.add(new ShocolChobi(contentType, contentUrl, contentTitle, contentCat, thumbnailImgUrl, contentId, contentPrice));
-
+                    if (contentCat.equals("moving_image")) {
+                        shocolChobiArrayList.add(new ShocolChobi(contentType, contentUrl, contentTitle, contentCat, thumbnailImgUrl, contentId, contentPrice));
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.d("shocolChobi", e.toString());
+                    Log.e("shocolChobi", e.toString());
                 }
             }
             initializeShocolChobiRecyclerview();
@@ -422,10 +419,11 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
 
                     int contentId = games_zone__content_arr.getJSONObject(i).getInt("id");
                     String contentCat = games_zone__content_arr.getJSONObject(i).getString("contentCat");
-                    gamesZoneArrayList.add(new GamesZone(contentType, contentUrl, contentTitle, thumbnailImgUrl, 0, newPrice, contentCat, contentId));
-
+                    if (contentCat.equals("game_zone")) {
+                        gamesZoneArrayList.add(new GamesZone(contentType, contentUrl, contentTitle, thumbnailImgUrl, 0, newPrice, contentCat, contentId));
+                    }
                 } catch (JSONException e) {
-                    Log.d("exceptionGamesZone", e.toString());
+                    Log.e("exceptionGamesZone", e.toString());
                     e.printStackTrace();
                 }
             }
@@ -454,14 +452,16 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                         contentPrice = shikkha_sohayika__content_arr.getJSONObject(i).getInt("contentPrice");
                     }
 
-                    if (contentType.equals("video")) {
-                        String contentUrl = shikkha_sohayika__content_arr.getJSONObject(i).getString("contentUrl");
-                        shikkhaSohaYikaArrayList.add(new ShikkhaSohaYika(contentType, contentDescription, contentUrl, contentTitle, imageUrl, contentCat, contentId, contentPrice));
-                    } else {
-                        shikkhaSohaYikaArrayList.add(new ShikkhaSohaYika(contentType, contentDescription, "", contentTitle, imageUrl, contentCat, contentId, contentPrice));
+                    if (contentCat.equals("education")) {
+                        if (contentType.equals("video")) {
+                            String contentUrl = shikkha_sohayika__content_arr.getJSONObject(i).getString("contentUrl");
+                            shikkhaSohaYikaArrayList.add(new ShikkhaSohaYika(contentType, contentDescription, contentUrl, contentTitle, imageUrl, contentCat, contentId, contentPrice));
+                        } else {
+                            shikkhaSohaYikaArrayList.add(new ShikkhaSohaYika(contentType, contentDescription, "", contentTitle, imageUrl, contentCat, contentId, contentPrice));
+                        }
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e("EducationErr", e.toString());
                 }
             }
             initializeShikkhaSohayikaRecyclerview();
@@ -492,7 +492,10 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     for (int j = 0; j < jsonArray.length(); j++) {
                         newPrice = jsonArray.getJSONObject(j).getInt("discountPrice");
                     }
-                    mulloCharArrayList.add(new MulloChar(contentType, contentUrl, contentTitle, thumbNail_image, previousPrice, newPrice, image_url, contentCat, contentId));
+                    if (contentCat.equals("song")) {
+                        mulloCharArrayList.add(new MulloChar(contentType, contentUrl, contentTitle, thumbNail_image, previousPrice, newPrice, image_url, contentCat, contentId));
+
+                    }
                 } catch (JSONException e) {
                     Log.d("mullochardata", e.toString());
                     e.printStackTrace();
@@ -504,7 +507,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         }
     }
 
-    private void setJapitiJibonContent(JSONArray japito_jibon_content_arr) {
+    private void setDailyLife(JSONArray japito_jibon_content_arr) {
         if (japito_jibon_content_arr.length() > 0) {
             for (int i = 0; i < japito_jibon_content_arr.length(); i++) {
                 int contentPrice = 0;
@@ -514,26 +517,43 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     String contentDescription = japito_jibon_content_arr.getJSONObject(i).getString("contentDescription");
                     String contentUrl = japito_jibon_content_arr.getJSONObject(i).getString("contentUrl");
                     String contentCat = japito_jibon_content_arr.getJSONObject(i).getString("contentCat");
-                    ///String thumbNail_image = japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image");
+                    String thumbNail_image = japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image");
                     int contentid = japito_jibon_content_arr.getJSONObject(i).getInt("id");
                     if (japito_jibon_content_arr.getJSONObject(i).has("contentPrice")) {
                         contentPrice = japito_jibon_content_arr.getJSONObject(i).getInt("contentPrice");
                     }
-
-
-                    if (contentType.equals("video")) {
-                        Log.i("Data", "Video");
-                        japitoJibonArrayList.add(new JapitoJibon(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), "video", contentUrl, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), contentCat, contentid, contentPrice));
-                    } else {
-                        Log.i("Data", "Image");
-                        japitoJibonArrayList.add(new JapitoJibon(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("contentUrl"), "image", contentUrl, contentCat, "", contentid, contentPrice));
+                    if (contentCat.equals("daily_life")) {
+                        japitoJibonArrayList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        initializeJapitoJibonRecyclerView();
+                    } else if (contentCat.equals("news")) {
+                        hotNewsArrayList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        initializeHotNewsRecylerView();
+                    } else if (contentCat.equals("sports")) {
+                        sportsArralyList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        initializeSportsRecylerView();
+                    } else if (contentCat.equals("autto_hashi")) {
+                        auttoHashiArrList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        initializeAuttoHashiRecylerView();
+                    } else if (contentCat.equals("science")) {
+                        scienceArrList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        initializeScienceRecylerView();
+                    } else if (contentCat.equals("mixed")) {
+                        mixedArrList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        initializeMixedRecylerView();
+                    } else if (contentCat.equals("kk_mela")) {
+                        kidsArrList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        initializeKidsRecylerView();
+                    }else if (contentCat.equals("mobile_app")) {
+                        appList.add(new AppData(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), contentUrl));
+                    }else if (contentCat.equals("music_video")) {
+                        musicVideoList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
                     }
                 } catch (JSONException e) {
                     Log.d("japito_jibon_exception", e.toString());
                     e.printStackTrace();
                 }
             }
-            initializeJapitoJibonRecyclerView();
+
         } else {
             Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
         }
@@ -554,7 +574,9 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     if (top_contentsArr.getJSONObject(i).has("contentPrice")) {
                         contentPrice = top_contentsArr.getJSONObject(i).getInt("contentPrice");
                     }
-                    seraChobiArrayList.add(new SeraChobi(contentUrl, "", contentType, contentTitle, thumbNail_image, contentCat, contentId, contentDescription, contentPrice));
+                    if (contentCat.equals("top_images")) {
+                        seraChobiArrayList.add(new SeraChobi(contentUrl, "", contentType, contentTitle, thumbNail_image, contentCat, contentId, contentDescription, contentPrice));
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("tpCntntExcptn", e.toString());
@@ -569,20 +591,23 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     private void setSliderContent(JSONArray jsonSliderContentArr) {
         if (jsonSliderContentArr.length() > 0) {
             int contentPrice = 0;
+            String contentType;
             for (int i = 0; i < jsonSliderContentArr.length(); i++) {
                 try {
-                    String contentUrl = jsonSliderContentArr.getJSONObject(i).getString("contentUrl");
-                    String description = jsonSliderContentArr.getJSONObject(i).getString("contentDescription");
-                    String contentTitle = jsonSliderContentArr.getJSONObject(i).getString("contentTitle");
-                    String contentType = jsonSliderContentArr.getJSONObject(i).getString("contentType");
                     String contentCat = jsonSliderContentArr.getJSONObject(i).getString("contentCat");
-                    int contentId = jsonSliderContentArr.getJSONObject(i).getInt("id");
-                    String contentDescription = jsonSliderContentArr.getJSONObject(i).getString("contentDescription");
-                    String thumbNailImg = jsonSliderContentArr.getJSONObject(i).getString("thumbNail_image");
-                    if (jsonSliderContentArr.getJSONObject(i).has("contentPrice")) {
-                        contentPrice = jsonSliderContentArr.getJSONObject(i).getInt("contentPrice");
+                    if (contentCat.equals("slider")) {
+                        String contentUrl = jsonSliderContentArr.getJSONObject(i).getString("contentUrl");
+                        String description = jsonSliderContentArr.getJSONObject(i).getString("contentDescription");
+                        String contentTitle = jsonSliderContentArr.getJSONObject(i).getString("contentTitle");
+                        contentType = jsonSliderContentArr.getJSONObject(i).getString("contentType");
+                        int contentId = jsonSliderContentArr.getJSONObject(i).getInt("id");
+                        String contentDescription = jsonSliderContentArr.getJSONObject(i).getString("contentDescription");
+                        String thumbNailImg = jsonSliderContentArr.getJSONObject(i).getString("thumbNail_image");
+                        if (jsonSliderContentArr.getJSONObject(i).has("contentPrice")) {
+                            contentPrice = jsonSliderContentArr.getJSONObject(i).getInt("contentPrice");
+                        }
+                        sliderImages.add(new SliderImage(contentUrl, description, contentType, contentTitle, contentCat, contentId, contentDescription, thumbNailImg, contentPrice));
                     }
-                    sliderImages.add(new SliderImage(contentUrl, description, contentType, contentTitle, contentCat, contentId, contentDescription, thumbNailImg, contentPrice));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("SldrCntntExcptn", e.toString());
@@ -604,42 +629,6 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     public void onBackPressed() {
         super.onBackPressed();
         this.finishAffinity();
-    }
-
-    public void startSportActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), KheladhulaActivity.class);
-
-        this.startActivity(myIntent);
-    }
-
-    public void startPorashunaActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
-        this.startActivity(myIntent);
-    }
-
-    public void startAuttoHashiActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), AuttoHashiActivity.class);
-        this.startActivity(myIntent);
-    }
-
-    public void startJibonJaponActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), JibonJaponActivity.class);
-        this.startActivity(myIntent);
-    }
-
-    public void startPachMishaliActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), PachMishaliActivity.class);
-        this.startActivity(myIntent);
-    }
-
-    public void startBigganOProjuktiActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), BigganOProjuktiActivity.class);
-        this.startActivity(myIntent);
-    }
-
-    public void startCartoonActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), CartoonActivity.class);
-        this.startActivity(myIntent);
     }
 
     public void initialCustomSwipeAdapter() {
@@ -713,8 +702,69 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         recyclerViewForShikkhaSohayika.setAdapter(adapterForShikkhaSohayika);
     }
 
+    public void initializeHotNewsRecylerView() {
+        recyclerViewForJapitoJibon = findViewById(R.id.RVhotnews);
+        recyclerViewForJapitoJibon.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        SnapHelper snapHelperStartJapitoJibon = new GravitySnapHelper(Gravity.START);
+        snapHelperStartJapitoJibon.attachToRecyclerView(recyclerViewForJapitoJibon);
+        recyclerViewForJapitoJibon.setHasFixedSize(true);
+        adapterForJapitoJibon = new RecyclerAdapterForJapitoJibon(this, hotNewsArrayList);
+        recyclerViewForJapitoJibon.setAdapter(adapterForJapitoJibon);
+    }
+
+    public void initializeAuttoHashiRecylerView() {
+        recyclerViewForJapitoJibon = findViewById(R.id.RVAuttoahshi);
+        recyclerViewForJapitoJibon.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        SnapHelper snapHelperStartJapitoJibon = new GravitySnapHelper(Gravity.START);
+        snapHelperStartJapitoJibon.attachToRecyclerView(recyclerViewForJapitoJibon);
+        recyclerViewForJapitoJibon.setHasFixedSize(true);
+        adapterForJapitoJibon = new RecyclerAdapterForJapitoJibon(this, auttoHashiArrList);
+        recyclerViewForJapitoJibon.setAdapter(adapterForJapitoJibon);
+    }
+
+    public void initializeSportsRecylerView() {
+        recyclerViewForJapitoJibon = findViewById(R.id.RVsports);
+        recyclerViewForJapitoJibon.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        SnapHelper snapHelperStartJapitoJibon = new GravitySnapHelper(Gravity.START);
+        snapHelperStartJapitoJibon.attachToRecyclerView(recyclerViewForJapitoJibon);
+        recyclerViewForJapitoJibon.setHasFixedSize(true);
+        adapterForJapitoJibon = new RecyclerAdapterForJapitoJibon(this, sportsArralyList);
+        recyclerViewForJapitoJibon.setAdapter(adapterForJapitoJibon);
+    }
+
+    public void initializeScienceRecylerView() {
+        recyclerViewForJapitoJibon = findViewById(R.id.RVScience);
+        recyclerViewForJapitoJibon.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        SnapHelper snapHelperStartJapitoJibon = new GravitySnapHelper(Gravity.START);
+        snapHelperStartJapitoJibon.attachToRecyclerView(recyclerViewForJapitoJibon);
+        recyclerViewForJapitoJibon.setHasFixedSize(true);
+        adapterForJapitoJibon = new RecyclerAdapterForJapitoJibon(this, scienceArrList);
+        recyclerViewForJapitoJibon.setAdapter(adapterForJapitoJibon);
+    }
+
+    public void initializeMixedRecylerView() {
+        recyclerViewForJapitoJibon = findViewById(R.id.RVMixed);
+        recyclerViewForJapitoJibon.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        SnapHelper snapHelperStartJapitoJibon = new GravitySnapHelper(Gravity.START);
+        snapHelperStartJapitoJibon.attachToRecyclerView(recyclerViewForJapitoJibon);
+        recyclerViewForJapitoJibon.setHasFixedSize(true);
+        adapterForJapitoJibon = new RecyclerAdapterForJapitoJibon(this, mixedArrList);
+        recyclerViewForJapitoJibon.setAdapter(adapterForJapitoJibon);
+    }
+
+    public void initializeKidsRecylerView() {
+        recyclerViewForJapitoJibon = findViewById(R.id.RVKids);
+        recyclerViewForJapitoJibon.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        SnapHelper snapHelperStartJapitoJibon = new GravitySnapHelper(Gravity.START);
+        snapHelperStartJapitoJibon.attachToRecyclerView(recyclerViewForJapitoJibon);
+        recyclerViewForJapitoJibon.setHasFixedSize(true);
+        adapterForJapitoJibon = new RecyclerAdapterForJapitoJibon(this, kidsArrList);
+        recyclerViewForJapitoJibon.setAdapter(adapterForJapitoJibon);
+    }
+
     public void startGoromKhoborPage(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), GoromKhoborActivity.class);
+        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        myIntent.putExtra("tag", "news");
         this.startActivity(myIntent);
     }
 
@@ -730,31 +780,81 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     public void moreJapitoJibon(View view) {
-        Intent intentDailyLife = new Intent(HomePage.this, JibonJaponActivity.class);
+        Intent intentDailyLife = new Intent(HomePage.this, PorashunaActivity.class);
+        intentDailyLife.putExtra("tag", "daily_life");
         startActivity(intentDailyLife);
     }
 
     public void moreShikha(View view) {
         Intent intentDailyLife = new Intent(HomePage.this, PorashunaActivity.class);
+        intentDailyLife.putExtra("tag", "education");
         startActivity(intentDailyLife);
     }
 
-    public void jumpToHandsetFeature(View view) {
-        Intent intent = new Intent(HomePage.this, SymphonyCareActivity.class);
-        intent.putExtra("position", 0);
+    public void startSportActivity(View view) {
+        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        myIntent.putExtra("tag", "sports");
+        this.startActivity(myIntent);
+    }
+
+    public void startPorashunaActivity(View view) {
+        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        myIntent.putExtra("tag", "education");
+        this.startActivity(myIntent);
+    }
+
+    public void startAuttoHashiActivity(View view) {
+        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        myIntent.putExtra("tag", "autto_hashi");
+        this.startActivity(myIntent);
+    }
+
+    public void startJibonJaponActivity(View view) {
+        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        myIntent.putExtra("tag", "daily_life");
+        this.startActivity(myIntent);
+    }
+
+    public void startPachMishaliActivity(View view) {
+        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        myIntent.putExtra("tag", "mixed");
+        this.startActivity(myIntent);
+    }
+
+    public void startBigganOProjuktiActivity(View view) {
+        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        myIntent.putExtra("tag", "science");
+        this.startActivity(myIntent);
+    }
+
+    public void startCartoonActivity(View view) {
+        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        myIntent.putExtra("tag", "kk_mela");
+        this.startActivity(myIntent);
+    }
+
+
+    public void jumpToAppList(View view) {
+        Intent intent = new Intent(HomePage.this, AppList.class);
+        Gson gson = new Gson();
+        String appListJson = gson.toJson(appList);
+        intent.putExtra("appList", appListJson);
         startActivity(intent);
     }
 
-    public void jumpToCustomerCare(View view) {
-        Intent intent = new Intent(HomePage.this, SymphonyCareActivity.class);
-        intent.putExtra("position", 1);
+    public void jumpToVideoList(View view) {
+        Intent intent = new Intent(HomePage.this, Music_Video.class);
+        Gson gson = new Gson();
+        String appListJson = gson.toJson(musicVideoList);
+        intent.putExtra("videoList", appListJson);
         startActivity(intent);
     }
 
     public void jumpToContact(View view) {
-        Intent intent = new Intent(HomePage.this, SymphonyCareActivity.class);
+        Toast.makeText(HomePage.this, "Emoticons will available soon!", Toast.LENGTH_SHORT).show();
+        /*Intent intent = new Intent(HomePage.this, Emoticons.class);
         intent.putExtra("position", 2);
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
     @Override
@@ -771,5 +871,4 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             Log.d("onProcessFinishedComplt", "onProcessFinishedComplt");
         }
     }
-
 }

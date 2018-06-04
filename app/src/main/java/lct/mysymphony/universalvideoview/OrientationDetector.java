@@ -1,19 +1,3 @@
-/*
-* Copyright (C) 2015 Author <dictfb#gmail.com>
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
-
 package lct.mysymphony.universalvideoview;
 
 import android.content.Context;
@@ -37,7 +21,7 @@ public class OrientationDetector {
     private long lastCalcTime = 0;
     private Direction lastDirection = Direction.PORTRAIT;
 
-    private int currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;//初始为竖屏
+    private int currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
     private OrientationChangeListener listener;
 
@@ -64,7 +48,7 @@ public class OrientationDetector {
                         resetTime();
                         lastDirection = currDirection;
                         if (BuildConfig.DEBUG) {
-                            Log.d(TAG, String.format("方向改变, 开始计时, 当前是方向为%s", currDirection));
+                            Log.d(TAG, String.format("Tag", currDirection));
                         }
                     } else {
                         calcHoldingTime();
@@ -161,12 +145,6 @@ public class OrientationDetector {
     }
 
     public interface OrientationChangeListener {
-        /***
-         * @param screenOrientation ActivityInfo.SCREEN_ORIENTATION_PORTRAIT or ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-         *                          or ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE or ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
-         * @param direction         PORTRAIT or REVERSE_PORTRAIT when screenOrientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-         *                          LANDSCAPE or REVERSE_LANDSCAPE when screenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE.
-         */
         void onOrientationChanged(int screenOrientation, Direction direction);
     }
 

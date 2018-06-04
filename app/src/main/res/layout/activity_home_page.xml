@@ -12,12 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
+
         <include
             android:id="@+id/toolbarlayoutinhome_page"
             layout="@layout/toolbar_layout_in_homepage" />
     </android.support.design.widget.AppBarLayout>
 
     <requestFocus />
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -44,10 +46,12 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <android.support.v4.view.ViewPager
                         android:id="@+id/viewPager"
                         android:layout_width="match_parent"
                         android:layout_height="180dp" />
+
                     <requestFocus />
 
                     <com.viewpagerindicator.CirclePageIndicator
@@ -68,47 +72,87 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_margin="5dp"
-                    android:gravity="bottom">
-                    <Button
+                    android:gravity="bottom"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="60dp"
-                        android:drawableLeft="@drawable/mobile"
-                        android:text="হ্যান্ডসেট ফিচার"
-                        android:textSize="12dp"
-                        android:onClick="jumpToHandsetFeature"/>
-                    <Button
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/mainButton1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:onClick="jumpToAppList"
+                            android:src="@drawable/mobile"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/textViewMain1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="3dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="60dp"
-                        android:text="কাস্টোমার কেয়ার"
-                        android:drawableLeft="@drawable/customer_care"
-                        android:textSize="12dp"
-                        android:onClick="jumpToCustomerCare"/>
-                    <Button
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/mainButton2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="60dp"
+                            android:onClick="jumpToVideoList"
+                            android:src="@drawable/customer_care"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/textViewMain2"
+                            android:layout_gravity="center"
+                            android:padding="3dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="60dp"
-                        android:textSize="12dp"
-                        android:text="যোগাযোগ করুন"
-                        android:drawableLeft="@drawable/support"
-                        android:onClick="jumpToContact"/>
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/mainButton3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="60dp"
+                            android:onClick="jumpToContact"
+                            android:src="@drawable/support"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/textViewMain3"
+                            android:layout_gravity="center"
+                            android:padding="3dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="আপনাদের জন্য আরও আয়োজন"
                         android:gravity="center"
                         android:padding="3dp"
-                        android:textColor="@color/dark_red"
+                        android:text="আপনাদের জন্য আরও আয়োজন"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textStyle="normal"/>
+                        android:textColor="@color/dark_red"
+                        android:textStyle="normal" />
 
                 </LinearLayout>
 
@@ -139,12 +183,14 @@
                             android:orientation="vertical">
 
                             <ImageView
+                                android:id="@+id/imageView1"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/fire" />
 
                             <TextView
+                                android:id="@+id/textView1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -164,18 +210,18 @@
                             android:orientation="vertical">
 
                             <ImageView
+                                android:id="@+id/imageView2"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/cr2" />
 
                             <TextView
+                                android:id="@+id/textView2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:text="খেলাধুলা" />
-
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -190,18 +236,18 @@
                             android:orientation="vertical">
 
                             <ImageView
+                                android:id="@+id/imageView3"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/book" />
 
                             <TextView
+                                android:id="@+id/textView3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:text="পড়াশুনা" />
-
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -216,21 +262,19 @@
                             android:orientation="vertical">
 
                             <ImageView
+                                android:id="@+id/imageView4"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/mask" />
 
                             <TextView
+                                android:id="@+id/textView4"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:text="অট্টহাসি" />
-
-
                         </LinearLayout>
-
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -253,18 +297,18 @@
                             android:orientation="vertical">
 
                             <ImageView
+                                android:id="@+id/imageView5"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/flower" />
 
                             <TextView
+                                android:id="@+id/textView5"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:text="জীবনযাপন" />
-
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -279,18 +323,18 @@
                             android:orientation="vertical">
 
                             <ImageView
+                                android:id="@+id/imageView6"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/pachmishali" />
 
                             <TextView
+                                android:id="@+id/textView6"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:text="পাচমিশালি" />
-
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -304,17 +348,19 @@
                             android:orientation="vertical">
 
                             <ImageView
+                                android:id="@+id/imageView7"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/science" />
 
                             <TextView
+                                android:id="@+id/textView7"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="বিজ্ঞান" />
-
+                                android:text="বিজ্ঞান"
+                                android:textSize="10dp" />
 
                         </LinearLayout>
 
@@ -330,27 +376,29 @@
                             android:orientation="vertical">
 
                             <ImageView
+                                android:id="@+id/imageView8"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/cartoon" />
 
                             <TextView
+                                android:id="@+id/textView8"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="কার্টুন" />
+                                android:text="কার্টুন"
+                                android:textSize="10dp" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-
-                <!-- Sera chobi er layout -->
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:background="@color/White">
+                    android:background="@color/White"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/seraChobiTV"
@@ -375,23 +423,179 @@
                         android:textColor="@color/red"
                         android:textSize="17sp" />
 
-
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/RV_SeraChobi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/seraChobiTV"
                         android:layout_marginTop="10dp"
-                        android:nestedScrollingEnabled="false">
+                        android:nestedScrollingEnabled="false"></android.support.v7.widget.RecyclerView>
+                </RelativeLayout>
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/White">
+
+                    <TextView
+                        android:id="@+id/hotNewsTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="8dp"
+                        android:text="গরম খবর"
+                        android:textSize="17sp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/RVhotnews"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/hotNewsTV"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/White"
+                        android:nestedScrollingEnabled="false">
 
                     </android.support.v7.widget.RecyclerView>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/RVhotnews"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="5dp"
+                        android:onClick="startGoromKhoborPage"
+                        android:text="আরো পড়ুন"
+                        android:textColor="@color/red"
+                        android:textSize="17sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/White">
+
+                    <TextView
+                        android:id="@+id/sportsTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="8dp"
+                        android:text="খেলাধুলা"
+                        android:textSize="17sp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/RVsports"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/sportsTV"
+                        android:background="@color/White"
+                        android:nestedScrollingEnabled="false"></android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/RVsports"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="10dp"
+                        android:onClick="startSportActivity"
+                        android:text="আরো পড়ুন"
+                        android:textColor="@color/red"
+                        android:textSize="17sp" />
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/White">
 
-                <!-- japito jibon -->
+                    <TextView
+                        android:id="@+id/ShikkhaSohayikaTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="8dp"
+                        android:onClick="subscribe"
+                        android:text="শিক্ষা"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="8dp"
+                        android:text="সাবস্ক্রাইব করুন"
+                        android:textColor="@color/red"
+                        android:textSize="17sp"
+                        android:visibility="invisible" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/RV_ShikkhaSohayika"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/ShikkhaSohayikaTV"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/White"
+                        android:nestedScrollingEnabled="false"></android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/RV_ShikkhaSohayika"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="5dp"
+                        android:onClick="moreShikha"
+                        android:text="আরো পড়ুন"
+                        android:textColor="@color/red"
+                        android:textSize="17sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/White">
+
+                    <TextView
+                        android:id="@+id/auttoHashiTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="8dp"
+                        android:text="অট্টহাসি"
+                        android:textSize="17sp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/RVAuttoahshi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/auttoHashiTV"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/White"
+                        android:nestedScrollingEnabled="false"></android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/RVAuttoahshi"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="5dp"
+                        android:onClick="startAuttoHashiActivity"
+                        android:text="আরো পড়ুন"
+                        android:textColor="@color/red"
+                        android:textSize="17sp" />
+
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -419,22 +623,17 @@
                         android:layout_marginTop="8dp"
                         android:text="সাবস্ক্রাইব করুন"
                         android:textColor="@color/red"
-                        android:textSize="17sp" />
-                    <!--android:onClick="subscribe"-->
-
+                        android:textSize="17sp"
+                        android:visibility="invisible" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/RV_japitoJibon"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/japitoJibonTV"
-
                         android:layout_marginTop="10dp"
                         android:background="@color/White"
-                        android:nestedScrollingEnabled="false">
-
-
-                    </android.support.v7.widget.RecyclerView>
+                        android:nestedScrollingEnabled="false"></android.support.v7.widget.RecyclerView>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -442,23 +641,133 @@
                         android:layout_below="@id/RV_japitoJibon"
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="5dp"
-                        android:layout_marginTop="10dp"
                         android:onClick="moreJapitoJibon"
                         android:text="আরো পড়ুন"
                         android:textColor="@color/red"
                         android:textSize="17sp" />
-
-
                 </RelativeLayout>
-
-
-                <!-- Mullo char -->
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:background="@color/White">
+
+                    <TextView
+                        android:id="@+id/mixedTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="8dp"
+                        android:text="পাচমিশালি"
+                        android:textSize="17sp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/RVMixed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/mixedTV"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/White"
+                        android:nestedScrollingEnabled="false"></android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/RVMixed"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="5dp"
+                        android:onClick="startPachMishaliActivity"
+                        android:text="আরো পড়ুন"
+                        android:textColor="@color/red"
+                        android:textSize="17sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/White">
+
+                    <TextView
+                        android:id="@+id/scienceTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="8dp"
+                        android:text="বিজ্ঞান"
+                        android:textSize="17sp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/RVScience"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/scienceTV"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/White"
+                        android:nestedScrollingEnabled="false">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/RVScience"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="5dp"
+                        android:onClick="startBigganOProjuktiActivity"
+                        android:text="আরো পড়ুন"
+                        android:textColor="@color/red"
+                        android:textSize="17sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/White">
+
+                    <TextView
+                        android:id="@+id/kidsTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="8dp"
+                        android:text="কচিকাঁচার মেলা"
+                        android:textSize="17sp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/RVKids"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/kidsTV"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/White"
+                        android:nestedScrollingEnabled="false">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/RVKids"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="5dp"
+                        android:onClick="startCartoonActivity"
+                        android:text="আরো পড়ুন"
+                        android:textColor="@color/red"
+                        android:textSize="17sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/White"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/mulloCharTV"
@@ -476,12 +785,10 @@
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginRight="5dp"
-                        android:layout_marginTop="8dp"
                         android:text="আরো দেখুন"
                         android:textColor="@color/red"
                         android:textSize="17sp"
                         android:visibility="invisible" />
-
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/RV_mulloChar"
@@ -489,12 +796,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/mulloCharTV"
                         android:layout_marginTop="10dp"
-                        android:nestedScrollingEnabled="false">
-
-
-                    </android.support.v7.widget.RecyclerView>
-
-
+                        android:nestedScrollingEnabled="false"></android.support.v7.widget.RecyclerView>
                 </RelativeLayout>
 
 
@@ -503,15 +805,15 @@
                     android:layout_height="150dp"
                     android:layout_marginTop="10dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ad" />
-
+                    android:src="@drawable/ad"
+                    android:visibility="gone" />
                 <!-- Games Zone -->
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:background="@color/White">
+                    android:background="@color/White"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/gamesZoneTV"
@@ -529,12 +831,10 @@
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginRight="5dp"
-                        android:layout_marginTop="8dp"
                         android:text="আরো দেখুন"
                         android:textColor="@color/red"
                         android:textSize="17sp"
                         android:visibility="invisible" />
-
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/RV_gamesZone"
@@ -542,81 +842,16 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/gamesZoneTV"
                         android:layout_marginTop="10dp"
-                        android:nestedScrollingEnabled="false">
-
-
-                    </android.support.v7.widget.RecyclerView>
-
+                        android:nestedScrollingEnabled="false"></android.support.v7.widget.RecyclerView>
 
                 </RelativeLayout>
-
-
-                <!--  Shikkha sohayika -->
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:background="@color/White">
-
-                    <TextView
-                        android:id="@+id/ShikkhaSohayikaTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="8dp"
-                        android:onClick="subscribe"
-                        android:text="শিক্ষা সহায়িকা"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginTop="8dp"
-                        android:text="সাবস্ক্রাইব করুন"
-                        android:textColor="@color/red"
-                        android:textSize="17sp" />
-
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/RV_ShikkhaSohayika"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/ShikkhaSohayikaTV"
-
-                        android:layout_marginTop="10dp"
-                        android:background="@color/White"
-                        android:nestedScrollingEnabled="false">
-
-
-                    </android.support.v7.widget.RecyclerView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/RV_ShikkhaSohayika"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="10dp"
-                        android:onClick="moreShikha"
-                        android:text="আরো পড়ুন"
-                        android:textColor="@color/red"
-                        android:textSize="17sp" />
-
-
-                </RelativeLayout>
-
-                <!-- Shocol chobi -->
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/White">
+                    android:background="@color/White"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/shocolChobiTV"
@@ -634,12 +869,10 @@
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginRight="5dp"
-                        android:layout_marginTop="8dp"
                         android:text="আরো দেখুন"
                         android:textColor="@color/red"
                         android:textSize="17sp"
                         android:visibility="invisible" />
-
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/RV_ShocolChobi"
@@ -650,15 +883,9 @@
                         android:nestedScrollingEnabled="false">
 
                     </android.support.v7.widget.RecyclerView>
-
-
                 </RelativeLayout>
-
-
             </LinearLayout>
         </android.support.constraint.ConstraintLayout>
-
-
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.BottomNavigationView
@@ -675,9 +902,5 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
-        app:menu="@menu/bottom_navigation_menu">
-
-    </android.support.design.widget.BottomNavigationView>
-
-
+        app:menu="@menu/bottom_navigation_menu"></android.support.design.widget.BottomNavigationView>
 </android.support.constraint.ConstraintLayout>

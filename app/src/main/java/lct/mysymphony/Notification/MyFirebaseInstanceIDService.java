@@ -1,5 +1,6 @@
 package lct.mysymphony.Notification;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -12,7 +13,10 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.e(TAG, "onTokenRefresh: " + refreshedToken);
+        SharedPreferences.Editor editor;
+        editor = getSharedPreferences("login", MODE_PRIVATE).edit();
+        editor.putString("firebaseToken", refreshedToken);
+        editor.apply();
+        Log.i(TAG, "onTokenRefresh: " + refreshedToken);
     }
-
 }

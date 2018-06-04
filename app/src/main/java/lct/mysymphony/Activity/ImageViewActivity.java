@@ -57,6 +57,7 @@ import java.util.concurrent.ExecutionException;
 
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.ModelClass.GamesZone;
+import lct.mysymphony.ModelClass.JapitoJibon;
 import lct.mysymphony.ModelClass.MulloChar;
 import lct.mysymphony.ModelClass.SeraChobi;
 import lct.mysymphony.ModelClass.ShocolChobi;
@@ -135,6 +136,31 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
 
                 newPrice.setText(Integer.toString(Data.getNewPrice()));
                 previousPrice.setText(Integer.toString(Data.getPreviousPrice()));
+                dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, "paid", Data.getContentId());
+                setImage(Data.getImageUrl());
+                PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
+                pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, ImageViewActivity.this);
+
+                if (dataHelper.checkDownLoadedOrNot(Data.getContentCat(), Data.getContentId())) {
+                    buyOrDownloadLinearLayout.setVisibility(View.GONE);
+                    Log.d("enter", "MulloChar");
+                    isDownloaded = true;
+                }
+
+            } else if (cameFromWhichActivity.contains("music_video")) {
+                JapitoJibon Data = (JapitoJibon) getIntent().getSerializableExtra("data");
+                imageUrl = Data.getImageUrl();
+                contentTitle = Data.getContentTitle();
+                contentCat = Data.getContentCat();
+                contentDesc = "";
+                contentType = Data.getContentType();
+                audioUrl = Data.getContentUrl();
+                audioTitle = Data.getContentTitle();
+                playAudioBTN.setVisibility(View.VISIBLE);
+                thumbNailImgUrl = Data.getThumbNail_image();
+
+                //newPrice.setText(Integer.toString(Data.getNewPrice()));
+                //previousPrice.setText(Integer.toString(Data.getPreviousPrice()));
                 dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, "paid", Data.getContentId());
                 setImage(Data.getImageUrl());
                 PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
@@ -289,13 +315,13 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         }
     }
 
-    @Override
+/*    @Override
     public void onBackPressed() {
         super.onBackPressed();
         Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
         this.startActivity(myIntent);
         finish();
-    }
+    }*/
 
     @Override
     public void processFinish(String output) {
@@ -505,7 +531,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
     }
 
     public void startAudioBackgroundService() {
-        Intent intent = new Intent(ImageViewActivity.this, PlayAudioInBackgroundService.class);
+        Intent intent = new Intent(ImageViewActivity.this, PlayAudioActivity.class);
         intent.putExtra("audioUrl", audioUrl);
         startService(intent);
     }
@@ -527,3 +553,4 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         return true;
     }
 }
+

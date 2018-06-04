@@ -36,7 +36,7 @@ public class Utility {
 
             builder.setAutoCancel(false);
             //builder.setTicker("this is ticker text");
-            builder.setContentTitle("Song is playing");
+            builder.setContentTitle(songTitle);
           /*  builder.setContentText("You have a new message");*/
             builder.setSmallIcon(R.mipmap.ic_launcher);
             builder.setContentIntent(pendingIntent);

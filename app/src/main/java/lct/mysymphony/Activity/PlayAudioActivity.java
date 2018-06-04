@@ -17,9 +17,15 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import lct.mysymphony.ModelClass.DataBaseData;
 import lct.mysymphony.ModelClass.MulloChar;
+import lct.mysymphony.ModelClass.Porashuna;
 import lct.mysymphony.R;
+import lct.mysymphony.helper.AppLogger;
 import lct.mysymphony.helper.DownloadAudio;
 import lct.mysymphony.helper.PlayerInService;
 import lct.mysymphony.helper.Utility;
@@ -32,11 +38,12 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
     private Intent playerService;
     public static SeekBar seekBar;
     Utility utility;
-    MulloChar data;
+    Porashuna data;
     DataBaseData dataBaseData;
     ImageView imageView;
     public lct.mysymphony.helper.ProgressDialog progressDialog;
-
+    Date currenTime;
+    DateFormat dateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,21 +52,26 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         utility = new Utility();
         progressDialog = new lct.mysymphony.helper.ProgressDialog(PlayAudioActivity.this);
         SharedPreferences.Editor editor = getSharedPreferences("imageUrlSp", MODE_PRIVATE).edit();
-        data = (MulloChar) getIntent().getSerializableExtra("mullochar");
+        data = (Porashuna) getIntent().getSerializableExtra("data");
         if (data != null) {
-            String imageUrl = data.getImageUrl();
+            String imageUrl = data.getThumbnailImgUrl();
             editor.putString("imageUrl", imageUrl);
             editor.apply();
-            Glide.with(this).load(imageUrl).into((ImageView) findViewById(R.id.songimageView));
-            String contentTitle = data.getContentTile();
+            /*if(imageUrl.isEmpty() || imageUrl==null){
+
+            }else{
+                Glide.with(this).load(imageUrl).into((ImageView) findViewById(R.id.songimageView));
+            }*/
+            String contentTitle = data.getContentTitle();
             String contentCat = data.getContentCat();
             String contentDesc = "";
             String contentType = data.getContentType();
-            String thumbNailImgUrl = data.getThumbNailImgUrl();
+            String thumbNailImgUrl = data.getThumbnailImgUrl();
            if (isMyServiceRunning(PlayerInService.class))
            {
                Log.d("Servicerunning","ServiceRunning");
                playerService = new Intent(PlayAudioActivity.this, PlayerInService.class);
+               playerService.putExtra("songUrl", data.getContentUrl());
                stopService(playerService);
            }
             utility.cancelNotification();
@@ -67,14 +79,11 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         } else {
             SharedPreferences prefs = getSharedPreferences("imageUrlSp", MODE_PRIVATE);
             String restoredText = prefs.getString("imageUrl", null);
-            if (restoredText != null) {
-                Glide.with(this).load(restoredText).into((ImageView) findViewById(R.id.songimageView));
-            }
         }
         initView();
         playerService = new Intent(PlayAudioActivity.this, PlayerInService.class);
+        playerService.putExtra("songUrl", data.getContentUrl());
         startService(playerService);
-
     }
 
     @Override
@@ -120,6 +129,10 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
 
     @Override
     protected void onResume() {
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        currenTime = new Date();
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", "PlayMusic",
+                "IN", "Entrance");
         try {
             if (!PlayerInService.mp.isPlaying()) {
                 btnPlay.setBackgroundResource(R.drawable.player);
@@ -134,10 +147,17 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         super.onResume();
     }
 
+    @Override
+    protected void onStop(){
+        super.onStop();
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", "PlayMusic",
+                "OUT", "Leave");
+    }
+
     public void downLoadAudio(View view) {
         progressDialog.showProgressDialog("গান ডাউনলোড হচ্ছে");
         DownloadAudio downloadAudio = new DownloadAudio();
-        downloadAudio.downloadAudio("http://jachaibd.com/files/eminem.mp3", PlayAudioActivity.this, dataBaseData);
+        downloadAudio.downloadAudio(data.getContentUrl(), PlayAudioActivity.this, dataBaseData);
     }
 
     @Override
