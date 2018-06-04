@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+
 import lct.mysymphony.ModelClass.JapitoJibon;
 import lct.mysymphony.ModelClass.Porashuna;
 import lct.mysymphony.R;
@@ -49,12 +50,14 @@ public class VideoListAdapter extends BaseAdapter {
         View customView = inflater.inflate(R.layout.video_list_item, viewGroup, false);
         ImageView videoThumbnail = customView.findViewById(R.id.videoThumbnail);
         TextView apptitle = customView.findViewById(R.id.videoTitle);
-        if(videoList.get(position).getThumbnailImgUrl().isEmpty()|| videoList.get(position).getThumbnailImgUrl().equals("null")){
+        TextView type = customView.findViewById(R.id.contentType);
+        if (videoList.get(position).getThumbnailImgUrl().isEmpty() || videoList.get(position).getThumbnailImgUrl().equals("null")) {
 
-        }else {
+        } else {
             Glide.with(context).load(videoList.get(position).getThumbnailImgUrl()).into(videoThumbnail);
         }
         apptitle.setText(videoList.get(position).getContentTitle());
+        type.setText(videoList.get(position).getContentType());
 
         return customView;
     }

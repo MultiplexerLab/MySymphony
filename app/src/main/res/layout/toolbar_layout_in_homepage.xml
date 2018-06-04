@@ -41,7 +41,7 @@
             android:layout_weight="1"
             android:padding="2dp"
             android:src="@drawable/ic_action_search"
-            android:visibility="visible" />
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/notificationInHomePageToolbar"
@@ -51,9 +51,8 @@
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:padding="2dp"
+            android:visibility="invisible"
             android:src="@drawable/ic_action_notification" />
 
     </LinearLayout>
-
-
 </android.support.v7.widget.Toolbar>

@@ -2,6 +2,7 @@ package lct.mysymphony.RecyclerViewAdapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
-
 import java.util.ArrayList;
-
-import lct.mysymphony.Activity.HomePage;
 import lct.mysymphony.ModelClass.AppData;
 import lct.mysymphony.R;
 import lct.mysymphony.helper.DownloadApk;
@@ -39,7 +37,7 @@ public class AppListAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        return i;
+        return appData.get(i);
     }
 
     @Override
@@ -64,23 +62,17 @@ public class AppListAdapter extends BaseAdapter {
             expTv1.setText("No Description");
         }else{
             expTv1.setText(appData.get(position).getDescription());
-
         }
 
         installButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences preferences = context.getSharedPreferences("tempData", context.MODE_PRIVATE);
-                int flag = preferences.getInt("unknownSource", 0);
-                if (flag == 0) {
-                    progressDialog.showProgressDialogAPK();
-                    DownloadApk downloadApk = new DownloadApk();
-                    downloadApk.downLoadAPK(appData.get(position).getContentUrl(), context);
-                } else {
-                    progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
-                    DownloadApk downloadApk = new DownloadApk();
-                    downloadApk.downLoadAPK(appData.get(position).getContentUrl(), context);
-                }
+
+                String apkUrl = appData.get(position).getContentUrl();
+                String appTitle = appData.get(position).getTitle();
+                Log.i("DownloadAPK", apkUrl);
+                DownloadApk downloadApk = new DownloadApk();
+                downloadApk.downLoadAPK(appTitle, apkUrl, context);
             }
         });
         return customView;

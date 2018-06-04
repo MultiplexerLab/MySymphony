@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.Settings;
@@ -84,16 +85,23 @@ public class DownloadApk {
         context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 
-    public void downLoadAPK(final String apkUrl, final Context context) {
+    public void downLoadAPK(final String appTitle, final String apkUrl, final Context context) {
+        final ProgressDialog progressDialog = new lct.mysymphony.helper.ProgressDialog(context);
+        SharedPreferences preferences = context.getSharedPreferences("tempData", context.MODE_PRIVATE);
+        int flag = preferences.getInt("unknownSource", 0);
+        if (flag == 0) {
+            progressDialog.showProgressDialogAPK();
+        } else {
+            progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
+        }
         Log.i("apkUrlDownload", apkUrl);
         this.context = context;
         this.apkUrl = apkUrl;
-        //dbHelper=new DataHelper(context);
         String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
-        final String fname = "apk" + n + ".apk";
+        final String fname = appTitle + ".apk";
         contentSdCardUrl = fname;
         destination += fname;
         final Uri uri = Uri.parse("file://" + destination);
@@ -103,8 +111,8 @@ public class DownloadApk {
             file.delete();
 
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(apkUrl));
-        request.setDescription("Downloading the APK please wait!");
-        request.setTitle("APK!");
+        request.setDescription("Downloading the " + appTitle + " please wait!");
+        request.setTitle(appTitle);
 
         final Uri apkUri = FileProvider.getUriForFile(context,
                 BuildConfig.APPLICATION_ID + ".provider",
@@ -118,9 +126,9 @@ public class DownloadApk {
             public void onReceive(Context ctxt, Intent intent) {
                 try {
                     Log.d("onComplete", "onComplete");
+                    progressDialog.hideProgressDialog();
                     AsyncResponse asyncResponse = (AsyncResponse) context;
                     asyncResponse.processFinish("complete");
-                    //insertDataInDatabaseWithContentSdcardUl();
 
                     Intent install = new Intent(Intent.ACTION_VIEW);
                     install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -21,6 +21,7 @@
     <requestFocus />
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="50dp"
@@ -76,67 +77,73 @@
                     android:gravity="bottom"
                     android:orientation="horizontal"
                     android:padding="10dp">
+
                     <LinearLayout
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content">
+                        android:gravity="center"
+                        android:onClick="jumpToAppList"
+                        android:paddingLeft="5dp">
 
                         <ImageView
                             android:id="@+id/mainButton1"
                             android:layout_width="wrap_content"
                             android:layout_height="50dp"
-                            android:onClick="jumpToAppList"
-                            android:src="@drawable/mobile"
-                            android:textSize="12dp" />
+                            android:src="@drawable/mobile" />
 
                         <TextView
                             android:id="@+id/textViewMain1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:padding="3dp"/>
+                            android:padding="3dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content">
+                        android:gravity="center"
+                        android:onClick="jumpToVideoList"
+                        android:paddingLeft="5dp">
 
                         <ImageView
                             android:id="@+id/mainButton2"
                             android:layout_width="wrap_content"
                             android:layout_height="60dp"
-                            android:onClick="jumpToVideoList"
-                            android:src="@drawable/customer_care"
-                            android:textSize="12dp" />
+                            android:src="@drawable/customer_care" />
 
                         <TextView
                             android:id="@+id/textViewMain2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:padding="3dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content">
+                        android:gravity="center"
+                        android:onClick="jumpToContact">
 
                         <ImageView
                             android:id="@+id/mainButton3"
                             android:layout_width="wrap_content"
                             android:layout_height="60dp"
-                            android:onClick="jumpToContact"
-                            android:src="@drawable/support"
-                            android:textSize="12dp" />
+                            android:src="@drawable/support" />
 
                         <TextView
                             android:id="@+id/textViewMain3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:padding="3dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -359,8 +366,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="বিজ্ঞান"
-                                android:textSize="10dp" />
+                                android:text="বিজ্ঞান" />
 
                         </LinearLayout>
 
@@ -387,8 +393,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="কার্টুন"
-                                android:textSize="10dp" />
+                                android:text="কার্টুন" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -755,7 +760,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/RVKids"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="5dp"
+                        android:layout_marginBottom="25dp"
                         android:onClick="startCartoonActivity"
                         android:text="আরো পড়ুন"
                         android:textColor="@color/red"
@@ -888,19 +893,128 @@
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/btmNavigation"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:background="@color/White"
-        android:elevation="8dp"
-        app:elevation="8dp"
-        app:itemBackground="@color/White"
-        app:itemIconTint="@drawable/bottom_nav_color_state"
-        app:itemTextColor="@drawable/bottom_nav_color_state"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintLeft_toRightOf="parent"
-        app:menu="@menu/bottom_navigation_menu"></android.support.design.widget.BottomNavigationView>
+        app:layout_constraintLeft_toRightOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/bottom1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:onClick="jumpToAppList"
+                    android:src="@drawable/mobile" />
+
+                <TextView
+                    android:id="@+id/textBottom1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="3dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/bottom2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/customer_care" />
+
+                <TextView
+                    android:id="@+id/textBottom2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="3dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/bottom3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:onClick="jumpToContact"
+                    android:src="@drawable/support" />
+
+                <TextView
+                    android:id="@+id/textBottom3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="3dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/bottom4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:onClick="jumpToContact"
+                    android:src="@drawable/support" />
+
+                <TextView
+                    android:id="@+id/textBottom4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="3dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
+
+
+    <!--
+    <android.support.design.widget.BottomNavigationView
+    android:id="@+id/btmNavigation"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/White"
+    android:elevation="8dp"
+    android:visibility="gone"
+    app:elevation="8dp"
+    app:itemBackground="@color/White"
+    app:itemIconTint="@drawable/bottom_nav_color_state"
+    app:itemTextColor="@drawable/bottom_nav_color_state"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintLeft_toRightOf="parent"
+    app:menu="@menu/bottom_navigation_menu"></android.support.design.widget.BottomNavigationView>-->

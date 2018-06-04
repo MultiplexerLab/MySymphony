@@ -101,7 +101,7 @@
                 android:id="@+id/buttonInstall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="center_horizontal"
                 android:background="@color/dark_red"
                 android:text="Install"
                 android:textColor="@color/White" />

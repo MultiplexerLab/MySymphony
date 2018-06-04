@@ -235,7 +235,7 @@ public class MusicPlayerActivity extends Activity implements MediaPlayerControl,
     public void downLoadAudio(View view) {
         progressDialog.showProgressDialog("গান ডাউনলোড হচ্ছে");
         DownloadAudio downloadAudio = new DownloadAudio();
-        downloadAudio.downloadAudio("http://jachaibd.com/files/eminem.mp3", MusicPlayerActivity.this, dataBaseData);
+        //downloadAudio.downloadAudio("http://jachaibd.com/files/eminem.mp3", MusicPlayerActivity.this, dataBaseData);
     }
 
     @Override

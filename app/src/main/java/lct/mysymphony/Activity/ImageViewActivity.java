@@ -378,7 +378,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                             String json = preferences.getString("databaseData", "");
                             DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
                             DownloadAudio downloadAudio = new DownloadAudio();
-                            downloadAudio.downloadAudio("http://jachaibd.com/files/eminem.mp3", ImageViewActivity.this, dataBaseData);
+                            //downloadAudio.downloadAudio("http://jachaibd.com/files/eminem.mp3", ImageViewActivity.this, dataBaseData);
                             ///downloadAudio.downloadAudio("https://fsa.zobj.net/download/bztTqNHqgr0dug1iOwSoDq7Pp6Czdcalekon2tBpAJFeTMZa2WVQka2Dm18rAvddZw9JmlX3IQladYbM4PYgBASpPB-yBUIUBbm91yAK0QvANRE2dB8ZzCy-hFRY/?a=web&c=72&f=let_me_love_you.mp3&special=1525951411-ky2356gba1OZDBXCdm4ekc2OWgrp%2FZ1brCOPlJo1Aro%3D", ImageViewActivity.this, dataBaseData);
                         } else Log.d("audioUrlNotFound", "audioUrlNotFound");
 

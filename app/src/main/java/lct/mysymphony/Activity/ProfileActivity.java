@@ -86,9 +86,9 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
         viewPager = findViewById(R.id.viewPagerProfile);
         viewPagerAdapterForSports = new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setOffscreenPageLimit(3);
-        viewPagerAdapterForSports.addFragments(new PaymentListFragmentInProfileActivity(), "পেমেন্ট লিস্ট");
+        //.addFragments(new PaymentListFragmentInProfileActivity(), "পেমেন্ট লিস্ট");
         viewPagerAdapterForSports.addFragments(new MyItemFragmentInProfileActivity(), "মাই আইটেম");
-        viewPagerAdapterForSports.addFragments(new MyInfoFragmentInProfileActivity(), "মাই ইনফো");
+        //viewPagerAdapterForSports.addFragments(new MyInfoFragmentInProfileActivity(), "মাই ইনফো");
         viewPager.setAdapter(viewPagerAdapterForSports);
         tabLayout.setupWithViewPager(viewPager);
         cameFromWhichActivity=getIntent().getStringExtra("cameFromWhichActivity");

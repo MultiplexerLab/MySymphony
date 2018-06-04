@@ -2,6 +2,7 @@ package lct.mysymphony.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -14,8 +15,10 @@ import java.util.List;
 import lct.mysymphony.ModelClass.AppData;
 import lct.mysymphony.R;
 import lct.mysymphony.RecyclerViewAdapter.AppListAdapter;
+import lct.mysymphony.helper.DownloadApk;
+import lct.mysymphony.helper.ProgressDialog;
 
-public class AppList extends AppCompatActivity {
+public class AppList extends AppCompatActivity implements DownloadApk.AsyncResponse{
 
     ListView listView;
     AppListAdapter adapter;
@@ -35,5 +38,10 @@ public class AppList extends AppCompatActivity {
 
         adapter = new AppListAdapter(AppList.this, appList);
         listView.setAdapter(adapter);
+    }
+
+    @Override
+    public void processFinish(String output) {
+
     }
 }

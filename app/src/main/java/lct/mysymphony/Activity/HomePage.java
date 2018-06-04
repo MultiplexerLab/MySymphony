@@ -109,7 +109,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     ArrayList<ShocolChobi> shocolChobiArrayList;
     ArrayList<GamesZone> gamesZoneArrayList;
     ArrayList<ShikkhaSohaYika> shikkhaSohaYikaArrayList;
-    BottomNavigationView bottomNavigationView;
+    //BottomNavigationView bottomNavigationView;
 
     private android.support.v7.widget.Toolbar toolbar;
 
@@ -173,13 +173,6 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         appList = new ArrayList<>();
         musicVideoList = new ArrayList<>();
 
-        bottomNavigationView = findViewById(R.id.btmNavigation);
-        bottomNavigationView.getMenu().findItem(R.id.home_bottom_navigation).setChecked(true);
-        bottomNavigationView.getMenu().getItem(0).setIcon(R.drawable.bottom1);
-        bottomNavigationView.getMenu().getItem(1).setIcon(R.drawable.bottom2);
-        bottomNavigationView.getMenu().getItem(2).setIcon(R.drawable.bottom3);
-        bottomNavigationView.getMenu().getItem(3).setIcon(R.drawable.bottom4);
-
         String apkUrl = getIntent().getStringExtra("apk");
         if (apkUrl != null) {
             SharedPreferences preferences = context.getSharedPreferences("tempData", context.MODE_PRIVATE);
@@ -187,32 +180,15 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             if (flag == 0) {
                 progressDialog.showProgressDialogAPK();
                 DownloadApk downloadApk = new DownloadApk();
-                downloadApk.downLoadAPK(apkUrl, HomePage.this);
+                downloadApk.downLoadAPK("App", apkUrl, HomePage.this);
             } else {
                 progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
                 DownloadApk downloadApk = new DownloadApk();
-                downloadApk.downLoadAPK(apkUrl, HomePage.this);
+                downloadApk.downLoadAPK("App",apkUrl, HomePage.this);
             }
         }
 
         progressDialog.showProgressDialog();
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                if (id == R.id.about_bottom_navigation) {
-                    Intent symphony = new Intent(HomePage.this, HomePage.class);
-                    startActivity(symphony);
-                } else if (id == R.id.contact_bottom_navigation) {
-                    Intent news = new Intent(HomePage.this, HomePage.class);
-                    startActivity(news);
-                } else if (id == R.id.terms_bottom_navigation) {
-                    Intent apps = new Intent(HomePage.this, HomePage.class);
-                    startActivity(apps);
-                }
-                return true;
-            }
-        });
 
         profileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,37 +204,32 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 startActivity(profileIntent);
             }
         });
-        //loadDataFromVolley();
         loadIconsFromServer();
         newloadDataFromVolley();
     }
 
     private void setIcons() {
-        Integer[] imageViews = {R.id.mainButton1, R.id.mainButton2, R.id.mainButton3, R.id.imageView1, R.id.imageView2, R.id.imageView3, R.id.imageView4, R.id.imageView5, R.id.imageView6, R.id.imageView7, R.id.imageView8};
-        Integer[] textViews = {R.id.textViewMain1, R.id.textViewMain2, R.id.textViewMain3, R.id.textView1, R.id.textView2, R.id.textView3, R.id.textView4, R.id.textView5, R.id.textView6, R.id.textView7, R.id.textView8};
+        Integer[] imageViews = {R.id.mainButton1, R.id.mainButton2, R.id.mainButton3, R.id.imageView1, R.id.imageView2, R.id.imageView3, R.id.imageView4, R.id.imageView5, R.id.imageView6, R.id.imageView7, R.id.imageView8, R.id.bottom1, R.id.bottom2, R.id.bottom3, R.id.bottom4};
+        Integer[] textViews = {R.id.textViewMain1, R.id.textViewMain2, R.id.textViewMain3, R.id.textView1, R.id.textView2, R.id.textView3, R.id.textView4, R.id.textView5, R.id.textView6, R.id.textView7, R.id.textView8, R.id.textBottom1, R.id.textBottom2, R.id.textBottom3, R.id.textBottom4};
 
         for (int i = 0; i < iconImageUrls.size(); i++) {
             Glide.with(HomePage.this).load(iconImageUrls.get(i).getImage()).into((ImageView) findViewById(imageViews[i]));
             TextView temp = findViewById(textViews[i]);
             temp.setText(iconImageUrls.get(i).getCategoryTitle());
-
-            /*if (iconImageUrls.get(i).getType().equals("topic")) {
-                Log.i("LinkImages", iconImageUrls.get(i).getImage());
-
-            }*/
         }
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
         AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "N", "HomePage",
                 "IN", "Entrance");
     }
+
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "HomePage",
                 "OUT", "Leave");
@@ -543,9 +514,9 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     } else if (contentCat.equals("kk_mela")) {
                         kidsArrList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
                         initializeKidsRecylerView();
-                    }else if (contentCat.equals("mobile_app")) {
+                    } else if (contentCat.equals("mobile_app")) {
                         appList.add(new AppData(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), contentUrl));
-                    }else if (contentCat.equals("music_video")) {
+                    } else if (contentCat.equals("music_video")) {
                         musicVideoList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
                     }
                 } catch (JSONException e) {

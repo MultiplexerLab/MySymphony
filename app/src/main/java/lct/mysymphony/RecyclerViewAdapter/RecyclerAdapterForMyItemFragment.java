@@ -36,29 +36,29 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
     /*ArrayList<Bitmap> bitmapArrayList;*/
     ArrayList<String> contentSdCardUrl;
     ArrayList<DataBaseData> dataHelperArrayList;
-   ArrayList<String> contentDownloadTimestampArrayList;
-    public RecyclerAdapterForMyItemFragment(Activity activity, ArrayList<DataBaseData> dataHelperArrayList,ArrayList<String> contentSdCardUrl,ArrayList<String> contentDownloadTimestampArrayLis) {
+    ArrayList<String> contentDownloadTimestampArrayList;
+
+    public RecyclerAdapterForMyItemFragment(Activity activity, ArrayList<DataBaseData> dataHelperArrayList, ArrayList<String> contentSdCardUrl, ArrayList<String> contentDownloadTimestampArrayLis) {
         this.activity = activity;
         /*this.bitmapArrayList = bitmapArrayList;*/
         this.dataHelperArrayList = dataHelperArrayList;
-        this.contentSdCardUrl=contentSdCardUrl;
-        this.contentDownloadTimestampArrayList=contentDownloadTimestampArrayLis;
+        this.contentSdCardUrl = contentSdCardUrl;
+        this.contentDownloadTimestampArrayList = contentDownloadTimestampArrayLis;
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout_my_item_in_user_profile, parent, false);
         /*RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, dataHelperArrayList, bitmapArrayList);*/
-        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, dataHelperArrayList,contentSdCardUrl,contentDownloadTimestampArrayList);
+        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view, activity, dataHelperArrayList, contentSdCardUrl, contentDownloadTimestampArrayList);
         return recyclerViewHolder;
     }
+
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
         String contentType = dataHelperArrayList.get(position).getContentType();
         holder.contentDownloadTimestampTV.setText(contentDownloadTimestampArrayList.get(position));
-      /*  if (dataHelperArrayList.get(position).getContentStatus().contains("free"))
-            holder.downloadIcon.setVisibility(View.GONE);*/
-        String text;
+         String text;
         if (contentType.contains("image"))
             text = "ছবি";
         else if (contentType.contains("apk")) {
@@ -71,19 +71,13 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
             text = "ছবি";
         }
         holder.textView.setText(text);
+        if(dataHelperArrayList.get(position).getThumbNailImgUrl()==null){
 
-        /*if (contentType.contains("audio")||contentType.contains("video"))
-        {*/
+        }else{
             Glide.with(activity)
-                    .load(dataHelperArrayList.get(position).getThumbNailImgUrl())
+                    .load(dataHelperArrayList.get(position).getThumbNailImgUrl().isEmpty())
                     .into(holder.imageView);
-       /* }
-        else
-        {
-            Glide.with(activity)
-                    .load(bitmapArrayList.get(position))
-                    .into(holder.imageView);
-        }*/
+        }
 
     }
 
@@ -97,64 +91,59 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
         ImageView imageView;
         CardView cardView;
         Activity activity;
-        TextView textView,contentDownloadTimestampTV;
+        TextView textView, contentDownloadTimestampTV;
         ArrayList<DataBaseData> dataHelperArrayList;
         private ArrayList<String> contentDownloadTimestampArrayList;
-       /* ArrayList<Bitmap> bitmapArrayList;*/
-       ArrayList<String> contentSdCardUrl;
+        /* ArrayList<Bitmap> bitmapArrayList;*/
+        ArrayList<String> contentSdCardUrl;
         /*ImageView downloadIcon;*/
-       ImageView shareIcon;
-        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<DataBaseData> dataHelperArrayList,final ArrayList<String> contentSdCardUrl,final ArrayList<String> contentDownloadTimestampArrayList) {
+        ImageView shareIcon;
+
+        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<DataBaseData> dataHelperArrayList, final ArrayList<String> contentSdCardUrl, final ArrayList<String> contentDownloadTimestampArrayList) {
             super(view);
             this.activity = activity;
             this.dataHelperArrayList = dataHelperArrayList;
-            this.contentDownloadTimestampArrayList=contentDownloadTimestampArrayList;
-       /*     this.bitmapArrayList = bitmapArrayList;*/
+            this.contentDownloadTimestampArrayList = contentDownloadTimestampArrayList;
+            /*     this.bitmapArrayList = bitmapArrayList;*/
             imageView = view.findViewById(R.id.imgMyitemFragment);
             textView = view.findViewById(R.id.titleMyItemFragment);
             cardView = view.findViewById(R.id.myItemFragmentCardView);
             shareIcon = view.findViewById(R.id.shareIcon);
-            contentDownloadTimestampTV=view.findViewById(R.id.contentDownloadTimestampTV);
+            contentDownloadTimestampTV = view.findViewById(R.id.contentDownloadTimestampTV);
             view.setDrawingCacheEnabled(false);
-            this.contentSdCardUrl=contentSdCardUrl;
+            this.contentSdCardUrl = contentSdCardUrl;
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String contentType=dataHelperArrayList.get(getAdapterPosition()).getContentType();
+                    String contentType = dataHelperArrayList.get(getAdapterPosition()).getContentType();
                     String root = Environment.getExternalStorageDirectory().toString();
                     Intent intentShareFile = new Intent(Intent.ACTION_SEND);
                     File file = null;
-                    if (contentType.contains("apk"))
-                    {
-                        Log.d("contentTypeApk","contentTypeApk");
-                        Log.d("contentSdCardUrl",contentSdCardUrl.get(getAdapterPosition()));
-                        String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/"+contentSdCardUrl.get(getAdapterPosition());
+                    if (contentType.contains("apk")) {
+                        Log.d("contentTypeApk", "contentTypeApk");
+                        Log.d("contentSdCardUrl", contentSdCardUrl.get(getAdapterPosition()));
+                        String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + contentSdCardUrl.get(getAdapterPosition());
                         try {
                             file = new File(destination);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Log.d("fileProblemInApk","fileProblemInApk");
+                            Log.d("fileProblemInApk", "fileProblemInApk");
                         }
-                    }
-                    else {
+                    } else {
                         file = new File(root + "/appstore/" + contentSdCardUrl.get(getAdapterPosition()));
                     }
-                    if (file.exists())
-                    {
-                        if (contentType.contains("image"))
-                        {
+                    if (file.exists()) {
+                        if (contentType.contains("image")) {
                             if (dataHelperArrayList.get(getAdapterPosition()).getContentCat().contains("moving_image"))
                                 intentShareFile.setType("image/gif");
-                            else
-                            {
+                            else {
                                 intentShareFile.setType("image/jpg");
-                                Log.d("contentype","image/jpg");
+                                Log.d("contentype", "image/jpg");
                             }
-                        }
-                        else if (contentType.contains("apk")) {
+                        } else if (contentType.contains("apk")) {
                             intentShareFile.setType("application/apk");
                         } else if (contentType.contains("video")) {
-                            Log.d("videoEnter","videoEnter");
+                            Log.d("videoEnter", "videoEnter");
                             /*Uri uri = Uri.fromFile(file);
                             intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             intentShareFile.putExtra(Intent.EXTRA_STREAM,uri);*/
@@ -175,10 +164,8 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
                                 "Sharing File...");
                         intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File...");
                         activity.startActivity(Intent.createChooser(intentShareFile, "Share File"));
-                    }
-                    else
-                    {
-                        Log.d("fileNotExist","fileNotExist");
+                    } else {
+                        Log.d("fileNotExist", "fileNotExist");
                         Toast.makeText(activity, "দুঃখিত কন্টেন্টটি খুজে পাওয়া যাচ্ছেনা", Toast.LENGTH_SHORT).show();
                     }
                     /*view.setDrawingCacheEnabled(false);

@@ -24,7 +24,6 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
     private WeakReference<ImageButton> btnPlay;
     private WeakReference<ImageButton> btnFastForward;
     private WeakReference<ImageButton> btnRewind;
-    /*private WeakReference<ImageButton> btnStop;*/
     public static WeakReference<TextView> textViewSongTime;
     public static WeakReference<SeekBar> songProgressBar;
     static Handler progressBarHandler = new Handler();
@@ -33,7 +32,7 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
     ProgressDialog progressDialog;
     public static MediaPlayer mp;
     private boolean isPause = false;
-    String songUrl;
+    String songUrl, songTitle;
 
     @Override
     public void onCreate() {
@@ -49,9 +48,9 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
         if (intent != null) {
             initUI();
             songUrl=(String) intent.getExtras().get("songUrl");
+            songTitle=(String) intent.getExtras().get("songTitle");
             super.onStart(intent, startId);
         }
-
         return START_STICKY;
     }
 
@@ -65,14 +64,12 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
         btnRewind = new WeakReference<>(PlayAudioActivity.btnRewind);
         btnFastForward = new WeakReference<>(PlayAudioActivity.btnFastForward);
         btnRewind = new WeakReference<>(PlayAudioActivity.btnRewind);
-        /*btnStop = new WeakReference<>(PlayAudioActivity.btnStop);*/
         textViewSongTime = new WeakReference<>(PlayAudioActivity.textViewSongTime);
         songProgressBar = new WeakReference<>(PlayAudioActivity.seekBar);
         songProgressBar.get().setOnSeekBarChangeListener(this);
         btnPlay.get().setOnClickListener(this);
         btnFastForward.get().setOnClickListener(this);
         btnRewind.get().setOnClickListener(this);
-        /*btnStop.get().setOnClickListener(this);*/
         mp.setOnCompletionListener(this);
 
     }
@@ -87,7 +84,6 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
                     btnPlay.get().setBackgroundResource(R.drawable.player);
                     return;
                 }
-
                 if (isPause) {
                     mp.start();
                     isPause = false;
@@ -99,7 +95,6 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
                 if (!mp.isPlaying()) {
                     playSong();
                 }
-
                 break;
             case R.id.btnFastForward:
                 Log.d("btnFastForward","btnFastForward");
@@ -109,13 +104,6 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
                 Log.d("btnRewind","btnRewind");
                 rewindSong();
                 break;
-
-            /*case R.id.btnStop:
-                mp.stop();
-                onCompletion(mp);
-                textViewSongTime.get().setText("0.00/0.00"); // Displaying time completed playing
-                break;*/
-
         }
     }
 
@@ -126,6 +114,7 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
 
         }
     }
+
 
     static Runnable mUpdateTimeTask = new Runnable() {
         public void run() {
@@ -157,7 +146,6 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
 
     // Play song
     public void playSong() {
-        Utility.initNotification("Playing (Amar shonar bangla)...", this);
         try {
             mp.reset();
             ///Uri myUri = Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.bangla);

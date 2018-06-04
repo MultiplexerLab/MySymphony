@@ -26,13 +26,13 @@
             android:padding="1dp">
 
             <ImageView
-                android:layout_weight=".00001"
+                android:layout_weight="0.6"
                 android:id="@+id/imgMyitemFragment"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/kheladhula_cricket_2" />
+                android:src="@drawable/musicvideo" />
 
 
             <LinearLayout

@@ -16,32 +16,24 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 
 
 public class Utility {
-    //Notification
-    // Set up the notification ID
     public static final int NOTIFICATION_ID = 1;
-    @SuppressWarnings("unused")
-   /* public static Notification mNotificationManager;*/
     private static NotificationManager manager;
     private static Notification myNotication;
     public static final String NOTIFICATION_CHANNEL_ID = "10001";
 
     public static void initNotification(String songTitle, Context mContext) {
         try {
-
             manager = (NotificationManager) mContext.getSystemService(NOTIFICATION_SERVICE);
 
             Intent intent = new Intent(mContext,PlayAudioActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
             Notification.Builder builder = new Notification.Builder(mContext);
 
-            builder.setAutoCancel(false);
-            //builder.setTicker("this is ticker text");
+            builder.setAutoCancel(true);
             builder.setContentTitle(songTitle);
-          /*  builder.setContentText("You have a new message");*/
-            builder.setSmallIcon(R.mipmap.ic_launcher);
+            builder.setSmallIcon(R.drawable.icon);
             builder.setContentIntent(pendingIntent);
             builder.setOngoing(true);
-       /*     builder.setSubText("This is subtext..."); */  //API level 16
             builder.setNumber(100);
             builder.build();
 
@@ -62,7 +54,6 @@ public class Utility {
             assert manager != null;
             manager.notify(NOTIFICATION_ID, myNotication);
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,11 +64,7 @@ public class Utility {
         Double percentage = (double) 0;
         long currentSeconds = (int) (currentDuration / 1000);
         long totalSeconds = (int) (totalDuration / 1000);
-
-        // calculating percentage
         percentage = (((double) currentSeconds) / totalSeconds) * 100;
-
-        // return percentage
         return percentage.intValue();
     }
 

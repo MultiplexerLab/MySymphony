@@ -38,7 +38,7 @@ public class Music_Video extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_list);
+        setContentView(R.layout.activity_music__video);
 
         listView = findViewById(R.id.listViewApps);
 

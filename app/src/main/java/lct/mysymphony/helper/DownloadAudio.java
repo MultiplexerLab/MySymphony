@@ -38,14 +38,17 @@ public class DownloadAudio {
         bt.execute(audioUrl);
     }*/
 
-    public void downloadAudio(String audioUrl, Context context, DataBaseData dataBaseData) {
+    public void downloadAudio(String audioUrl, String songTitle, Context context, DataBaseData dataBaseData) {
         this.context = context;
         this.audioUrl = audioUrl;
         this.dataBaseData = dataBaseData;
         dbHelper=new DataHelper(context);
-        if (dataBaseData==null)
-            Log.d("dataBaseDataNull","dataBaseDataNull");
-        audioTitle=dataBaseData.getContentTitle();
+        if (dataBaseData==null) {
+            Log.d("dataBaseDataNull", "dataBaseDataNull");
+            audioTitle = songTitle;
+        }else{
+            audioTitle=dataBaseData.getContentTitle();
+        }
         Log.i("DonwloadAudioEnter", "Downloading the Audio. Please wait...");
         DownloadAudio.RetrieveAudioTask bt = new DownloadAudio.RetrieveAudioTask();
         bt.execute(audioUrl);
@@ -53,8 +56,6 @@ public class DownloadAudio {
     class RetrieveAudioTask extends AsyncTask<String, Void, String> {
 
         private Exception exception;
-
-
         protected void onPreExecute() {
             Log.i("DonwloadAudio", "Downloading the Audio. Please wait...");
         }
@@ -76,9 +77,6 @@ public class DownloadAudio {
                         bao.write(buff, 0, bytesRead);
                     }
                     saveAudio(bao);
-                    //byte[] data = bao.toByteArray();
-                    /*video = Base64.encodeToString(data, Base64.DEFAULT);*/
-                    ///Log.i("audioStr", video);
                 }
             } catch (MalformedURLException mue) {
                 Log.e("URLException", mue.toString());

@@ -16,6 +16,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -51,7 +52,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         setContentView(R.layout.activity_play_audio);
         utility = new Utility();
         progressDialog = new lct.mysymphony.helper.ProgressDialog(PlayAudioActivity.this);
-        SharedPreferences.Editor editor = getSharedPreferences("imageUrlSp", MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = getSharedPreferences("audioData", MODE_PRIVATE).edit();
         data = (Porashuna) getIntent().getSerializableExtra("data");
         if (data != null) {
             String imageUrl = data.getThumbnailImgUrl();
@@ -67,22 +68,35 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             String contentDesc = "";
             String contentType = data.getContentType();
             String thumbNailImgUrl = data.getThumbnailImgUrl();
+            editor.putString("songUrl", data.getContentUrl());
+            editor.putString("songTitle", data.getContentTitle());
+            editor.commit();
+
            if (isMyServiceRunning(PlayerInService.class))
            {
                Log.d("Servicerunning","ServiceRunning");
                playerService = new Intent(PlayAudioActivity.this, PlayerInService.class);
                playerService.putExtra("songUrl", data.getContentUrl());
+               playerService.putExtra("songTitle", data.getContentTitle());
                stopService(playerService);
            }
             utility.cancelNotification();
             dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, "paid", data.getContentId());
+            Gson gson = new Gson();
+            String json = gson.toJson(dataBaseData);
+            SharedPreferences.Editor editor1 = getSharedPreferences("tempData", MODE_PRIVATE).edit();
+            editor1.putString("databaseData", json);
+            editor1.commit();
         } else {
             SharedPreferences prefs = getSharedPreferences("imageUrlSp", MODE_PRIVATE);
             String restoredText = prefs.getString("imageUrl", null);
         }
         initView();
+        SharedPreferences prefs = getSharedPreferences("audioData", MODE_PRIVATE);
+
         playerService = new Intent(PlayAudioActivity.this, PlayerInService.class);
-        playerService.putExtra("songUrl", data.getContentUrl());
+        playerService.putExtra("songUrl", prefs.getString("songUrl",""));
+        playerService.putExtra("songTitle", prefs.getString("songTitle",""));
         startService(playerService);
     }
 
@@ -149,15 +163,24 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
 
     @Override
     protected void onStop(){
+        SharedPreferences prefs = getSharedPreferences("audioData", MODE_PRIVATE);
+        Utility.initNotification(prefs.getString("songTitle",""), this);
         super.onStop();
         AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", "PlayMusic",
                 "OUT", "Leave");
     }
 
     public void downLoadAudio(View view) {
+        Gson gson = new Gson();
+        SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
+        String json = preferences.getString("databaseData", "");
+        DataBaseData dataBaseData1 = gson.fromJson(json, DataBaseData.class);
+
+        SharedPreferences prefs = getSharedPreferences("audioData", MODE_PRIVATE);
         progressDialog.showProgressDialog("গান ডাউনলোড হচ্ছে");
+
         DownloadAudio downloadAudio = new DownloadAudio();
-        downloadAudio.downloadAudio(data.getContentUrl(), PlayAudioActivity.this, dataBaseData);
+        downloadAudio.downloadAudio(prefs.getString("songUrl",""),prefs.getString("songTitle",""), PlayAudioActivity.this, dataBaseData1);
     }
 
     @Override
