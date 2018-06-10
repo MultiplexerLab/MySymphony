@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AppStore</string>
+    <string name="app_name">Sym App Store</string>
     <string name="txtIntroduce">" শিক্ষা সংবাদ ও বিনোদনের নতুন ঠিকানা"</string>
     <string name="txtAggrement">" সাইন আপ করার মাধ্যমে আপনি "App Store " \n এর টার্মস এন্ড কন্ডিশনে সম্মত হচ্ছেন"</string>
     <string name="we_just_need_your_registered_email_id_to_sent_n_you_password_reset_instruction">We just need your registered email id \n to sent  you password reset instruction .</string>

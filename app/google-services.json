@@ -17,6 +17,10 @@
         {
           "client_id": "904373924633-e9mgomkb3ucakrog2mdu4e3itbp8c6v5.apps.googleusercontent.com",
           "client_type": 3
+        },
+        {
+          "client_id": "904373924633-e9mgomkb3ucakrog2mdu4e3itbp8c6v5.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
@@ -39,19 +43,15 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:904373924633:android:dd7c765e37e1b6f5",
+        "mobilesdk_app_id": "1:904373924633:android:6af70d8b7a18d688",
         "android_client_info": {
-          "package_name": "tanvir.multiplexer"
+          "package_name": "sym.appstore"
         }
       },
       "oauth_client": [
         {
-          "client_id": "904373924633-0ff77bg9hir8cu7k3shh6q6proik7khi.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "tanvir.multiplexer",
-            "certificate_hash": "b7aa2410ccbe5dc5561d1cc17cc14ce0b93788f3"
-          }
+          "client_id": "904373924633-e9mgomkb3ucakrog2mdu4e3itbp8c6v5.apps.googleusercontent.com",
+          "client_type": 3
         },
         {
           "client_id": "904373924633-e9mgomkb3ucakrog2mdu4e3itbp8c6v5.apps.googleusercontent.com",
@@ -68,13 +68,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "904373924633-e9mgomkb3ucakrog2mdu4e3itbp8c6v5.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".Activity.ContactActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbarLayoutInHomepage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <include
+            android:id="@+id/toolbarlayoutinhome_page"
+            layout="@layout/toolbar_layout_contact_us" />
+    </android.support.design.widget.AppBarLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -22,77 +33,52 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="3dp"
-                android:text="Name"
-                android:textAllCaps="true"
-                android:textColor="@color/colorPrimary"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
             <EditText
                 android:id="@+id/your_name"
-                android:layout_width="fill_parent"
-                android:layout_height="38dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
+                android:hint="আপনার নাম"
                 android:inputType="text"
                 android:singleLine="true"
                 android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="3dp"
-                android:text="Phone Number"
-                android:textAllCaps="true"
-                android:textColor="@color/colorPrimary"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
             <EditText
                 android:id="@+id/your_email"
-                android:layout_width="fill_parent"
-                android:layout_height="38dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
+                android:hint="ইমেইল"
                 android:inputType="textEmailAddress"
                 android:singleLine="true"
                 android:textSize="14sp" />
 
-
-            <TextView
-                android:layout_width="fill_parent"
+            <EditText
+                android:id="@+id/your_phone"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="3dp"
-                android:text="Email"
-                android:textAllCaps="true"
-                android:textColor="@color/colorPrimary"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:layout_marginBottom="20dp"
+                android:hint="আপনার মোবাইল নম্বর"
+                android:inputType="phone"
+                android:singleLine="true"
+                android:textSize="14sp" />
 
             <EditText
-                android:id="@+id/your_subject"
-                android:layout_width="fill_parent"
-                android:layout_height="38dp"
+                android:id="@+id/your_company"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
+                android:hint="আপনি কোন ধরনের প্রতিষ্ঠানের সাথে জড়িত?"
                 android:inputType="text"
                 android:singleLine="true"
                 android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="32dp"
-                android:paddingLeft="3dp"
-                android:text="Message"
-                android:textAllCaps="true"
-                android:textColor="@color/colorPrimary"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
             <EditText
                 android:id="@+id/your_message"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:height="180dp"
-                android:gravity="top"
+                android:hint="আপনার মন্তব্য লিখুন…"
                 android:inputType="textMultiLine"
                 android:textSize="14sp" />
 
@@ -101,16 +87,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@color/colorPrimary"
+                android:background="@color/dark_red"
                 android:paddingBottom="1dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:paddingTop="1dp"
-                android:text="Send"
+                android:text="পাঠিয়ে দিন"
+                android:onClick="sendMessage"
                 android:textAllCaps="true"
                 android:textColor="@android:color/white"
                 android:textSize="13sp" />
         </LinearLayout>
     </ScrollView>
 
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

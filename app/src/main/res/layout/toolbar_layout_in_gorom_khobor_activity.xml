@@ -6,8 +6,7 @@
     android:layout_height="?attr/actionBarSize"
     android:background="@color/toolbarColor"
     app:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:id="@+id/toolBar"
-    >
+    android:id="@+id/toolBar">
 
    <LinearLayout
        android:layout_width="match_parent"
@@ -20,10 +19,4 @@
            android:text="গরম খবর"
            android:layout_height="wrap_content" />
    </LinearLayout>
-
-
-
-
-
-
 </android.support.v7.widget.Toolbar>

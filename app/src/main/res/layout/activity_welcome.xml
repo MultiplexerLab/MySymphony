@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPagerIntro"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <requestFocus />
+    </android.support.v4.view.ViewPager>
+
+
+    <com.viewpagerindicator.CirclePageIndicator
+        android:id="@+id/indicatorIntro"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="#4D000000"
+        android:gravity="bottom"
+        android:padding="10dip"
+        app:centered="true"
+        app:fillColor="#FFFFFF"
+        app:pageColor="@color/colorPrimaryDark"
+        app:snap="false" />
+
 </RelativeLayout>

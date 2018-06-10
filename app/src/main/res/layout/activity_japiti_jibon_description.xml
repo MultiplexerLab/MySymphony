@@ -37,7 +37,7 @@
                 android:layout_height="300dp"
                 android:background="@android:color/black">
 
-                <lct.mysymphony.universalvideoview.UniversalVideoView
+                <sym.appstore.universalvideoview.UniversalVideoView
                     android:id="@+id/videoView"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -45,7 +45,7 @@
                     app:uvv_autoRotation="true"
                     app:uvv_fitXY="true" />
 
-                <lct.mysymphony.universalvideoview.UniversalMediaController
+                <sym.appstore.universalvideoview.UniversalMediaController
                     android:id="@+id/media_controller"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -130,9 +130,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:visibility="visible"
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/priceTag"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
@@ -167,8 +169,9 @@
                         android:layout_gravity="bottom"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/btn_style_red"
-                        android:onClick="mullochar"
-                        android:text="কিনুন/ডাউনলোড করুন"
+                        android:onClick="downloadVideo"
+                        android:text="ডাউনলোড করুন"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:visibility="visible"
                         android:textColor="@color/White" />
                 </LinearLayout>

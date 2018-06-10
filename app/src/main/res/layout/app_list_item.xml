@@ -34,8 +34,7 @@
                         android:id="@+id/appCoverImage"
                         android:layout_width="wrap_content"
                         android:layout_height="150dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/image_1" />
+                        android:src="@drawable/app_download" />
 
                     <ProgressBar
                         android:id="@+id/progressBarInJapitoJibon"
@@ -45,9 +44,9 @@
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="5dp"
                         android:indeterminate="true"
-                        android:visibility="invisible"
                         android:indeterminateTint="@color/progress_diaog_color"
-                        android:indeterminateTintMode="src_atop" />
+                        android:indeterminateTintMode="src_atop"
+                        android:visibility="invisible" />
 
                 </RelativeLayout>
 
@@ -93,8 +92,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|bottom"
                     android:background="@android:color/transparent"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="5dp"/>
+                    android:paddingBottom="5dp"
+                    android:paddingRight="10dp" />
             </com.ms.square.android.expandabletextview.ExpandableTextView>
 
             <Button

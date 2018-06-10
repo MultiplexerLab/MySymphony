@@ -129,7 +129,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:onClick="jumpToContact">
+                        android:onClick="jumpToEmoticon">
 
                         <ImageView
                             android:id="@+id/mainButton3"
@@ -366,6 +366,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:gravity="center"
                                 android:text="বিজ্ঞান" />
 
                         </LinearLayout>
@@ -393,6 +394,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:gravity="center"
                                 android:text="কার্টুন" />
                         </LinearLayout>
                     </LinearLayout>
@@ -942,6 +944,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
+                    android:onClick="jumpToAboutUs"
                     android:src="@drawable/customer_care" />
 
                 <TextView
@@ -985,7 +988,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:onClick="jumpToContact"
+                    android:onClick="jumpToTerms"
                     android:src="@drawable/support" />
 
                 <TextView
