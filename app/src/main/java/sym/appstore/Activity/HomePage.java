@@ -148,8 +148,8 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             Manifest.permission.GET_ACCOUNTS,
             Manifest.permission.READ_PHONE_NUMBERS,
     };
-    String emailId = "default", devicePhoneNumber = "default", deviceName = "default";
-    String osVersion = "default", carrierName = "default", firebaseToken = "default", deviceId = "default";
+    String emailId = "", devicePhoneNumber = "", deviceName = "";
+    String osVersion = "", carrierName = "", firebaseToken = "", deviceId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,62 +201,70 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             }
         }
 
-        if(internetConnected()) {
-            initDeviceData();
-            progressDialog.showProgressDialog();
-            loadIconsFromServer();
-            getInstanceInfo();
-            newloadDataFromVolley();
-        }else{
-            Toast.makeText(this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void initDeviceData() {
-
         SharedPreferences prefs = getSharedPreferences("login", MODE_PRIVATE);
         int loginStatus = prefs.getInt("loginStatus", 0);
         if (loginStatus == 1) {
-
+            loadIconsFromServer();
+            getInstanceInfo();
+            newloadDataFromVolley();
         } else {
-            deviceId = Settings.Secure.getString(getContentResolver(),
-                    Settings.Secure.ANDROID_ID);
-            firebaseToken = prefs.getString("firebaseToken", "nothing");
-            Log.i("FirebaseTokenMain", firebaseToken);
-            checkPermissions();
-
-            TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            carrierName = manager.getNetworkOperatorName();
-            try {
-                if (ActivityCompat.checkSelfPermission(HomePage.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                devicePhoneNumber = manager.getLine1Number();
-                Log.i("PhoneNo", devicePhoneNumber);
-            } catch (Exception e) {
-                Log.e("Excep", e.toString());
-            }
-            Log.i("carrierName", carrierName);
-            deviceName = android.os.Build.MODEL;
-            Log.i("ModelName", deviceName);
-            osVersion = Build.VERSION.RELEASE;
-            Log.i("osVersion", osVersion);
-
-            Pattern gmailPattern = Patterns.EMAIL_ADDRESS;
-            Account[] accounts = AccountManager.get(this).getAccounts();
-            for (Account account : accounts) {
-                if (gmailPattern.matcher(account.name).matches()) {
-                    emailId = account.name;
-                }
-            }
-            Log.i("EmailId", emailId);
-            if (emailId.isEmpty() || emailId == null) {
-                enableRuntimePermission();
-                getAccountsName();
+            if (internetConnected()) {
+                initializeData();
+                insertUserToDB();
+                loadIconsFromServer();
+                getInstanceInfo();
+                newloadDataFromVolley();
             } else {
-                insertToServerDB();
+                Toast.makeText(this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void insertUserToDB() {
+        Pattern gmailPattern = Patterns.EMAIL_ADDRESS;
+        Account[] accounts = AccountManager.get(this).getAccounts();
+        for (Account account : accounts) {
+            if (gmailPattern.matcher(account.name).matches()) {
+                emailId = account.name;
+            }
+        }
+        Log.i("EmailId", emailId);
+        if (emailId.isEmpty() || emailId == null) {
+            enableRuntimePermission();
+            getAccountsName();
+        } else {
+            initializeData();
+            insertToServerDB();
+        }
+    }
+
+    private void initializeData() {
+        sliderImages = new ArrayList<>();
+        deviceId = Settings.Secure.getString(getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        SharedPreferences prefs = getSharedPreferences("login", MODE_PRIVATE);
+        firebaseToken = prefs.getString("firebaseToken", "nothing");
+        Log.i("FirebaseTokenMain", firebaseToken);
+        progressDialog = new sym.appstore.helper.ProgressDialog(HomePage.this);
+        checkPermissions();
+
+        TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        carrierName = manager.getNetworkOperatorName();
+        try {
+            if (ActivityCompat.checkSelfPermission(HomePage.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            devicePhoneNumber = manager.getLine1Number();
+            Log.i("PhoneNo", devicePhoneNumber);
+        } catch (Exception e) {
+            Log.e("ExcepPhoneNo", e.toString());
+        }
+        Log.i("carrierName", carrierName);
+        deviceName = android.os.Build.MODEL;
+        Log.i("ModelName", deviceName);
+        osVersion = Build.VERSION.RELEASE;
+        Log.i("osVersion", osVersion);
+        //getInstanceInfo();
     }
 
     public void getAccountsName() {
@@ -275,7 +283,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
             emailId = accountName;
             Log.i("Email", accountName);
-            initDeviceData();
+            initializeData();
             insertToServerDB();
         }
     }
@@ -316,6 +324,8 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     private void insertToServerDB() {
+        Log.i("Called", "Called");
+        progressDialog.showProgressDialog();
         String url = "http://bot.sharedtoday.com:9500/ws/mysymphony/commonInsertIntoSymUsers?tbl=symUsers";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -323,7 +333,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 Log.i("ResponseSignUp", response);
                 if (response.contains("SUCCESS")) {
                     AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "Registration",
-                            "SUCCESS", "");
+                            "SUCCESS", "Succesful Registration");
                     SharedPreferences.Editor editor;
                     editor = getSharedPreferences("login", MODE_PRIVATE).edit();
                     editor.putString("username", "Guest");
@@ -336,7 +346,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     finish();
                 } else if (response.contains("exists")) {
                     AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "Login",
-                            "SUCCESS", "");
+                            "SUCCESS", "Succesful Login");
                     progressDialog.hideProgressDialog();
                     SharedPreferences.Editor editor;
                     editor = getSharedPreferences("login", MODE_PRIVATE).edit();
@@ -373,7 +383,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("defaultPassword", "default");
 
-                if (deviceId == null || deviceId.equals("null")) {
+                if (deviceId == null || deviceId.equals("")) {
                     params.put("deviceId", "default");
                     params.put("userId", "default");
                 } else {
@@ -381,32 +391,32 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     params.put("userId", deviceId);
                 }
                 params.put("registrationDate", dateFormat.format(date));
-                if (devicePhoneNumber == null || devicePhoneNumber.equals("null")) {
-
+                if (devicePhoneNumber == null || devicePhoneNumber.equals("")) {
+                    params.put("contactNum", "01717");
                 } else {
                     params.put("contactNum", devicePhoneNumber);
                 }
-                if (firebaseToken == null || firebaseToken.equals("null")) {
+                if (firebaseToken == null || firebaseToken.equals("")) {
 
                 } else {
                     params.put("firebaseToken", firebaseToken);
                 }
-                if (emailId == null || emailId.equals("null")) {
+                if (emailId == null || emailId.equals("")) {
 
                 } else {
                     params.put("email", emailId);
                 }
 
-                if (carrierName == null || carrierName.equals("null")) {
+                if (carrierName == null || carrierName.equals("")) {
                 } else {
                     params.put("operatorName", carrierName);
                 }
-                if (deviceName == null || deviceName.equals("null")) {
+                if (deviceName == null || deviceName.equals("")) {
 
                 } else {
                     params.put("mobileModel", deviceName);
                 }
-                if (osVersion == null || osVersion.equals("null")) {
+                if (osVersion == null || osVersion.equals("")) {
 
                 } else {
                     params.put("osVersion", osVersion);
@@ -559,7 +569,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d("exceptionLoadData4rmvly", e.toString());
-                    progressDialog.hideProgressDialog();
+                    // progressDialog.hideProgressDialog();
                 }
             }
         }, new Response.ErrorListener() {
