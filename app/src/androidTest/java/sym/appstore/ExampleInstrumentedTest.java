@@ -1,4 +1,4 @@
-package lct.mysymphony;
+package sym.appstore;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

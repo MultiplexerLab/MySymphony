@@ -1,4 +1,4 @@
-package lct.mysymphony;
+package sym.appstore;
 
 import org.junit.Test;
 
