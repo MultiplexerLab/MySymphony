@@ -106,6 +106,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             } else if (notificationId == 2) {
                 //Notification Id 1 = Contain Image - No Button - Open redirect Link
                 String link = data.get("activityName");
+                Log.i("LinkUrl", link);
                 initNotificationForImageWithOutButton(false, title, description, imageLink, link, userName);
 
             } else if (notificationId == 3) {
@@ -177,7 +178,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 remoteView1.setOnClickPendingIntent(R.id.notificationButton1, pendingIntent1);
 
                 notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), channel)
-                        .setSmallIcon(R.drawable.notification)
+                        .setSmallIcon(R.drawable.icon)
                         .setContentTitle(title)
                         .setContentText(description)
                         .setAutoCancel(true)
@@ -205,7 +206,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
                 notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), channel)
-                        .setSmallIcon(R.drawable.notification)
+                        .setSmallIcon(R.drawable.icon)
                         .setContentTitle(title)
                         .setContentText(description)
                         .setAutoCancel(true)
@@ -236,7 +237,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 remoteView1.setOnClickPendingIntent(R.id.notificationButton3, pendingIntent3);
 
                 notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), channel)
-                        .setSmallIcon(R.drawable.notification)
+                        .setSmallIcon(R.drawable.icon)
                         .setContentTitle(title)
                         .setContentText(description)
                         .setAutoCancel(true)
@@ -330,8 +331,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         currenTime = new Date();
         AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", "Notification",
                 "CLICKED", notificationId + " this notification was clicked");
-
-
         if (action.equals("home")) {
             return new Intent(this, MainActivity.class);
         } else if (action.equals("joke")) {
@@ -372,7 +371,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Intent downLoadIntent = new Intent(this, HomePage.class);
             downLoadIntent.putExtra("apk", apkUrl);
             return downLoadIntent;
+        }else if (action.contains("http")) {
+            String url = action;
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            return i;
         }
+
         return new Intent(this, MainActivity.class);
     }
 
