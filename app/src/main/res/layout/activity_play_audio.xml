@@ -8,8 +8,9 @@
     <ImageView
         android:id="@+id/songimageView"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:adjustViewBounds="true"
+        android:layout_marginTop="30dp"
         android:src="@drawable/musicvideo" />
 
     <TextView

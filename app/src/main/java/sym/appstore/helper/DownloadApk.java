@@ -43,24 +43,31 @@ public class DownloadApk {
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
-        final String fname = "apk" + n + ".apk";
+        final String fname = dataBaseData.getContentTitle()+ ".apk";
         destination += fname;
         contentSdCardUrl = fname;
         final Uri uri = Uri.parse("file://" + destination);
-        /* final Uri uri = Uri.parse("file://" + myDir);*/
 
         File file = new File(destination);
         if (file.exists())
             file.delete();
 
+        Log.i("apkUrlDownload", apkUrl);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(apkUrl));
         request.setDescription("Downloading the APK please wait!");
-        request.setTitle("APK!");
+        request.setTitle(dataBaseData.getContentTitle());
 
         final Uri apkUri = FileProvider.getUriForFile(context,
                 BuildConfig.APPLICATION_ID + ".provider",
                 file);
         request.setDestinationUri(uri);
+
+        final Date startTime;
+        final DateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        startTime = new Date();
+        AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", ""+dataBaseData.getContentId(),
+                "DOWNLOAD_START", "Download starts for " + dataBaseData.getContentTitle());
 
         final DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         final long downloadId = manager.enqueue(request);
@@ -68,13 +75,12 @@ public class DownloadApk {
         BroadcastReceiver onComplete = new BroadcastReceiver() {
             public void onReceive(Context ctxt, Intent intent) {
                 try {
-
                     Date startTime;
                     DateFormat dateFormat;
                     dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                     startTime = new Date();
-                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "Download",
-                            "INSTALL", "Download completed for "+ dataBaseData.getContentTitle());
+                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", ""+dataBaseData.getContentId(),
+                            "DOWNLOADED", "Download completed for "+ dataBaseData.getContentTitle());
 
                     Log.d("onComplete", "onComplete");
                     insertDataInDatabaseWithContentSdcardUl();
@@ -90,6 +96,8 @@ public class DownloadApk {
 
                 } catch (Exception e) {
                     Log.e("ErrrInDownloadApk", e.toString());
+                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", ""+dataBaseData.getContentId(),
+                            "DOWNLOAD_FAILED", e.toString());
                 }
             }
         };
@@ -121,6 +129,12 @@ public class DownloadApk {
         if (file.exists())
             file.delete();
 
+        final Date startTime;
+        final DateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        startTime = new Date();
+        AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "",
+                "DOWNLOAD_START", "Download starts for " + appTitle);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(apkUrl));
         request.setDescription("Downloading the " + appTitle + " please wait!");
         request.setTitle(appTitle);
@@ -140,8 +154,8 @@ public class DownloadApk {
                     DateFormat dateFormat;
                     dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                     startTime = new Date();
-                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "Download",
-                            "INSTALL", "Download completed for "+ appTitle);
+                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "",
+                            "DOWNLOADED", "Download completed for "+ appTitle);
 
                     Log.d("onComplete", "onComplete");
                     progressDialog.hideProgressDialog();
@@ -160,6 +174,8 @@ public class DownloadApk {
 
                 } catch (Exception e) {
                     Log.e("ErrrInDownloadApk", e.toString());
+                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", ""+dataBaseData.getContentId(),
+                            "DOWNLOAD_FAILED", e.toString());
                 }
             }
         };

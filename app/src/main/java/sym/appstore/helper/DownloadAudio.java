@@ -1,11 +1,16 @@
 package sym.appstore.helper;
 
 import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.util.Base64;
 import android.util.Log;
 
@@ -22,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
+import sym.appstore.BuildConfig;
 import sym.appstore.ModelClass.DataBaseData;
 
 public class DownloadAudio {
@@ -33,7 +39,7 @@ public class DownloadAudio {
     String contentSdCardUrl;
     DataHelper dbHelper;
 
-    public void downloadAudio(String audioUrl, String songTitle, Context context, DataBaseData dataBaseData) {
+    /*public void downloadAudio(String audioUrl, String songTitle, Context context, DataBaseData dataBaseData) {
         this.context = context;
         this.audioUrl = audioUrl;
         this.dataBaseData = dataBaseData;
@@ -63,9 +69,9 @@ public class DownloadAudio {
 
         protected void onPreExecute() {
             Log.i("DonwloadAudio", "Downloading the Audio. Please wait...");
-            /*DownloadManager.Request request = new DownloadManager.Request(Uri.parse(audioUrl));
+            *//*DownloadManager.Request request = new DownloadManager.Request(Uri.parse(audioUrl));
             request.setDescription("Downloading the " + dataBaseData.getContentTitle() + " please wait!");
-            request.setTitle(dataBaseData.getContentTitle());*/
+            request.setTitle(dataBaseData.getContentTitle());*//*
         }
 
         protected String doInBackground(String... urls) {
@@ -114,7 +120,7 @@ public class DownloadAudio {
             startTime = new Date();
             AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "DownloadAudio",
                     "Finish", "Download completed for " + dataBaseData.getContentTitle());
-            /* dbHelper.insertAudioStr(result, dataBaseData);*/
+            *//* dbHelper.insertAudioStr(result, dataBaseData);*//*
         }
     }
 
@@ -131,9 +137,9 @@ public class DownloadAudio {
         int n = 10000;
         n = generator.nextInt(n);
         String fname;
-        /*if (audioTitle.length()>0)
+        *//*if (audioTitle.length()>0)
             fname = audioTitle+"-"+n +".mp3";
-        else*/
+        else*//*
         fname = "Audio-" + n + ".mp3";
         fname.replaceAll(" ", "_");
         contentSdCardUrl = fname;
@@ -157,5 +163,85 @@ public class DownloadAudio {
         if (dataBaseData == null)
             Log.d("dataBaseDataNull2", "dataBaseDataNull");
         dbHelper.insertContentDataWithSdCardUrl(contentSdCardUrl, dataBaseData);
+    }*/
+
+    public void downloadAudio(String audioUrl, String songTitle, final Context context, final DataBaseData dataBaseData) {
+        this.context = context;
+        this.audioUrl = audioUrl;
+        this.dataBaseData = dataBaseData;
+
+        dbHelper = new DataHelper(context);
+
+        final Date startTime;
+        final DateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        startTime = new Date();
+        AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", ""+dataBaseData.getContentId(),
+                "DOWNLOAD_START", "Download starts for " + dataBaseData.getContentTitle());
+
+        String destination = Environment.getExternalStorageDirectory().toString() + "/appstore";
+        File myDir = new File(destination);
+        myDir.mkdirs();
+
+        final String fname = songTitle + ".mp3";
+        destination += fname;
+
+        contentSdCardUrl = destination;
+        final Uri uri = Uri.parse("file://" + destination);
+
+        File file = new File(destination);
+        if (file.exists())
+            file.delete();
+
+        Log.i("audioToDownload", audioUrl);
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(audioUrl));
+        request.setDescription("Downloading the Song please wait!");
+        request.setTitle(dataBaseData.getContentTitle());
+
+        final Uri audioUri = FileProvider.getUriForFile(context,
+                BuildConfig.APPLICATION_ID + ".provider",
+                file);
+        request.setDestinationUri(uri);
+
+        final DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        final long downloadId = manager.enqueue(request);
+
+        if(Build.VERSION.RELEASE.contains("8")){
+            insertDataInDatabaseWithContentSdcardUl();
+        }
+        BroadcastReceiver onComplete = new BroadcastReceiver() {
+            public void onReceive(Context ctxt, Intent intent) {
+                try {
+                    Date startTime;
+                    DateFormat dateFormat;
+                    dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                    startTime = new Date();
+                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", ""+dataBaseData.getContentId(),
+                            "DOWNLOADED", "Download completed for " + dataBaseData.getContentTitle());
+
+                    Log.d("onComplete", "onComplete");
+                    insertDataInDatabaseWithContentSdcardUl();
+                    context.unregisterReceiver(this);
+                    contentSdCardUrl=fname;
+
+                } catch (Exception e) {
+                    Log.e("ErrrInDownloadApk", e.toString());
+                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", dataBaseData.getContentId()+"",
+                            "DOWNLOAD_FAILED", e.toString());
+                }
+            }
+        };
+        context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
     }
+
+    public void insertDataInDatabaseWithContentSdcardUl() {
+        Log.d("contentSdCardUrl", contentSdCardUrl);
+        dbHelper.insertContentDataWithSdCardUrl(contentSdCardUrl, dataBaseData);
+    }
+
+    public interface AsyncResponse {
+        void processFinish(String output);
+    }
+
 }

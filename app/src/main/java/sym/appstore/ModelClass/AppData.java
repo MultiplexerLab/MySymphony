@@ -6,12 +6,16 @@ public class AppData {
     String description;
     String thumbNailImage;
     String contentUrl;
+    String packagName;
+    String versionCode;
 
-    public AppData(String title, String description, String thumbNailImage, String contentUrl) {
+    public AppData(String title, String description, String thumbNailImage, String contentUrl, String packagName, String versionCode) {
         this.title = title;
         this.description = description;
         this.thumbNailImage = thumbNailImage;
         this.contentUrl = contentUrl;
+        this.packagName = packagName;
+        this.versionCode = versionCode;
     }
 
     public String getTitle() {
@@ -44,5 +48,21 @@ public class AppData {
 
     public void setContentUrl(String contentUrl) {
         this.contentUrl = contentUrl;
+    }
+
+    public String getPackagName() {
+        return packagName;
+    }
+
+    public void setPackagName(String packagName) {
+        this.packagName = packagName;
+    }
+
+    public String getVersionCode() {
+        return versionCode;
+    }
+
+    public void setVersionCode(String versionCode) {
+        this.versionCode = versionCode;
     }
 }

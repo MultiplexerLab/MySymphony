@@ -2,6 +2,9 @@ package sym.appstore.RecyclerViewAdapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import sym.appstore.ModelClass.AppData;
 import sym.appstore.R;
@@ -61,19 +65,46 @@ public class AppListAdapter extends BaseAdapter {
         //TextView appDesc = customView.findViewById(R.id.appDescription);
         Button installButton = customView.findViewById(R.id.buttonInstall);
         String imageUrl = appData.get(position).getThumbNailImage();
-        if(imageUrl==null || imageUrl.isEmpty() || imageUrl.equals("null") ) {
+        if (imageUrl == null || imageUrl.isEmpty() || imageUrl.equals("null")) {
 
-        }else{
+        } else {
             Glide.with(context).load(appData.get(position).getThumbNailImage()).into(appThumbnail);
         }
 
         apptitle.setText(appData.get(position).getTitle());
 
+        String packageName = appData.get(position).getPackagName();
+        if (isPackageExisted(packageName)) {
+            PackageInfo pinfo = null;
+            try {
+                pinfo = context.getPackageManager().getPackageInfo(packageName, 0);
+                int versionNumber = pinfo.versionCode;
+                Log.i("VersionCode", packageName+"  "+versionNumber);
+                String versionCodeStr = appData.get(position).getVersionCode();
+                if (versionCodeStr == null || versionCodeStr.equals("null")) {
+
+                } else {
+                    if (versionNumber == Integer.parseInt(appData.get(position).getVersionCode())) {
+                        installButton.setEnabled(false);
+                        installButton.setText("Installed");
+                        installButton.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+                    } else {
+                        installButton.setEnabled(true);
+                        installButton.setText("UPDATE");
+                        installButton.setBackgroundColor(context.getResources().getColor(R.color.dark_red));
+                    }
+                }
+
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
         ExpandableTextView expTv1 = (ExpandableTextView) customView.findViewById(R.id.cardViewAppList)
                 .findViewById(R.id.expand_text_view);
-        if(appData.get(position).getDescription().isEmpty()){
+        if (appData.get(position).getDescription().isEmpty()) {
             expTv1.setText("No Description");
-        }else{
+        } else {
             expTv1.setText(appData.get(position).getDescription());
         }
 
@@ -85,7 +116,7 @@ public class AppListAdapter extends BaseAdapter {
                 dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                 startTime = new Date();
                 AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "Start Downloading",
-                        "INSTALL", "Install Button Clicked for "+ apptitle);
+                        "INSTALL", "Install Button Clicked for " + apptitle);
 
                 String apkUrl = appData.get(position).getContentUrl();
                 String appTitle = appData.get(position).getTitle();
@@ -96,4 +127,19 @@ public class AppListAdapter extends BaseAdapter {
         });
         return customView;
     }
+
+    public boolean isPackageExisted(String targetPackage) {
+        List<ApplicationInfo> packages;
+        PackageManager pm;
+
+        pm = context.getPackageManager();
+        packages = pm.getInstalledApplications(0);
+        for (ApplicationInfo packageInfo : packages) {
+            Log.i("PackageIstalled", packageInfo.packageName.toString());
+            if (packageInfo.packageName.equals(targetPackage))
+                return true;
+        }
+        return false;
+    }
+
 }

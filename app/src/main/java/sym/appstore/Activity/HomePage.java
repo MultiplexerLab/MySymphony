@@ -3,7 +3,6 @@ package sym.appstore.Activity;
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Dialog;
 import android.app.LoaderManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ActivityNotFoundException;
@@ -15,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -25,11 +25,16 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,11 +42,14 @@ import android.support.v7.widget.SnapHelper;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +65,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.daimajia.easing.linear.Linear;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
@@ -89,9 +98,7 @@ import sym.appstore.ModelClass.JapitoJibon;
 import sym.appstore.ModelClass.MulloChar;
 import sym.appstore.ModelClass.Porashuna;
 import sym.appstore.ModelClass.SeraChobi;
-import sym.appstore.ModelClass.ShikkhaSohaYika;
 import sym.appstore.ModelClass.ShocolChobi;
-import sym.appstore.ModelClass.SliderImage;
 import sym.appstore.R;
 import sym.appstore.RecyclerViewAdapter.RecyclerAdapterForGamesZone;
 import sym.appstore.RecyclerViewAdapter.RecyclerAdapterForJapitoJibon;
@@ -104,6 +111,7 @@ import sym.appstore.helper.DownloadApk;
 import sym.appstore.helper.DownloadImage;
 import sym.appstore.helper.Endpoints;
 import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
+import sym.appstore.helper.OnSwipeListener;
 
 import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.Manifest.permission.READ_PHONE_STATE;
@@ -150,6 +158,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     };
     String emailId = "", devicePhoneNumber = "", deviceName = "";
     String osVersion = "", carrierName = "", firebaseToken = "", deviceId = "";
+    LinearLayout rootLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +166,22 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         setContentView(R.layout.activity_home_page);
 
         FirebaseMessaging.getInstance().subscribeToTopic("All");
+        rootLayout = findViewById(R.id.rootLayout);
+
+        final SwipeRefreshLayout mySwipeRefreshLayout = findViewById(R.id.swiperefresh);
+        mySwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        if (internetConnected()) {
+                            newloadDataFromVolley();
+                            mySwipeRefreshLayout.setRefreshing(false);
+                        } else {
+                            showSnackBar();
+                        }
+                    }
+                }
+        );
 
         progressDialog = new sym.appstore.helper.ProgressDialog(this);
         context = HomePage.this;
@@ -200,13 +225,21 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 downloadApk.downLoadAPK("App", apkUrl, HomePage.this);
             }
         }
+        initDataFromServer();
 
+    }
+
+    private void initDataFromServer() {
         SharedPreferences prefs = getSharedPreferences("login", MODE_PRIVATE);
         int loginStatus = prefs.getInt("loginStatus", 0);
         if (loginStatus == 1) {
-            loadIconsFromServer();
-            getInstanceInfo();
-            newloadDataFromVolley();
+            if (internetConnected()) {
+                loadIconsFromServer();
+                getInstanceInfo();
+                newloadDataFromVolley();
+            } else {
+                showSnackBar();
+            }
         } else {
             if (internetConnected()) {
                 initializeData();
@@ -215,9 +248,23 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 getInstanceInfo();
                 newloadDataFromVolley();
             } else {
-                Toast.makeText(this, "ইন্টারনেট সংযোগ করে চেষ্টা করুন", Toast.LENGTH_SHORT).show();
+                showSnackBar();
             }
         }
+    }
+
+    public void showSnackBar() {
+        Snackbar snackbar = Snackbar
+                .make(rootLayout, "ইন্টারনেটের সাথে সংযুক্ত নেই!", Snackbar.LENGTH_INDEFINITE)
+                .setAction("সংযুক্ত করুন", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent settingsIntent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                        startActivityForResult(settingsIntent, 9003);
+                    }
+                });
+        snackbar.setActionTextColor(Color.RED);
+        snackbar.show();
     }
 
     private void insertUserToDB() {
@@ -286,6 +333,17 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             initializeData();
             insertToServerDB();
         }
+        if (requestCode == 9003) {
+            if (internetConnected()) {
+                initializeData();
+                insertUserToDB();
+                loadIconsFromServer();
+                getInstanceInfo();
+                newloadDataFromVolley();
+            } else {
+                showSnackBar();
+            }
+        }
     }
 
     public void enableRuntimePermission() {
@@ -341,9 +399,8 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     editor.putInt("loginStatus", 1);
                     editor.putString("emailId", emailId);
                     editor.apply();
-                    Intent intent = new Intent(HomePage.this, HomePage.class);
-                    startActivity(intent);
-                    finish();
+                    loadIconsFromServer();
+                    newloadDataFromVolley();
                 } else if (response.contains("exists")) {
                     AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "Login",
                             "SUCCESS", "Succesful Login");
@@ -355,9 +412,8 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     editor.putInt("loginStatus", 1);
                     editor.putString("emailId", emailId);
                     editor.apply();
-                    Intent intent = new Intent(HomePage.this, HomePage.class);
-                    startActivity(intent);
-                    finish();
+                    loadIconsFromServer();
+                    newloadDataFromVolley();
                 } else {
                     AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "Login/Registration",
                             "FAILED", response);
@@ -372,10 +428,10 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 progressDialog.hideProgressDialog();
                 AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "Login/Registration",
                         "FAILED", error.toString());
+
                 Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         }) {
-
             @Override
             public Map<String, String> getParams() throws AuthFailureError {
                 DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
@@ -435,11 +491,17 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     private void setIcons() {
         Integer[] imageViews = {R.id.mainButton1, R.id.mainButton2, R.id.mainButton3, R.id.imageView1, R.id.imageView2, R.id.imageView3, R.id.imageView4, R.id.imageView5, R.id.imageView6, R.id.imageView7, R.id.imageView8, R.id.bottom1, R.id.bottom2, R.id.bottom3, R.id.bottom4};
         Integer[] textViews = {R.id.textViewMain1, R.id.textViewMain2, R.id.textViewMain3, R.id.textView1, R.id.textView2, R.id.textView3, R.id.textView4, R.id.textView5, R.id.textView6, R.id.textView7, R.id.textView8, R.id.textBottom1, R.id.textBottom2, R.id.textBottom3, R.id.textBottom4};
+        Integer[] textViewsCategories = {R.id.hotNewsTV, R.id.sportsTV, R.id.ShikkhaSohayikaTV, R.id.auttoHashiTV, R.id.japitoJibonTV, R.id.mixedTV, R.id.scienceTV, R.id.kidsTV};
 
         for (int i = 0; i < iconImageUrls.size(); i++) {
             Glide.with(HomePage.this).load(iconImageUrls.get(i).getImage()).into((ImageView) findViewById(imageViews[i]));
             TextView temp = findViewById(textViews[i]);
             temp.setText(iconImageUrls.get(i).getCategoryTitle());
+            if (iconImageUrls.get(i).getType().equals("topic")) {
+                TextView temp2 = findViewById(textViewsCategories[i - 3]);
+                temp2.setText(iconImageUrls.get(i).getCategoryTitle());
+
+            }
         }
     }
 
@@ -456,7 +518,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     protected void onStop() {
         super.onStop();
         AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "HomePage",
-                "OUT", "Leave");
+                "LEAVE", "Leave");
     }
 
     @Override
@@ -464,7 +526,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         super.onDestroy();
         SharedPreferences pref = getSharedPreferences("tracker", MODE_PRIVATE);
         AppLogger.insertLogs(HomePage.this, pref.getString("startTime", dateFormat.format(currenTime)), "Y", "AppStore APP",
-                "DURATION", "FINISH the app");
+                "DURATION", "App is finishing");
     }
 
     private void loadIconsFromServer() {
@@ -538,6 +600,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     private void newloadDataFromVolley() {
+        progressDialog.showProgressDialog();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.NEW_HOME_GET_URL, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -576,7 +639,9 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
-                progressDialog.hideProgressDialog();
+                if (progressDialog != null) {
+                    progressDialog.hideProgressDialog();
+                }
                 Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         });
@@ -773,7 +838,10 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                         kidsArrList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
                         initializeKidsRecylerView();
                     } else if (contentCat.equals("mobile_app")) {
-                        appList.add(new AppData(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), contentUrl));
+                        String packageName = japito_jibon_content_arr.getJSONObject(i).getString("reference1");
+                        String versionName = japito_jibon_content_arr.getJSONObject(i).getString("reference2");
+                        String versionCode = japito_jibon_content_arr.getJSONObject(i).getString("reference3");
+                        appList.add(new AppData(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), contentUrl, packageName, versionCode));
                     } else if (contentCat.equals("music_video")) {
                         if (contentType.equals("video")) {
                             musicVideoList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
@@ -824,6 +892,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     private void setSliderContent(JSONArray jsonSliderContentArr) {
+        sliderImages.clear();
         if (jsonSliderContentArr.length() > 0) {
             int contentPrice = 0;
             String contentType;
@@ -874,6 +943,20 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         indicator.setViewPager(viewPager);
         final float density = getResources().getDisplayMetrics().density;
         indicator.setRadius(5 * density);
+
+        /*viewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int action = MotionEventCompat.getActionMasked(motionEvent);
+                switch(action) {
+                    case (MotionEvent.ACTION_UP) :
+                        Log.d("SWIPE","Action UP");
+                        return true;
+                    default :
+                        return HomePage.super.onTouchEvent(motionEvent);
+                }
+            }
+        });*/
     }
 
     public void initializeTopContentRecyclerView() {

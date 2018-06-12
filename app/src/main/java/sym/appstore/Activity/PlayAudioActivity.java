@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -54,15 +55,20 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         progressDialog = new sym.appstore.helper.ProgressDialog(PlayAudioActivity.this);
         SharedPreferences.Editor editor = getSharedPreferences("audioData", MODE_PRIVATE).edit();
         data = (Porashuna) getIntent().getSerializableExtra("data");
+
         if (data != null) {
+            dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            currenTime = new Date();
+            AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId()+"",
+                    "SONG_VISITED", "Category: "+data.getContentCat());
             String imageUrl = data.getThumbnailImgUrl();
             editor.putString("imageUrl", imageUrl);
             editor.apply();
-            /*if(imageUrl.isEmpty() || imageUrl==null){
+            if(imageUrl.isEmpty() || imageUrl==null){
 
             }else{
                 Glide.with(this).load(imageUrl).into((ImageView) findViewById(R.id.songimageView));
-            }*/
+            }
             String contentTitle = data.getContentTitle();
             String contentCat = data.getContentCat();
             String contentDesc = "";
@@ -71,6 +77,13 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             editor.putString("songUrl", data.getContentUrl());
             editor.putString("songTitle", data.getContentTitle());
             editor.commit();
+
+            dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, "free", data.getContentId());
+            Gson gson = new Gson();
+            String json = gson.toJson(dataBaseData);
+            SharedPreferences.Editor editor1 = getSharedPreferences("tempData", MODE_PRIVATE).edit();
+            editor1.putString("databaseData", json);
+            editor1.commit();
 
            if (isMyServiceRunning(PlayerInService.class))
            {
@@ -81,12 +94,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
                stopService(playerService);
            }
             utility.cancelNotification();
-            dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, "paid", data.getContentId());
-            Gson gson = new Gson();
-            String json = gson.toJson(dataBaseData);
-            SharedPreferences.Editor editor1 = getSharedPreferences("tempData", MODE_PRIVATE).edit();
-            editor1.putString("databaseData", json);
-            editor1.commit();
+
         } else {
             SharedPreferences prefs = getSharedPreferences("imageUrlSp", MODE_PRIVATE);
             String restoredText = prefs.getString("imageUrl", null);
@@ -145,17 +153,21 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
     protected void onResume() {
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
-        AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", "PlayMusic",
-                "IN", "Entrance");
         try {
             if (!PlayerInService.mp.isPlaying()) {
                 btnPlay.setBackgroundResource(R.drawable.player);
 
             } else {
+                dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                currenTime = new Date();
+                AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId()+"",
+                        "SONG_PLAYED", data.getContentTitle());
                 btnPlay.setBackgroundResource(R.drawable.pause);
             }
         } catch (Exception e) {
             Log.e("Exception", "" + e.getMessage() + e.getStackTrace() + e.getCause());
+            AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId()+"",
+                    "SONG_PLAYING_FAILED", e.toString());
         }
 
         super.onResume();
@@ -166,8 +178,6 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         SharedPreferences prefs = getSharedPreferences("audioData", MODE_PRIVATE);
         Utility.initNotification(prefs.getString("songTitle",""), this);
         super.onStop();
-        AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", "PlayMusic",
-                "OUT", "Leave");
     }
 
     public void downLoadAudio(View view) {
@@ -177,8 +187,9 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         DataBaseData dataBaseData1 = gson.fromJson(json, DataBaseData.class);
 
         SharedPreferences prefs = getSharedPreferences("audioData", MODE_PRIVATE);
-        progressDialog.showProgressDialog("গান ডাউনলোড হচ্ছে");
+        //progressDialog.showProgressDialog("গান ডাউনলোড হচ্ছে");
 
+        Toast.makeText(this, "গান ডাউনলোড হচ্ছে", Toast.LENGTH_LONG).show();
         DownloadAudio downloadAudio = new DownloadAudio();
         downloadAudio.downloadAudio(prefs.getString("songUrl",""),prefs.getString("songTitle",""), PlayAudioActivity.this, dataBaseData1);
     }

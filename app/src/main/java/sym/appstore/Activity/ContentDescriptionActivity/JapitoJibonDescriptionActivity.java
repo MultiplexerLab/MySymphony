@@ -115,7 +115,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
         String thumbNail_image = musicVideoObj.getThumbnailImgUrl();
         String priceStatus;
         priceStatus = "free";
-        newPrice.setText("ফ্রি!");
+        newPrice.setText("ফ্রি দেখুন!");
         dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNail_image, priceStatus, musicVideoObj.getContentId());
         Boolean check = dataHelper.checkDownLoadedOrNot(musicVideoObj.getContentCat(), musicVideoObj.getContentId());
         Log.d("checkJapitoJibon", check.toString());

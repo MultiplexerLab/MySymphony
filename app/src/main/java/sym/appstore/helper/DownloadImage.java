@@ -43,8 +43,8 @@ public class DownloadImage {
         DateFormat dateFormat;
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
-        AppLogger.insertLogs(context, dateFormat.format(currenTime), "Y", "ImageDownload",
-                "DownloadStart", "Image download from "+context.toString());
+        AppLogger.insertLogs(context, dateFormat.format(currenTime), "Y", ""+dataBaseData.getContentId(),
+                "DOWNLOAD_START", "Image download starts: "+dataBaseData.getContentTitle());
 
         DownloadImage.BackTask bt = new DownloadImage.BackTask();
         if (!imgURL.trim().equals("")) {
@@ -103,6 +103,12 @@ public class DownloadImage {
         protected void onPostExecute(Bitmap result) {
             AsyncResponse asyncResponse = (AsyncResponse) context;
             asyncResponse.processFinish("complete");
+            Date currenTime;
+            DateFormat dateFormat;
+            dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            currenTime = new Date();
+            AppLogger.insertLogs(context, dateFormat.format(currenTime), "Y", ""+dataBaseData.getContentId(),
+                    "DOWNLOADED", "Image Downloaded: "+dataBaseData.getContentTitle());
             /*dbHelper.insertBitmap(result, dataBaseData);*/
         }
     }

@@ -482,7 +482,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         setupChannels(notificationManager);
                     }
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(ImageViewActivity.this, channel).setSmallIcon(R.mipmap.ic_launcher).setTicker("Ticker Text").setContent(notificationView);
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(ImageViewActivity.this, channel).setSmallIcon(R.drawable.icon).setTicker("Ticker Text").setContent(notificationView);
                     notificationView.setOnClickPendingIntent(R.id.stopButton, pendingSwitchIntent);
                     builder.setContentIntent(pendingSwitchIntent);
                     notificationManager.notify(1, builder.build());
@@ -499,7 +499,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 setupChannels(notificationManager);
             }
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(ImageViewActivity.this, channel).setSmallIcon(R.mipmap.ic_launcher).setTicker("Ticker Text").setContent(notificationView);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(ImageViewActivity.this, channel).setSmallIcon(R.drawable.icon).setTicker("Ticker Text").setContent(notificationView);
             notificationView.setOnClickPendingIntent(R.id.stopButton, pendingSwitchIntent);
             builder.setContentIntent(pendingSwitchIntent);
             notificationManager.notify(1, builder.build());

@@ -172,7 +172,7 @@
                         android:onClick="downloadVideo"
                         android:text="ডাউনলোড করুন"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:visibility="visible"
+                        android:visibility="invisible"
                         android:textColor="@color/White" />
                 </LinearLayout>
             </LinearLayout>

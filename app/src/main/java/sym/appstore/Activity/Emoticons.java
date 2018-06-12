@@ -87,7 +87,7 @@ public class Emoticons extends AppCompatActivity implements DownloadImage.AsyncR
     protected void onStop() {
         super.onStop();
         AppLogger.insertLogs(this, dateFormat.format(startTime), "Y", "Emoticons",
-                "OUT", "Leave from Emoticons Page");
+                "LEAVE", "Leave from Emoticons Page");
     }
 
     @Override

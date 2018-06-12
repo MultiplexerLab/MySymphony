@@ -50,7 +50,7 @@ public class AppList extends AppCompatActivity implements DownloadApk.AsyncRespo
     protected void onStop() {
         super.onStop();
         AppLogger.insertLogs(this, dateFormat.format(startTime), "Y", "AppList",
-                "OUT", "Leave from Applist");
+                "LEAVE", "Leave from Applist");
     }
 
     @Override

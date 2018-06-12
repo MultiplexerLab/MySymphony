@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLaoutDescription"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -13,103 +14,110 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:fitsSystemWindows="true">
+
         <include
             android:id="@+id/toolbarlayoutinnewsDescription"
             layout="@layout/toolbar_layout_in_news_description" />
     </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
-        android:layout_below="@id/appbarLayoutInPorashunaDescription"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:layout_height="match_parent"
+        android:layout_below="@id/appbarLayoutInPorashunaDescription">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/appbarLayoutInWallpaperBundle"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/appbarLayoutInPorashunaDescription"
+            android:padding="10dp">
 
-            <ImageView
-                android:id="@+id/imgPorashunaDescription"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/kheladhula_2" />
+                android:layout_height="match_parent"
+                android:layout_below="@id/appbarLayoutInWallpaperBundle"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/newsTitlePorashunaDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="বিস্তারিত"
-                android:textColor="@color/black"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                <ImageView
+                    android:id="@+id/imgPorashunaDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/kheladhula_2" />
 
-            <TextView
-                android:id="@+id/newsdescriptionPorashunaDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ক্রিকেট দুনিয়ার নানান ধরনের দারুন সব খবর নিয়ে আমাদের এই আয়োজন"
-                android:textColor="@color/black"
-                android:textSize="@dimen/textSize" />
+                <TextView
+                    android:id="@+id/newsTitlePorashunaDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="বিস্তারিত"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textColor="@color/black" />
 
-            <TextView
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="সরাসরি তথ্যটি জানুন"/>
+                <TextView
+                    android:id="@+id/newsdescriptionPorashunaDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ক্রিকেট দুনিয়ার নানান ধরনের দারুন সব খবর নিয়ে আমাদের এই আয়োজন"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textSize" />
 
-            <WebView
-                android:id="@+id/webView"
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_height="match_parent"></WebView>
-        
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="সরাসরি তথ্যটি জানুন" />
 
-        <!--<LinearLayout-->
-            <!--android:id="@+id/kinunOrDownloadKorunLinearLayout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="18dp"-->
-            <!--android:gravity="bottom|end"-->
-            <!--android:orientation="horizontal">-->
+                <WebView
+                    android:id="@+id/webView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"></WebView>
 
-            <!--<LinearLayout-->
+
+                <!--<LinearLayout-->
+                <!--android:id="@+id/kinunOrDownloadKorunLinearLayout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="18dp"-->
+                <!--android:gravity="bottom|end"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<LinearLayout-->
                 <!--android:layout_width="wrap_content"-->
                 <!--android:layout_height="wrap_content"-->
                 <!--android:layout_gravity="center"-->
                 <!--android:orientation="vertical">-->
 
                 <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginTop="5dp"-->
-                    <!--android:text="বিশেষ অফার"-->
-                    <!--android:textColor="@color/red" />-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:text="বিশেষ অফার"-->
+                <!--android:textColor="@color/red" />-->
 
                 <!--<LinearLayout-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:orientation="horizontal">-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/previousPriceTVinPorashunaDescription"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="৳১৫" />-->
+                <!--<TextView-->
+                <!--android:id="@+id/previousPriceTVinPorashunaDescription"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="৳১৫" />-->
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/newPriceTVinPorashunaDescription"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:text="৳১০"-->
-                        <!--android:textColor="@color/green" />-->
+                <!--<TextView-->
+                <!--android:id="@+id/newPriceTVinPorashunaDescription"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:text="৳১০"-->
+                <!--android:textColor="@color/green" />-->
                 <!--</LinearLayout>-->
-            <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
 
-            <!--<Button-->
+                <!--<Button-->
 
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="70dp"-->
@@ -119,9 +127,10 @@
                 <!--android:background="@drawable/btn_style_red"-->
                 <!--android:text="কিনুন / ডাউনলোড করুন"-->
                 <!--android:textColor="@color/White" />-->
-        <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
 
 
-    </LinearLayout>
-</ScrollView>
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

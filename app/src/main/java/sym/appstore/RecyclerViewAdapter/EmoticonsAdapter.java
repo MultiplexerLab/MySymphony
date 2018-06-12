@@ -71,12 +71,6 @@ public class EmoticonsAdapter extends BaseAdapter {
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date startTime;
-                DateFormat dateFormat;
-                dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-                startTime = new Date();
-                AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "Start Downloading",
-                        "DOWNLOAD", "Download Button Clicked for " + title);
 
                 Log.i("DownloadAPK", emoticonUrl);
 
