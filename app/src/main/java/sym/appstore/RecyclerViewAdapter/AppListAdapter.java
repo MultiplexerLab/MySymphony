@@ -116,13 +116,13 @@ public class AppListAdapter extends BaseAdapter {
                 dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                 startTime = new Date();
                 AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "Start Downloading",
-                        "INSTALL", "Install Button Clicked for " + apptitle);
+                        "INSTALL", "Install Button Clicked for " + apptitle, "app");
 
                 String apkUrl = appData.get(position).getContentUrl();
                 String appTitle = appData.get(position).getTitle();
                 Log.i("DownloadAPK", apkUrl);
                 DownloadApk downloadApk = new DownloadApk();
-                downloadApk.downLoadAPK(appTitle, apkUrl, context);
+                downloadApk.downLoadAPK(appTitle, apkUrl, appData.get(position).getContentId(), context);
             }
         });
         return customView;

@@ -176,17 +176,17 @@ public class DownloadAudio {
         final DateFormat dateFormat;
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         startTime = new Date();
-        AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", ""+dataBaseData.getContentId(),
-                "DOWNLOAD_START", "Download starts for " + dataBaseData.getContentTitle());
+        AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "" + dataBaseData.getContentId(),
+                "DOWNLOAD_START", "Download starts for " + dataBaseData.getContentTitle(), "content");
 
         String destination = Environment.getExternalStorageDirectory().toString() + "/appstore";
         File myDir = new File(destination);
         myDir.mkdirs();
 
-        final String fname = songTitle + ".mp3";
+        final String fname = "/"+songTitle + ".mp3";
         destination += fname;
 
-        contentSdCardUrl = destination;
+        contentSdCardUrl = fname;
         final Uri uri = Uri.parse("file://" + destination);
 
         File file = new File(destination);
@@ -206,9 +206,10 @@ public class DownloadAudio {
         final DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         final long downloadId = manager.enqueue(request);
 
-        if(Build.VERSION.RELEASE.contains("8")){
-            insertDataInDatabaseWithContentSdcardUl();
-        }
+        /*if (Build.VERSION.RELEASE.contains("8")) {
+
+        }*/
+        insertDataInDatabaseWithContentSdcardUl();
         BroadcastReceiver onComplete = new BroadcastReceiver() {
             public void onReceive(Context ctxt, Intent intent) {
                 try {
@@ -216,18 +217,18 @@ public class DownloadAudio {
                     DateFormat dateFormat;
                     dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                     startTime = new Date();
-                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", ""+dataBaseData.getContentId(),
-                            "DOWNLOADED", "Download completed for " + dataBaseData.getContentTitle());
 
                     Log.d("onComplete", "onComplete");
-                    insertDataInDatabaseWithContentSdcardUl();
-                    context.unregisterReceiver(this);
-                    contentSdCardUrl=fname;
+                    contentSdCardUrl = fname;
+                    //insertDataInDatabaseWithContentSdcardUl();
+                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "" + dataBaseData.getContentId(),
+                            "DOWNLOADED", "Download completed for " + dataBaseData.getContentTitle(), "content");
 
+                    context.unregisterReceiver(this);
                 } catch (Exception e) {
                     Log.e("ErrrInDownloadApk", e.toString());
-                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", dataBaseData.getContentId()+"",
-                            "DOWNLOAD_FAILED", e.toString());
+                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", dataBaseData.getContentId() + "",
+                            "DOWNLOAD_FAILED", e.toString(), "content");
                 }
             }
         };

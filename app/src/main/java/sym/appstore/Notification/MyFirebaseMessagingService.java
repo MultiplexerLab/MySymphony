@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,6 +21,13 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
@@ -31,6 +39,11 @@ import com.google.gson.annotations.SerializedName;
 import com.squareup.picasso.Picasso;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,21 +51,30 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import sym.appstore.Activity.AppList;
 import sym.appstore.Activity.AuttoHashiActivity;
 import sym.appstore.Activity.BigganOProjuktiActivity;
 import sym.appstore.Activity.CartoonActivity;
+import sym.appstore.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
+import sym.appstore.Activity.ContentDescriptionActivity.PorashunaDescriptionActivity;
+import sym.appstore.Activity.Emoticons;
 import sym.appstore.Activity.GoromKhoborActivity;
 import sym.appstore.Activity.HomePage;
 import sym.appstore.Activity.JibonJaponActivity;
 import sym.appstore.Activity.KheladhulaActivity;
 import sym.appstore.Activity.MainActivity;
 import sym.appstore.Activity.PachMishaliActivity;
+import sym.appstore.Activity.PlayAudioActivity;
 import sym.appstore.Activity.PorashunaActivity;
 import sym.appstore.Activity.WallpaperBundleActivity;
+import sym.appstore.ModelClass.AppData;
+import sym.appstore.ModelClass.Porashuna;
 import sym.appstore.R;
 import sym.appstore.helper.AppLogger;
 import sym.appstore.helper.DownloadApk;
+import sym.appstore.helper.Endpoints;
 
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -66,9 +88,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     Date currenTime;
     DateFormat dateFormat;
 
+    JSONObject jsonDataObject;
+    RequestQueue queue;
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.e(TAG, "From: " + remoteMessage.getFrom());
+        queue = Volley.newRequestQueue(this);
 
         try {
             if (remoteMessage.getData() != null) {
@@ -90,7 +116,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             currenTime = new Date();
             AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", "Notification",
-                    "RECEIVED", notificationId + " this notification recerived, data: " + data.toString());
+                    "RECEIVED", notificationId + " this notification recerived, data: " + data.toString(), "notification");
 
             String KEY = data.get("KEY");
             apkUrl = data.get("apkLink");
@@ -143,10 +169,64 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 }
                 initNotificationForImageWithMultipleButton(totalButton, listBtn, title, description, imageLink, userName);
 
+            } else if (notificationCategory.equals("contentRedirect")) {
+                int contentId = Integer.parseInt(data.get("contentId"));
+                Log.i("ContentId", contentId + "");
+                initNotificationForContentId(title, description, imageLink, contentId);
             }
             Log.e(TAG, "getDataFromRemoteMessage: " + notificationId);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void initNotificationForContentId(String title, String description, final String imageLink, int contentId) {
+        try {
+            notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                setupChannels();
+            }
+            Intent notificationIntent = getIntentForContentId(contentId);
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+            final RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notification_image_only);
+
+            remoteViews.setTextViewText(R.id.notificationTitle, title);
+            remoteViews.setTextViewText(R.id.notificationDes, description);
+            final int notificationId = 1459756;
+            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), channel)
+                    .setSmallIcon(R.drawable.notification)
+                    .setContentTitle(title)
+                    .setContentText(description)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+                    .setCustomBigContentView(remoteViews)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    .setSound(defaultSoundUri)
+                    .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
+
+            final Notification notification = notificationBuilder.build();
+            Handler uiHandler = new Handler(Looper.getMainLooper());
+            uiHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Picasso.get()
+                                .load(imageLink)
+                                .into(remoteViews, R.id.imageLarge, notificationId, notification);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            notificationManager.notify(notificationId, notification);
+        } catch (Exception e) {
+            Log.e("Notierror", e.toString());
+        } finally {
+
         }
     }
 
@@ -168,7 +248,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 setupChannels();
             }
             if (totalButton == 1) {
-                Intent notificationIntent1 = getIntentForActivity(listBtn.get(0).getActivityName());
+                Intent notificationIntent1 = getIntentForActivity(listBtn.get(0).getActivityName(), title);
                 PendingIntent pendingIntent1 = PendingIntent.getActivity(this, 0, notificationIntent1, PendingIntent.FLAG_CANCEL_CURRENT);
 
                 remoteView1 = new RemoteViews(getPackageName(), R.layout.notification_image_btn_one);
@@ -190,10 +270,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
             } else if (totalButton == 2) {
-                Intent notificationIntent1 = getIntentForActivity(listBtn.get(0).getActivityName());
+                Intent notificationIntent1 = getIntentForActivity(listBtn.get(0).getActivityName(), title);
                 PendingIntent pendingIntent1 = PendingIntent.getActivity(this, 0, notificationIntent1, PendingIntent.FLAG_CANCEL_CURRENT);
 
-                Intent notificationIntent2 = getIntentForActivity(listBtn.get(1).getActivityName());
+                Intent notificationIntent2 = getIntentForActivity(listBtn.get(1).getActivityName(), title);
                 PendingIntent pendingIntent2 = PendingIntent.getActivity(this, 0, notificationIntent2, PendingIntent.FLAG_CANCEL_CURRENT);
                 remoteView1 = new RemoteViews(getPackageName(), R.layout.notification_image_btn_two);
 
@@ -218,12 +298,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
             } else if (totalButton == 3) {
-                Intent notificationIntent1 = getIntentForActivity(listBtn.get(0).getActivityName());
+                Intent notificationIntent1 = getIntentForActivity(listBtn.get(0).getActivityName(), title);
                 PendingIntent pendingIntent1 = PendingIntent.getActivity(this, 0, notificationIntent1, PendingIntent.FLAG_CANCEL_CURRENT);
 
-                Intent notificationIntent2 = getIntentForActivity(listBtn.get(1).getActivityName());
+                Intent notificationIntent2 = getIntentForActivity(listBtn.get(1).getActivityName(), title);
                 PendingIntent pendingIntent2 = PendingIntent.getActivity(this, 0, notificationIntent2, PendingIntent.FLAG_CANCEL_CURRENT);
-                Intent notificationIntent3 = getIntentForActivity(listBtn.get(2).getActivityName());
+                Intent notificationIntent3 = getIntentForActivity(listBtn.get(2).getActivityName(), title);
                 PendingIntent pendingIntent3 = PendingIntent.getActivity(this, 0, notificationIntent3, PendingIntent.FLAG_CANCEL_CURRENT);
                 remoteView1 = new RemoteViews(getPackageName(), R.layout.notification_image_btn_three);
 
@@ -270,6 +350,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
+    private class LongOperation extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            Log.i("params", params[0].toString());
+            getDataFromContentId(params[0]);
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+    }
+
     private void initNotificationForImageWithOutButton(boolean isOpenActivity, String title, String description, final String imageLink, String redirect, String userName) {
         try {
             if (title.contains(USERNAME)) {
@@ -280,7 +383,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 setupChannels();
             }
-            Intent notificationIntent = getIntentForActivity(redirect);
+            Intent notificationIntent = getIntentForActivity(redirect, title);
 
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -324,13 +427,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private Intent getIntentForActivity(String action) {
+    private Intent getIntentForActivity(String action, String title) {
         Log.e(TAG, "getIntentForActivity: " + action);
 
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
         AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", "Notification",
-                "CLICKED", notificationId + " this notification was clicked");
+                "CLICKED", notificationId + " this notification was clicked", "notification");
         if (action.equals("home")) {
             return new Intent(this, MainActivity.class);
         } else if (action.equals("joke")) {
@@ -366,21 +469,101 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             myIntent.putExtra("tag", "kk_mela");
             return myIntent;
         } else if (action.equals("wallpaper")) {
-            return new Intent(this, WallpaperBundleActivity.class);
+            return new Intent(this, Emoticons.class);
         } else if (action.equals("apkDownload")) {
             Intent downLoadIntent = new Intent(this, HomePage.class);
             downLoadIntent.putExtra("apk", apkUrl);
+            downLoadIntent.putExtra("notificationTitle", title);
             return downLoadIntent;
-        }else if (action.contains("http")) {
+        } else if (action.contains("http")) {
             String url = action;
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             return i;
         }
 
-        return new Intent(this, MainActivity.class);
+        return new Intent(this, HomePage.class);
     }
 
+
+    private Intent getIntentForContentId(int contentId) {
+        Intent intent = null;
+        String url = "http://bot.sharedtoday.com:9500/ws/mysymphony/getSpecificContent?id=" + contentId;
+        // getDataFromContentId(url);
+        new LongOperation().execute(url);
+        try {
+            String contentCat = jsonDataObject.getString("contentCat");
+            String id = jsonDataObject.getString("id");
+            String contentType = jsonDataObject.getString("contentType");
+            String contentTitle = jsonDataObject.getString("contentTitle");
+            String contentDescription = jsonDataObject.getString("contentDescription");
+            String thumbNail_image = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("thumbNail_image");
+            int contentPrice = jsonDataObject.getInt("contentPrice");
+
+            if (contentCat.equals("mobile_app")) {
+                ArrayList<AppData> appList = new ArrayList<>();
+                String packageName = jsonDataObject.getString("reference1");
+                String versionName = jsonDataObject.getString("reference2");
+                String versionCode = jsonDataObject.getString("reference3");
+                String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
+                appList.add(new AppData(id + "", contentTitle, contentDescription, thumbNail_image, contentUrl, packageName, versionCode));
+
+                intent = new Intent(this, AppList.class);
+                Gson gson = new Gson();
+                String appListJson = gson.toJson(appList);
+                intent.putExtra("appList", appListJson);
+            } else if (contentCat.equals("music_video")) {
+                if (contentType.equals("audio")) {
+                    String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
+                    Porashuna porashuna = new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentId);
+                    intent = new Intent(this, PlayAudioActivity.class);
+                    intent.putExtra("cameFromWhichActivity", "music_video");
+                    intent.putExtra("data", (Serializable) porashuna);
+                } else {
+                    String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
+                    Porashuna porashuna = new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentId);
+                    intent = new Intent(this, JapitoJibonDescriptionActivity.class);
+                    intent.putExtra("Data", (Serializable) porashuna);
+                    intent.putExtra("cameFromWhichActivity", "music_video");
+                }
+            } else {
+                String contentUrl = jsonDataObject.getString("contentUrl");
+                Porashuna porashuna = new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentId);
+                intent = new Intent(this, PorashunaDescriptionActivity.class);
+                intent.putExtra("Data", (Serializable) porashuna);
+            }
+        } catch (ExceptionInInitializerError e) {
+            Log.e("AnoError", e.toString());
+        } catch (JSONException e) {
+            Log.e("JSONError", e.toString());
+        }
+        return intent;
+    }
+
+    public void getDataFromContentId(String url) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    jsonDataObject = response.getJSONObject(0);
+                    Log.i("jsonDataObject", jsonDataObject.toString());
+                } catch (JSONException e) {
+                    Log.e("JSONError", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VolleyError", error.toString());
+            }
+        });
+        /*jsonArrayRequest.setShouldCache(false);
+        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
+                (int) TimeUnit.SECONDS.toMillis(5),
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
+        queue.add(jsonArrayRequest);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setupChannels() {

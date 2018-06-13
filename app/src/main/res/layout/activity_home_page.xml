@@ -99,7 +99,7 @@
 
                                 <ImageView
                                     android:id="@+id/mainButton1"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="50dp"
                                     android:layout_height="50dp"
                                     android:src="@drawable/mobile_app" />
 
@@ -122,7 +122,7 @@
 
                                 <ImageView
                                     android:id="@+id/mainButton2"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="50dp"
                                     android:layout_height="50dp"
                                     android:src="@drawable/music_video" />
 
@@ -144,7 +144,7 @@
 
                                 <ImageView
                                     android:id="@+id/mainButton3"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="50dp"
                                     android:layout_height="50dp"
                                     android:src="@drawable/emoticon" />
 
@@ -938,8 +938,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:onClick="jumpToAppList"
-                    android:src="@drawable/mobile" />
+                    android:src="@drawable/home" />
 
                 <TextView
                     android:id="@+id/textBottom1"
@@ -961,7 +960,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:onClick="jumpToAboutUs"
-                    android:src="@drawable/customer_care" />
+                    android:src="@drawable/about_us" />
 
                 <TextView
                     android:id="@+id/textBottom2"
@@ -983,7 +982,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:onClick="jumpToContact"
-                    android:src="@drawable/support" />
+                    android:src="@drawable/contact" />
 
                 <TextView
                     android:id="@+id/textBottom3"
@@ -1005,7 +1004,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:onClick="jumpToTerms"
-                    android:src="@drawable/support" />
+                    android:src="@drawable/terms_and_conditions" />
 
                 <TextView
                     android:id="@+id/textBottom4"

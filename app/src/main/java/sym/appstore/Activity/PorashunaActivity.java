@@ -1,12 +1,21 @@
 package sym.appstore.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -45,6 +54,8 @@ public class PorashunaActivity extends AppCompatActivity {
     Date currenTime;
     DateFormat dateFormat;
     String tag;
+    LinearLayout rootLayout;
+    Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +63,60 @@ public class PorashunaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_porashuna);
         toolbar = findViewById(R.id.toolbarlayoutinporashuna);
         setSupportActionBar(toolbar);
+
+        rootLayout = findViewById(R.id.rootLayout);
         porashunaArrayList = new ArrayList<>();
         progressDialog = new ProgressDialog(PorashunaActivity.this);
         queue = Volley.newRequestQueue(PorashunaActivity.this);
-        loadDataFromVolley();
+        if(internetConnected()){
+            loadDataFromVolley();
+        }else{
+            showSnackBar();
+        }
+        final SwipeRefreshLayout mySwipeRefreshLayout = findViewById(R.id.swiperefresh);
+        mySwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        if (internetConnected()) {
+                            if(snackbar!=null){
+                                if(snackbar.isShown()) {
+                                    snackbar.dismiss();
+                                }
+                            }
+                            loadDataFromVolley();
+                            mySwipeRefreshLayout.setRefreshing(false);
+                        } else {
+                            showSnackBar();
+                        }
+                    }
+                }
+        );
+
+    }
+
+    public void showSnackBar() {
+        snackbar = Snackbar
+                .make(rootLayout, "ইন্টারনেটের সাথে সংযুক্ত নেই!", Snackbar.LENGTH_INDEFINITE)
+                .setAction("সংযুক্ত করুন", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent settingsIntent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                        startActivityForResult(settingsIntent, 9003);
+                    }
+                });
+        snackbar.setActionTextColor(Color.RED);
+        snackbar.show();
+    }
+
+    private boolean internetConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -69,7 +130,6 @@ public class PorashunaActivity extends AppCompatActivity {
     private void loadDataFromVolley() {
         progressDialog.showProgressDialog();
         tag = getIntent().getStringExtra("tag");
-
         SharedPreferences.Editor editor = getSharedPreferences("tagCategory", MODE_PRIVATE).edit();
         if (tag == null) {
             SharedPreferences pref = getSharedPreferences("tagCategory", MODE_PRIVATE);
@@ -133,7 +193,7 @@ public class PorashunaActivity extends AppCompatActivity {
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
         AppLogger.insertLogs(PorashunaActivity.this, dateFormat.format(currenTime), "N", tag,
-                "IN", "Entrance to " + tag + " page");
+                "IN", "Entrance to " + tag + " page", "page");
     }
 
     @Override
@@ -142,7 +202,7 @@ public class PorashunaActivity extends AppCompatActivity {
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
         AppLogger.insertLogs(PorashunaActivity.this, dateFormat.format(currenTime), "N", tag,
-                "LEAVE", "Leave from " + tag + " page");
+                "LEAVE", "Leave from " + tag + " page", "page");
     }
 
     public void initializeRecyclerView() {
@@ -152,5 +212,16 @@ public class PorashunaActivity extends AppCompatActivity {
         recyclerViewForPorashuna.setHasFixedSize(true);
         adapterForPorashuna = new RecyclerAdapterForPorashuna(this, porashunaArrayList);
         recyclerViewForPorashuna.setAdapter(adapterForPorashuna);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 9003) {
+            if (internetConnected()) {
+                loadDataFromVolley();
+            } else {
+                showSnackBar();
+            }
+        }
     }
 }

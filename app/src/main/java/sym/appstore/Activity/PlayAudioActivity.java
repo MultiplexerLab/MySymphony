@@ -60,7 +60,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             currenTime = new Date();
             AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId()+"",
-                    "SONG_VISITED", "Category: "+data.getContentCat());
+                    "SONG_VISITED", "Category: "+data.getContentCat(), "content");
             String imageUrl = data.getThumbnailImgUrl();
             editor.putString("imageUrl", imageUrl);
             editor.apply();
@@ -160,14 +160,18 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             } else {
                 dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                 currenTime = new Date();
-                AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId()+"",
-                        "SONG_PLAYED", data.getContentTitle());
+                if(data!=null) {
+                    AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId() + "",
+                            "SONG_PLAYED", data.getContentTitle(), "content");
+                }
                 btnPlay.setBackgroundResource(R.drawable.pause);
             }
         } catch (Exception e) {
             Log.e("Exception", "" + e.getMessage() + e.getStackTrace() + e.getCause());
-            AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId()+"",
-                    "SONG_PLAYING_FAILED", e.toString());
+            if(data!=null) {
+                AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId() + "",
+                        "SONG_PLAYING_FAILED", e.toString(), "content");
+            }
         }
 
         super.onResume();

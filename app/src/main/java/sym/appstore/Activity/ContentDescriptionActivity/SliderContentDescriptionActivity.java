@@ -32,7 +32,7 @@ import sym.appstore.helper.ProgressDialog;
 import sym.appstore.helper.PushDataToSharedPref;
 import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
-public class SliderContentDescriptionActivity extends AppCompatActivity implements DownloadImage.AsyncResponse {
+public class SliderContentDescriptionActivity extends AppCompatActivity implements DownloadImage.AsyncResponse, DownloadApk.AsyncResponse {
 
     String imageUrl;
     Porashuna sliderImage;
@@ -87,25 +87,12 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
     public void downloadSlider(View view) {
         //Intent purchase = new Intent(SliderContentDescriptionActivity.this, PaymentMethod.class);
         String priceStatus = null;
-
         priceStatus = "free";
         dataBaseData = new DataBaseData(sliderImage.getContentTitle(), sliderImage.getContentCat(), sliderImage.getContentType(), "", sliderImage.getThumbnailImgUrl(), priceStatus, sliderImage.getContentId());
-        progressDialog.showProgressDialog();
+
         PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
         pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, SliderContentDescriptionActivity.this);
         Log.d("enterFree", "enterFree");
-        /*} else {
-            Intent myIntent;
-            priceStatus = "paid";
-            dataBaseData = new DataBaseData(sliderImage.getContentTitle(), sliderImage.getContentCat(), sliderImage.getContentType(), "", sliderImage.getThumbNail_image(), priceStatus, sliderImage.getId());
-            SharedPreferences preferences = getSharedPreferences("phoneNumber", MODE_PRIVATE);
-            myIntent = new Intent(getApplicationContext(), PaymentMethod.class);
-            myIntent.putExtra("userId", preferences.getString("phoneNo", ""));
-            Log.d("enterPaid", "enterPaid");
-            PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
-            pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, SliderContentDescriptionActivity.this);
-            this.startActivityForResult(myIntent, 1);
-        }*/
 
         Log.i("DataType", dataBaseData.getContentType());
 
@@ -120,47 +107,16 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
             DownloadImage downloadImage = new DownloadImage();
             downloadImage.downloadImage(imageURL, SliderContentDescriptionActivity.this, dataBaseData);
         } else if (dataBaseData.getContentType().contains("apk")) {
-            progressDialog.showProgressDialog();
+
             Gson gson = new Gson();
             SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
             String json = preferences.getString("databaseData", "");
             DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
-            Log.i("APK", sliderImage.getContentUrl());
+            Log.i("APK", json);
             DownloadApk downloadApk = new DownloadApk();
             downloadApk.downLoadAPK(sliderImage.getContentUrl(), SliderContentDescriptionActivity.this,
                     dataBaseData);
-        } /*else if (dataBaseData.getContentType().contains("audio")) {
-            progressDialog.showProgressDialog();
-            Gson gson = new Gson();
-            SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
-            String json = preferences.getString("databaseData", "");
-            DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
-            Log.i("Audio", sliderImage.getContentUrl());
-            DownloadAudio downloadApk = new DownloadAudio();
-            downloadApk.downloadAudio(sliderImage.getContentUrl(), sliderImage.getContentTitle(), SliderContentDescriptionActivity.this,
-                    dataBaseData);
         }
-        else if (dataBaseData.getContentType().contains("video")) {
-            progressDialog.showProgressDialog();
-            Gson gson = new Gson();
-            SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
-            String json = preferences.getString("databaseData", "");
-            DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
-            Log.i("Audio", sliderImage.getContentUrl());
-            DownloadVideo downloadApk = new DownloadVideo();
-            downloadApk.downloadVideo(sliderImage.getContentUrl(), SliderContentDescriptionActivity.this,
-                    dataBaseData);
-        }*/
-
-
-        /*purchase.putExtra("dataBaseData", dataBaseData);
-        SharedPreferences preferences = getSharedPreferences("phoneNumber", MODE_PRIVATE);
-        purchase.putExtra("userId", preferences.getString("phoneNo", ""));
-        purchase.putExtra("imageUrl", imageUrl);
-        progressDialog.showProgressDialog();
-        DownloadImage downloadImage = new DownloadImage();
-        downloadImage.downloadImage(imageUrl, SliderContentDescriptionActivity.this, dataBaseData);*/
-        ///this.startActivityForResult(purchase, 1);
     }
 
     @Override
@@ -195,7 +151,7 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
                         SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
                         String json = preferences.getString("databaseData", "");
                         DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
-                        Log.i("APK", sliderImage.getContentUrl());
+                        Log.i("APK", json);
                         DownloadApk downloadApk = new DownloadApk();
                         downloadApk.downLoadAPK(sliderImage.getContentUrl(), SliderContentDescriptionActivity.this,
                                 dataBaseData);
@@ -208,9 +164,9 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
 
     @Override
     public void processFinish(String output) {
-        progressDialog.hideProgressDialog();
         Log.d("processFinished", "processFinished");
-        if (output.contains("complete")) {
+        if (output.equals("complete")) {
+            progressDialog.hideProgressDialog();
             Intent myIntent;
             myIntent = new Intent(getApplicationContext(), ProfileActivity.class);
             ///Toast.makeText(SliderContentDescriptionActivity.this, "ধন্যবাদ কিছুক্ষন পরে মাইআইটেম লিস্ট এ আপনার আইটেমটি দেখতে পারবেন", Toast.LENGTH_SHORT).show();
@@ -218,8 +174,11 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
             myIntent.putExtra("dataBaseData", dataBaseData);
             myIntent.putExtra("cameFromWhichActivity", "ImageViewActivity");
             this.startActivity(myIntent);
-        } else
+        } else if (output.contains("completeAPK")) {
+
+        } else {
             Log.d("errorInprocessFinish", "errorInprocessFinish");
+        }
     }
    /* @Override
     public void onPause() {

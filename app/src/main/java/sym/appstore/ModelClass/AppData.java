@@ -2,6 +2,7 @@ package sym.appstore.ModelClass;
 
 public class AppData {
 
+    String contentId;
     String title;
     String description;
     String thumbNailImage;
@@ -9,7 +10,8 @@ public class AppData {
     String packagName;
     String versionCode;
 
-    public AppData(String title, String description, String thumbNailImage, String contentUrl, String packagName, String versionCode) {
+    public AppData(String contentId, String title, String description, String thumbNailImage, String contentUrl, String packagName, String versionCode) {
+        this.contentId = contentId;
         this.title = title;
         this.description = description;
         this.thumbNailImage = thumbNailImage;
@@ -17,6 +19,7 @@ public class AppData {
         this.packagName = packagName;
         this.versionCode = versionCode;
     }
+
 
     public String getTitle() {
         return title;
@@ -52,6 +55,14 @@ public class AppData {
 
     public String getPackagName() {
         return packagName;
+    }
+
+    public String getContentId() {
+        return contentId;
+    }
+
+    public void setContentId(String contentId) {
+        this.contentId = contentId;
     }
 
     public void setPackagName(String packagName) {

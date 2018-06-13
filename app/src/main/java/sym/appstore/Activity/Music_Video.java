@@ -59,13 +59,13 @@ public class Music_Video extends AppCompatActivity {
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
         AppLogger.insertLogs(Music_Video.this, dateFormat.format(currenTime), "N", "MusicVideo",
-                "IN", "Entrance");
+                "IN", "Entrance", "page");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         AppLogger.insertLogs(Music_Video.this, dateFormat.format(currenTime), "Y", "MusicVideo",
-                "OUT", "Leave");
+                "OUT", "Leave", "page");
     }
 }

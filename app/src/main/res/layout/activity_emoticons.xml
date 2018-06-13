@@ -4,13 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Emoticons"
-    android:padding="10dp">
-    
-    <GridView
-        android:id="@+id/gridViewEmoticons"
+    android:id="@+id/rootLayout"
+    android:padding="10dp"
+    tools:context=".Activity.Emoticons">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="auto_fit"></GridView>
+        android:layout_height="match_parent"
+        android:layout_below="@id/appbarLayoutInPorashunaDescription">
+
+        <GridView
+            android:id="@+id/gridViewEmoticons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="auto_fit"></GridView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

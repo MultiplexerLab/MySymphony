@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/rootLayout"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Activity.ContactActivity">
@@ -41,7 +42,7 @@
                 android:hint="আপনার নাম"
                 android:inputType="text"
                 android:singleLine="true"
-                android:textSize="14sp" />
+                android:textSize="16dp" />
 
             <EditText
                 android:id="@+id/your_email"
@@ -51,7 +52,7 @@
                 android:hint="ইমেইল"
                 android:inputType="textEmailAddress"
                 android:singleLine="true"
-                android:textSize="14sp" />
+                android:textSize="16dp" />
 
             <EditText
                 android:id="@+id/your_phone"
@@ -61,17 +62,16 @@
                 android:hint="আপনার মোবাইল নম্বর"
                 android:inputType="phone"
                 android:singleLine="true"
-                android:textSize="14sp" />
+                android:textSize="16dp" />
 
-            <EditText
-                android:id="@+id/your_company"
+            <Spinner
+                android:id="@+id/your_objective"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:hint="আপনি কোন ধরনের প্রতিষ্ঠানের সাথে জড়িত?"
                 android:inputType="text"
                 android:singleLine="true"
-                android:textSize="14sp" />
+                android:textSize="16dp" />
 
             <EditText
                 android:id="@+id/your_message"
@@ -80,7 +80,7 @@
                 android:layout_marginBottom="20dp"
                 android:hint="আপনার মন্তব্য লিখুন…"
                 android:inputType="textMultiLine"
-                android:textSize="14sp" />
+                android:textSize="16dp" />
 
             <Button
                 android:id="@+id/post_message"

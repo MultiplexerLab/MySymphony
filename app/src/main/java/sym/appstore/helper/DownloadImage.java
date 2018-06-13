@@ -44,7 +44,7 @@ public class DownloadImage {
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
         AppLogger.insertLogs(context, dateFormat.format(currenTime), "Y", ""+dataBaseData.getContentId(),
-                "DOWNLOAD_START", "Image download starts: "+dataBaseData.getContentTitle());
+                "DOWNLOAD_START", "Image download starts: "+dataBaseData.getContentTitle(), "content");
 
         DownloadImage.BackTask bt = new DownloadImage.BackTask();
         if (!imgURL.trim().equals("")) {
@@ -108,7 +108,7 @@ public class DownloadImage {
             dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             currenTime = new Date();
             AppLogger.insertLogs(context, dateFormat.format(currenTime), "Y", ""+dataBaseData.getContentId(),
-                    "DOWNLOADED", "Image Downloaded: "+dataBaseData.getContentTitle());
+                    "DOWNLOADED", "Image Downloaded: "+dataBaseData.getContentTitle(), "content");
             /*dbHelper.insertBitmap(result, dataBaseData);*/
         }
     }

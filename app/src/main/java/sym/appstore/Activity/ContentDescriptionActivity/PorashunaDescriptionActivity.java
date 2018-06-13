@@ -44,7 +44,7 @@ public class PorashunaDescriptionActivity extends AppCompatActivity {
     Date currenTime;
     DateFormat dateFormat;
     RelativeLayout rootLaoutDescription;
-
+    Snackbar snackbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +64,11 @@ public class PorashunaDescriptionActivity extends AppCompatActivity {
                     @Override
                     public void onRefresh() {
                         if (internetConnected()) {
+                            if(snackbar!=null){
+                                if(snackbar.isShown()) {
+                                    snackbar.dismiss();
+                                }
+                            }
                             setDescripTionData();
                             mySwipeRefreshLayout.setRefreshing(false);
                         } else {
@@ -75,7 +80,7 @@ public class PorashunaDescriptionActivity extends AppCompatActivity {
     }
 
     public void showSnackBar() {
-        Snackbar snackbar = Snackbar
+        snackbar = Snackbar
                 .make(rootLaoutDescription, "ইন্টারনেটের সাথে সংযুক্ত নেই!", Snackbar.LENGTH_INDEFINITE)
                 .setAction("সংযুক্ত করুন", new View.OnClickListener() {
                     @Override
@@ -117,7 +122,7 @@ public class PorashunaDescriptionActivity extends AppCompatActivity {
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
         AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", object.getContentId()+"",
-                "VISITED", "Category: "+object.getContentCat());
+                "VISITED", "Category: "+object.getContentCat(), "content");
 
         newsDescription.setText(object.getContentDescription());
         webView.setWebViewClient(new WebViewClient());

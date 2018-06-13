@@ -50,7 +50,7 @@ public class AppList extends AppCompatActivity implements DownloadApk.AsyncRespo
     protected void onStop() {
         super.onStop();
         AppLogger.insertLogs(this, dateFormat.format(startTime), "Y", "AppList",
-                "LEAVE", "Leave from Applist");
+                "LEAVE", "Leave from Applist", "page");
     }
 
     @Override
@@ -59,7 +59,7 @@ public class AppList extends AppCompatActivity implements DownloadApk.AsyncRespo
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         startTime = new Date();
         AppLogger.insertLogs(this, dateFormat.format(startTime), "N", "AppList",
-                "IN", "Entrance to Applist");
+                "IN", "Entrance to Applist", "page");
     }
 
     @Override

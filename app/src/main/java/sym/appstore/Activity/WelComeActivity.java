@@ -188,14 +188,14 @@ public class WelComeActivity extends AppCompatActivity {
                     initialCustomSwipeAdapter();
                 } catch (Exception e) {
                     AppLogger.insertLogs(WelComeActivity.this, dateFormat.format(currenTime), "Y", "Intro",
-                            "FAILED", response.toString());
+                            "FAILED", response.toString(), "page");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 AppLogger.insertLogs(WelComeActivity.this, dateFormat.format(currenTime), "Y", "Intro",
-                        "FAILED", error.toString());
+                        "FAILED", error.toString(), "page");
                 Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         });
@@ -277,7 +277,7 @@ public class WelComeActivity extends AppCompatActivity {
                 Log.i("ResponseSignUp", response);
                 if (response.contains("SUCCESS")) {
                     AppLogger.insertLogs(WelComeActivity.this, dateFormat.format(currenTime), "Y", "Registration",
-                            "SUCCESS", "");
+                            "SUCCESS", "", "");
                     SharedPreferences.Editor editor;
                     editor = getSharedPreferences("login", MODE_PRIVATE).edit();
                     editor.putString("username", "Guest");
@@ -290,7 +290,7 @@ public class WelComeActivity extends AppCompatActivity {
                     finish();
                 } else if (response.contains("exists")) {
                     AppLogger.insertLogs(WelComeActivity.this, dateFormat.format(currenTime), "Y", "Login",
-                            "SUCCESS", "");
+                            "SUCCESS", "", "");
                     progressDialog.hideProgressDialog();
                     SharedPreferences.Editor editor;
                     editor = getSharedPreferences("login", MODE_PRIVATE).edit();
@@ -304,7 +304,7 @@ public class WelComeActivity extends AppCompatActivity {
                     finish();
                 } else {
                     AppLogger.insertLogs(WelComeActivity.this, dateFormat.format(currenTime), "Y", "Login/Registration",
-                            "FAILED", response);
+                            "FAILED", response, "");
                     progressDialog.hideProgressDialog();
                     Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
                 }
@@ -315,7 +315,7 @@ public class WelComeActivity extends AppCompatActivity {
                 Log.e("ErrorInSignUp", error.toString());
                 progressDialog.hideProgressDialog();
                 AppLogger.insertLogs(WelComeActivity.this, dateFormat.format(currenTime), "Y", "Login/Registration",
-                        "FAILED", error.toString());
+                        "FAILED", error.toString(), "");
                 Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         }) {
@@ -369,7 +369,7 @@ public class WelComeActivity extends AppCompatActivity {
 
                 currenTime = new Date();
                 AppLogger.insertLogs(WelComeActivity.this, dateFormat.format(currenTime), "N", "login",
-                        "Login/Registration", "Data from user:" + params.toString());
+                        "Login/Registration", "Data from user:" + params.toString(), "");
                 return params;
             }
         };

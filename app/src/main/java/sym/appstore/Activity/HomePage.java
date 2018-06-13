@@ -159,6 +159,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     String emailId = "", devicePhoneNumber = "", deviceName = "";
     String osVersion = "", carrierName = "", firebaseToken = "", deviceId = "";
     LinearLayout rootLayout;
+    Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +176,11 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     public void onRefresh() {
                         if (internetConnected()) {
                             newloadDataFromVolley();
+                            if(snackbar!=null){
+                                if(snackbar.isShown()) {
+                                    snackbar.dismiss();
+                                }
+                            }
                             mySwipeRefreshLayout.setRefreshing(false);
                         } else {
                             showSnackBar();
@@ -212,17 +218,18 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         editor.commit();
 
         String apkUrl = getIntent().getStringExtra("apk");
+        String apkTitle = getIntent().getStringExtra("notificationTitle");
         if (apkUrl != null) {
             SharedPreferences preferences = context.getSharedPreferences("tempData", context.MODE_PRIVATE);
             int flag = preferences.getInt("unknownSource", 0);
             if (flag == 0) {
-                progressDialog.showProgressDialogAPK();
+                //progressDialog.showProgressDialogAPK();
                 DownloadApk downloadApk = new DownloadApk();
-                downloadApk.downLoadAPK("App", apkUrl, HomePage.this);
+                downloadApk.downLoadAPK(apkTitle, apkUrl, "notification", HomePage.this);
             } else {
-                progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
+                //progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
                 DownloadApk downloadApk = new DownloadApk();
-                downloadApk.downLoadAPK("App", apkUrl, HomePage.this);
+                downloadApk.downLoadAPK(apkTitle, apkUrl, "notification", HomePage.this);
             }
         }
         initDataFromServer();
@@ -246,7 +253,6 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 insertUserToDB();
                 loadIconsFromServer();
                 getInstanceInfo();
-                newloadDataFromVolley();
             } else {
                 showSnackBar();
             }
@@ -254,7 +260,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     public void showSnackBar() {
-        Snackbar snackbar = Snackbar
+        snackbar = Snackbar
                 .make(rootLayout, "ইন্টারনেটের সাথে সংযুক্ত নেই!", Snackbar.LENGTH_INDEFINITE)
                 .setAction("সংযুক্ত করুন", new View.OnClickListener() {
                     @Override
@@ -311,7 +317,6 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         Log.i("ModelName", deviceName);
         osVersion = Build.VERSION.RELEASE;
         Log.i("osVersion", osVersion);
-        //getInstanceInfo();
     }
 
     public void getAccountsName() {
@@ -339,7 +344,6 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 insertUserToDB();
                 loadIconsFromServer();
                 getInstanceInfo();
-                newloadDataFromVolley();
             } else {
                 showSnackBar();
             }
@@ -382,7 +386,6 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     private void insertToServerDB() {
-        Log.i("Called", "Called");
         progressDialog.showProgressDialog();
         String url = "http://bot.sharedtoday.com:9500/ws/mysymphony/commonInsertIntoSymUsers?tbl=symUsers";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -390,8 +393,9 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             public void onResponse(String response) {
                 Log.i("ResponseSignUp", response);
                 if (response.contains("SUCCESS")) {
+                    progressDialog.hideProgressDialog();
                     AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "Registration",
-                            "SUCCESS", "Succesful Registration");
+                            "SUCCESS", "Succesful Registration", "registration");
                     SharedPreferences.Editor editor;
                     editor = getSharedPreferences("login", MODE_PRIVATE).edit();
                     editor.putString("username", "Guest");
@@ -403,7 +407,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     newloadDataFromVolley();
                 } else if (response.contains("exists")) {
                     AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "Login",
-                            "SUCCESS", "Succesful Login");
+                            "SUCCESS", "Succesful Login", "login");
                     progressDialog.hideProgressDialog();
                     SharedPreferences.Editor editor;
                     editor = getSharedPreferences("login", MODE_PRIVATE).edit();
@@ -415,8 +419,8 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     loadIconsFromServer();
                     newloadDataFromVolley();
                 } else {
-                    AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "Login/Registration",
-                            "FAILED", response);
+                    AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "Registration",
+                            "FAILED", response, "login/registration");
                     progressDialog.hideProgressDialog();
                     Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
                 }
@@ -427,7 +431,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 Log.e("ErrorInSignUp", error.toString());
                 progressDialog.hideProgressDialog();
                 AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "Login/Registration",
-                        "FAILED", error.toString());
+                        "FAILED", error.toString(), "login/registration");
 
                 Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
@@ -478,10 +482,6 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     params.put("osVersion", osVersion);
                 }
                 Log.i("DataSet", params.toString());
-
-                currenTime = new Date();
-                AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "N", "login",
-                        "Login/Registration", "Data from user:" + params.toString());
                 return params;
             }
         };
@@ -511,14 +511,14 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
         AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "N", "HomePage",
-                "IN", "Entrance");
+                "IN", "Entrance", "page");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "HomePage",
-                "LEAVE", "Leave");
+                "LEAVE", "Leave", "page");
     }
 
     @Override
@@ -526,7 +526,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         super.onDestroy();
         SharedPreferences pref = getSharedPreferences("tracker", MODE_PRIVATE);
         AppLogger.insertLogs(HomePage.this, pref.getString("startTime", dateFormat.format(currenTime)), "Y", "AppStore APP",
-                "DURATION", "App is finishing");
+                "DURATION", "App is finishing", "page");
     }
 
     private void loadIconsFromServer() {
@@ -567,7 +567,6 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     private void getInstanceInfo() {
-
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_APP_INFO, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -600,39 +599,25 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     private void newloadDataFromVolley() {
+        queue = Volley.newRequestQueue(HomePage.this);
         progressDialog.showProgressDialog();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.NEW_HOME_GET_URL, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                /*JSONObject jsonObject = null;
-                JSONArray jsonArrayNew = null;
-                try {
-                    String jsonFormattedString = response.replaceAll("\\\\", "");
-                    jsonFormattedString = jsonFormattedString.substring(1, jsonFormattedString.length() - 1);
-                    jsonFormattedString = jsonFormattedString.replaceAll("\"\\[", "[");
-                    jsonFormattedString = jsonFormattedString.replaceAll("\\]\"", "]");
-                    Log.d("jsonFormattedString", jsonFormattedString);
-                    jsonObject = new JSONObject(jsonFormattedString);
-                    jsonArrayNew = jsonObject.getJSONArray("Contents");
-                    Log.d("obj", jsonObject.toString());
-                } catch (JSONException e) {
-                    Log.d("JSONExec", e.getMessage());
-                }*/
-
                 try {
                     setSliderContent(response);
-                    setTopContent(response);
+                    //setTopContent(response);
                     setDailyLife(response);
-                    setMulloCharContent(response);
+                    //setMulloCharContent(response);
                     setShikkhaSohayikaContent(response);
-                    setGamesZoneContent(response);
-                    setShocolChobiContent(response);
+                    //setGamesZoneContent(response);
+                    //setShocolChobiContent(response);
                     progressDialog.hideProgressDialog();
 
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d("exceptionLoadData4rmvly", e.toString());
-                    // progressDialog.hideProgressDialog();
+                    progressDialog.hideProgressDialog();
                 }
             }
         }, new Response.ErrorListener() {
@@ -642,7 +627,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 if (progressDialog != null) {
                     progressDialog.hideProgressDialog();
                 }
-                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         });
         /*jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
@@ -841,7 +826,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                         String packageName = japito_jibon_content_arr.getJSONObject(i).getString("reference1");
                         String versionName = japito_jibon_content_arr.getJSONObject(i).getString("reference2");
                         String versionCode = japito_jibon_content_arr.getJSONObject(i).getString("reference3");
-                        appList.add(new AppData(contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), contentUrl, packageName, versionCode));
+                        appList.add(new AppData(contentid + "", contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), contentUrl, packageName, versionCode));
                     } else if (contentCat.equals("music_video")) {
                         if (contentType.equals("video")) {
                             musicVideoList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));

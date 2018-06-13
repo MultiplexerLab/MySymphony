@@ -1,11 +1,21 @@
 package sym.appstore.Activity;
 
+import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -44,16 +54,66 @@ public class Emoticons extends AppCompatActivity implements DownloadImage.AsyncR
     Date startTime;
     DateFormat dateFormat;
     RequestQueue queue;
+    LinearLayout rootLayout;
+    Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emoticons);
 
+        rootLayout = findViewById(R.id.rootLayout);
         gridView = findViewById(R.id.gridViewEmoticons);
         queue = Volley.newRequestQueue(this);
 
-        getEmoticons();
+        if(internetConnected()){
+            getEmoticons();
+        }else{
+            showSnackBar();
+        }
+        final SwipeRefreshLayout mySwipeRefreshLayout = findViewById(R.id.swiperefresh);
+        mySwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        if (internetConnected()) {
+                            if(snackbar!=null){
+                                if(snackbar.isShown()) {
+                                    snackbar.dismiss();
+                                }
+                            }
+                            getEmoticons();
+                            mySwipeRefreshLayout.setRefreshing(false);
+                        } else {
+                            showSnackBar();
+                        }
+                    }
+                }
+        );
+    }
+
+    public void showSnackBar() {
+        snackbar = Snackbar
+                .make(rootLayout, "ইন্টারনেটের সাথে সংযুক্ত নেই!", Snackbar.LENGTH_INDEFINITE)
+                .setAction("সংযুক্ত করুন", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent settingsIntent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                        startActivityForResult(settingsIntent, 9003);
+                    }
+                });
+        snackbar.setActionTextColor(Color.RED);
+        snackbar.show();
+    }
+
+    private boolean internetConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void getEmoticons() {
@@ -77,7 +137,7 @@ public class Emoticons extends AppCompatActivity implements DownloadImage.AsyncR
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyError", error.toString());
-                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         });
         queue.add(jsonArrayRequest);
@@ -87,7 +147,7 @@ public class Emoticons extends AppCompatActivity implements DownloadImage.AsyncR
     protected void onStop() {
         super.onStop();
         AppLogger.insertLogs(this, dateFormat.format(startTime), "Y", "Emoticons",
-                "LEAVE", "Leave from Emoticons Page");
+                "LEAVE", "Leave from Emoticons Page", "page");
     }
 
     @Override
@@ -96,7 +156,7 @@ public class Emoticons extends AppCompatActivity implements DownloadImage.AsyncR
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         startTime = new Date();
         AppLogger.insertLogs(this, dateFormat.format(startTime), "N", "Emoticons",
-                "IN", "Entrance to Emoticons Page");
+                "IN", "Entrance to Emoticons Page", "page");
     }
 
     @Override
@@ -119,5 +179,16 @@ public class Emoticons extends AppCompatActivity implements DownloadImage.AsyncR
             this.startActivity(myIntent);
         } else
             Log.d("errorInprocessFinish", "errorInprocessFinish");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 9003) {
+            if (internetConnected()) {
+                getEmoticons();
+            } else {
+                showSnackBar();
+            }
+        }
     }
 }

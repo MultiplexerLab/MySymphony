@@ -23,7 +23,7 @@ import sym.appstore.Activity.WelComeActivity;
 public class AppLogger {
 
     public static void insertLogs(final Context context, final String startTime, final String tagEndTime, final String procName, final String event,
-                                  final String message){
+                                  final String message, final String type){
         final RequestQueue queue;
         queue = Volley.newRequestQueue(context);
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.APPLOGS_POST_URL, new Response.Listener<String>() {

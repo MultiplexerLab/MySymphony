@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Activity.PorashunaActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -15,17 +16,21 @@
 
         <include
             android:id="@+id/toolbarlayoutinporashuna"
-            layout="@layout/toolbar_layout_in_porashuna_activity"
-            />
+            layout="@layout/toolbar_layout_in_porashuna_activity" />
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/RV_Porashuna"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:nestedScrollingEnabled="false">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:layout_below="@id/appbarLayoutInPorashunaDescription">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/RV_Porashuna"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:nestedScrollingEnabled="false"></android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>
