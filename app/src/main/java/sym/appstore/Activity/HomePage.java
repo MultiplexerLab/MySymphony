@@ -11,6 +11,8 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -54,6 +56,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -72,6 +75,7 @@ import com.google.android.gms.common.AccountPicker;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -88,10 +92,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import sym.appstore.CustomSwipeAdapter;
 import sym.appstore.ModelClass.AppData;
+import sym.appstore.ModelClass.DataBaseData;
 import sym.appstore.ModelClass.GamesZone;
 import sym.appstore.ModelClass.Icon;
 import sym.appstore.ModelClass.JapitoJibon;
@@ -217,23 +223,102 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         editor.putString("startTime", dateFormat.format(currenTime));
         editor.commit();
 
-        String apkUrl = getIntent().getStringExtra("apk");
+        String appContentId = getIntent().getStringExtra("appContentId");
         String apkTitle = getIntent().getStringExtra("notificationTitle");
-        if (apkUrl != null) {
-            SharedPreferences preferences = context.getSharedPreferences("tempData", context.MODE_PRIVATE);
-            int flag = preferences.getInt("unknownSource", 0);
-            if (flag == 0) {
-                //progressDialog.showProgressDialogAPK();
-                DownloadApk downloadApk = new DownloadApk();
-                downloadApk.downLoadAPK(apkTitle, apkUrl, "notification", HomePage.this);
-            } else {
-                //progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
-                DownloadApk downloadApk = new DownloadApk();
-                downloadApk.downLoadAPK(apkTitle, apkUrl, "notification", HomePage.this);
+        if (appContentId != null) {
+            String url = "http://bot.sharedtoday.com:9500/ws/mysymphony/getSpecificContent?id=" + appContentId;
+            getDataFromContentId(url);
+
+            SharedPreferences  mPrefs = getPreferences(MODE_PRIVATE);
+            Gson gson = new Gson();
+            String json = mPrefs.getString("jsonDataObject", "");
+            JSONObject jsonDataObject = gson.fromJson(json, JSONObject.class);
+            if(jsonDataObject==null){
+                getDataFromContentId(url);
+            }
+            if(jsonDataObject!=null){
+                try {
+                    String packageName = jsonDataObject.getString("reference1");
+                    String versionName = jsonDataObject.getString("reference2");
+                    String versionCode = jsonDataObject.getString("reference3");
+                    Log.i("dataVersionCode", packageName+"  "+versionCode);
+                    if (isPackageExisted(packageName)) {
+                        PackageInfo pinfo = null;
+                        try {
+                            pinfo = getPackageManager().getPackageInfo(packageName, 0);
+                            int versionNumber = pinfo.versionCode;
+
+                            if (versionCode == null || versionCode.equals("null")) {
+
+                            } else {
+                                if (versionNumber == Integer.parseInt(versionCode)) {
+                                    Toast.makeText(context, jsonDataObject.getString("contentTitle")+" অ্যাপ আপনার মোবাইলে ইন্সটলড আছে!", Toast.LENGTH_SHORT).show();
+
+                                } else {
+                                    Toast.makeText(context, jsonDataObject.getString("contentTitle")+" অ্যাপ আপনার মোবাইলে ইন্সটলড আছে, কিন্তু নতুন ভার্সন এসেছে!", Toast.LENGTH_SHORT).show();
+                                    DownloadApk downloadApk = new DownloadApk();
+                                    DataBaseData dataBaseData  = new DataBaseData(apkTitle, "mobile_app", "apk", jsonDataObject.getString("contentDescription"), Endpoints.DOMAIN_PREFIX+jsonDataObject.getString("thumbNail_image"), "free",
+                                            Integer.parseInt(appContentId));
+                                    downloadApk.downLoadAPK(Endpoints.DOMAIN_PREFIX+jsonDataObject.getString("contentUrl"), this, dataBaseData);
+                                }
+                            }
+
+                        } catch (PackageManager.NameNotFoundException e) {
+                            Log.e("unknown", e.toString());
+                        }
+                    }else{
+                        DownloadApk downloadApk = new DownloadApk();
+                        DataBaseData dataBaseData  = new DataBaseData(apkTitle, "mobile_app", "apk", jsonDataObject.getString("contentDescription"), Endpoints.DOMAIN_PREFIX+jsonDataObject.getString("thumbNail_image"), "free",
+                                Integer.parseInt(appContentId));
+                        downloadApk.downLoadAPK(Endpoints.DOMAIN_PREFIX+jsonDataObject.getString("contentUrl"), this, dataBaseData);
+                    }
+                } catch (JSONException e) {
+                    Log.e("Hudai", e.toString());
+                }
             }
         }
         initDataFromServer();
+    }
 
+    public boolean isPackageExisted(String targetPackage) {
+        List<ApplicationInfo> packages;
+        PackageManager pm;
+
+        pm = context.getPackageManager();
+        packages = pm.getInstalledApplications(0);
+        for (ApplicationInfo packageInfo : packages) {
+            Log.i("PackageIstalled", packageInfo.packageName.toString());
+            if (packageInfo.packageName.equals(targetPackage))
+                return true;
+        }
+        return false;
+    }
+
+    public void getDataFromContentId(String url) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    JSONObject jsonDataObject = response.getJSONObject(0);
+                    Log.i("jsonDataObject", jsonDataObject.toString());
+                    SharedPreferences  mPrefs = getPreferences(MODE_PRIVATE);
+                    SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(jsonDataObject);
+                    prefsEditor.putString("jsonDataObject", json);
+                    prefsEditor.commit();
+
+                } catch (JSONException e) {
+                    Log.e("JSONError", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VolleyError", error.toString());
+            }
+        });
+        queue.add(jsonArrayRequest);
     }
 
     private void initDataFromServer() {

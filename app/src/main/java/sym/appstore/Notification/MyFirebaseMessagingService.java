@@ -82,13 +82,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private NotificationManager notificationManager;
     private String channel = "Exclusive Offer";
     private final String USERNAME = "[NAME]";
-    private String apkUrl;
+    private String appContentId;
     int notificationId;
 
     Date currenTime;
     DateFormat dateFormat;
-
-    JSONObject jsonDataObject;
     RequestQueue queue;
 
     @Override
@@ -119,7 +117,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     "RECEIVED", notificationId + " this notification recerived, data: " + data.toString(), "notification");
 
             String KEY = data.get("KEY");
-            apkUrl = data.get("apkLink");
+            appContentId = data.get("appContentId");
             String notificationCategory = data.get("notificationCategory");
             Log.i("Cat", notificationCategory);
             String imageLink = data.get("imageLink");
@@ -182,6 +180,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void initNotificationForContentId(String title, String description, final String imageLink, int contentId) {
         try {
+            if (title.contains(USERNAME)) {
+                title = title.replace(USERNAME, title);
+            }
+
             notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 setupChannels();
@@ -224,7 +226,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             notificationManager.notify(notificationId, notification);
         } catch (Exception e) {
-            Log.e("Notierror", e.toString());
+            e.printStackTrace();
         } finally {
 
         }
@@ -350,29 +352,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private class LongOperation extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            Log.i("params", params[0].toString());
-            getDataFromContentId(params[0]);
-            return "Executed";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-        }
-    }
-
     private void initNotificationForImageWithOutButton(boolean isOpenActivity, String title, String description, final String imageLink, String redirect, String userName) {
         try {
             if (title.contains(USERNAME)) {
@@ -472,7 +451,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             return new Intent(this, Emoticons.class);
         } else if (action.equals("apkDownload")) {
             Intent downLoadIntent = new Intent(this, HomePage.class);
-            downLoadIntent.putExtra("apk", apkUrl);
+            downLoadIntent.putExtra("appContentId", appContentId);
             downLoadIntent.putExtra("notificationTitle", title);
             return downLoadIntent;
         } else if (action.contains("http")) {
@@ -489,8 +468,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private Intent getIntentForContentId(int contentId) {
         Intent intent = null;
         String url = "http://bot.sharedtoday.com:9500/ws/mysymphony/getSpecificContent?id=" + contentId;
-        // getDataFromContentId(url);
-        new LongOperation().execute(url);
+        getDataFromContentId(url);
+
+        SharedPreferences  mPrefs = getSharedPreferences("tempData",MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = mPrefs.getString("jsonDataObject", "");
+        JSONObject jsonDataObject = gson.fromJson(json, JSONObject.class);
+        if(jsonDataObject==null){
+            getDataFromContentId(url);
+        }
         try {
             String contentCat = jsonDataObject.getString("contentCat");
             String id = jsonDataObject.getString("id");
@@ -509,8 +495,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 appList.add(new AppData(id + "", contentTitle, contentDescription, thumbNail_image, contentUrl, packageName, versionCode));
 
                 intent = new Intent(this, AppList.class);
-                Gson gson = new Gson();
-                String appListJson = gson.toJson(appList);
+                Gson gson2 = new Gson();
+                String appListJson = gson2.toJson(appList);
                 intent.putExtra("appList", appListJson);
             } else if (contentCat.equals("music_video")) {
                 if (contentType.equals("audio")) {
@@ -545,7 +531,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             @Override
             public void onResponse(JSONArray response) {
                 try {
-                    jsonDataObject = response.getJSONObject(0);
+                    JSONObject jsonDataObject = response.getJSONObject(0);
+                    SharedPreferences  mPrefs = getSharedPreferences("tempData",MODE_PRIVATE);
+                    SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(jsonDataObject);
+                    prefsEditor.putString("jsonDataObject", json);
+                    prefsEditor.commit();
                     Log.i("jsonDataObject", jsonDataObject.toString());
                 } catch (JSONException e) {
                     Log.e("JSONError", e.toString());
@@ -557,11 +549,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Log.e("VolleyError", error.toString());
             }
         });
-        /*jsonArrayRequest.setShouldCache(false);
+        jsonArrayRequest.setShouldCache(false);
         jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
-                (int) TimeUnit.SECONDS.toMillis(5),
+                (int) TimeUnit.SECONDS.toMillis(2),
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(jsonArrayRequest);
     }
 

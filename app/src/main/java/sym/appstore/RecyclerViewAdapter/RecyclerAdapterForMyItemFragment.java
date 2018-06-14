@@ -1,6 +1,7 @@
 package sym.appstore.RecyclerViewAdapter;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -110,7 +111,7 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
             contentDownloadTimestampTV = view.findViewById(R.id.contentDownloadTimestampTV);
             view.setDrawingCacheEnabled(false);
             this.contentSdCardUrl = contentSdCardUrl;
-            cardView.setOnClickListener(new View.OnClickListener() {
+            shareIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     String contentType = dataHelperArrayList.get(getAdapterPosition()).getContentType();
@@ -174,6 +175,15 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
                     } else {
                         Toast.makeText(activity, "এখন ডাউনলোড করার সুযোগটি নেই\n" + "পেমেন্ট যাচাই করা হলে ডাউললোড করার সুযোগ পাবেন", Toast.LENGTH_SHORT).show();
                     }*/
+                }
+            });
+
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (dataHelperArrayList.get(getAdapterPosition()).getContentType().contains("apk")) {
+                        activity.startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
+                    }
                 }
             });
         }

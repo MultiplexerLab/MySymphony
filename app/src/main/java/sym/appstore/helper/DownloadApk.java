@@ -16,6 +16,7 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -87,6 +88,7 @@ public class DownloadApk {
             public void onReceive(Context ctxt, Intent intent) {
                 try {
                     progressDialog.hideProgressDialog();
+                    Toast.makeText(context, dataBaseData.getContentTitle()+" ডাউনলোড হয়েছে", Toast.LENGTH_SHORT).show();
                     Date startTime;
                     DateFormat dateFormat;
                     dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
@@ -98,7 +100,7 @@ public class DownloadApk {
                     Log.d("onComplete", "onComplete");
                     insertDataInDatabaseWithContentSdcardUl();
                     Intent install = new Intent(Intent.ACTION_VIEW);
-                    install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     install.setDataAndType(apkUri,
                             manager.getMimeTypeForDownloadedFile(downloadId));
                     install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -117,7 +119,7 @@ public class DownloadApk {
         context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 
-    public void downLoadAPK(final String appTitle, final String apkUrl, final String contentId, final Context context) {
+    /*public void downLoadAPK(final String appTitle, final String apkUrl, final String contentId, final Context context) {
         final ProgressDialog progressDialog = new sym.appstore.helper.ProgressDialog(context);
         SharedPreferences preferences = context.getSharedPreferences("tempData", context.MODE_PRIVATE);
         int flag = preferences.getInt("unknownSource", 0);
@@ -163,6 +165,7 @@ public class DownloadApk {
         BroadcastReceiver onComplete = new BroadcastReceiver() {
             public void onReceive(Context ctxt, Intent intent) {
                 try {
+                    Toast.makeText(context, dataBaseData.getContentTitle()+" ডাউনলোড হয়েছে", Toast.LENGTH_SHORT).show();
                     Date startTime;
                     DateFormat dateFormat;
                     dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
@@ -174,7 +177,7 @@ public class DownloadApk {
                     progressDialog.hideProgressDialog();
 
                     Intent install = new Intent(Intent.ACTION_VIEW);
-                    install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     install.setDataAndType(apkUri,
                             manager.getMimeTypeForDownloadedFile(downloadId));
                     install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -194,7 +197,7 @@ public class DownloadApk {
             }
         };
         context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-    }
+    }*/
 
     public void insertDataInDatabaseWithContentSdcardUl() {
         Log.d("enterInsertApkToDB", "enterInsertAudioToDB");

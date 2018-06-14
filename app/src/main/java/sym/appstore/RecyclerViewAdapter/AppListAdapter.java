@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 import sym.appstore.ModelClass.AppData;
+import sym.appstore.ModelClass.DataBaseData;
 import sym.appstore.R;
 import sym.appstore.helper.AppLogger;
 import sym.appstore.helper.DownloadApk;
@@ -121,8 +122,10 @@ public class AppListAdapter extends BaseAdapter {
                 String apkUrl = appData.get(position).getContentUrl();
                 String appTitle = appData.get(position).getTitle();
                 Log.i("DownloadAPK", apkUrl);
+                DataBaseData dataBaseData = new DataBaseData(appTitle, "mobile_app","apk", appData.get(position).getDescription(),
+                        appData.get(position).getThumbNailImage(), "free", Integer.parseInt(appData.get(position).getContentId()));
                 DownloadApk downloadApk = new DownloadApk();
-                downloadApk.downLoadAPK(appTitle, apkUrl, appData.get(position).getContentId(), context);
+                downloadApk.downLoadAPK(apkUrl, context, dataBaseData);
             }
         });
         return customView;
