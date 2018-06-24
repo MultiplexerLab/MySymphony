@@ -257,7 +257,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                                 } else {
                                     Toast.makeText(context, jsonDataObject.getString("contentTitle")+" অ্যাপ আপনার মোবাইলে ইন্সটলড আছে, কিন্তু নতুন ভার্সন এসেছে!", Toast.LENGTH_SHORT).show();
                                     DownloadApk downloadApk = new DownloadApk();
-                                    DataBaseData dataBaseData  = new DataBaseData(apkTitle, "mobile_app", "apk", jsonDataObject.getString("contentDescription"), Endpoints.DOMAIN_PREFIX+jsonDataObject.getString("thumbNail_image"), "free",
+                                    DataBaseData dataBaseData  = new DataBaseData(jsonDataObject.getString("contentTitle"), "mobile_app", "apk", jsonDataObject.getString("contentDescription"), Endpoints.DOMAIN_PREFIX+jsonDataObject.getString("thumbNail_image"), "free",
                                             Integer.parseInt(appContentId));
                                     downloadApk.downLoadAPK(Endpoints.DOMAIN_PREFIX+jsonDataObject.getString("contentUrl"), this, dataBaseData);
                                 }
@@ -268,7 +268,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                         }
                     }else{
                         DownloadApk downloadApk = new DownloadApk();
-                        DataBaseData dataBaseData  = new DataBaseData(apkTitle, "mobile_app", "apk", jsonDataObject.getString("contentDescription"), Endpoints.DOMAIN_PREFIX+jsonDataObject.getString("thumbNail_image"), "free",
+                        DataBaseData dataBaseData  = new DataBaseData(jsonDataObject.getString("contentTitle"), "mobile_app", "apk", jsonDataObject.getString("contentDescription"), Endpoints.DOMAIN_PREFIX+jsonDataObject.getString("thumbNail_image"), "free",
                                 Integer.parseInt(appContentId));
                         downloadApk.downLoadAPK(Endpoints.DOMAIN_PREFIX+jsonDataObject.getString("contentUrl"), this, dataBaseData);
                     }

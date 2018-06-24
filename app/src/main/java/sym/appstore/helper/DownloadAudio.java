@@ -1,18 +1,24 @@
 package sym.appstore.helper;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -24,7 +30,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import sym.appstore.BuildConfig;
@@ -38,7 +46,9 @@ public class DownloadAudio {
     private DataBaseData dataBaseData;
     String contentSdCardUrl;
     DataHelper dbHelper;
-
+    String[] permissions = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    };
     /*public void downloadAudio(String audioUrl, String songTitle, Context context, DataBaseData dataBaseData) {
         this.context = context;
         this.audioUrl = audioUrl;
@@ -172,68 +182,88 @@ public class DownloadAudio {
 
         dbHelper = new DataHelper(context);
 
-        final Date startTime;
-        final DateFormat dateFormat;
-        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        startTime = new Date();
-        AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "" + dataBaseData.getContentId(),
-                "DOWNLOAD_START", "Download starts for " + dataBaseData.getContentTitle(), "content");
+        if (checkPermissions()) {
+            final Date startTime;
+            final DateFormat dateFormat;
+            dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            startTime = new Date();
+            AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "" + dataBaseData.getContentId(),
+                    "DOWNLOAD_START", "Download starts for " + dataBaseData.getContentTitle(), "content");
 
-        String destination = Environment.getExternalStorageDirectory().toString() + "/appstore";
-        File myDir = new File(destination);
-        myDir.mkdirs();
+            String destination = Environment.getExternalStorageDirectory().toString() + "/appstore";
+            File myDir = new File(destination);
+            myDir.mkdirs();
 
-        final String fname = "/"+songTitle + ".mp3";
-        destination += fname;
+            final String fname = "/" + songTitle + ".mp3";
+            destination += fname;
 
-        contentSdCardUrl = fname;
-        final Uri uri = Uri.parse("file://" + destination);
+            contentSdCardUrl = fname;
+            final Uri uri = Uri.parse("file://" + destination);
 
-        File file = new File(destination);
-        if (file.exists())
-            file.delete();
+            File file = new File(destination);
+            if (file.exists())
+                file.delete();
 
-        Log.i("audioToDownload", audioUrl);
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(audioUrl));
-        request.setDescription("Downloading the Song please wait!");
-        request.setTitle(dataBaseData.getContentTitle());
+            Log.i("audioToDownload", audioUrl);
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(audioUrl));
+            request.setDescription("Downloading the Song please wait!");
+            request.setTitle(dataBaseData.getContentTitle());
 
-        final Uri audioUri = FileProvider.getUriForFile(context,
-                BuildConfig.APPLICATION_ID + ".provider",
-                file);
-        request.setDestinationUri(uri);
+            final Uri audioUri = FileProvider.getUriForFile(context,
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    file);
+            request.setDestinationUri(uri);
 
-        final DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-        final long downloadId = manager.enqueue(request);
+            final DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+            final long downloadId = manager.enqueue(request);
 
         /*if (Build.VERSION.RELEASE.contains("8")) {
 
         }*/
-        insertDataInDatabaseWithContentSdcardUl();
-        BroadcastReceiver onComplete = new BroadcastReceiver() {
-            public void onReceive(Context ctxt, Intent intent) {
-                try {
-                    Date startTime;
-                    DateFormat dateFormat;
-                    dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-                    startTime = new Date();
+            insertDataInDatabaseWithContentSdcardUl();
+            BroadcastReceiver onComplete = new BroadcastReceiver() {
+                public void onReceive(Context ctxt, Intent intent) {
+                    try {
+                        Date startTime;
+                        DateFormat dateFormat;
+                        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                        startTime = new Date();
 
-                    Log.d("onComplete", "onComplete");
-                    contentSdCardUrl = fname;
-                    //insertDataInDatabaseWithContentSdcardUl();
-                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "" + dataBaseData.getContentId(),
-                            "DOWNLOADED", "Download completed for " + dataBaseData.getContentTitle(), "content");
+                        Log.d("onComplete", "onComplete");
+                        contentSdCardUrl = fname;
+                        //insertDataInDatabaseWithContentSdcardUl();
+                        AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "" + dataBaseData.getContentId(),
+                                "DOWNLOADED", "Download completed for " + dataBaseData.getContentTitle(), "content");
 
-                    context.unregisterReceiver(this);
-                } catch (Exception e) {
-                    Log.e("ErrrInDownloadApk", e.toString());
-                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", dataBaseData.getContentId() + "",
-                            "DOWNLOAD_FAILED", e.toString(), "content");
+                        context.unregisterReceiver(this);
+                    } catch (Exception e) {
+                        Log.e("ErrrInDownloadApk", e.toString());
+                        AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", dataBaseData.getContentId() + "",
+                                "DOWNLOAD_FAILED", e.toString(), "content");
+                    }
                 }
-            }
-        };
-        context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+            };
+            context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        }else{
+            Toast.makeText(context, "ডাওনলোড এর পূর্বে ডিভাইস এক্সেস দিয়ে নিন", Toast.LENGTH_SHORT).show();
+        }
+    }
 
+    private boolean checkPermissions() {
+        int result;
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for (String p : permissions) {
+            result = ContextCompat.checkSelfPermission(context, p);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(p);
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            Activity activity = (Activity) context;
+            ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 100);
+            return false;
+        }
+        return true;
     }
 
     public void insertDataInDatabaseWithContentSdcardUl() {

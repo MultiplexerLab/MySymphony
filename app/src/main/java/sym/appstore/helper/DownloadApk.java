@@ -1,5 +1,7 @@
 package sym.appstore.helper;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DownloadManager;
@@ -9,9 +11,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +26,9 @@ import android.widget.Toast;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import sym.appstore.Activity.ImageViewActivity;
@@ -35,6 +42,9 @@ public class DownloadApk {
     String contentSdCardUrl;
     DataBaseData dataBaseData;
     DataHelper dbHelper;
+    String[] permissions = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    };
 
     public void downLoadAPK(final String apkUrl, final Context context, final DataBaseData dataBaseData) {
         final ProgressDialog progressDialog = new sym.appstore.helper.ProgressDialog(context);
@@ -42,83 +52,104 @@ public class DownloadApk {
         this.apkUrl = apkUrl;
         dbHelper = new DataHelper(context);
         this.dataBaseData = dataBaseData;
-        String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
-        Random generator = new Random();
-        int n = 10000;
-        n = generator.nextInt(n);
-        final String fname = dataBaseData.getContentTitle()+ ".apk";
-        destination += fname;
-        contentSdCardUrl = fname;
-        final Uri uri = Uri.parse("file://" + destination);
 
-        File file = new File(destination);
-        if (file.exists())
-            file.delete();
+        if(checkPermissions()){
+            String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
+            Random generator = new Random();
+            int n = 10000;
+            n = generator.nextInt(n);
+            final String fname = dataBaseData.getContentTitle()+ ".apk";
+            destination += fname;
+            contentSdCardUrl = fname;
+            final Uri uri = Uri.parse("file://" + destination);
 
-        Log.i("apkUrlDownload", apkUrl);
-        SharedPreferences preferences = context.getSharedPreferences("tempData", context.MODE_PRIVATE);
-        int flag = preferences.getInt("unknownSource", 0);
-        if (flag == 0) {
-            progressDialog.showProgressDialogAPK();
-        } else {
-            progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
-        }
+            File file = new File(destination);
+            if (file.exists())
+                file.delete();
 
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(apkUrl));
-        request.setDescription("Downloading "+dataBaseData.getContentTitle()+" please wait!");
-        request.setTitle(dataBaseData.getContentTitle());
-        request.setNotificationVisibility(View.VISIBLE);
-
-        final Uri apkUri = FileProvider.getUriForFile(context,
-                BuildConfig.APPLICATION_ID + ".provider",
-                file);
-        request.setDestinationUri(uri);
-
-        final Date startTime;
-        final DateFormat dateFormat;
-        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        startTime = new Date();
-        AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", ""+dataBaseData.getContentId(),
-                "DOWNLOAD_START", "Download starts for " + dataBaseData.getContentTitle(), "app");
-
-        final DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-        final long downloadId = manager.enqueue(request);
-
-        BroadcastReceiver onComplete = new BroadcastReceiver() {
-            public void onReceive(Context ctxt, Intent intent) {
-                try {
-                    progressDialog.hideProgressDialog();
-                    Toast.makeText(context, dataBaseData.getContentTitle()+" ডাউনলোড হয়েছে", Toast.LENGTH_SHORT).show();
-                    Date startTime;
-                    DateFormat dateFormat;
-                    dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-                    startTime = new Date();
-                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", ""+dataBaseData.getContentId(),
-                            "DOWNLOADED", "Download completed for "+ dataBaseData.getContentTitle(), "app");
-                    AsyncResponse asyncResponse = (AsyncResponse) context;
-                    asyncResponse.processFinish("completeAPK");
-                    Log.d("onComplete", "onComplete");
-                    insertDataInDatabaseWithContentSdcardUl();
-                    Intent install = new Intent(Intent.ACTION_VIEW);
-                    install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    install.setDataAndType(apkUri,
-                            manager.getMimeTypeForDownloadedFile(downloadId));
-                    install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    context.startActivity(install);
-                    Log.i("RunningDownloadApk", apkUri.toString());
-                    context.unregisterReceiver(this);
-                } catch (Exception e) {
-                    AsyncResponse asyncResponse = (AsyncResponse) context;
-                    asyncResponse.processFinish("completeAPK");
-                    Log.e("ErrrInDownloadApk", e.toString());
-                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", ""+dataBaseData.getContentId(),
-                            "DOWNLOAD_FAILED", e.toString(), "app");
-                }
+            Log.i("apkUrlDownload", apkUrl);
+            SharedPreferences preferences = context.getSharedPreferences("tempData", context.MODE_PRIVATE);
+            int flag = preferences.getInt("unknownSource", 0);
+            if (flag == 0) {
+                progressDialog.showProgressDialogAPK();
+            } else {
+                progressDialog.showProgressDialog("App ডাউনলোড হচ্ছে");
             }
-        };
-        context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(apkUrl));
+            request.setDescription("Downloading "+dataBaseData.getContentTitle()+" please wait!");
+            request.setTitle(dataBaseData.getContentTitle());
+            request.setNotificationVisibility(View.VISIBLE);
+
+            final Uri apkUri = FileProvider.getUriForFile(context,
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    file);
+            request.setDestinationUri(uri);
+
+            final Date startTime;
+            final DateFormat dateFormat;
+            dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            startTime = new Date();
+            AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", ""+dataBaseData.getContentId(),
+                    "DOWNLOAD_START", "Download starts for " + dataBaseData.getContentTitle(), "app");
+
+            final DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+            final long downloadId = manager.enqueue(request);
+
+            BroadcastReceiver onComplete = new BroadcastReceiver() {
+                public void onReceive(Context ctxt, Intent intent) {
+                    try {
+                        progressDialog.hideProgressDialog();
+                        Toast.makeText(context, dataBaseData.getContentTitle()+" ডাউনলোড হয়েছে", Toast.LENGTH_SHORT).show();
+                        Date startTime;
+                        DateFormat dateFormat;
+                        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                        startTime = new Date();
+                        AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", ""+dataBaseData.getContentId(),
+                                "DOWNLOADED", "Download completed for "+ dataBaseData.getContentTitle(), "app");
+                        AsyncResponse asyncResponse = (AsyncResponse) context;
+                        asyncResponse.processFinish("completeAPK");
+                        Log.d("onComplete", "onComplete");
+                        insertDataInDatabaseWithContentSdcardUl();
+                        Intent install = new Intent(Intent.ACTION_VIEW);
+                        install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        install.setDataAndType(apkUri,
+                                manager.getMimeTypeForDownloadedFile(downloadId));
+                        install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        context.startActivity(install);
+                        Log.i("RunningDownloadApk", apkUri.toString());
+                        context.unregisterReceiver(this);
+                    } catch (Exception e) {
+                        AsyncResponse asyncResponse = (AsyncResponse) context;
+                        asyncResponse.processFinish("completeAPK");
+                        Log.e("ErrrInDownloadApk", e.toString());
+                        AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", ""+dataBaseData.getContentId(),
+                                "DOWNLOAD_FAILED", e.toString(), "app");
+                    }
+                }
+            };
+            context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        }else{
+            Toast.makeText(context, "ডাওনলোড এর পূর্বে ডিভাইস এক্সেস দিয়ে নিন", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    private boolean checkPermissions() {
+        int result;
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for (String p : permissions) {
+            result = ContextCompat.checkSelfPermission(context, p);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(p);
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            Activity activity = (Activity) context;
+            ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 100);
+            return false;
+        }
+        return true;
+    }
     /*public void downLoadAPK(final String appTitle, final String apkUrl, final String contentId, final Context context) {
         final ProgressDialog progressDialog = new sym.appstore.helper.ProgressDialog(context);
         SharedPreferences preferences = context.getSharedPreferences("tempData", context.MODE_PRIVATE);
