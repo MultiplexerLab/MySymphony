@@ -223,6 +223,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         editor.putString("startTime", dateFormat.format(currenTime));
         editor.commit();
 
+        initDataFromServer();
         String appContentId = getIntent().getStringExtra("appContentId");
         String apkTitle = getIntent().getStringExtra("notificationTitle");
         if (appContentId != null) {
@@ -277,7 +278,6 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 }
             }
         }
-        initDataFromServer();
     }
 
     public boolean isPackageExisted(String targetPackage) {
@@ -324,6 +324,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     private void initDataFromServer() {
         SharedPreferences prefs = getSharedPreferences("login", MODE_PRIVATE);
         int loginStatus = prefs.getInt("loginStatus", 0);
+        Log.i("LoginTag", loginStatus+"");
         if (loginStatus == 1) {
             if (internetConnected()) {
                 loadIconsFromServer();

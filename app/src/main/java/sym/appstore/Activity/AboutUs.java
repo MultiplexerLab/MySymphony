@@ -19,18 +19,24 @@ import com.viewpagerindicator.CirclePageIndicator;
 import org.json.JSONArray;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import sym.appstore.ModelClass.SliderImage;
 import sym.appstore.R;
 import sym.appstore.ViewpagerAdapter.CustomSwipeAdapterIntro;
+import sym.appstore.helper.AppLogger;
 import sym.appstore.helper.Endpoints;
 
 public class AboutUs extends AppCompatActivity {
 
     sym.appstore.helper.ProgressDialog progressDialog;
     RequestQueue queue;
+    Date currenTime;
+    DateFormat dateFormat;
     ArrayList<SliderImage> sliderImages;
 
     @Override
@@ -75,5 +81,21 @@ public class AboutUs extends AppCompatActivity {
         indicator.setViewPager(viewPager);
         final float density = getResources().getDisplayMetrics().density;
         indicator.setRadius(5 * density);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        currenTime = new Date();
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", "AboutUs",
+                "IN", "Entrance", "page");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", "AboutUs",
+                "LEAVE", "Leave", "page");
     }
 }

@@ -199,9 +199,7 @@ public class PorashunaActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        currenTime = new Date();
-        AppLogger.insertLogs(PorashunaActivity.this, dateFormat.format(currenTime), "N", tag,
+        AppLogger.insertLogs(PorashunaActivity.this, dateFormat.format(currenTime), "Y", tag,
                 "LEAVE", "Leave from " + tag + " page", "page");
     }
 

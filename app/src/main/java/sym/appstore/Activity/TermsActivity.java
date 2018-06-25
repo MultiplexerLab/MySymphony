@@ -18,11 +18,18 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import sym.appstore.R;
+import sym.appstore.helper.AppLogger;
 import sym.appstore.helper.Endpoints;
 
 public class TermsActivity extends AppCompatActivity {
     RequestQueue queue;
+    Date currenTime;
+    DateFormat dateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,5 +69,21 @@ public class TermsActivity extends AppCompatActivity {
             }
         });
         queue.add(jsonArrayRequest);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        currenTime = new Date();
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", "Terms",
+                "IN", "Entrance", "page");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", "Terms",
+                "LEAVE", "Leave", "page");
     }
 }

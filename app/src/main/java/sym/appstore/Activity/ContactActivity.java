@@ -25,11 +25,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import sym.appstore.R;
+import sym.appstore.helper.AppLogger;
 import sym.appstore.helper.Endpoints;
 
 public class ContactActivity extends AppCompatActivity {
@@ -38,6 +42,8 @@ public class ContactActivity extends AppCompatActivity {
     LinearLayout rootLayout;
     EditText eTname, eTemail, eTphone, eTcompany, eTcomment;
     Spinner spinner;
+    Date currenTime;
+    DateFormat dateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,5 +140,21 @@ public class ContactActivity extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        currenTime = new Date();
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", "Contact",
+                "IN", "Entrance", "page");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", "Contact",
+                "LEAVE", "Leave", "page");
     }
 }

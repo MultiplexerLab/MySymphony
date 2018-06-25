@@ -29,7 +29,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import sym.appstore.Activity.HomePage;
@@ -39,6 +42,7 @@ import sym.appstore.ModelClass.DataBaseData;
 import sym.appstore.ModelClass.JapitoJibon;
 import sym.appstore.ModelClass.Porashuna;
 import sym.appstore.R;
+import sym.appstore.helper.AppLogger;
 import sym.appstore.helper.CheckPermission;
 import sym.appstore.helper.DataHelper;
 import sym.appstore.helper.DownloadImage;
@@ -75,6 +79,8 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
     String[] permissions = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,};
+    Date currenTime;
+    DateFormat dateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +93,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
         newsImageView = findViewById(R.id.imgJapitiJibonDescription);
         newsTitle = findViewById(R.id.newsTitleJapitiJibonDescription);
         newsDescription = findViewById(R.id.newsdescriptionJapitiJibonDescription);
-        imageLayout=findViewById(R.id.imageLayout);
+        imageLayout = findViewById(R.id.imageLayout);
         ///videoView = findViewById(R.id.videoViewJapitojibon);
         newPrice = findViewById(R.id.newPriceTVinJapitoJibonDescription);
         dataHelper = new DataHelper(JapitoJibonDescriptionActivity.this);
@@ -98,7 +104,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
         ///videoProgressBar = findViewById(R.id.progressBarInVideoViewInJapitiJibonDescription);
         videoLayout = findViewById(R.id.video_layout);
         videoView = findViewById(R.id.videoView);
-        mediaController =findViewById(R.id.media_controller);
+        mediaController = findViewById(R.id.media_controller);
         videoView.setMediaController(mediaController);
         progressDialog = new sym.appstore.helper.ProgressDialog(this);
         setDescripTionData();
@@ -140,8 +146,13 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
 
     public void setDescripTionData() {
         musicVideoObj = (Porashuna) getIntent().getSerializableExtra("Data");
+
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        currenTime = new Date();
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", musicVideoObj.getContentId() + "",
+                "VIDEO_VISITED", "Category: " + musicVideoObj.getContentCat(), "content");
         if (musicVideoObj.getContentType().equals("video")) {
-            videoTitle=musicVideoObj.getContentTitle();
+            videoTitle = musicVideoObj.getContentTitle();
             setVideoAreaSize();
             playVideo();
 
@@ -245,7 +256,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
             public void run() {
                 int width = videoLayout.getWidth();
                 cachedHeight = (int) (width * 405f / 720f);
-                Log.d("cashedInsetVideoArea",Integer.toString(cachedHeight));
+                Log.d("cashedInsetVideoArea", Integer.toString(cachedHeight));
 //                cachedHeight = (int) (width * 3f / 4f);
 //                cachedHeight = (int) (width * 9f / 16f);
                 ViewGroup.LayoutParams videoLayoutParams = videoLayout.getLayoutParams();
@@ -279,22 +290,29 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
     }
 
     public void playVideo() {
-     if (mSeekPosition > 0) {
+        Date currenTime;
+        DateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        currenTime = new Date();
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", musicVideoObj.getContentId() + "",
+                "VIDEO_PLAYED", musicVideoObj.getContentDescription(), "content");
+        if (mSeekPosition > 0) {
             videoView.seekTo(mSeekPosition);
         }
         videoView.start();
-     if (videoTitle.length()>0)
-        mediaController.setTitle(videoTitle);
-     else
-         mediaController.setTitle("");
+        if (videoTitle.length() > 0)
+            mediaController.setTitle(videoTitle);
+        else
+            mediaController.setTitle("");
         videoView.setVideoViewCallback(new UniversalVideoView.VideoViewCallback() {
             public boolean isFullscreen2 = isFullscreen;
+
             @Override
             public void onScaleChange(boolean isFullscreen) {
                 this.isFullscreen2 = isFullscreen;
                 setFullscreen(isFullscreen);
                 if (isFullscreen) {
-                    Log.d("LandScape","LandScape");
+                    Log.d("LandScape", "LandScape");
                     toolbar.setVisibility(View.GONE);
                     ViewGroup.LayoutParams layoutParams = videoLayout.getLayoutParams();
                     layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -304,19 +322,19 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
                     getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                     int height = displayMetrics.heightPixels;
                     int width = displayMetrics.widthPixels;
-                    Log.d("height&width", Integer.toString(height)+" : "+Integer.toString(width));
-                    videoView.getLayoutParams().height= height;
+                    Log.d("height&width", Integer.toString(height) + " : " + Integer.toString(width));
+                    videoView.getLayoutParams().height = height;
 
                     //GONE the unconcerned views to leave room for video and controller
                     mBottomLayout.setVisibility(View.GONE);
                 } else {
-                    Log.d("Potrait","Potrait");
+                    Log.d("Potrait", "Potrait");
                     ///Log.d("cachedHeight2",Integer.toString(cachedHeight2));
-                    videoView.getLayoutParams().height=300;
-                   toolbar.setVisibility(View.VISIBLE);
+                    videoView.getLayoutParams().height = 300;
+                    toolbar.setVisibility(View.VISIBLE);
                     ViewGroup.LayoutParams layoutParams = videoLayout.getLayoutParams();
                     layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                    layoutParams.height =cachedHeight;
+                    layoutParams.height = cachedHeight;
                     videoLayout.setLayoutParams(layoutParams);
                     mBottomLayout.setVisibility(View.VISIBLE);
                 }
@@ -344,6 +362,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
 
         });
     }
+
     public boolean checkPermissions() {
         int result;
         List<String> listPermissionsNeeded = new ArrayList<>();

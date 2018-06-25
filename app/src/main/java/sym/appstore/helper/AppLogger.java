@@ -54,7 +54,7 @@ public class AppLogger {
                 params.put("event", event);
                 params.put("deviceId", deviceId);
                 params.put("userId", deviceId);
-                params.put("type", "test");
+                params.put("type", type);
                 params.put("msg", message);
 
                 Log.i("ParamsNew", params.toString());

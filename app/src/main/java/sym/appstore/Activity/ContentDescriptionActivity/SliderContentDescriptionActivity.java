@@ -15,6 +15,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import sym.appstore.Activity.HomePage;
 import sym.appstore.Activity.ImageViewActivity;
 import sym.appstore.Activity.ProfileActivity;
@@ -22,6 +26,7 @@ import sym.appstore.ModelClass.DataBaseData;
 import sym.appstore.ModelClass.Porashuna;
 import sym.appstore.ModelClass.SliderImage;
 import sym.appstore.R;
+import sym.appstore.helper.AppLogger;
 import sym.appstore.helper.CheckPermission;
 import sym.appstore.helper.DataHelper;
 import sym.appstore.helper.DownloadApk;
@@ -44,6 +49,8 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
     TextView priceTV;
     DataBaseData dataBaseData;
     sym.appstore.helper.ProgressDialog progressDialog;
+    Date currenTime;
+    DateFormat dateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +68,11 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
         newsDescriptionTV = findViewById(R.id.newsdescriptionInSliderDetails);
         buyOrDownloadBTN = findViewById(R.id.buyOrDownloadBTNInSliderDetails);
         imageUrl = sliderImage.getContentUrl();
+
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        currenTime = new Date();
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", sliderImage.getContentId()+"",
+                "VISITED", "Category: "+sliderImage.getContentCat(), "content");
 
         if (sliderImage.getContentUrl().contains("apk")) {
             Glide.with(this).load(sliderImage.getThumbnailImgUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
@@ -107,7 +119,6 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
             DownloadImage downloadImage = new DownloadImage();
             downloadImage.downloadImage(imageURL, SliderContentDescriptionActivity.this, dataBaseData);
         } else if (dataBaseData.getContentType().contains("apk")) {
-
             Gson gson = new Gson();
             SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
             String json = preferences.getString("databaseData", "");

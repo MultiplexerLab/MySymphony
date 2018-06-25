@@ -14,8 +14,12 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import sym.appstore.Activity.PlayAudioActivity;
 import sym.appstore.R;
@@ -33,6 +37,7 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
     public static MediaPlayer mp;
     private boolean isPause = false;
     String songUrl, songTitle;
+    int songId;
 
     @Override
     public void onCreate() {
@@ -47,8 +52,9 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             initUI();
-            songUrl=(String) intent.getExtras().get("songUrl");
-            songTitle=(String) intent.getExtras().get("songTitle");
+            songUrl = (String) intent.getExtras().get("songUrl");
+            songTitle = (String) intent.getExtras().get("songTitle");
+            songId = (Integer) intent.getExtras().get("songId");
             super.onStart(intent, startId);
         }
         return START_STICKY;
@@ -71,7 +77,6 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
         btnFastForward.get().setOnClickListener(this);
         btnRewind.get().setOnClickListener(this);
         mp.setOnCompletionListener(this);
-
     }
 
     public void onClick(View v) {
@@ -97,11 +102,11 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
                 }
                 break;
             case R.id.btnFastForward:
-                Log.d("btnFastForward","btnFastForward");
+                Log.d("btnFastForward", "btnFastForward");
                 forwardSong();
                 break;
             case R.id.btnRewind:
-                Log.d("btnRewind","btnRewind");
+                Log.d("btnRewind", "btnRewind");
                 rewindSong();
                 break;
         }
@@ -109,7 +114,7 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
 
     public void updateProgressBar() {
         try {
-            progressBarHandler.postDelayed(mUpdateTimeTask, 100);
+            progressBarHandler.postDelayed(mUpdateTimeTask, 2000);
         } catch (Exception e) {
 
         }
@@ -132,16 +137,14 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
     };
 
     @Override
     public void onDestroy() {
-        Utility utility=new Utility();
-       utility.cancelNotification();
-       mp.stop();
-
+        Utility utility = new Utility();
+        utility.cancelNotification();
+        mp.stop();
     }
 
     // Play song
@@ -149,6 +152,12 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
         try {
             mp.reset();
             ///Uri myUri = Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.bangla);
+
+            Toast.makeText(this, "গান লোড হচ্ছে, একটু অপেক্ষা করুন্", Toast.LENGTH_LONG).show();
+            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            Date currenTime = new Date();
+            AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", songId+"",
+                    "SONG_PLAYED", songTitle, "content");
             mp.setDataSource(this, Uri.parse(songUrl));
             mp.prepareAsync();
             mp.setOnPreparedListener(new OnPreparedListener() {
@@ -158,13 +167,13 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
                         updateProgressBar();
                         btnPlay.get().setBackgroundResource(R.drawable.pause);
                     } catch (Exception e) {
-                        Log.i("EXCEPTION", "" + e.getMessage());
+                        Log.e("PrepareException", "" + e.getMessage());
                     }
                 }
             });
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("PlayingExecption", e.toString());
         }
     }
 
@@ -197,9 +206,9 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
     public void forwardSong() {
         if (mp != null) {
             int currentPosition = mp.getCurrentPosition();
-            Log.d("currentPosition",Integer.toString(currentPosition));
+            Log.d("currentPosition", Integer.toString(currentPosition));
             if (currentPosition + seekForwardTime <= mp.getDuration()) {
-                Log.d("enterForward","enterForward");
+                Log.d("enterForward", "enterForward");
                 mp.seekTo(currentPosition + seekForwardTime);
                 updateProgressBar();
             } else {

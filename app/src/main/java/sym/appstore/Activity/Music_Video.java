@@ -66,6 +66,6 @@ public class Music_Video extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         AppLogger.insertLogs(Music_Video.this, dateFormat.format(currenTime), "Y", "MusicVideo",
-                "OUT", "Leave", "page");
+                "LEAVE", "Leave", "page");
     }
 }

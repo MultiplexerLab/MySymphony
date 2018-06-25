@@ -91,6 +91,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
                playerService = new Intent(PlayAudioActivity.this, PlayerInService.class);
                playerService.putExtra("songUrl", data.getContentUrl());
                playerService.putExtra("songTitle", data.getContentTitle());
+               playerService.putExtra("songId", data.getContentId());
                stopService(playerService);
            }
             utility.cancelNotification();
@@ -105,6 +106,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         playerService = new Intent(PlayAudioActivity.this, PlayerInService.class);
         playerService.putExtra("songUrl", prefs.getString("songUrl",""));
         playerService.putExtra("songTitle", prefs.getString("songTitle",""));
+        playerService.putExtra("songId", data.getContentId());
         startService(playerService);
     }
 
@@ -154,26 +156,26 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
         try {
-            if (!PlayerInService.mp.isPlaying()) {
-                btnPlay.setBackgroundResource(R.drawable.player);
-
-            } else {
-                dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-                currenTime = new Date();
-                if(data!=null) {
-                    AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId() + "",
-                            "SONG_PLAYED", data.getContentTitle(), "content");
+            if(PlayerInService.mp!=null) {
+                if (!PlayerInService.mp.isPlaying()) {
+                    btnPlay.setBackgroundResource(R.drawable.player);
+                } else {
+                    dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                    currenTime = new Date();
+                    if (data != null) {
+                        AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId() + "",
+                                "SONG_PLAYED", data.getContentTitle(), "content");
+                    }
+                    btnPlay.setBackgroundResource(R.drawable.pause);
                 }
-                btnPlay.setBackgroundResource(R.drawable.pause);
             }
         } catch (Exception e) {
-            Log.e("Exception", "" + e.getMessage() + e.getStackTrace() + e.getCause());
+            Log.e("AudioException", "" + e.getMessage() + e.getStackTrace() + e.getCause());
             if(data!=null) {
                 AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId() + "",
                         "SONG_PLAYING_FAILED", e.toString(), "content");
             }
         }
-
         super.onResume();
     }
 

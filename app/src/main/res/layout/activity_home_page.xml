@@ -773,7 +773,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/RVKids"
                                 android:layout_centerHorizontal="true"
-                                android:layout_marginBottom="25dp"
+                                android:layout_marginBottom="80dp"
                                 android:onClick="startCartoonActivity"
                                 android:text="আরো পড়ুন"
                                 android:textColor="@color/red"

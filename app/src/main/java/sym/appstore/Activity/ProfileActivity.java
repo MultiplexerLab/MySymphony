@@ -16,11 +16,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import sym.appstore.Fragment.MyInfoFragmentInProfileActivity;
 import sym.appstore.Fragment.MyItemFragmentInProfileActivity;
 import sym.appstore.Fragment.PaymentListFragmentInProfileActivity;
 import sym.appstore.R;
 import sym.appstore.ViewpagerAdapter.ViewPagerAdapter;
+import sym.appstore.helper.AppLogger;
 
 public class ProfileActivity extends AppCompatActivity implements MyInfoFragmentInProfileActivity.ActivityCommunicator {
 
@@ -32,6 +37,8 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
     TextView nameTVInActivityUserProfile;
     TextView nameTV;
     String cameFromWhichActivity;
+    Date currenTime;
+    DateFormat dateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,5 +133,21 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
     public void passDataToActivity(String someValue) {
         Log.d("enteractivity",someValue);
         nameTV.setText(someValue);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        currenTime = new Date();
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", "DownloadedItems",
+                "IN", "Entrance", "page");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", "DownloadedItems",
+                "LEAVE", "Leave", "page");
     }
 }
