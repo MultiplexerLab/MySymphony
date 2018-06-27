@@ -3,39 +3,23 @@ package sym.appstore.Activity;
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.LoaderManager;
-import android.bluetooth.BluetoothAdapter;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,11 +28,7 @@ import android.support.v7.widget.SnapHelper;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.GestureDetector;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,26 +36,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.daimajia.easing.linear.Linear;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -89,10 +62,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import sym.appstore.CustomSwipeAdapter;
@@ -100,24 +71,16 @@ import sym.appstore.ModelClass.AppData;
 import sym.appstore.ModelClass.DataBaseData;
 import sym.appstore.ModelClass.GamesZone;
 import sym.appstore.ModelClass.Icon;
-import sym.appstore.ModelClass.JapitoJibon;
 import sym.appstore.ModelClass.MulloChar;
 import sym.appstore.ModelClass.Porashuna;
 import sym.appstore.ModelClass.SeraChobi;
 import sym.appstore.ModelClass.ShocolChobi;
 import sym.appstore.R;
-import sym.appstore.RecyclerViewAdapter.RecyclerAdapterForGamesZone;
 import sym.appstore.RecyclerViewAdapter.RecyclerAdapterForJapitoJibon;
-import sym.appstore.RecyclerViewAdapter.RecyclerAdapterForMulloChar;
-import sym.appstore.RecyclerViewAdapter.RecyclerAdapterForSeraChobi;
-import sym.appstore.RecyclerViewAdapter.RecyclerAdapterForShikkhaSohayika;
-import sym.appstore.RecyclerViewAdapter.RecyclerAdapterForShocolChobi;
 import sym.appstore.helper.AppLogger;
 import sym.appstore.helper.DownloadApk;
-import sym.appstore.helper.DownloadImage;
 import sym.appstore.helper.Endpoints;
 import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
-import sym.appstore.helper.OnSwipeListener;
 
 import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.Manifest.permission.READ_PHONE_STATE;
@@ -129,25 +92,16 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
 
     ArrayList<Porashuna> sliderImages;
     ArrayList<SeraChobi> seraChobiArrayList;
-    ArrayList<Porashuna> japitoJibonArrayList, musicVideoList, audioList, hotNewsArrayList, sportsArralyList, auttoHashiArrList, mixedArrList, scienceArrList, kidsArrList;
+    ArrayList<Porashuna> japitoJibonArrayList, musicVideoList, audioList, hotNewsArrayList, sportsArralyList, auttoHashiArrList, mixedArrList, scienceArrList, kidsArrList, educationList;
     ArrayList<MulloChar> mulloCharArrayList;
     ArrayList<AppData> appList;
     ArrayList<ShocolChobi> shocolChobiArrayList;
     ArrayList<GamesZone> gamesZoneArrayList;
-    ArrayList<Porashuna> shikkhaSohaYikaArrayList;
     private android.support.v7.widget.Toolbar toolbar;
     CustomSwipeAdapter customSwipeAdapter;
     ViewPager viewPager;
-    private RecyclerView recyclerViewForGamesZone;
-    public RecyclerAdapterForGamesZone adapterForGamesZone;
-    private RecyclerView recyclerViewForSeraChobi;
-    public RecyclerAdapterForSeraChobi adapterForSeraChobi;
     private RecyclerView recyclerViewForJapitoJibon;
     public RecyclerAdapterForJapitoJibon adapterForJapitoJibon;
-    private RecyclerView recyclerViewForMulloChar;
-    public RecyclerAdapterForMulloChar adapterForMulloChar;
-    private RecyclerView recyclerViewForShocolChobi;
-    public RecyclerAdapterForShocolChobi adapterForShocolChobi;
     ArrayList<Icon> iconImageUrls;
 
     RequestQueue queue;
@@ -182,8 +136,8 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     public void onRefresh() {
                         if (internetConnected()) {
                             newloadDataFromVolley();
-                            if(snackbar!=null){
-                                if(snackbar.isShown()) {
+                            if (snackbar != null) {
+                                if (snackbar.isShown()) {
                                     snackbar.dismiss();
                                 }
                             }
@@ -206,7 +160,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         mulloCharArrayList = new ArrayList<>();
         gamesZoneArrayList = new ArrayList<>();
         shocolChobiArrayList = new ArrayList<>();
-        shikkhaSohaYikaArrayList = new ArrayList<>();
+        educationList = new ArrayList<>();
         hotNewsArrayList = new ArrayList<>();
         sportsArralyList = new ArrayList<>();
         auttoHashiArrList = new ArrayList<>();
@@ -222,6 +176,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         SharedPreferences.Editor editor = getSharedPreferences("tracker", MODE_PRIVATE).edit();
         editor.putString("startTime", dateFormat.format(currenTime));
         editor.commit();
+        Log.i("TrackerstartTime", dateFormat.format(currenTime));
 
         initDataFromServer();
         String appContentId = getIntent().getStringExtra("appContentId");
@@ -230,19 +185,19 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             String url = "http://bot.sharedtoday.com:9500/ws/mysymphony/getSpecificContent?id=" + appContentId;
             getDataFromContentId(url);
 
-            SharedPreferences  mPrefs = getPreferences(MODE_PRIVATE);
+            SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
             Gson gson = new Gson();
             String json = mPrefs.getString("jsonDataObject", "");
             JSONObject jsonDataObject = gson.fromJson(json, JSONObject.class);
-            if(jsonDataObject==null){
+            if (jsonDataObject == null) {
                 getDataFromContentId(url);
             }
-            if(jsonDataObject!=null){
+            if (jsonDataObject != null) {
                 try {
                     String packageName = jsonDataObject.getString("reference1");
                     String versionName = jsonDataObject.getString("reference2");
                     String versionCode = jsonDataObject.getString("reference3");
-                    Log.i("dataVersionCode", packageName+"  "+versionCode);
+                    Log.i("dataVersionCode", packageName + "  " + versionCode);
                     if (isPackageExisted(packageName)) {
                         PackageInfo pinfo = null;
                         try {
@@ -253,25 +208,25 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
 
                             } else {
                                 if (versionNumber == Integer.parseInt(versionCode)) {
-                                    Toast.makeText(context, jsonDataObject.getString("contentTitle")+" অ্যাপ আপনার মোবাইলে ইন্সটলড আছে!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, jsonDataObject.getString("contentTitle") + " অ্যাপ আপনার মোবাইলে ইন্সটলড আছে!", Toast.LENGTH_SHORT).show();
 
                                 } else {
-                                    Toast.makeText(context, jsonDataObject.getString("contentTitle")+" অ্যাপ আপনার মোবাইলে ইন্সটলড আছে, কিন্তু নতুন ভার্সন এসেছে!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, jsonDataObject.getString("contentTitle") + " অ্যাপ আপনার মোবাইলে ইন্সটলড আছে, কিন্তু নতুন ভার্সন এসেছে!", Toast.LENGTH_SHORT).show();
                                     DownloadApk downloadApk = new DownloadApk();
-                                    DataBaseData dataBaseData  = new DataBaseData(jsonDataObject.getString("contentTitle"), "mobile_app", "apk", jsonDataObject.getString("contentDescription"), Endpoints.DOMAIN_PREFIX+jsonDataObject.getString("thumbNail_image"), "free",
+                                    DataBaseData dataBaseData = new DataBaseData(jsonDataObject.getString("contentTitle"), "mobile_app", "apk", jsonDataObject.getString("contentDescription"), Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("thumbNail_image"), "free",
                                             Integer.parseInt(appContentId));
-                                    downloadApk.downLoadAPK(Endpoints.DOMAIN_PREFIX+jsonDataObject.getString("contentUrl"), this, dataBaseData);
+                                    downloadApk.downLoadAPK(Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl"), this, dataBaseData);
                                 }
                             }
 
                         } catch (PackageManager.NameNotFoundException e) {
                             Log.e("unknown", e.toString());
                         }
-                    }else{
+                    } else {
                         DownloadApk downloadApk = new DownloadApk();
-                        DataBaseData dataBaseData  = new DataBaseData(jsonDataObject.getString("contentTitle"), "mobile_app", "apk", jsonDataObject.getString("contentDescription"), Endpoints.DOMAIN_PREFIX+jsonDataObject.getString("thumbNail_image"), "free",
+                        DataBaseData dataBaseData = new DataBaseData(jsonDataObject.getString("contentTitle"), "mobile_app", "apk", jsonDataObject.getString("contentDescription"), Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("thumbNail_image"), "free",
                                 Integer.parseInt(appContentId));
-                        downloadApk.downLoadAPK(Endpoints.DOMAIN_PREFIX+jsonDataObject.getString("contentUrl"), this, dataBaseData);
+                        downloadApk.downLoadAPK(Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl"), this, dataBaseData);
                     }
                 } catch (JSONException e) {
                     Log.e("Hudai", e.toString());
@@ -301,7 +256,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 try {
                     JSONObject jsonDataObject = response.getJSONObject(0);
                     Log.i("jsonDataObject", jsonDataObject.toString());
-                    SharedPreferences  mPrefs = getPreferences(MODE_PRIVATE);
+                    SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
                     SharedPreferences.Editor prefsEditor = mPrefs.edit();
                     Gson gson = new Gson();
                     String json = gson.toJson(jsonDataObject);
@@ -324,7 +279,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     private void initDataFromServer() {
         SharedPreferences prefs = getSharedPreferences("login", MODE_PRIVATE);
         int loginStatus = prefs.getInt("loginStatus", 0);
-        Log.i("LoginTag", loginStatus+"");
+        Log.i("LoginTag", loginStatus + "");
         if (loginStatus == 1) {
             if (internetConnected()) {
                 loadIconsFromServer();
@@ -508,7 +463,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "Registration",
                             "FAILED", response, "login/registration");
                     progressDialog.hideProgressDialog();
-                    Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomePage.this, "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -519,7 +474,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "Y", "Login/Registration",
                         "FAILED", error.toString(), "login/registration");
 
-                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomePage.this, "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -646,7 +601,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
                 progressDialog.hideProgressDialog();
-                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomePage.this, "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         });
         queue.add(jsonObjectRequest);
@@ -678,7 +633,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley", error.toString());
-                Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomePage.this, "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         });
         queue.add(jsonArrayRequest);
@@ -692,12 +647,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             public void onResponse(JSONArray response) {
                 try {
                     setSliderContent(response);
-                    //setTopContent(response);
                     setDailyLife(response);
-                    //setMulloCharContent(response);
-                    setShikkhaSohayikaContent(response);
-                    //setGamesZoneContent(response);
-                    //setShocolChobiContent(response);
                     progressDialog.hideProgressDialog();
 
                 } catch (Exception e) {
@@ -713,164 +663,11 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 if (progressDialog != null) {
                     progressDialog.hideProgressDialog();
                 }
-                //Toast.makeText(getApplicationContext(), "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
         });
-        /*jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 2000;
-            }
-
-            @Override
-            public int getCurrentRetryCount() {
-                return 2000;
-            }
-
-            @Override
-            public void retry(VolleyError error) throws VolleyError {
-
-            }
-        });*/
         queue.add(jsonArrayRequest);
     }
 
-    private void setShocolChobiContent(JSONArray shocol_chobi__content_arr) {
-
-        if (shocol_chobi__content_arr.length() > 0) {
-            for (int i = 0; i < shocol_chobi__content_arr.length(); i++) {
-                int contentPrice = 0;
-                try {
-                    String contentUrl = shocol_chobi__content_arr.getJSONObject(i).getString("contentUrl");
-                    String contentTitle = shocol_chobi__content_arr.getJSONObject(i).getString("contentTitle");
-                    String contentType = shocol_chobi__content_arr.getJSONObject(i).getString("contentType");
-                    int contentId = shocol_chobi__content_arr.getJSONObject(i).getInt("id");
-                    String contentCat = shocol_chobi__content_arr.getJSONObject(i).getString("contentCat");
-                    String thumbnailImgUrl = shocol_chobi__content_arr.getJSONObject(i).getString("thumbNail_image");
-                    if (shocol_chobi__content_arr.getJSONObject(i).has("contentPrice")) {
-                        contentPrice = shocol_chobi__content_arr.getJSONObject(i).getInt("contentPrice");
-                    }
-                    if (contentCat.equals("moving_image")) {
-                        shocolChobiArrayList.add(new ShocolChobi(contentType, contentUrl, contentTitle, contentCat, thumbnailImgUrl, contentId, contentPrice));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e("shocolChobi", e.toString());
-                }
-            }
-            initializeShocolChobiRecyclerview();
-        } else {
-            Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void setGamesZoneContent(JSONArray games_zone__content_arr) {
-
-        if (games_zone__content_arr.length() > 0) {
-            for (int i = 0; i < games_zone__content_arr.length(); i++) {
-                int newPrice = 0;
-                try {
-                    String contentUrl = games_zone__content_arr.getJSONObject(i).getString("contentUrl");
-                    String contentTitle = games_zone__content_arr.getJSONObject(i).getString("contentTitle");
-                    String contentType = games_zone__content_arr.getJSONObject(i).getString("contentType");
-                    String thumbnailImgUrl = games_zone__content_arr.getJSONObject(i).getString("thumbNail_image");
-                    Log.d("thumbnailImgUrlGa", thumbnailImgUrl);
-                    if (thumbnailImgUrl.length() == 0)
-                        thumbnailImgUrl = contentUrl;
-                    ///int previousPrice = games_zone__content_arr.getJSONObject(i).getInt("previousPrice");
-                    if (games_zone__content_arr.getJSONObject(i).has("contentPrice")) {
-                        newPrice = games_zone__content_arr.getJSONObject(i).getInt("contentPrice");
-                    }
-
-                    int contentId = games_zone__content_arr.getJSONObject(i).getInt("id");
-                    String contentCat = games_zone__content_arr.getJSONObject(i).getString("contentCat");
-                    if (contentCat.equals("game_zone")) {
-                        gamesZoneArrayList.add(new GamesZone(contentType, contentUrl, contentTitle, thumbnailImgUrl, 0, newPrice, contentCat, contentId));
-                    }
-                } catch (JSONException e) {
-                    Log.e("exceptionGamesZone", e.toString());
-                    e.printStackTrace();
-                }
-            }
-
-            Log.d("size", "size : " + Integer.toString(gamesZoneArrayList.size()));
-            initializeGamesZoneRecyclerView();
-        } else {
-            Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void setShikkhaSohayikaContent(JSONArray shikkha_sohayika__content_arr) {
-
-        if (shikkha_sohayika__content_arr.length() > 0) {
-            for (int i = 0; i < shikkha_sohayika__content_arr.length(); i++) {
-                int contentPrice = 0;
-                try {
-                    String contentTitle = shikkha_sohayika__content_arr.getJSONObject(i).getString("contentTitle");
-                    String contentType = shikkha_sohayika__content_arr.getJSONObject(i).getString("contentType");
-                    String imageUrl = shikkha_sohayika__content_arr.getJSONObject(i).getString("thumbNail_image");
-                    String contentDescription = shikkha_sohayika__content_arr.getJSONObject(i).getString("contentDescription");
-                    int contentId = shikkha_sohayika__content_arr.getJSONObject(i).getInt("id");
-                    String contentCat = shikkha_sohayika__content_arr.getJSONObject(i).getString("contentCat");
-
-                    if (shikkha_sohayika__content_arr.getJSONObject(i).has("contentPrice")) {
-                        contentPrice = shikkha_sohayika__content_arr.getJSONObject(i).getInt("contentPrice");
-                    }
-
-                    /*if (contentCat.equals("education")) {
-                        if (contentType.equals("video")) {
-                            String contentUrl = shikkha_sohayika__content_arr.getJSONObject(i).getString("contentUrl");
-                            shikkhaSohaYikaArrayList.add(new Porashuna(contentType, contentDescription, contentUrl, contentTitle, imageUrl, contentCat, contentId, contentPrice));
-                        } else {
-                            shikkhaSohaYikaArrayList.add(new ShikkhaSohaYika(contentType, contentDescription, "", contentTitle, imageUrl, contentCat, contentId, contentPrice));
-                        }
-                    }*/
-                } catch (JSONException e) {
-                    Log.e("EducationErr", e.toString());
-                }
-            }
-            initializeShikkhaSohayikaRecyclerview();
-        } else {
-            Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void setMulloCharContent(JSONArray mulloCharJsonArr) {
-
-        if (mulloCharJsonArr.length() > 0) {
-
-            int newPrice = 0;
-            for (int i = 0; i < mulloCharJsonArr.length(); i++) {
-                try {
-                    String contentUrl = mulloCharJsonArr.getJSONObject(i).getString("contentUrl");
-                    String contentTitle = mulloCharJsonArr.getJSONObject(i).getString("contentTitle");
-                    String contentType = mulloCharJsonArr.getJSONObject(i).getString("contentType");
-                    String image_url = mulloCharJsonArr.getJSONObject(i).getString("thumbNail_image");
-                    int previousPrice = mulloCharJsonArr.getJSONObject(i).getInt("contentPrice");
-                    int contentId = mulloCharJsonArr.getJSONObject(i).getInt("id");
-                    String contentCat = mulloCharJsonArr.getJSONObject(i).getString("contentCat");
-                    String thumbNail_image = mulloCharJsonArr.getJSONObject(i).getString("thumbNail_image");
-
-
-                    JSONArray jsonArray = mulloCharJsonArr.getJSONObject(i).getJSONArray("discount");
-
-                    for (int j = 0; j < jsonArray.length(); j++) {
-                        newPrice = jsonArray.getJSONObject(j).getInt("discountPrice");
-                    }
-                    if (contentCat.equals("song")) {
-                        mulloCharArrayList.add(new MulloChar(contentType, contentUrl, contentTitle, thumbNail_image, previousPrice, newPrice, image_url, contentCat, contentId));
-
-                    }
-                } catch (JSONException e) {
-                    Log.d("mullochardata", e.toString());
-                    e.printStackTrace();
-                }
-            }
-            initializeMulloCharRecyclerView();
-        } else {
-            Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private void setDailyLife(JSONArray japito_jibon_content_arr) {
         if (japito_jibon_content_arr.length() > 0) {
@@ -920,7 +717,8 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                             audioList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
                         }
                     } else if (contentCat.equals("education")) {
-                        shikkhaSohaYikaArrayList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        educationList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        initializeEducationRecyclerView();
                     }
                 } catch (JSONException e) {
                     Log.d("japito_jibon_exception", e.toString());
@@ -928,35 +726,6 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 }
             }
 
-        } else {
-            Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void setTopContent(JSONArray top_contentsArr) {
-        if (top_contentsArr.length() > 0) {
-            for (int i = 0; i < top_contentsArr.length(); i++) {
-                int contentPrice = 0;
-                try {
-                    String contentUrl = top_contentsArr.getJSONObject(i).getString("contentUrl");
-                    String contentTitle = top_contentsArr.getJSONObject(i).getString("contentTitle");
-                    String contentType = top_contentsArr.getJSONObject(i).getString("contentType");
-                    String contentCat = top_contentsArr.getJSONObject(i).getString("contentCat");
-                    String thumbNail_image = top_contentsArr.getJSONObject(i).getString("thumbNail_image");
-                    int contentId = top_contentsArr.getJSONObject(i).getInt("id");
-                    String contentDescription = top_contentsArr.getJSONObject(i).getString("contentDescription");
-                    if (top_contentsArr.getJSONObject(i).has("contentPrice")) {
-                        contentPrice = top_contentsArr.getJSONObject(i).getInt("contentPrice");
-                    }
-                    if (contentCat.equals("top_images")) {
-                        seraChobiArrayList.add(new SeraChobi(contentUrl, "", contentType, contentTitle, thumbNail_image, contentCat, contentId, contentDescription, contentPrice));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.d("tpCntntExcptn", e.toString());
-                }
-            }
-            initializeTopContentRecyclerView();
         } else {
             Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
         }
@@ -994,16 +763,10 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         }
     }
 
-    public void startLoginActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        this.startActivity(myIntent);
-        finish();
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        this.finishAffinity();
+        finishAffinity();
     }
 
     public void initialCustomSwipeAdapter() {
@@ -1030,16 +793,6 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         });*/
     }
 
-    public void initializeTopContentRecyclerView() {
-        recyclerViewForSeraChobi = findViewById(R.id.RV_SeraChobi);
-        recyclerViewForSeraChobi.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        SnapHelper snapHelperStart = new GravitySnapHelper(Gravity.START);
-        snapHelperStart.attachToRecyclerView(recyclerViewForSeraChobi);
-        recyclerViewForSeraChobi.setHasFixedSize(true);
-        adapterForSeraChobi = new RecyclerAdapterForSeraChobi(this, seraChobiArrayList);
-        recyclerViewForSeraChobi.setAdapter(adapterForSeraChobi);
-    }
-
     public void initializeJapitoJibonRecyclerView() {
         recyclerViewForJapitoJibon = findViewById(R.id.RV_japitoJibon);
         recyclerViewForJapitoJibon.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -1050,47 +803,6 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         recyclerViewForJapitoJibon.setAdapter(adapterForJapitoJibon);
     }
 
-
-    public void initializeMulloCharRecyclerView() {
-        recyclerViewForMulloChar = findViewById(R.id.RV_mulloChar);
-        recyclerViewForMulloChar.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        SnapHelper snapHelperStartMulloChar = new GravitySnapHelper(Gravity.START);
-        snapHelperStartMulloChar.attachToRecyclerView(recyclerViewForMulloChar);
-        recyclerViewForMulloChar.setHasFixedSize(true);
-        adapterForMulloChar = new RecyclerAdapterForMulloChar(this, mulloCharArrayList);
-        recyclerViewForMulloChar.setAdapter(adapterForMulloChar);
-    }
-
-    public void initializeGamesZoneRecyclerView() {
-        recyclerViewForGamesZone = findViewById(R.id.RV_gamesZone);
-        recyclerViewForGamesZone.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        SnapHelper snapHelperStartMulloChar = new GravitySnapHelper(Gravity.START);
-        snapHelperStartMulloChar.attachToRecyclerView(recyclerViewForGamesZone);
-        recyclerViewForGamesZone.setHasFixedSize(true);
-        adapterForGamesZone = new RecyclerAdapterForGamesZone(this, gamesZoneArrayList);
-        recyclerViewForGamesZone.setAdapter(adapterForGamesZone);
-    }
-
-    public void initializeShocolChobiRecyclerview() {
-        recyclerViewForShocolChobi = findViewById(R.id.RV_ShocolChobi);
-        recyclerViewForShocolChobi.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        SnapHelper snapHelperStartShocolChobi = new GravitySnapHelper(Gravity.START);
-        snapHelperStartShocolChobi.attachToRecyclerView(recyclerViewForShocolChobi);
-        recyclerViewForShocolChobi.setHasFixedSize(true);
-        adapterForShocolChobi = new RecyclerAdapterForShocolChobi(this, shocolChobiArrayList);
-        recyclerViewForShocolChobi.setAdapter(adapterForShocolChobi);
-    }
-
-    public void initializeShikkhaSohayikaRecyclerview() {
-        recyclerViewForJapitoJibon = findViewById(R.id.RV_ShikkhaSohayika);
-        recyclerViewForJapitoJibon.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        SnapHelper snapHelperStartJapitoJibon = new GravitySnapHelper(Gravity.START);
-        snapHelperStartJapitoJibon.attachToRecyclerView(recyclerViewForJapitoJibon);
-        recyclerViewForJapitoJibon.setHasFixedSize(true);
-        adapterForJapitoJibon = new RecyclerAdapterForJapitoJibon(this, shikkhaSohaYikaArrayList);
-        recyclerViewForJapitoJibon.setAdapter(adapterForJapitoJibon);
-    }
-
     public void initializeHotNewsRecylerView() {
         recyclerViewForJapitoJibon = findViewById(R.id.RVhotnews);
         recyclerViewForJapitoJibon.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -1098,6 +810,16 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         snapHelperStartJapitoJibon.attachToRecyclerView(recyclerViewForJapitoJibon);
         recyclerViewForJapitoJibon.setHasFixedSize(true);
         adapterForJapitoJibon = new RecyclerAdapterForJapitoJibon(this, hotNewsArrayList);
+        recyclerViewForJapitoJibon.setAdapter(adapterForJapitoJibon);
+    }
+
+    public void initializeEducationRecyclerView() {
+        recyclerViewForJapitoJibon = findViewById(R.id.RV_ShikkhaSohayika);
+        recyclerViewForJapitoJibon.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        SnapHelper snapHelperStartJapitoJibon = new GravitySnapHelper(Gravity.START);
+        snapHelperStartJapitoJibon.attachToRecyclerView(recyclerViewForJapitoJibon);
+        recyclerViewForJapitoJibon.setHasFixedSize(true);
+        adapterForJapitoJibon = new RecyclerAdapterForJapitoJibon(this, educationList);
         recyclerViewForJapitoJibon.setAdapter(adapterForJapitoJibon);
     }
 
@@ -1152,15 +874,9 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     public void startGoromKhoborPage(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
         myIntent.putExtra("tag", "news");
-        this.startActivity(myIntent);
-    }
-
-    public void startGalleryActivity(View view) {
-        Intent galleryIntent = new Intent(getApplicationContext(), GalleryActivity.class);
-        galleryIntent.putExtra("galleryImageData", seraChobiArrayList);
-        this.startActivity(galleryIntent);
+        startActivity(myIntent);
     }
 
     public void subscribe(View view) {
@@ -1181,45 +897,45 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     public void startSportActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
         myIntent.putExtra("tag", "sports");
-        this.startActivity(myIntent);
+        startActivity(myIntent);
     }
 
     public void startPorashunaActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
         myIntent.putExtra("tag", "education");
-        this.startActivity(myIntent);
+        startActivity(myIntent);
     }
 
     public void startAuttoHashiActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
         myIntent.putExtra("tag", "autto_hashi");
-        this.startActivity(myIntent);
+        startActivity(myIntent);
     }
 
     public void startJibonJaponActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
         myIntent.putExtra("tag", "daily_life");
-        this.startActivity(myIntent);
+        startActivity(myIntent);
     }
 
     public void startPachMishaliActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
         myIntent.putExtra("tag", "mixed");
-        this.startActivity(myIntent);
+        startActivity(myIntent);
     }
 
     public void startBigganOProjuktiActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
         myIntent.putExtra("tag", "science");
-        this.startActivity(myIntent);
+        startActivity(myIntent);
     }
 
     public void startCartoonActivity(View view) {
-        Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
         myIntent.putExtra("tag", "kk_mela");
-        this.startActivity(myIntent);
+        startActivity(myIntent);
     }
 
 

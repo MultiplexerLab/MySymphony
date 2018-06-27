@@ -37,7 +37,7 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
     public static MediaPlayer mp;
     private boolean isPause = false;
     String songUrl, songTitle;
-    int songId;
+    int songId = 0;
 
     @Override
     public void onCreate() {

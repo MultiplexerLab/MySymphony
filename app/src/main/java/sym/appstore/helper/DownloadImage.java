@@ -2,7 +2,6 @@ package sym.appstore.helper;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -28,7 +27,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import sym.appstore.Activity.MainActivity;
 import sym.appstore.ModelClass.DataBaseData;
 import sym.appstore.ModelClass.SliderImage;
 

@@ -107,11 +107,13 @@ public class PorashunaDescriptionActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         if(source!=null){
-            Intent home = new Intent(this, HomePage.class);
-            startActivity(home);
+            /*Intent home = new Intent(this, HomePage.class);
+            startActivity(home);*/
+            finish();
         }else {
-            Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
-            this.startActivity(myIntent);
+            /*Intent myIntent = new Intent(getApplicationContext(), PorashunaActivity.class);
+            this.startActivity(myIntent);*/
+            finish();
         }
     }
 

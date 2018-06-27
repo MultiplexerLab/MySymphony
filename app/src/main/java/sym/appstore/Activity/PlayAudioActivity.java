@@ -35,7 +35,7 @@ import paymentgateway.lct.lctpaymentgateway.ProgressDialog;
 
 public class PlayAudioActivity extends AppCompatActivity implements DownloadAudio.AsyncResponse {
 
-    public static ImageButton btnPlay, btnStop,btnFastForward,btnRewind;
+    public static ImageButton btnPlay, btnStop, btnFastForward, btnRewind;
     public static TextView textViewSongTime;
     private Intent playerService;
     public static SeekBar seekBar;
@@ -59,14 +59,14 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         if (data != null) {
             dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             currenTime = new Date();
-            AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId()+"",
-                    "SONG_VISITED", "Category: "+data.getContentCat(), "content");
+            AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId() + "",
+                    "SONG_VISITED", "Category: " + data.getContentCat(), "content");
             String imageUrl = data.getThumbnailImgUrl();
             editor.putString("imageUrl", imageUrl);
             editor.apply();
-            if(imageUrl.isEmpty() || imageUrl==null){
+            if (imageUrl.isEmpty() || imageUrl == null) {
 
-            }else{
+            } else {
                 Glide.with(this).load(imageUrl).into((ImageView) findViewById(R.id.songimageView));
             }
             String contentTitle = data.getContentTitle();
@@ -85,15 +85,14 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             editor1.putString("databaseData", json);
             editor1.commit();
 
-           if (isMyServiceRunning(PlayerInService.class))
-           {
-               Log.d("Servicerunning","ServiceRunning");
-               playerService = new Intent(PlayAudioActivity.this, PlayerInService.class);
-               playerService.putExtra("songUrl", data.getContentUrl());
-               playerService.putExtra("songTitle", data.getContentTitle());
-               playerService.putExtra("songId", data.getContentId());
-               stopService(playerService);
-           }
+            if (isMyServiceRunning(PlayerInService.class)) {
+                Log.d("Servicerunning", "ServiceRunning");
+                playerService = new Intent(PlayAudioActivity.this, PlayerInService.class);
+                playerService.putExtra("songUrl", data.getContentUrl());
+                playerService.putExtra("songTitle", data.getContentTitle());
+                playerService.putExtra("songId", data.getContentId());
+                stopService(playerService);
+            }
             utility.cancelNotification();
 
         } else {
@@ -104,9 +103,13 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         SharedPreferences prefs = getSharedPreferences("audioData", MODE_PRIVATE);
 
         playerService = new Intent(PlayAudioActivity.this, PlayerInService.class);
-        playerService.putExtra("songUrl", prefs.getString("songUrl",""));
-        playerService.putExtra("songTitle", prefs.getString("songTitle",""));
-        playerService.putExtra("songId", data.getContentId());
+        playerService.putExtra("songUrl", prefs.getString("songUrl", ""));
+        playerService.putExtra("songTitle", prefs.getString("songTitle", ""));
+        if (data != null) {
+            playerService.putExtra("songId", data.getContentId());
+        }else{
+            playerService.putExtra("songId", 0);
+        }
         startService(playerService);
     }
 
@@ -129,11 +132,11 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
     }
 
     private void initView() {
-        btnPlay =  findViewById(R.id.btnPlay);
+        btnPlay = findViewById(R.id.btnPlay);
         /*btnStop = (ImageButton) findViewById(R.id.btnStop);*/
-        btnFastForward=findViewById(R.id.btnFastForward);
-        btnRewind=findViewById(R.id.btnRewind);
-        seekBar =  findViewById(R.id.seekBar);
+        btnFastForward = findViewById(R.id.btnFastForward);
+        btnRewind = findViewById(R.id.btnRewind);
+        seekBar = findViewById(R.id.seekBar);
         textViewSongTime = findViewById(R.id.textViewSongTime);
     }
 
@@ -156,7 +159,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
         try {
-            if(PlayerInService.mp!=null) {
+            if (PlayerInService.mp != null) {
                 if (!PlayerInService.mp.isPlaying()) {
                     btnPlay.setBackgroundResource(R.drawable.player);
                 } else {
@@ -171,7 +174,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             }
         } catch (Exception e) {
             Log.e("AudioException", "" + e.getMessage() + e.getStackTrace() + e.getCause());
-            if(data!=null) {
+            if (data != null) {
                 AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId() + "",
                         "SONG_PLAYING_FAILED", e.toString(), "content");
             }
@@ -180,9 +183,9 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
     }
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         SharedPreferences prefs = getSharedPreferences("audioData", MODE_PRIVATE);
-        Utility.initNotification(prefs.getString("songTitle",""), this);
+        Utility.initNotification(prefs.getString("songTitle", ""), this);
         super.onStop();
     }
 
@@ -197,7 +200,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
 
         Toast.makeText(this, "গান ডাউনলোড হচ্ছে", Toast.LENGTH_LONG).show();
         DownloadAudio downloadAudio = new DownloadAudio();
-        downloadAudio.downloadAudio(prefs.getString("songUrl",""),prefs.getString("songTitle",""), PlayAudioActivity.this, dataBaseData1);
+        downloadAudio.downloadAudio(prefs.getString("songUrl", ""), prefs.getString("songTitle", ""), PlayAudioActivity.this, dataBaseData1);
     }
 
     @Override
@@ -213,6 +216,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             Log.d("onProcessFinishedComplt", "onProcessFinishedComplt");
         }
     }
+
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {

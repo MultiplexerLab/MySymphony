@@ -71,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
                         editor = getSharedPreferences("login", MODE_PRIVATE).edit();
                         editor.putInt("loginStatus", 0);
                         editor.apply();
-                        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                        Intent intent = new Intent(ProfileActivity.this, HomePage.class);
                         startActivity(intent);
                         alertDialog.dismiss();
                     }
@@ -125,8 +125,7 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        this.startActivity(myIntent);
+        finish();
     }
 
     @Override

@@ -8,15 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.location.Location;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.RequiresApi;
-import android.support.constraint.solver.widgets.ConstraintAnchor;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -32,7 +29,6 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -54,26 +50,16 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import sym.appstore.Activity.AppList;
-import sym.appstore.Activity.AuttoHashiActivity;
-import sym.appstore.Activity.BigganOProjuktiActivity;
-import sym.appstore.Activity.CartoonActivity;
 import sym.appstore.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
 import sym.appstore.Activity.ContentDescriptionActivity.PorashunaDescriptionActivity;
 import sym.appstore.Activity.Emoticons;
-import sym.appstore.Activity.GoromKhoborActivity;
 import sym.appstore.Activity.HomePage;
-import sym.appstore.Activity.JibonJaponActivity;
-import sym.appstore.Activity.KheladhulaActivity;
-import sym.appstore.Activity.MainActivity;
-import sym.appstore.Activity.PachMishaliActivity;
 import sym.appstore.Activity.PlayAudioActivity;
 import sym.appstore.Activity.PorashunaActivity;
-import sym.appstore.Activity.WallpaperBundleActivity;
 import sym.appstore.ModelClass.AppData;
 import sym.appstore.ModelClass.Porashuna;
 import sym.appstore.R;
 import sym.appstore.helper.AppLogger;
-import sym.appstore.helper.DownloadApk;
 import sym.appstore.helper.Endpoints;
 
 
@@ -414,7 +400,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", "Notification",
                 "CLICKED", notificationId + " this notification was clicked", "notification");
         if (action.equals("home")) {
-            return new Intent(this, MainActivity.class);
+            return new Intent(this, HomePage.class);
         } else if (action.equals("joke")) {
             Intent myIntent = new Intent(this, PorashunaActivity.class);
             myIntent.putExtra("tag", "autto_hashi");

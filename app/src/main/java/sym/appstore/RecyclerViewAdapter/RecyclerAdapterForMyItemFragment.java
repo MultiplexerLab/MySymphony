@@ -3,7 +3,6 @@ package sym.appstore.RecyclerViewAdapter;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
@@ -22,7 +21,6 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 import java.util.ArrayList;
 
-import sym.appstore.Activity.ShowOnlyImage;
 import sym.appstore.BuildConfig;
 import sym.appstore.ModelClass.DataBaseData;
 import sym.appstore.R;

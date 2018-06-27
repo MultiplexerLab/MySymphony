@@ -133,8 +133,7 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        this.startActivity(myIntent);
+        finish();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -18,8 +18,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import sym.appstore.Activity.WelComeActivity;
-
 public class AppLogger {
 
     public static void insertLogs(final Context context, final String startTime, final String tagEndTime, final String procName, final String event,

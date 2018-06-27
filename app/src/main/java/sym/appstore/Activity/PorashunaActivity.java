@@ -122,8 +122,8 @@ public class PorashunaActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
-        this.startActivity(myIntent);
+        /*Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
+        this.startActivity(myIntent);*/
         finish();
     }
 
