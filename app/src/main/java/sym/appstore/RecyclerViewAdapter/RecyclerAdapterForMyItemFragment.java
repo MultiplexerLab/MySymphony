@@ -181,6 +181,16 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
                 public void onClick(View view) {
                     if (dataHelperArrayList.get(getAdapterPosition()).getContentType().contains("apk")) {
                         activity.startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
+                    }else{
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT );
+                        Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()
+                                + "/appstore/");
+                        intent.setDataAndType(uri, "*/*");
+                        activity.startActivity(Intent.createChooser(intent, "Open folder"));
+//                        Uri selectedUri = Uri.parse(Environment.getExternalStorageDirectory() + "/appstore/");
+//                        Intent intent = new Intent(Intent.ACTION_VIEW);
+//                        intent.setDataAndType(selectedUri, "*/*");
+//                        activity.startActivity(intent);
                     }
                 }
             });

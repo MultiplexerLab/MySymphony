@@ -22,16 +22,26 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import sym.appstore.ModelClass.Icon;
 import sym.appstore.R;
 import sym.appstore.helper.AppLogger;
 import sym.appstore.helper.Endpoints;
@@ -58,7 +68,12 @@ public class ContactActivity extends AppCompatActivity {
         eTcomment = findViewById(R.id.your_message);
         spinner = findViewById(R.id.your_objective);
 
-        ArrayList<String> arrayList = new ArrayList<>();
+        if(internetConnected()){
+            getSpinnerData();
+        }else{
+            showSnackBar();
+        }
+        /*ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("যোগাযোগের উদ্দেশ্য");
         arrayList.add("আমি এন্ড্রয়েড ডেভেলপার, আমার অ্যাপটি শেয়ার করতে চাই");
         arrayList.add("আমি পেমেন্ট সরবরাহকারী, পেমেন্ট চ্যানেল যুক্ত করতে চাই");
@@ -66,7 +81,34 @@ public class ContactActivity extends AppCompatActivity {
         arrayList.add("বিজ্ঞাপন দিতে চাই");
         arrayList.add("অন্যান্য");
         spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,
-                arrayList));
+                arrayList));*/
+    }
+
+    private void getSpinnerData() {
+        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.OBJECTIVES_GET_URL, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    ArrayList<String> arrayList = new ArrayList<>();
+                    for(int i=0; i<response.length(); i++){
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        arrayList.add(jsonObject.getString("purposeTitle"));
+                    }
+                    spinner.setAdapter(new ArrayAdapter<String>(ContactActivity.this, android.R.layout.simple_spinner_dropdown_item,
+                            arrayList));
+
+                } catch (Exception e) {
+                    Log.d("PurposeError", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley", error.toString());
+                Toast.makeText(ContactActivity.this, "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+            }
+        });
+        queue.add(jsonObjectRequest);
     }
 
     public void sendMessage(View view) {
