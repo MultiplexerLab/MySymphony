@@ -47,6 +47,7 @@ import com.bumptech.glide.Glide;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -56,6 +57,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -75,6 +77,7 @@ import sym.appstore.ModelClass.MulloChar;
 import sym.appstore.ModelClass.Porashuna;
 import sym.appstore.ModelClass.SeraChobi;
 import sym.appstore.ModelClass.ShocolChobi;
+import sym.appstore.Notification.MyFirebaseInstanceIDService;
 import sym.appstore.R;
 import sym.appstore.RecyclerViewAdapter.RecyclerAdapterForJapitoJibon;
 import sym.appstore.helper.AppLogger;
@@ -277,11 +280,13 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     private void initDataFromServer() {
+        FirebaseMessaging.getInstance().subscribeToTopic("All");
         SharedPreferences prefs = getSharedPreferences("login", MODE_PRIVATE);
         int loginStatus = prefs.getInt("loginStatus", 0);
         Log.i("LoginTag", loginStatus + "");
         if (loginStatus == 1) {
             if (internetConnected()) {
+                updateFirebaseToken();
                 loadIconsFromServer();
                 getInstanceInfo();
                 newloadDataFromVolley();
@@ -299,6 +304,56 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             }
         }
     }
+
+    private void updateFirebaseToken() {
+        String token = null;
+        token = FirebaseInstanceId.getInstance().getToken();
+        Log.d("MYTAG", "This is your Firebase token " + token);
+
+        if (token == null || token.equals("null") || token.equals("")) {
+            token = FirebaseInstanceId.getInstance().getToken();
+
+            Log.d("MYTAG", "This is your updated Firebase token " + token);
+        } else {
+            SharedPreferences.Editor editor;
+            editor = getSharedPreferences("login", MODE_PRIVATE).edit();
+            editor.putString("firebaseToken", token);
+            editor.apply();
+            RequestQueue queue;
+            queue = Volley.newRequestQueue(this);
+            final String finalToken = token;
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.FIREBASE_TOKEN_POST_URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("ResponseFirebase", response);
+                    if (response.contains("SUCCESS")) {
+                        Log.i("ResponseFirebase", "SUCCESS");
+                    } else {
+                        Log.i("ResponseFirebase", "FAILED");
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.i("ErrorVolley", error.toString());
+                }
+            }) {
+                @Override
+                public Map<String, String> getParams() throws AuthFailureError {
+                    String deviceId = Settings.Secure.getString(getContentResolver(),
+                            Settings.Secure.ANDROID_ID);
+                    Map<String, String> params = new HashMap<>();
+                    params.put("userId", deviceId);
+                    params.put("refresh_token", finalToken);
+                    return params;
+                }
+            };
+            queue.add(stringRequest);
+        }
+    }
+        /*MyFirebaseInstanceIDService object = new MyFirebaseInstanceIDService();
+        object.sendTokenToServer(token);*/
+
 
     public void showSnackBar() {
         snackbar = Snackbar
@@ -336,9 +391,12 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         sliderImages = new ArrayList<>();
         deviceId = Settings.Secure.getString(getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-        SharedPreferences prefs = getSharedPreferences("login", MODE_PRIVATE);
-        firebaseToken = prefs.getString("firebaseToken", "nothing");
-        Log.i("FirebaseTokenMain", firebaseToken);
+        firebaseToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d("MYTAG", "This is your first Firebase token" + firebaseToken);
+        SharedPreferences.Editor editor;
+        editor = getSharedPreferences("login", MODE_PRIVATE).edit();
+        editor.putString("firebaseToken", firebaseToken);
+        editor.apply();
         progressDialog = new sym.appstore.helper.ProgressDialog(HomePage.this);
         checkPermissions();
 
@@ -549,6 +607,9 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     @Override
     protected void onResume() {
         super.onResume();
+        if(internetConnected()) {
+            updateFirebaseToken();
+        }
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
         AppLogger.insertLogs(HomePage.this, dateFormat.format(currenTime), "N", "HomePage",

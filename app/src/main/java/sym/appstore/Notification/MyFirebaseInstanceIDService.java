@@ -26,20 +26,17 @@ import sym.appstore.helper.Endpoints;
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private static final String TAG = MyFirebaseInstanceIDService.class.getSimpleName();
-    RequestQueue queue;
 
     @Override
     public void onTokenRefresh() {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        SharedPreferences.Editor editor;
-        editor = getSharedPreferences("login", MODE_PRIVATE).edit();
-        editor.putString("firebaseToken", refreshedToken);
-        editor.apply();
-        sendTokenToServer(refreshedToken);
+
+        //sendTokenToServer(refreshedToken);
         Log.i(TAG, "onTokenRefresh: " + refreshedToken);
     }
 
-    private void sendTokenToServer(final String refreshedToken) {
+    public void sendTokenToServer(final String refreshedToken) {
+        RequestQueue queue;
         queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.FIREBASE_TOKEN_POST_URL, new Response.Listener<String>() {
             @Override

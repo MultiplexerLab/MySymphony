@@ -94,13 +94,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.e(TAG, "getDataFromRemoteMessage: " + remoteMessage.getData().toString());
             Map<String, String> data = remoteMessage.getData();
             notificationId = Integer.parseInt(data.get("notificationId"));
+            Log.i("notificationId", notificationId+"");
             String title = data.get("title");
             String description = data.get("description");
 
             dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             currenTime = new Date();
-            AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", "Notification",
-                    "RECEIVED", notificationId + " this notification recerived, data: " + data.toString(), "notification");
+            AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", notificationId+"",
+                    "RECEIVED", data.toString(), "notification");
 
             String KEY = data.get("KEY");
             appContentId = data.get("appContentId");
@@ -397,15 +398,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
-        AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", "Notification",
-                "CLICKED", notificationId + " this notification was clicked", "notification");
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", notificationId+"",
+                "CLICKED", "this notification was clicked", "notification");
         if (action.equals("home")) {
             return new Intent(this, HomePage.class);
         } else if (action.equals("joke")) {
             Intent myIntent = new Intent(this, PorashunaActivity.class);
             myIntent.putExtra("tag", "autto_hashi");
             return myIntent;
-        } else if ((action == "study")) {
+        } else if (action.equals("study")) {
             Intent myIntent = new Intent(this, PorashunaActivity.class);
             myIntent.putExtra("tag", "education");
             return myIntent;
@@ -429,7 +430,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Intent myIntent = new Intent(this, PorashunaActivity.class);
             myIntent.putExtra("tag", "science");
             return myIntent;
-        } else if (action.equals("cartoon")) {
+        }else if (action.equals("applist")) {
+            Intent myIntent = new Intent(this, AppList.class);
+            return myIntent;
+        }
+        else if (action.equals("cartoon")) {
             Intent myIntent = new Intent(this, PorashunaActivity.class);
             myIntent.putExtra("tag", "kk_mela");
             return myIntent;
