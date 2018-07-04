@@ -68,9 +68,9 @@ public class ContactActivity extends AppCompatActivity {
         eTcomment = findViewById(R.id.your_message);
         spinner = findViewById(R.id.your_objective);
 
-        if(internetConnected()){
+        if (internetConnected()) {
             getSpinnerData();
-        }else{
+        } else {
             showSnackBar();
         }
         /*ArrayList<String> arrayList = new ArrayList<>();
@@ -90,7 +90,7 @@ public class ContactActivity extends AppCompatActivity {
             public void onResponse(JSONArray response) {
                 try {
                     ArrayList<String> arrayList = new ArrayList<>();
-                    for(int i=0; i<response.length(); i++){
+                    for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
                         arrayList.add(jsonObject.getString("purposeTitle"));
                     }
@@ -99,20 +99,32 @@ public class ContactActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     Log.d("PurposeError", e.toString());
+                    AppLogger.insertLogs(ContactActivity.this, dateFormat.format(currenTime), "Y", "Contact",
+                            "ERROR", e.toString(), "page");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Volley", error.toString());
-                Toast.makeText(ContactActivity.this, "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                Log.e("ContactVolley", error.toString());
+                //Toast.makeText(ContactActivity.this, "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
+                ArrayList<String> arrayList = new ArrayList<>();
+                arrayList.add("আমি এন্ড্রয়েড ডেভেলপার, আমার অ্যাপটি শেয়ার করতে চাই");
+                arrayList.add("আমি পেমেন্ট সরবরাহকারী, পেমেন্ট চ্যানেল যুক্ত করতে চাই");
+                arrayList.add("আমি আর্টিস্ট, গান অথবা মিউজিক ভিডিও শেয়ার করতে চাই");
+                arrayList.add("বিজ্ঞাপন দিতে চাই");
+                arrayList.add("অন্যান্য");
+                spinner.setAdapter(new ArrayAdapter<String>(ContactActivity.this, android.R.layout.simple_spinner_dropdown_item,
+                        arrayList));
+                AppLogger.insertLogs(ContactActivity.this, dateFormat.format(currenTime), "Y", "Contact",
+                        "ERROR", error.toString(), "page");
             }
         });
         queue.add(jsonObjectRequest);
     }
 
     public void sendMessage(View view) {
-        if(internetConnected()) {
+        if (internetConnected()) {
             final String name = eTname.getText().toString();
             final String email = eTemail.getText().toString();
             final String phone = eTphone.getText().toString();
@@ -120,7 +132,9 @@ public class ContactActivity extends AppCompatActivity {
             final String comment = eTcomment.getText().toString();
 
             if (name.isEmpty() || email.isEmpty() || phone.isEmpty() || objective.equals("যোগাযোগের উদ্দেশ্য") || comment.isEmpty()) {
-                Toast.makeText(this, "সকল ডাটা প্রদান করুন", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "সকল ডাটা প্রদান করুন", Toast.LENGTH_LONG).show();
+            } else if (!email.contains("@")) {
+                Toast.makeText(this, "সঠিক ইমেইল প্রদান করুন ", Toast.LENGTH_LONG).show();
             } else {
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.CONTACTUS_POST_URL, new Response.Listener<String>() {
                     @Override
@@ -129,10 +143,9 @@ public class ContactActivity extends AppCompatActivity {
                         if (response.contains("SUCCESS")) {
                             Intent intent = new Intent(ContactActivity.this, HomePage.class);
                             startActivity(intent);
-                            Toast.makeText(ContactActivity.this, "আপনার তথ্য সাবমিট হয়েছে, ধন্যবাদ!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ContactActivity.this, "আপনার তথ্য সাবমিট হয়েছে, ধন্যবাদ!", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(ContactActivity.this, "ইন্টারনেটে সমস্যা!!", Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(ContactActivity.this, "ইন্টারনেটে সমস্যা!!", Toast.LENGTH_LONG).show();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -150,12 +163,13 @@ public class ContactActivity extends AppCompatActivity {
                         params.put("phoneNumber", phone);
                         params.put("role", objective);
                         params.put("comments", comment);
+                        Log.i("ContactParams", params.toString());
                         return params;
                     }
                 };
                 queue.add(stringRequest);
             }
-        }else{
+        } else {
             showSnackBar();
         }
     }

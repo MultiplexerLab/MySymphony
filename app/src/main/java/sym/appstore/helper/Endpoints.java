@@ -24,8 +24,9 @@ public class Endpoints {
     public static final String APPLOGS_POST_URL=DOMAIN_PREFIX+"/ws/mysymphony/insertAppLogs";
     public static final String GET_APP_INFO=DOMAIN_PREFIX+"/ws/mysymphony/getInstanceConfig";
     public static final String GET_EMOTICONS_INFO=DOMAIN_PREFIX+"/ws/mysymphony/getCategorisedContentFromTable?cat=emoticon";
+    public static final String GET_APPS_INFO=DOMAIN_PREFIX+"/ws/mysymphony/getCategorisedContentFromTable?cat=mobile_app";
     public static final String GET_INTRO_INFO=DOMAIN_PREFIX+"/ws/mysymphony/getCategorisedContentFromTable?cat=intro_slides";
     public static final String CONTACTUS_POST_URL=DOMAIN_PREFIX+"/ws/commonInsertIntoSingleTable?tbl=contactUs";
-    public static final String OBJECTIVES_GET_URL=DOMAIN_PREFIX+"/ws/commonGetFromTableForSym?tbl=contactPurpose&key=id&val=%";
+    public static final String OBJECTIVES_GET_URL=DOMAIN_PREFIX+"/ws/commonGetFromTableForSym?tbl=contactPurpose&key=id&val=%25";
     public static final String FIREBASE_TOKEN_POST_URL=DOMAIN_PREFIX+"/ws/refreshFirebaseToken";
 }

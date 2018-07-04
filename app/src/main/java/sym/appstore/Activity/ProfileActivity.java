@@ -22,7 +22,6 @@ import java.util.Date;
 
 import sym.appstore.Fragment.MyInfoFragmentInProfileActivity;
 import sym.appstore.Fragment.MyItemFragmentInProfileActivity;
-import sym.appstore.Fragment.PaymentListFragmentInProfileActivity;
 import sym.appstore.R;
 import sym.appstore.ViewpagerAdapter.ViewPagerAdapter;
 import sym.appstore.helper.AppLogger;

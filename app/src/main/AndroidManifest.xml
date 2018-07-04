@@ -48,7 +48,6 @@
         <activity android:name=".Activity.PorashunaActivity" />
         <!-- <activity android:name=".Activity.PaymentMethod" /> -->
         <activity android:name=".Activity.ProfileActivity" />
-        <activity android:name=".Activity.NotificationActivity" />
 
         <service
             android:name=".Notification.MyFirebaseMessagingService"

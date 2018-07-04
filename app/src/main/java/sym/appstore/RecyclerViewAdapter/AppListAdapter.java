@@ -61,31 +61,31 @@ public class AppListAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.app_list_item, viewGroup, false);
         ImageView appThumbnail = customView.findViewById(R.id.appCoverImage);
-        Log.i("backgroundUrl", appData.get(position).getThumbNailImage());
+        //Log.i("backgroundUrl", appData.get(position).getThumbNailImage());
         final TextView apptitle = customView.findViewById(R.id.appTitle);
         //TextView appDesc = customView.findViewById(R.id.appDescription);
         Button installButton = customView.findViewById(R.id.buttonInstall);
-        String imageUrl = appData.get(position).getThumbNailImage();
+        String imageUrl = appData.get(position).getThumbNail_image();
         if (imageUrl == null || imageUrl.isEmpty() || imageUrl.equals("null")) {
 
         } else {
-            Glide.with(context).load(appData.get(position).getThumbNailImage()).into(appThumbnail);
+            Glide.with(context).load(appData.get(position).getThumbNail_image()).into(appThumbnail);
         }
 
-        apptitle.setText(appData.get(position).getTitle());
+        apptitle.setText(appData.get(position).getContentTitle());
 
-        String packageName = appData.get(position).getPackagName();
+        String packageName = appData.get(position).getReference1();
         if (isPackageExisted(packageName)) {
             PackageInfo pinfo = null;
             try {
                 pinfo = context.getPackageManager().getPackageInfo(packageName, 0);
                 int versionNumber = pinfo.versionCode;
                 Log.i("VersionCode", packageName+"  "+versionNumber);
-                String versionCodeStr = appData.get(position).getVersionCode();
+                String versionCodeStr = appData.get(position).getReference3();
                 if (versionCodeStr == null || versionCodeStr.equals("null")) {
 
                 } else {
-                    if (versionNumber == Integer.parseInt(appData.get(position).getVersionCode())) {
+                    if (versionNumber == Integer.parseInt(appData.get(position).getReference3())) {
                         installButton.setEnabled(false);
                         installButton.setText("Installed");
                         installButton.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
@@ -103,10 +103,10 @@ public class AppListAdapter extends BaseAdapter {
 
         ExpandableTextView expTv1 = (ExpandableTextView) customView.findViewById(R.id.cardViewAppList)
                 .findViewById(R.id.expand_text_view);
-        if (appData.get(position).getDescription().isEmpty()) {
+        if (appData.get(position).getContentDescription().isEmpty()) {
             expTv1.setText("No Description");
         } else {
-            expTv1.setText(appData.get(position).getDescription());
+            expTv1.setText(appData.get(position).getContentDescription());
         }
 
         installButton.setOnClickListener(new View.OnClickListener() {
@@ -120,10 +120,10 @@ public class AppListAdapter extends BaseAdapter {
                         "INSTALL", "Install Button Clicked for " + apptitle, "app");
 
                 String apkUrl = appData.get(position).getContentUrl();
-                String appTitle = appData.get(position).getTitle();
+                String appTitle = appData.get(position).getContentTitle();
                 Log.i("DownloadAPK", apkUrl);
-                DataBaseData dataBaseData = new DataBaseData(appTitle, "mobile_app","apk", appData.get(position).getDescription(),
-                        appData.get(position).getThumbNailImage(), "free", Integer.parseInt(appData.get(position).getContentId()));
+                DataBaseData dataBaseData = new DataBaseData(appTitle, "mobile_app","apk", appData.get(position).getContentDescription(),
+                        appData.get(position).getThumbNail_image(), "free", Integer.parseInt(appData.get(position).getId()));
                 DownloadApk downloadApk = new DownloadApk();
                 downloadApk.downLoadAPK(apkUrl, context, dataBaseData);
             }

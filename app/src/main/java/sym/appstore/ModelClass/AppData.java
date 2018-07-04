@@ -2,47 +2,73 @@ package sym.appstore.ModelClass;
 
 public class AppData {
 
-    String contentId;
-    String title;
-    String description;
-    String thumbNailImage;
+    String id;
+    String contentCat;
+    String contentType;
+    String contentTitle;
+    String contentDescription;
+    String thumbNail_image;
     String contentUrl;
-    String packagName;
-    String versionCode;
+    String reference1;
+    String reference2;
+    String reference3;
 
     public AppData(String contentId, String title, String description, String thumbNailImage, String contentUrl, String packagName, String versionCode) {
-        this.contentId = contentId;
-        this.title = title;
-        this.description = description;
-        this.thumbNailImage = thumbNailImage;
+        this.id = contentId;
+        this.contentTitle = title;
+        this.contentDescription = description;
+        this.thumbNail_image = thumbNailImage;
         this.contentUrl = contentUrl;
-        this.packagName = packagName;
-        this.versionCode = versionCode;
+        this.reference1 = packagName;
+        this.reference3 = versionCode;
     }
 
-
-    public String getTitle() {
-        return title;
+    public String getId() {
+        return id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getContentCat() {
+        return contentCat;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setContentCat(String contentCat) {
+        this.contentCat = contentCat;
     }
 
-    public String getThumbNailImage() {
-        return thumbNailImage;
+    public String getContentType() {
+        return contentType;
     }
 
-    public void setThumbNailImage(String thumbNailImage) {
-        this.thumbNailImage = thumbNailImage;
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getContentTitle() {
+        return contentTitle;
+    }
+
+    public void setContentTitle(String contentTitle) {
+        this.contentTitle = contentTitle;
+    }
+
+    public String getContentDescription() {
+        return contentDescription;
+    }
+
+    public void setContentDescription(String contentDescription) {
+        this.contentDescription = contentDescription;
+    }
+
+    public String getThumbNail_image() {
+        return thumbNail_image;
+    }
+
+    public void setThumbNail_image(String thumbNail_image) {
+        this.thumbNail_image = thumbNail_image;
     }
 
     public String getContentUrl() {
@@ -53,27 +79,27 @@ public class AppData {
         this.contentUrl = contentUrl;
     }
 
-    public String getPackagName() {
-        return packagName;
+    public String getReference1() {
+        return reference1;
     }
 
-    public String getContentId() {
-        return contentId;
+    public void setReference1(String reference1) {
+        this.reference1 = reference1;
     }
 
-    public void setContentId(String contentId) {
-        this.contentId = contentId;
+    public String getReference2() {
+        return reference2;
     }
 
-    public void setPackagName(String packagName) {
-        this.packagName = packagName;
+    public void setReference2(String reference2) {
+        this.reference2 = reference2;
     }
 
-    public String getVersionCode() {
-        return versionCode;
+    public String getReference3() {
+        return reference3;
     }
 
-    public void setVersionCode(String versionCode) {
-        this.versionCode = versionCode;
+    public void setReference3(String reference3) {
+        this.reference3 = reference3;
     }
 }

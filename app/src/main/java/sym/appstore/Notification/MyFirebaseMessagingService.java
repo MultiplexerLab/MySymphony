@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -70,7 +71,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private final String USERNAME = "[NAME]";
     private String appContentId;
     int notificationId;
-
+    Intent ccontentIntent = null;
     Date currenTime;
     DateFormat dateFormat;
     RequestQueue queue;
@@ -94,13 +95,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.e(TAG, "getDataFromRemoteMessage: " + remoteMessage.getData().toString());
             Map<String, String> data = remoteMessage.getData();
             notificationId = Integer.parseInt(data.get("notificationId"));
-            Log.i("notificationId", notificationId+"");
+            Log.i("notificationId", notificationId + "");
             String title = data.get("title");
             String description = data.get("description");
 
             dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             currenTime = new Date();
-            AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", notificationId+"",
+            AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", notificationId + "",
                     "RECEIVED", data.toString(), "notification");
 
             String KEY = data.get("KEY");
@@ -176,44 +177,57 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 setupChannels();
             }
             Intent notificationIntent = getIntentForContentId(contentId);
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (notificationIntent == null) {
 
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            }else{
+                Log.i("notiInten", notificationIntent.getExtras().toString());
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-            final RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notification_image_only);
+                final RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notification_image_only);
 
-            remoteViews.setTextViewText(R.id.notificationTitle, title);
-            remoteViews.setTextViewText(R.id.notificationDes, description);
-            final int notificationId = 1459756;
-            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), channel)
-                    .setSmallIcon(R.drawable.notification)
-                    .setContentTitle(title)
-                    .setContentText(description)
-                    .setContentIntent(pendingIntent)
-                    .setAutoCancel(true)
-                    .setCustomBigContentView(remoteViews)
-                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                    .setSound(defaultSoundUri)
-                    .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
+                remoteViews.setTextViewText(R.id.notificationTitle, title);
+                remoteViews.setTextViewText(R.id.notificationDes, description);
+                final int notificationId = 1459756;
+                Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), channel)
+                        .setSmallIcon(R.drawable.notification)
+                        .setContentTitle(title)
+                        .setContentText(description)
+                        .setContentIntent(pendingIntent)
+                        .setAutoCancel(true)
+                        .setCustomBigContentView(remoteViews)
+                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                        .setSound(defaultSoundUri)
+                        .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
 
-            final Notification notification = notificationBuilder.build();
-            Handler uiHandler = new Handler(Looper.getMainLooper());
-            uiHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Picasso.get()
-                                .load(imageLink)
-                                .into(remoteViews, R.id.imageLarge, notificationId, notification);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                final Notification notification = notificationBuilder.build();
+                Handler uiHandler = new Handler(Looper.getMainLooper());
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Picasso.get()
+                                    .load(imageLink)
+                                    .into(remoteViews, R.id.imageLarge, notificationId, notification);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            });
+                });
 
-            notificationManager.notify(notificationId, notification);
+                notificationManager.notify(notificationId, notification);
+            }
+
+            //Log.i("notificationIntent", notificationIntent.toString());
+
+
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("NotifException", e.toString());
         } finally {
 
         }
@@ -398,7 +412,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
-        AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", notificationId+"",
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "Y", notificationId + "",
                 "CLICKED", "this notification was clicked", "notification");
         if (action.equals("home")) {
             return new Intent(this, HomePage.class);
@@ -430,11 +444,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Intent myIntent = new Intent(this, PorashunaActivity.class);
             myIntent.putExtra("tag", "science");
             return myIntent;
-        }else if (action.equals("applist")) {
+        } else if (action.equals("applist")) {
             Intent myIntent = new Intent(this, AppList.class);
             return myIntent;
-        }
-        else if (action.equals("cartoon")) {
+        } else if (action.equals("cartoon")) {
             Intent myIntent = new Intent(this, PorashunaActivity.class);
             myIntent.putExtra("tag", "kk_mela");
             return myIntent;
@@ -457,64 +470,88 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
     private Intent getIntentForContentId(int contentId) {
-        Intent intent = null;
-        String url = "http://bot.sharedtoday.com:9500/ws/mysymphony/getSpecificContent?id=" + contentId;
-        getDataFromContentId(url);
+        GetContentData object = new MyFirebaseMessagingService.GetContentData();
+        object.execute(contentId + "");
+        return ccontentIntent;
+    }
 
-        SharedPreferences  mPrefs = getSharedPreferences("tempData",MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = mPrefs.getString("jsonDataObject", "");
-        JSONObject jsonDataObject = gson.fromJson(json, JSONObject.class);
-        if(jsonDataObject==null){
+    class GetContentData extends AsyncTask<String, Void, String> {
+        private Exception exception;
+        String contentId;
+
+        protected void onPreExecute() {
+        }
+
+        protected String doInBackground(String... ids) {
+            contentId = ids[0];
+            String url = "http://bot.sharedtoday.com:9500/ws/mysymphony/getSpecificContent?id=" + contentId;
+            Log.i("urlData", url);
+
             getDataFromContentId(url);
-        }
-        try {
-            String contentCat = jsonDataObject.getString("contentCat");
-            String id = jsonDataObject.getString("id");
-            String contentType = jsonDataObject.getString("contentType");
-            String contentTitle = jsonDataObject.getString("contentTitle");
-            String contentDescription = jsonDataObject.getString("contentDescription");
-            String thumbNail_image = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("thumbNail_image");
-            int contentPrice = jsonDataObject.getInt("contentPrice");
-
-            if (contentCat.equals("mobile_app")) {
-                ArrayList<AppData> appList = new ArrayList<>();
-                String packageName = jsonDataObject.getString("reference1");
-                String versionName = jsonDataObject.getString("reference2");
-                String versionCode = jsonDataObject.getString("reference3");
-                String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
-                appList.add(new AppData(id + "", contentTitle, contentDescription, thumbNail_image, contentUrl, packageName, versionCode));
-
-                intent = new Intent(this, AppList.class);
-                Gson gson2 = new Gson();
-                String appListJson = gson2.toJson(appList);
-                intent.putExtra("appList", appListJson);
-            } else if (contentCat.equals("music_video")) {
-                if (contentType.equals("audio")) {
-                    String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
-                    Porashuna porashuna = new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentId);
-                    intent = new Intent(this, PlayAudioActivity.class);
-                    intent.putExtra("cameFromWhichActivity", "music_video");
-                    intent.putExtra("data", (Serializable) porashuna);
-                } else {
-                    String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
-                    Porashuna porashuna = new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentId);
-                    intent = new Intent(this, JapitoJibonDescriptionActivity.class);
-                    intent.putExtra("Data", (Serializable) porashuna);
-                    intent.putExtra("cameFromWhichActivity", "music_video");
-                }
-            } else {
-                String contentUrl = jsonDataObject.getString("contentUrl");
-                Porashuna porashuna = new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentId);
-                intent = new Intent(this, PorashunaDescriptionActivity.class);
-                intent.putExtra("Data", (Serializable) porashuna);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } catch (ExceptionInInitializerError e) {
-            Log.e("AnoError", e.toString());
-        } catch (JSONException e) {
-            Log.e("JSONError", e.toString());
+            return "";
         }
-        return intent;
+
+        protected void onPostExecute(String result) {
+            try {
+                SharedPreferences mPrefs = getSharedPreferences("tempData", MODE_PRIVATE);
+                Gson gson = new Gson();
+                String json = mPrefs.getString("jsonDataObject", "");
+                JSONObject jsonDataObject = gson.fromJson(json, JSONObject.class);
+                Log.i("sharedData", jsonDataObject.toString());
+
+                mPrefs.edit().remove("jsonDataObject").commit();
+
+                String contentCat = jsonDataObject.getString("contentCat");
+                String id = jsonDataObject.getString("id");
+                String contentType = jsonDataObject.getString("contentType");
+                String contentTitle = jsonDataObject.getString("contentTitle");
+                String contentDescription = jsonDataObject.getString("contentDescription");
+                String thumbNail_image = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("thumbNail_image");
+                int contentPrice = jsonDataObject.getInt("contentPrice");
+
+                if (contentCat.equals("mobile_app")) {
+                    ArrayList<AppData> appList = new ArrayList<>();
+                    String packageName = jsonDataObject.getString("reference1");
+                    String versionName = jsonDataObject.getString("reference2");
+                    String versionCode = jsonDataObject.getString("reference3");
+                    String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
+                    appList.add(new AppData(id + "", contentTitle, contentDescription, thumbNail_image, contentUrl, packageName, versionCode));
+
+                    ccontentIntent = new Intent(MyFirebaseMessagingService.this, AppList.class);
+                    Gson gson2 = new Gson();
+                    String appListJson = gson2.toJson(appList);
+                    ccontentIntent.putExtra("appList", appListJson);
+                } else if (contentCat.equals("music_video")) {
+                    if (contentType.equals("audio")) {
+                        String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
+                        Porashuna porashuna = new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, Integer.parseInt(contentId));
+                        ccontentIntent = new Intent(MyFirebaseMessagingService.this, PlayAudioActivity.class);
+                        ccontentIntent.putExtra("cameFromWhichActivity", "music_video");
+                        ccontentIntent.putExtra("data", (Serializable) porashuna);
+                    } else {
+                        String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
+                        Porashuna porashuna = new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, Integer.parseInt(contentId));
+                        ccontentIntent = new Intent(MyFirebaseMessagingService.this, JapitoJibonDescriptionActivity.class);
+                        ccontentIntent.putExtra("Data", (Serializable) porashuna);
+                        ccontentIntent.putExtra("cameFromWhichActivity", "music_video");
+                    }
+                } else {
+                    String contentUrl = jsonDataObject.getString("contentUrl");
+                    Porashuna porashuna = new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, Integer.parseInt(contentId));
+                    ccontentIntent = new Intent(MyFirebaseMessagingService.this, PorashunaDescriptionActivity.class);
+                    ccontentIntent.putExtra("Data", (Serializable) porashuna);
+                }
+            } catch (ExceptionInInitializerError e) {
+                Log.e("AnoError", e.toString());
+            } catch (JSONException e) {
+                Log.e("JSONError", e.toString());
+            }
+        }
     }
 
     public void getDataFromContentId(String url) {
@@ -522,16 +559,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             @Override
             public void onResponse(JSONArray response) {
                 try {
+                    Log.i("responseContent", response.toString());
                     JSONObject jsonDataObject = response.getJSONObject(0);
-                    SharedPreferences  mPrefs = getSharedPreferences("tempData",MODE_PRIVATE);
+                    SharedPreferences mPrefs = getSharedPreferences("tempData", MODE_PRIVATE);
                     SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                    mPrefs.edit().remove("jsonDataObject").commit();
                     Gson gson = new Gson();
-                    String json = gson.toJson(jsonDataObject);
-                    prefsEditor.putString("jsonDataObject", json);
+                    String jsonNew = gson.toJson(jsonDataObject);
+                    prefsEditor.putString("jsonDataObject", jsonNew);
                     prefsEditor.commit();
                     Log.i("jsonDataObject", jsonDataObject.toString());
                 } catch (JSONException e) {
-                    Log.e("JSONError", e.toString());
+                    Log.e("JSONErrorParse", e.toString());
                 }
             }
         }, new Response.ErrorListener() {
