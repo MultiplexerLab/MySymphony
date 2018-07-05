@@ -35,7 +35,6 @@ import harmony.app.helper.DownloadImage;
 import harmony.app.helper.DownloadVideo;
 import harmony.app.helper.ProgressDialog;
 import harmony.app.helper.PushDataToSharedPref;
-import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
 public class SliderContentDescriptionActivity extends AppCompatActivity implements DownloadImage.AsyncResponse, DownloadApk.AsyncResponse {
 

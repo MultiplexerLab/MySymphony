@@ -71,7 +71,6 @@ import harmony.app.helper.DownloadVideo;
 import harmony.app.helper.PlayAudioInBackgroundService;
 import harmony.app.helper.ProgressDialog;
 import harmony.app.helper.PushDataToSharedPref;
-import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
 public class ImageViewActivity extends AppCompatActivity implements DownloadImage.AsyncResponse {
 
@@ -304,10 +303,10 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         Log.d("isItFreeInPurchase", String.valueOf(isItFree));
         Intent myIntent;
         if (isItFree == false) {
-            SharedPreferences preferences = getSharedPreferences("phoneNumber", MODE_PRIVATE);
+           /* SharedPreferences preferences = getSharedPreferences("phoneNumber", MODE_PRIVATE);
             myIntent = new Intent(getApplicationContext(), PaymentMethod.class);
             myIntent.putExtra("userId", preferences.getString("phoneNo", ""));
-            this.startActivityForResult(myIntent, 1);
+            this.startActivityForResult(myIntent, 1);*/
         } else {
             progressDialog.showProgressDialog();
             DownloadImage downloadImage = new DownloadImage();

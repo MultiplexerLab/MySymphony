@@ -31,7 +31,6 @@ import harmony.app.helper.AppLogger;
 import harmony.app.helper.DownloadAudio;
 import harmony.app.helper.PlayerInService;
 import harmony.app.helper.Utility;
-import paymentgateway.lct.lctpaymentgateway.ProgressDialog;
 
 public class PlayAudioActivity extends AppCompatActivity implements DownloadAudio.AsyncResponse {
 

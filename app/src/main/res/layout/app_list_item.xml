@@ -96,14 +96,34 @@
                     android:paddingRight="10dp" />
             </com.ms.square.android.expandabletextview.ExpandableTextView>
 
-            <Button
-                android:id="@+id/buttonInstall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:background="@color/dark_red"
-                android:text="Install"
-                android:textColor="@color/White" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/buttonPay"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/dark_red"
+                    android:text="PAY"
+                    android:layout_marginRight="10dp"
+                    android:visibility="invisible"
+                    android:textColor="@color/White" />
+
+                <Button
+                    android:id="@+id/buttonInstall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/dark_red"
+                    android:text="Install"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/White" />
+            </LinearLayout>
+
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

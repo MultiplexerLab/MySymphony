@@ -8,16 +8,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:904373924633:android:0d98b866a78bfb78",
+        "mobilesdk_app_id": "1:904373924633:android:6dce3f74993cae1f",
         "android_client_info": {
-          "package_name": "lct.mysymphony"
+          "package_name": "harmony.app"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "904373924633-e9mgomkb3ucakrog2mdu4e3itbp8c6v5.apps.googleusercontent.com",
-          "client_type": 3
-        },
         {
           "client_id": "904373924633-e9mgomkb3ucakrog2mdu4e3itbp8c6v5.apps.googleusercontent.com",
           "client_type": 3
@@ -49,10 +45,6 @@
         }
       },
       "oauth_client": [
-        {
-          "client_id": "904373924633-e9mgomkb3ucakrog2mdu4e3itbp8c6v5.apps.googleusercontent.com",
-          "client_type": 3
-        },
         {
           "client_id": "904373924633-e9mgomkb3ucakrog2mdu4e3itbp8c6v5.apps.googleusercontent.com",
           "client_type": 3

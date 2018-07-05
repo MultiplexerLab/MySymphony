@@ -50,7 +50,6 @@ import harmony.app.helper.DownloadVideo;
 import harmony.app.helper.PushDataToSharedPref;
 import harmony.app.universalvideoview.UniversalMediaController;
 import harmony.app.universalvideoview.UniversalVideoView;
-import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
 public class JapitoJibonDescriptionActivity extends AppCompatActivity implements DownloadImage.AsyncResponse {
 

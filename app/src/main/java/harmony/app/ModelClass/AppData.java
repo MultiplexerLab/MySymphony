@@ -8,23 +8,33 @@ public class AppData {
     String contentTitle;
     String contentDescription;
     String thumbNail_image;
+    int contentPrice;
     String contentUrl;
     String reference1;
     String reference2;
     String reference3;
 
-    public AppData(String contentId, String title, String description, String thumbNailImage, String contentUrl, String packagName, String versionCode) {
+    public AppData(String contentId, String title, String description, String thumbNailImage, String contentUrl, int contentPrice, String packagName, String versionCode) {
         this.id = contentId;
         this.contentTitle = title;
         this.contentDescription = description;
         this.thumbNail_image = thumbNailImage;
         this.contentUrl = contentUrl;
+        this.contentPrice = contentPrice;
         this.reference1 = packagName;
         this.reference3 = versionCode;
     }
 
     public String getId() {
         return id;
+    }
+
+    public int getContentPrice() {
+        return contentPrice;
+    }
+
+    public void setContentPrice(int contentPrice) {
+        this.contentPrice = contentPrice;
     }
 
     public void setId(String id) {

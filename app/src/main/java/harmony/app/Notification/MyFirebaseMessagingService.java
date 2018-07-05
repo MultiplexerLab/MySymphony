@@ -167,6 +167,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void initNotificationForContentId(String title, String description, final String imageLink, int contentId) {
+        Log.i("notiInten", "Dhukse");
         try {
             if (title.contains(USERNAME)) {
                 title = title.replace(USERNAME, title);
@@ -182,10 +183,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            notificationIntent = getIntentForContentId(contentId);
             if (notificationIntent == null) {
 
             }else{
-                Log.i("notiInten", notificationIntent.getExtras().toString());
+                Log.i("notiIntent", notificationIntent.getExtras().toString());
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
                 final RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notification_image_only);
@@ -520,7 +522,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     String versionName = jsonDataObject.getString("reference2");
                     String versionCode = jsonDataObject.getString("reference3");
                     String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
-                    appList.add(new AppData(id + "", contentTitle, contentDescription, thumbNail_image, contentUrl, packageName, versionCode));
+                    appList.add(new AppData(id + "", contentTitle, contentDescription, thumbNail_image, contentUrl, contentPrice, packageName, versionCode));
 
                     ccontentIntent = new Intent(MyFirebaseMessagingService.this, AppList.class);
                     Gson gson2 = new Gson();

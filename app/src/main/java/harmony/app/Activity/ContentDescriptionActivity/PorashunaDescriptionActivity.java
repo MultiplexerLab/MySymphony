@@ -32,7 +32,6 @@ import harmony.app.ModelClass.DataBaseData;
 import harmony.app.ModelClass.JapitoJibon;
 import harmony.app.ModelClass.Porashuna;
 import harmony.app.R;
-import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 import harmony.app.helper.AppLogger;
 
 public class PorashunaDescriptionActivity extends AppCompatActivity {
@@ -135,16 +134,5 @@ public class PorashunaDescriptionActivity extends AppCompatActivity {
         webView.setWebChromeClient(new WebChromeClient());
         webView.loadUrl(object.getContentUrl());
         Glide.with(PorashunaDescriptionActivity.this).load(object.getThumbnailImgUrl()).into(newsImageView);
-
-    }
-
-    public void mullochar(View view) {
-        Porashuna object = (Porashuna) getIntent().getSerializableExtra("Data");
-        Intent purchase = new Intent(getApplicationContext(), PaymentMethod.class);
-        DataBaseData dataBaseData = new DataBaseData(object.getContentTitle(), object.getContentCat(), object.getContentType(), object.getContentDescription(), object.getThumbnailImgUrl(), "free", object.getContentId());
-        purchase.putExtra("dataBaseData", dataBaseData);
-        purchase.putExtra("imageUrl", object.getThumbnailImgUrl());
-        purchase.putExtra("cameFromWhichActivity", "PorashunaDescriptionActivity");
-        startActivity(purchase);
     }
 }

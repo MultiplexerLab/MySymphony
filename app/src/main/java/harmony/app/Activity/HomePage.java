@@ -83,7 +83,6 @@ import harmony.app.RecyclerViewAdapter.RecyclerAdapterForJapitoJibon;
 import harmony.app.helper.AppLogger;
 import harmony.app.helper.DownloadApk;
 import harmony.app.helper.Endpoints;
-import paymentgateway.lct.lctpaymentgateway.PaymentMethod;
 
 import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.Manifest.permission.READ_PHONE_STATE;
@@ -770,7 +769,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                         String packageName = japito_jibon_content_arr.getJSONObject(i).getString("reference1");
                         String versionName = japito_jibon_content_arr.getJSONObject(i).getString("reference2");
                         String versionCode = japito_jibon_content_arr.getJSONObject(i).getString("reference3");
-                        appList.add(new AppData(contentid + "", contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), contentUrl, packageName, versionCode));
+                        appList.add(new AppData(contentid + "", contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), contentUrl, contentPrice, packageName, versionCode));
                     } else if (contentCat.equals("music_video")) {
                         if (contentType.equals("video")) {
                             musicVideoList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
@@ -941,8 +940,8 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     public void subscribe(View view) {
-        Intent intentDailyLife = new Intent(HomePage.this, PaymentMethod.class);
-        startActivity(intentDailyLife);
+        /*Intent intentDailyLife = new Intent(HomePage.this, PaymentMethod.class);
+        startActivity(intentDailyLife);*/
     }
 
     public void moreJapitoJibon(View view) {
