@@ -37,7 +37,7 @@
                 android:layout_height="300dp"
                 android:background="@android:color/black">
 
-                <sym.appstore.universalvideoview.UniversalVideoView
+                <harmony.app.universalvideoview.UniversalVideoView
                     android:id="@+id/videoView"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -45,7 +45,7 @@
                     app:uvv_autoRotation="true"
                     app:uvv_fitXY="true" />
 
-                <sym.appstore.universalvideoview.UniversalMediaController
+                <harmony.app.universalvideoview.UniversalMediaController
                     android:id="@+id/media_controller"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
