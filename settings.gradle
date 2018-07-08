@@ -1,1 +1,1 @@
-include ':app', ':lctpaymentgateway-release'
+include ':app', ':subscriptionintegration-debug'
