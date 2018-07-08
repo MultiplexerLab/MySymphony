@@ -25,9 +25,15 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.looselycoupled.subscriptionintegration.OnSubscriptionListener;
+import com.looselycoupled.subscriptionintegration.SubscribeUsingPaymentGateway;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -37,9 +43,11 @@ import java.util.List;
 
 import harmony.app.Activity.HomePage;
 import harmony.app.Activity.ImageViewActivity;
+import harmony.app.Activity.PlayAudioActivity;
 import harmony.app.Activity.ProfileActivity;
 import harmony.app.ModelClass.DataBaseData;
 import harmony.app.ModelClass.JapitoJibon;
+import harmony.app.ModelClass.MusicVideo;
 import harmony.app.ModelClass.Porashuna;
 import harmony.app.R;
 import harmony.app.helper.AppLogger;
@@ -47,6 +55,7 @@ import harmony.app.helper.CheckPermission;
 import harmony.app.helper.DataHelper;
 import harmony.app.helper.DownloadImage;
 import harmony.app.helper.DownloadVideo;
+import harmony.app.helper.InsertPayment;
 import harmony.app.helper.PushDataToSharedPref;
 import harmony.app.universalvideoview.UniversalMediaController;
 import harmony.app.universalvideoview.UniversalVideoView;
@@ -66,7 +75,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
     private android.support.v7.widget.Toolbar toolbar;
     View mBottomLayout;
     View videoLayout;
-    Porashuna musicVideoObj;
+    MusicVideo musicVideoObj;
     UniversalVideoView videoView;
     UniversalMediaController mediaController;
     String videoTitle;
@@ -87,20 +96,17 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_japiti_jibon_description);
         toolbar = findViewById(R.id.toolbarLayoutInnJapitoJibonDescriptionActivity);
         setSupportActionBar(toolbar);
-        checkPermissions();
         dataHelper = new DataHelper(JapitoJibonDescriptionActivity.this);
         newsImageView = findViewById(R.id.imgJapitiJibonDescription);
         newsTitle = findViewById(R.id.newsTitleJapitiJibonDescription);
         newsDescription = findViewById(R.id.newsdescriptionJapitiJibonDescription);
         imageLayout = findViewById(R.id.imageLayout);
-        ///videoView = findViewById(R.id.videoViewJapitojibon);
         newPrice = findViewById(R.id.newPriceTVinJapitoJibonDescription);
         dataHelper = new DataHelper(JapitoJibonDescriptionActivity.this);
         bisheshOfferLL = findViewById(R.id.bisheshOfferLLInJapitoJibonDescription);
         buyOrDownloadLL = findViewById(R.id.buyOrDownloadLLInJapitoJibonDescription);
         buyOrDownloadBTN = findViewById(R.id.buyOrDownloadBTNInJapitoJibonDescription);
         mBottomLayout = findViewById(R.id.bottom_layout);
-        ///videoProgressBar = findViewById(R.id.progressBarInVideoViewInJapitiJibonDescription);
         videoLayout = findViewById(R.id.video_layout);
         videoView = findViewById(R.id.videoView);
         mediaController = findViewById(R.id.media_controller);
@@ -111,16 +117,23 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
     }
 
     private void setBuyOrDownLoadButtonVisibility() {
-        musicVideoObj = (Porashuna) getIntent().getSerializableExtra("Data");
+        musicVideoObj = (MusicVideo) getIntent().getSerializableExtra("Data");
         imageUrl = musicVideoObj.getThumbnailImgUrl();
         String contentTitle = musicVideoObj.getContentTitle();
         String contentCat = musicVideoObj.getContentCat();
         String contentDesc = "";
         String contentType = musicVideoObj.getContentType();
         String thumbNail_image = musicVideoObj.getThumbnailImgUrl();
-        String priceStatus;
-        priceStatus = "free";
-        newPrice.setText("ফ্রি দেখুন!");
+        int price = musicVideoObj.getContentPrice();
+        String priceStatus = "free";
+        if(price>0){
+            newPrice.setText(price+" Tk");
+            priceStatus = "paid";
+            buyOrDownloadBTN.setVisibility(View.VISIBLE);
+        }else {
+            newPrice.setText("ফ্রি দেখুন!");
+            priceStatus = "free";
+        }
         dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNail_image, priceStatus, musicVideoObj.getContentId());
         Boolean check = dataHelper.checkDownLoadedOrNot(musicVideoObj.getContentCat(), musicVideoObj.getContentId());
         Log.d("checkJapitoJibon", check.toString());
@@ -144,7 +157,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
     }
 
     public void setDescripTionData() {
-        musicVideoObj = (Porashuna) getIntent().getSerializableExtra("Data");
+        musicVideoObj = (MusicVideo) getIntent().getSerializableExtra("Data");
 
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
@@ -172,18 +185,56 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
         SharedPreferences preferences = getSharedPreferences("phoneNumber", MODE_PRIVATE);
         purchase.putExtra("userId", preferences.getString("phoneNo", ""));
         startActivityForResult(purchase, 1);*/
+        //progressDialog.showProgressDialog();
+        if(checkPermissions()){
+            initSubscription(musicVideoObj.getContentPrice());
+        }else{
+            Toast.makeText(JapitoJibonDescriptionActivity.this, "ডাওনলোড এর পূর্বে ডিভাইস এক্সেস দিয়ে নিন", Toast.LENGTH_SHORT).show();
+        }
 
-        progressDialog.showProgressDialog();
-        Log.d("videoInImageView", "videoInImageView");
-        Gson gson = new Gson();
-        SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
-        String json = preferences.getString("databaseData", "");
-        DataBaseData dataBaseData = gson.fromJson(json, DataBaseData.class);
-        Log.i("VideoCOntent", "video");
+    }
+
+    private void initSubscription(final int price) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try  {
+                    SubscribeUsingPaymentGateway obj = new SubscribeUsingPaymentGateway();
+                    obj.setData("test","test123","1234", (float) price, JapitoJibonDescriptionActivity.this, new OnSubscriptionListener() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            try {
+                                String transactionStatus = result.getString("transactionStatus");
+                                String paymentID = result.getString("paymentID");
+                                String paymentMethod = result.getString("paymentMethod");
+                                String referenceCode = result.getString("referenceCode");
+                                Long amount = result.getLong("amount");
+                                if(transactionStatus.equals("Completed")){
+                                    downloadVideo();
+                                    InsertPayment.insertPayment(JapitoJibonDescriptionActivity.this, musicVideoObj.getContentId(), amount, paymentID, paymentMethod, referenceCode);
+                                    Toast.makeText(JapitoJibonDescriptionActivity.this, "আপনার পেমেন্ট সফল হয়েছে, গান ডাউনলোড হচ্ছে", Toast.LENGTH_LONG).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Log.i("tranResult","transactionResult: "+result);
+                        }
+
+                        @Override
+                        public void onError(JSONObject result) {
+                            Log.e("tranError","transactionResult: "+result);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+    }
+
+    private void downloadVideo() {
         DownloadVideo downLoadVideo = new DownloadVideo();
-        ///downLoadVideo.downloadVideo("http://mp4videos.fusionbd.com/All_Files/320x240_Pixels/Bollywood_Promo_Videos-MP4/O_Saathi-Baaghi_2-Promo_FusionBD.Com.mp4", JapitoJibonDescriptionActivity.this, dataBaseData);
-        ///http://jachaibd.com/files/sample.mp4
-        ///downLoadVideo.downloadVideo("http://jachaibd.com/files/sample.mp4", JapitoJibonDescriptionActivity.this, dataBaseData);
         downLoadVideo.downloadVideo(musicVideoObj.getContentUrl(), JapitoJibonDescriptionActivity.this, dataBaseData);
     }
 
@@ -193,7 +244,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
                 String returnedResult = data.getData().toString();
                 Log.i("ResultFromLib", returnedResult);
                 if (returnedResult.equals("Success")) {
-                    progressDialog.showProgressDialog();
+                    //progressDialog.showProgressDialog();
                     if (dataBaseData.getContentType().contains("image")) {
                         Gson gson = new Gson();
                         SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
@@ -203,7 +254,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
                         DownloadImage downloadImage = new DownloadImage();
                         downloadImage.downloadImage(imageURL, JapitoJibonDescriptionActivity.this, dataBaseData);
                     } else if (dataBaseData.getContentType().contains("video")) {
-                        progressDialog.showProgressDialog();
+                        //progressDialog.showProgressDialog();
                         Log.d("videoInImageView", "videoInImageView");
                         Gson gson = new Gson();
                         SharedPreferences preferences = getSharedPreferences("tempData", MODE_PRIVATE);
@@ -224,7 +275,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
 
     @Override
     public void processFinish(String output) {
-        progressDialog.hideProgressDialog();
+        //progressDialog.hideProgressDialog();
         Log.d("procesFinishedJpitoJibn", "processFinished");
         if (output.contains("complete")) {
             Intent myIntent;

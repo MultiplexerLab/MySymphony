@@ -9,8 +9,8 @@
         android:id="@+id/songimageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:adjustViewBounds="true"
         android:layout_marginTop="30dp"
+        android:adjustViewBounds="true"
         android:src="@drawable/musicvideo" />
 
     <TextView
@@ -83,18 +83,27 @@
             android:layout_toRightOf="@+id/btnPlay"
             android:background="@drawable/stop" />-->
 
+    <TextView
+        android:id="@+id/priceTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/buyOrDownloadBTN"
+        android:text=""
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
     <Button
         android:id="@+id/buyOrDownloadBTN"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_below="@+id/musicPlayerControle"
-        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/priceTag"
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
         android:background="@drawable/btn_style_red"
         android:onClick="downLoadAudio"
         android:text="ডাউনলোড করুন"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:textColor="@color/White" />
-
-
 </RelativeLayout>

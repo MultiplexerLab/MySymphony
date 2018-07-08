@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import harmony.app.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
-import harmony.app.Activity.Music_Video;
-import harmony.app.Activity.PlayAudioActivity;
-import harmony.app.ModelClass.Porashuna;
+import harmony.app.ModelClass.MusicVideo;
 import harmony.app.R;
 import harmony.app.RecyclerViewAdapter.VideoListAdapter;
 
@@ -28,7 +26,7 @@ public class VideoFragment extends Fragment {
 
     ListView listView;
     View view;
-    ArrayList<Porashuna> videoList;
+    ArrayList<MusicVideo> videoList;
     VideoListAdapter adapter;
 
     public VideoFragment() {
@@ -42,7 +40,7 @@ public class VideoFragment extends Fragment {
 
         String value = getArguments().getString("videoListStr");
         Gson gson = new Gson();
-        Type type = new TypeToken<List<Porashuna>>() {
+        Type type = new TypeToken<List<MusicVideo>>() {
         }.getType();
         videoList = gson.fromJson(value, type);
 

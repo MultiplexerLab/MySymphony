@@ -109,7 +109,7 @@
 
         <activity android:name=".Activity.ContactActivity" />
         <activity android:name=".Activity.AppList" />
-        <activity android:name=".Activity.Music_Video" />
+        <activity android:name=".Activity.MusicVideoActivity" />
         <activity android:name=".Activity.Emoticons" />
         <activity android:name=".Activity.AboutUs" />
         <activity android:name=".Activity.TermsActivity"></activity>

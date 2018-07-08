@@ -461,6 +461,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             downLoadIntent.putExtra("notificationTitle", title);
             return downLoadIntent;
         } else if (action.contains("http")) {
+            Log.i("Dhukse", action);
             String url = action;
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));

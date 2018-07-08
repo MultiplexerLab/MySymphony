@@ -1,7 +1,6 @@
 package harmony.app.Activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,6 +21,7 @@ import java.util.Date;
 
 import harmony.app.Fragment.MyInfoFragmentInProfileActivity;
 import harmony.app.Fragment.MyItemFragmentInProfileActivity;
+import harmony.app.Fragment.PaymentListFragmentInProfileActivity;
 import harmony.app.R;
 import harmony.app.ViewpagerAdapter.ViewPagerAdapter;
 import harmony.app.helper.AppLogger;
@@ -92,17 +92,11 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
         viewPager = findViewById(R.id.viewPagerProfile);
         viewPagerAdapterForSports = new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setOffscreenPageLimit(3);
-        //.addFragments(new PaymentListFragmentInProfileActivity(), "পেমেন্ট লিস্ট");
         viewPagerAdapterForSports.addFragments(new MyItemFragmentInProfileActivity(), "মাই আইটেম");
+        viewPagerAdapterForSports.addFragments(new PaymentListFragmentInProfileActivity(), "পেমেন্ট লিস্ট");
         //viewPagerAdapterForSports.addFragments(new MyInfoFragmentInProfileActivity(), "মাই ইনফো");
         viewPager.setAdapter(viewPagerAdapterForSports);
         tabLayout.setupWithViewPager(viewPager);
-        cameFromWhichActivity=getIntent().getStringExtra("cameFromWhichActivity");
-        if (cameFromWhichActivity!=null)
-        {
-            tabLayout.setScrollPosition(1,0f,true);
-            viewPager.setCurrentItem(1);
-        }
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

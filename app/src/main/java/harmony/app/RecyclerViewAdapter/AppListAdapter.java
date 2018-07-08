@@ -25,6 +25,7 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -71,11 +72,9 @@ public class AppListAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.app_list_item, viewGroup, false);
         ImageView appThumbnail = customView.findViewById(R.id.appCoverImage);
-        //Log.i("backgroundUrl", appData.get(position).getThumbNailImage());
         final TextView apptitle = customView.findViewById(R.id.appTitle);
-        //TextView appDesc = customView.findViewById(R.id.appDescription);
         Button installButton = customView.findViewById(R.id.buttonInstall);
-        Button payButton = customView.findViewById(R.id.buttonPay);
+        TextView payTag = customView.findViewById(R.id.payTag);
         String imageUrl = appData.get(position).getThumbNail_image();
         final int price = appData.get(position).getContentPrice();
         if (imageUrl == null || imageUrl.isEmpty() || imageUrl.equals("null")) {
@@ -85,8 +84,8 @@ public class AppListAdapter extends BaseAdapter {
         }
 
         if(price>0){
-            payButton.setVisibility(View.VISIBLE);
-            payButton.setText("BDT "+price);
+            payTag.setVisibility(View.VISIBLE);
+            payTag.setText("BDT "+price);
         }
 
         apptitle.setText(appData.get(position).getContentTitle());
@@ -105,10 +104,12 @@ public class AppListAdapter extends BaseAdapter {
                     if (versionNumber == Integer.parseInt(appData.get(position).getReference3())) {
                         installButton.setEnabled(false);
                         installButton.setText("Installed");
+                        payTag.setVisibility(View.INVISIBLE);
                         installButton.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
                     } else {
                         installButton.setEnabled(true);
                         installButton.setText("UPDATE");
+                        payTag.setVisibility(View.INVISIBLE);
                         installButton.setBackgroundColor(context.getResources().getColor(R.color.dark_red));
                     }
                 }
@@ -126,48 +127,66 @@ public class AppListAdapter extends BaseAdapter {
             expTv1.setText(appData.get(position).getContentDescription());
         }
 
-        installButton.setOnClickListener(new View.OnClickListener() {
+        /*installButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(price>0){
                     Toast.makeText(context, "ইন্সটল এর পূর্বে পেমেন্ট সম্পন্ন করুন", Toast.LENGTH_LONG).show();
                 }else{
-                    Date startTime;
-                    DateFormat dateFormat;
-                    dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-                    startTime = new Date();
-                    AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "Start Downloading",
-                            "INSTALL", "Install Button Clicked for " + apptitle, "app");
 
-                    String apkUrl = appData.get(position).getContentUrl();
-                    String appTitle = appData.get(position).getContentTitle();
-                    Log.i("DownloadAPK", apkUrl);
-                    DataBaseData dataBaseData = new DataBaseData(appTitle, "mobile_app","apk", appData.get(position).getContentDescription(),
-                            appData.get(position).getThumbNail_image(), "free", Integer.parseInt(appData.get(position).getId()));
-                    DownloadApk downloadApk = new DownloadApk();
-                    downloadApk.downLoadAPK(apkUrl, context, dataBaseData);
                 }
             }
-        });
+        });*/
 
-        payButton.setOnClickListener(new View.OnClickListener() {
+        installButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                dialog.setTitle("Sure?").setMessage("Are you sure you want to pay "+price+ " BDT?").setCancelable(false);
-                dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                Thread thread = new Thread(new Runnable() {
+
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        initSubscription(price);
+                    public void run() {
+                        try  {
+                            SubscribeUsingPaymentGateway obj = new SubscribeUsingPaymentGateway();
+                            obj.setData("test","test123","1234", (float) price, context, new OnSubscriptionListener() {
+                                @Override
+                                public void onSuccess(JSONObject result) {
+                                    try {
+                                        String transactionStatus = result.getString("transactionStatus");
+                                        if(transactionStatus.equals("Completed")){
+                                            Toast.makeText(context, "আপনার পেমেন্ট সফল হয়েছে", Toast.LENGTH_LONG).show();
+                                            Date startTime;
+                                            DateFormat dateFormat;
+                                            dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                                            startTime = new Date();
+                                            AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "Start Downloading",
+                                                    "INSTALL", "Install Button Clicked for " + apptitle, "app");
+
+                                            String apkUrl = appData.get(position).getContentUrl();
+                                            String appTitle = appData.get(position).getContentTitle();
+                                            Log.i("DownloadAPK", apkUrl);
+                                            DataBaseData dataBaseData = new DataBaseData(appTitle, "mobile_app","apk", appData.get(position).getContentDescription(),
+                                                    appData.get(position).getThumbNail_image(), "free", Integer.parseInt(appData.get(position).getId()));
+                                            DownloadApk downloadApk = new DownloadApk();
+                                            downloadApk.downLoadAPK(apkUrl, context, dataBaseData);
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Log.i("tranResult","transactionResult: "+result);
+                                }
+
+                                @Override
+                                public void onError(JSONObject result) {
+                                    Log.e("tranError","transactionResult: "+result);
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
-                dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                dialog.show();
+
+                thread.start();
 
             }
         });
@@ -175,38 +194,7 @@ public class AppListAdapter extends BaseAdapter {
     }
 
     private void initSubscription(final int price) {
-        Thread thread = new Thread(new Runnable() {
 
-            @Override
-            public void run() {
-                try  {
-                    SubscribeUsingPaymentGateway obj = new SubscribeUsingPaymentGateway();
-                    obj.setData("test","test123","1234", (float) price, context, new OnSubscriptionListener() {
-                        @Override
-                        public void onSuccess(JSONObject result) {
-                            try {
-                                String transactionStatus = result.getString("transactionStatus");
-                                if(transactionStatus.equals("Completed")){
-                                    Toast.makeText(context, "আপনার পেমেন্ট সফল হয়েছে", Toast.LENGTH_LONG).show();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            Log.i("tranResult","transactionResult: "+result);
-                        }
-
-                        @Override
-                        public void onError(JSONObject result) {
-                            Log.e("tranError","transactionResult: "+result);
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        thread.start();
     }
 
     public boolean isPackageExisted(String targetPackage) {

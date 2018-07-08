@@ -29,4 +29,6 @@ public class Endpoints {
     public static final String CONTACTUS_POST_URL=DOMAIN_PREFIX+"/ws/commonInsertIntoSingleTable?tbl=contactUs";
     public static final String OBJECTIVES_GET_URL=DOMAIN_PREFIX+"/ws/commonGetFromTableForSym?tbl=contactPurpose&key=id&val=%25";
     public static final String FIREBASE_TOKEN_POST_URL=DOMAIN_PREFIX+"/ws/refreshFirebaseToken";
+    public static final String GET_PAYMENT_INFO=DOMAIN_PREFIX+"/ws/commonGetFromTableForSym?tbl=paymentData";
+    public static final String PAYMENT_POST_URL=DOMAIN_PREFIX+"/ws/addPaymentData";
 }

@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import harmony.app.ModelClass.JapitoJibon;
+import harmony.app.ModelClass.MusicVideo;
 import harmony.app.ModelClass.Porashuna;
 import harmony.app.R;
 import harmony.app.helper.ProgressDialog;
@@ -21,11 +22,11 @@ import harmony.app.helper.ProgressDialog;
 public class VideoListAdapter extends BaseAdapter {
     ProgressDialog progressDialog;
     Context context;
-    ArrayList<Porashuna> videoList;
+    ArrayList<MusicVideo> videoList;
 
-    public VideoListAdapter(Context context, ArrayList<Porashuna> appData) {
+    public VideoListAdapter(Context context, ArrayList<MusicVideo> videoList) {
         this.context = context;
-        this.videoList = appData;
+        this.videoList = videoList;
         progressDialog = new harmony.app.helper.ProgressDialog(context);
     }
 
@@ -51,12 +52,17 @@ public class VideoListAdapter extends BaseAdapter {
         ImageView videoThumbnail = customView.findViewById(R.id.videoThumbnail);
         TextView apptitle = customView.findViewById(R.id.videoTitle);
         TextView type = customView.findViewById(R.id.contentType);
+        TextView priceTag = customView.findViewById(R.id.priceTag);
         if (videoList.get(position).getThumbnailImgUrl().isEmpty() || videoList.get(position).getThumbnailImgUrl().equals("null")) {
             if (videoList.get(position).getContentType().equals("video")) {
                 videoThumbnail.setImageDrawable(context.getResources().getDrawable(R.drawable.video_thumbnail));
             }
         } else {
             Glide.with(context).load(videoList.get(position).getThumbnailImgUrl()).into(videoThumbnail);
+        }
+        int price = videoList.get(position).getContentPrice();
+        if(price>0) {
+            priceTag.setText("৳"+price);
         }
         apptitle.setText(videoList.get(position).getContentTitle());
         type.setText(videoList.get(position).getContentType());

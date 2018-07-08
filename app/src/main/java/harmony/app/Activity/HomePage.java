@@ -57,7 +57,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -74,10 +73,10 @@ import harmony.app.ModelClass.DataBaseData;
 import harmony.app.ModelClass.GamesZone;
 import harmony.app.ModelClass.Icon;
 import harmony.app.ModelClass.MulloChar;
+import harmony.app.ModelClass.MusicVideo;
 import harmony.app.ModelClass.Porashuna;
 import harmony.app.ModelClass.SeraChobi;
 import harmony.app.ModelClass.ShocolChobi;
-import harmony.app.Notification.MyFirebaseInstanceIDService;
 import harmony.app.R;
 import harmony.app.RecyclerViewAdapter.RecyclerAdapterForJapitoJibon;
 import harmony.app.helper.AppLogger;
@@ -94,8 +93,9 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
 
     ArrayList<Porashuna> sliderImages;
     ArrayList<SeraChobi> seraChobiArrayList;
-    ArrayList<Porashuna> japitoJibonArrayList, musicVideoList, audioList, hotNewsArrayList, sportsArralyList, auttoHashiArrList, mixedArrList, scienceArrList, kidsArrList, educationList;
+    ArrayList<Porashuna> japitoJibonArrayList, hotNewsArrayList, sportsArralyList, auttoHashiArrList, mixedArrList, scienceArrList, kidsArrList, educationList;
     ArrayList<MulloChar> mulloCharArrayList;
+    ArrayList<MusicVideo> musicVideoList, audioList;
     ArrayList<AppData> appList;
     ArrayList<ShocolChobi> shocolChobiArrayList;
     ArrayList<GamesZone> gamesZoneArrayList;
@@ -110,13 +110,10 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     harmony.app.helper.ProgressDialog progressDialog;
     String[] permissions = new String[]{
             Manifest.permission.ACCESS_NETWORK_STATE,
-            Manifest.permission.RECEIVE_SMS,
-            Manifest.permission.READ_SMS,
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.REQUEST_INSTALL_PACKAGES,
             Manifest.permission.GET_ACCOUNTS,
-            Manifest.permission.READ_PHONE_NUMBERS,
     };
     String emailId = "", devicePhoneNumber = "", deviceName = "";
     String osVersion = "", carrierName = "", firebaseToken = "", deviceId = "";
@@ -435,6 +432,10 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             Log.i("Email", accountName);
             initializeData();
             insertToServerDB();
+        }else{
+            loadIconsFromServer();
+            getInstanceInfo();
+            newloadDataFromVolley();
         }
         if (requestCode == 9003) {
             if (internetConnected()) {
@@ -772,9 +773,9 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                         appList.add(new AppData(contentid + "", contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), contentUrl, contentPrice, packageName, versionCode));
                     } else if (contentCat.equals("music_video")) {
                         if (contentType.equals("video")) {
-                            musicVideoList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                            musicVideoList.add(new MusicVideo(contentTitle, contentType, contentDescription, contentUrl, contentCat,thumbNail_image , contentid, contentPrice));
                         } else {
-                            audioList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                            audioList.add(new MusicVideo(contentTitle, contentType, contentDescription, contentUrl, contentCat,thumbNail_image , contentid, contentPrice));
                         }
                     } else if (contentCat.equals("education")) {
                         educationList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
@@ -1008,7 +1009,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     public void jumpToVideoList(View view) {
-        Intent intent = new Intent(HomePage.this, Music_Video.class);
+        Intent intent = new Intent(HomePage.this, MusicVideoActivity.class);
         Gson gson = new Gson();
         String videoJson = gson.toJson(musicVideoList);
         String audioJson = gson.toJson(audioList);

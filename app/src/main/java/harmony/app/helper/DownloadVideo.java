@@ -1,8 +1,14 @@
 package harmony.app.helper;
 
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.util.Base64;
 import android.util.Log;
 
@@ -14,8 +20,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
+import harmony.app.BuildConfig;
 import harmony.app.ModelClass.DataBaseData;
 
 public class DownloadVideo {
@@ -40,6 +50,47 @@ public class DownloadVideo {
     class RetrieveVideoTask extends AsyncTask<String, Void, String> {
         private Exception exception;
         protected void onPreExecute() {
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(videoUrl));
+            request.setDescription("Downloading the video please wait!");
+            request.setTitle(dataBaseData.getContentTitle());
+
+            String root = Environment.getExternalStorageDirectory().toString();
+            File myDir = new File(root + "/appstore");
+            myDir.mkdirs();
+            final String fname;
+            fname = videoTitle+".mp4";
+            File file = new File (myDir, fname);
+            if (file.exists ()) file.delete ();
+            final Uri videoUri = FileProvider.getUriForFile(context,
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    file);
+            final Uri uri = Uri.parse("file://" + myDir);
+            request.setDestinationUri(uri);
+
+            final DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+            final long downloadId = manager.enqueue(request);
+
+            BroadcastReceiver onComplete = new BroadcastReceiver() {
+                public void onReceive(Context ctxt, Intent intent) {
+                    final Date startTime;
+                    final DateFormat dateFormat;
+                    dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                    startTime = new Date();
+                    try {
+                        Log.d("onComplete", "onComplete");
+                        contentSdCardUrl = fname;
+                        AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "" + dataBaseData.getContentId(),
+                                "DOWNLOADED", "Download completed for " + dataBaseData.getContentTitle(), "content");
+
+                        context.unregisterReceiver(this);
+                    } catch (Exception e) {
+                        Log.e("ErrrInDownloadApk", e.toString());
+                        AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", dataBaseData.getContentId() + "",
+                                "DOWNLOAD_FAILED", e.toString(), "content");
+                    }
+                }
+            };
+            context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
             Log.i("DonwloadVideo", "Downloading the video. Please wait...");
         }
         protected String doInBackground(String... urls) {

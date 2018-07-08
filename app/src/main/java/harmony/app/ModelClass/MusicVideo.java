@@ -2,19 +2,28 @@ package harmony.app.ModelClass;
 
 import java.io.Serializable;
 
-public class Porashuna implements Serializable {
+public class MusicVideo implements Serializable {
 
     String contentTitle, contentType, contentDescription, contentUrl, contentCat, thumbnailImgUrl;
-    int contentId;
+    int contentId, contentPrice;
 
-    public Porashuna(String contentTitle, String contentType, String contentDescription, String contentUrl, String thumbnailImgUrl, String contentCat, int contentId) {
+    public MusicVideo(String contentTitle, String contentType, String contentDescription, String contentUrl, String contentCat, String thumbnailImgUrl, int contentId, int contentPrice) {
         this.contentTitle = contentTitle;
         this.contentType = contentType;
         this.contentDescription = contentDescription;
         this.contentUrl = contentUrl;
         this.contentCat = contentCat;
-        this.contentId = contentId;
         this.thumbnailImgUrl = thumbnailImgUrl;
+        this.contentId = contentId;
+        this.contentPrice = contentPrice;
+    }
+
+    public int getContentPrice() {
+        return contentPrice;
+    }
+
+    public void setContentPrice(int contentPrice) {
+        this.contentPrice = contentPrice;
     }
 
     public String getContentCat() {
@@ -45,3 +54,4 @@ public class Porashuna implements Serializable {
         return contentUrl;
     }
 }
+

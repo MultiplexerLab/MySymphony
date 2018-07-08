@@ -217,9 +217,6 @@ public class DownloadAudio {
             final DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             final long downloadId = manager.enqueue(request);
 
-        /*if (Build.VERSION.RELEASE.contains("8")) {
-
-        }*/
             insertDataInDatabaseWithContentSdcardUl();
             BroadcastReceiver onComplete = new BroadcastReceiver() {
                 public void onReceive(Context ctxt, Intent intent) {

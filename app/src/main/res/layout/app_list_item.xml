@@ -100,17 +100,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <Button
-                    android:id="@+id/buttonPay"
+                <TextView
+                    android:id="@+id/payTag"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
-                    android:background="@color/dark_red"
-                    android:text="PAY"
                     android:layout_marginRight="10dp"
-                    android:visibility="invisible"
-                    android:textColor="@color/White" />
+                    android:layout_weight="1"
+                    android:background="@color/White"
+                    android:enabled="false"
+                    android:gravity="center"
+                    android:text="PAY"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/dark_red"
+                    android:visibility="invisible" />
 
                 <Button
                     android:id="@+id/buttonInstall"

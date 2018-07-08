@@ -16,7 +16,7 @@ import harmony.app.R;
 import harmony.app.ViewpagerAdapter.ViewPagerAdapterMusic;
 import harmony.app.helper.AppLogger;
 
-public class Music_Video extends AppCompatActivity {
+public class MusicVideoActivity extends AppCompatActivity {
 
     Date currenTime;
     DateFormat dateFormat;
@@ -31,7 +31,6 @@ public class Music_Video extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
         setViewPagerData();
         tabLayout.setupWithViewPager(viewPager);
-
     }
 
     private void setViewPagerData() {
@@ -58,14 +57,14 @@ public class Music_Video extends AppCompatActivity {
         super.onResume();
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
-        AppLogger.insertLogs(Music_Video.this, dateFormat.format(currenTime), "N", "MusicVideo",
+        AppLogger.insertLogs(MusicVideoActivity.this, dateFormat.format(currenTime), "N", "MusicVideo",
                 "IN", "Entrance", "page");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        AppLogger.insertLogs(Music_Video.this, dateFormat.format(currenTime), "Y", "MusicVideo",
+        AppLogger.insertLogs(MusicVideoActivity.this, dateFormat.format(currenTime), "Y", "MusicVideo",
                 "LEAVE", "Leave", "page");
     }
 }
