@@ -155,6 +155,8 @@ public class AppListAdapter extends BaseAdapter {
                                 @Override
                                 public void onSuccess(JSONObject result) {
                                     try {
+                                        String deviceId = Settings.Secure.getString(context.getContentResolver(),
+                                                Settings.Secure.ANDROID_ID);
                                         String transactionStatus = result.getString("transactionStatus");
                                         if(transactionStatus.equals("Completed")){
                                             Toast.makeText(context, "আপনার পেমেন্ট সফল হয়েছে", Toast.LENGTH_LONG).show();

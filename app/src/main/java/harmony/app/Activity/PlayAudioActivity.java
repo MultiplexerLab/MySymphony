@@ -272,6 +272,8 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
                                 Long amount = result.getLong("amount");
                                 if (transactionStatus.equals("Completed")) {
                                     downloadAudio();
+                                    String deviceId = Settings.Secure.getString(getContentResolver(),
+                                            Settings.Secure.ANDROID_ID);
                                     InsertPayment.insertPayment(PlayAudioActivity.this, data.getContentId(), amount, paymentID, paymentMethod, referenceCode, deviceId, data.getContentTitle());
                                     AppLogger.insertLogs(PlayAudioActivity.this, dateFormat.format(currenTime), "N", data.getContentId() + "",
                                             "PAYMENT_DONE", result.getString("paymentMethod"), "content");

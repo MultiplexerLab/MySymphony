@@ -215,6 +215,8 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
                                 Long amount = result.getLong("amount");
                                 if (transactionStatus.equals("Completed")) {
                                     downloadVideo();
+                                    String deviceId = Settings.Secure.getString(getContentResolver(),
+                                            Settings.Secure.ANDROID_ID);
                                     InsertPayment.insertPayment(JapitoJibonDescriptionActivity.this, musicVideoObj.getContentId(), amount, paymentID, paymentMethod, referenceCode, deviceId, musicVideoObj.getContentTitle());
                                     Date currenTime;
                                     DateFormat dateFormat;

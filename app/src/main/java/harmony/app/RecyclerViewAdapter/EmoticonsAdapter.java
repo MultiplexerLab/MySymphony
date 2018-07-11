@@ -148,6 +148,8 @@ public class EmoticonsAdapter extends BaseAdapter {
                                             @Override
                                             public void onSuccess(JSONObject result) {
                                                 try {
+                                                    final String deviceId = Settings.Secure.getString(context.getContentResolver(),
+                                                            Settings.Secure.ANDROID_ID);
                                                     String transactionStatus = result.getString("transactionStatus");
                                                     String paymentID = result.getString("paymentID");
                                                     String paymentMethod = result.getString("paymentMethod");
@@ -160,7 +162,7 @@ public class EmoticonsAdapter extends BaseAdapter {
                                                         AppLogger.insertLogs(context, dateFormat.format(currenTime), "N", emoticon.getId() + "",
                                                                 "PAYMENT_DONE", result.getString("paymentMethod"), "content");
 
-                                                        Toast.makeText(context, "আপনার পেমেন্ট সফল হয়েছে, গান ডাউনলোড হচ্ছে", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(context, "আপনার পেমেন্ট সফল হয়েছে, ডাউনলোড হচ্ছে", Toast.LENGTH_LONG).show();
                                                     }
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
