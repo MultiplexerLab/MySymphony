@@ -45,7 +45,6 @@ public class InsertPayment {
                 params.put("transactionStatus", "Completed");
                 params.put("customerId", userId);
                 if(contentTitle==null || contentTitle.isEmpty()){
-                   // params.put("contentName", "");
                 }else{
                     params.put("contentName", contentTitle);
                 }
