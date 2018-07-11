@@ -16,8 +16,7 @@ import java.util.Map;
 
 public class InsertPayment {
 
-
-    public static void insertPayment(final Context context, final int contentId, final Long contentPrice, final String paymentID, final String paymentMethod, final String referenceCode) {
+    public static void insertPayment(final Context context, final int contentId, final Long contentPrice, final String paymentID, final String paymentMethod, final String referenceCode, final String userId, final String contenttitle) {
         final RequestQueue queue;
         queue = Volley.newRequestQueue(context);
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, Endpoints.PAYMENT_POST_URL, new Response.Listener<String>() {
@@ -44,6 +43,8 @@ public class InsertPayment {
                 params.put("contentId", contentId+"");
                 params.put("deviceId", deviceId);
                 params.put("transactionStatus", "Completed");
+                params.put("customerId", userId);
+                params.put("contentName", contenttitle);
                 Log.i("PaymentParams", params.toString());
                 return params;
             }

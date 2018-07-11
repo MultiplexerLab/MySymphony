@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ import harmony.app.ModelClass.DataBaseData;
 import harmony.app.R;
 import harmony.app.helper.AppLogger;
 import harmony.app.helper.DownloadApk;
+import harmony.app.helper.InsertPayment;
 import harmony.app.helper.ProgressDialog;
 
 public class AppListAdapter extends BaseAdapter {
@@ -146,8 +148,10 @@ public class AppListAdapter extends BaseAdapter {
                     @Override
                     public void run() {
                         try  {
+                            final String deviceId = Settings.Secure.getString(context.getContentResolver(),
+                                    Settings.Secure.ANDROID_ID);
                             SubscribeUsingPaymentGateway obj = new SubscribeUsingPaymentGateway();
-                            obj.setData("test","test123","1234", (float) price, context, new OnSubscriptionListener() {
+                            obj.setData("test","test123","1234", (float) price, deviceId, appData.get(position).getContentTitle(), context, new OnSubscriptionListener() {
                                 @Override
                                 public void onSuccess(JSONObject result) {
                                     try {
@@ -158,6 +162,13 @@ public class AppListAdapter extends BaseAdapter {
                                             DateFormat dateFormat;
                                             dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                                             startTime = new Date();
+                                            String paymentID = result.getString("paymentID");
+                                            String paymentMethod = result.getString("paymentMethod");
+                                            String referenceCode = result.getString("referenceCode");
+                                            Long amount = result.getLong("amount");
+                                            AppData app = appData.get(position);
+                                            InsertPayment.insertPayment(context, Integer.parseInt(app.getId()), amount, paymentID, paymentMethod, referenceCode, deviceId, app.getContentTitle());
+
                                             AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "Start Downloading",
                                                     "INSTALL", "Install Button Clicked for " + apptitle, "app");
 

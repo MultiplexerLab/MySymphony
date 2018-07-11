@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -153,12 +154,20 @@ public class PlayerInService extends Service implements OnClickListener, MediaPl
             mp.reset();
             ///Uri myUri = Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.bangla);
 
+            Log.i("Dhukse", "Song");
             Toast.makeText(this, "গান লোড হচ্ছে, একটু অপেক্ষা করুন্", Toast.LENGTH_LONG).show();
             DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             Date currenTime = new Date();
             AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", songId+"",
                     "SONG_PLAYED", songTitle, "content");
-            mp.setDataSource(this, Uri.parse(songUrl));
+            DataHelper dataHelper = new DataHelper(getApplicationContext());
+            if(dataHelper.getColContentSdCardUrl(songId).equals("")) {
+                mp.setDataSource(this, Uri.parse(songUrl));
+            }else{
+                String destination = Environment.getExternalStorageDirectory().toString() + "/appstore"+dataHelper.getColContentSdCardUrl(songId);
+                Log.i("PathUri", destination);
+                mp.setDataSource(this, Uri.parse(destination));
+            }
             mp.prepareAsync();
             mp.setOnPreparedListener(new OnPreparedListener() {
                 public void onPrepared(MediaPlayer mp) {

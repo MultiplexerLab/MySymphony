@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import harmony.app.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
 import harmony.app.ModelClass.DataBaseData;
 import harmony.app.ModelClass.MulloChar;
 import harmony.app.ModelClass.MusicVideo;
@@ -256,8 +258,10 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             @Override
             public void run() {
                 try {
+                    final String deviceId = Settings.Secure.getString(getContentResolver(),
+                            Settings.Secure.ANDROID_ID);
                     SubscribeUsingPaymentGateway obj = new SubscribeUsingPaymentGateway();
-                    obj.setData("test", "test123", "1234", (float) price, PlayAudioActivity.this, new OnSubscriptionListener() {
+                    obj.setData("test", "test123", "1234", (float) price, deviceId,data.getContentTitle(), PlayAudioActivity.this, new OnSubscriptionListener() {
                         @Override
                         public void onSuccess(JSONObject result) {
                             try {
@@ -268,7 +272,10 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
                                 Long amount = result.getLong("amount");
                                 if (transactionStatus.equals("Completed")) {
                                     downloadAudio();
-                                    InsertPayment.insertPayment(PlayAudioActivity.this, data.getContentId(), amount, paymentID, paymentMethod, referenceCode);
+                                    InsertPayment.insertPayment(PlayAudioActivity.this, data.getContentId(), amount, paymentID, paymentMethod, referenceCode, deviceId, data.getContentTitle());
+                                    AppLogger.insertLogs(PlayAudioActivity.this, dateFormat.format(currenTime), "N", data.getContentId() + "",
+                                            "PAYMENT_DONE", result.getString("paymentMethod"), "content");
+
                                     Toast.makeText(PlayAudioActivity.this, "আপনার পেমেন্ট সফল হয়েছে, গান ডাউনলোড হচ্ছে", Toast.LENGTH_LONG).show();
                                 }
                             } catch (JSONException e) {
@@ -279,6 +286,9 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
 
                         @Override
                         public void onError(JSONObject result) {
+                            AppLogger.insertLogs(PlayAudioActivity.this, dateFormat.format(currenTime), "N", data.getContentId() + "",
+                                    "PAYMENT_FAILED", result.toString(), "content");
+
                             Log.e("tranError", "transactionResult: " + result);
 
                         }

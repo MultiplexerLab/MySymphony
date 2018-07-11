@@ -13,10 +13,12 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import harmony.app.Activity.PlayAudioActivity;
 import harmony.app.ModelClass.JapitoJibon;
 import harmony.app.ModelClass.MusicVideo;
 import harmony.app.ModelClass.Porashuna;
 import harmony.app.R;
+import harmony.app.helper.DataHelper;
 import harmony.app.helper.ProgressDialog;
 
 public class VideoListAdapter extends BaseAdapter {
@@ -47,6 +49,7 @@ public class VideoListAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View view, ViewGroup viewGroup) {
+        DataHelper dataHelper = new DataHelper(context);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.video_list_item, viewGroup, false);
         ImageView videoThumbnail = customView.findViewById(R.id.videoThumbnail);
@@ -62,7 +65,12 @@ public class VideoListAdapter extends BaseAdapter {
         }
         int price = videoList.get(position).getContentPrice();
         if(price>0) {
-            priceTag.setText("৳"+price);
+            if (dataHelper.checkDownLoadedOrNot(videoList.get(position).getContentCat(), videoList.get(position).getContentId()))
+            {
+                priceTag.setVisibility(View.INVISIBLE);
+            }else{
+                priceTag.setText("৳" + price);
+            }
         }
         apptitle.setText(videoList.get(position).getContentTitle());
         type.setText(videoList.get(position).getContentType());

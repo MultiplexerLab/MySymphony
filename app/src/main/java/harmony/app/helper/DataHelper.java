@@ -271,8 +271,31 @@ public class DataHelper extends SQLiteOpenHelper {
 
         }
         db.close();
-
         return false;
+    }
+
+    public String getDownloadedPath(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String val="";
+        try {
+            String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL_CONTENT_ID + " = " + id;
+            Log.d("contentid2", Integer.toString(id));
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.getCount() > 0) {
+                Log.d("cursorCheck", "found");
+                val= cursor.getString(cursor.getColumnIndex(COL_CONTENT_SD_CARD_URL));
+            } else {
+                Log.d("cursorCheck", "notfound");
+            }
+
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            Log.d("excptionCheck", e.toString());
+
+        }finally {
+            db.close();
+        }
+        return val;
     }
 
     public void insertVideoStr(String result, DataBaseData dataBaseData) {
@@ -374,10 +397,10 @@ public class DataHelper extends SQLiteOpenHelper {
 
     public String getColContentSdCardUrl(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String contentSdcardUrl = null;
+        String contentSdcardUrl = "";
         Log.d("enter", "enterTitle");
         try {
-            String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE id = " + id;
+            String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE contentId = " + id;
             Cursor cursor = db.rawQuery(selectQuery, null);
             if (cursor.getCount() == 0) Log.d("cursorTitle", "0");
             else if (cursor.getCount() > 0) Log.d("cursorTitle", "found");

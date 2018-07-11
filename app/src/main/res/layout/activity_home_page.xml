@@ -911,6 +911,7 @@
         app:layout_constraintLeft_toRightOf="parent"-->
 
         <LinearLayout
+            android:id="@+id/bottomL1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -918,13 +919,13 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/bottom1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/bottom1"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
@@ -939,9 +940,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/bottomL2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="jumpToAboutUs"
                 android:orientation="vertical">
 
                 <ImageView
@@ -949,7 +952,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:onClick="jumpToAboutUs"
                     android:src="@drawable/about_us" />
 
                 <TextView
@@ -961,9 +963,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/bottomL3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="jumpToContact"
                 android:orientation="vertical">
 
                 <ImageView
@@ -971,7 +975,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:onClick="jumpToContact"
                     android:src="@drawable/contact" />
 
                 <TextView
@@ -983,9 +986,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/bottomL4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="jumpToTerms"
                 android:orientation="vertical">
 
                 <ImageView
@@ -993,7 +998,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:onClick="jumpToTerms"
                     android:src="@drawable/terms_and_conditions" />
 
                 <TextView

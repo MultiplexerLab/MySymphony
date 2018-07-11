@@ -8,7 +8,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -126,11 +128,11 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
         String thumbNail_image = musicVideoObj.getThumbnailImgUrl();
         int price = musicVideoObj.getContentPrice();
         String priceStatus = "free";
-        if(price>0){
-            newPrice.setText(price+" Tk");
+        if (price > 0) {
+            newPrice.setText(price + " Tk");
             priceStatus = "paid";
             buyOrDownloadBTN.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             newPrice.setText("ফ্রি দেখুন!");
             priceStatus = "free";
         }
@@ -186,9 +188,9 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
         purchase.putExtra("userId", preferences.getString("phoneNo", ""));
         startActivityForResult(purchase, 1);*/
         //progressDialog.showProgressDialog();
-        if(checkPermissions()){
+        if (checkPermissions()) {
             initSubscription(musicVideoObj.getContentPrice());
-        }else{
+        } else {
             Toast.makeText(JapitoJibonDescriptionActivity.this, "ডাওনলোড এর পূর্বে ডিভাইস এক্সেস দিয়ে নিন", Toast.LENGTH_SHORT).show();
         }
 
@@ -198,9 +200,11 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try  {
+                try {
+                    final String deviceId = Settings.Secure.getString(getContentResolver(),
+                            Settings.Secure.ANDROID_ID);
                     SubscribeUsingPaymentGateway obj = new SubscribeUsingPaymentGateway();
-                    obj.setData("test","test123","1234", (float) price, JapitoJibonDescriptionActivity.this, new OnSubscriptionListener() {
+                    obj.setData("test", "test123", "1234", (float) price, deviceId, musicVideoObj.getContentTitle(), JapitoJibonDescriptionActivity.this, new OnSubscriptionListener() {
                         @Override
                         public void onSuccess(JSONObject result) {
                             try {
@@ -209,20 +213,29 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
                                 String paymentMethod = result.getString("paymentMethod");
                                 String referenceCode = result.getString("referenceCode");
                                 Long amount = result.getLong("amount");
-                                if(transactionStatus.equals("Completed")){
+                                if (transactionStatus.equals("Completed")) {
                                     downloadVideo();
-                                    InsertPayment.insertPayment(JapitoJibonDescriptionActivity.this, musicVideoObj.getContentId(), amount, paymentID, paymentMethod, referenceCode);
+                                    InsertPayment.insertPayment(JapitoJibonDescriptionActivity.this, musicVideoObj.getContentId(), amount, paymentID, paymentMethod, referenceCode, deviceId, musicVideoObj.getContentTitle());
+                                    Date currenTime;
+                                    DateFormat dateFormat;
+                                    dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                                    currenTime = new Date();
+                                    AppLogger.insertLogs(JapitoJibonDescriptionActivity.this, dateFormat.format(currenTime), "N", musicVideoObj.getContentId() + "",
+                                            "PAYMENT_DONE", result.getString("paymentMethod"), "content");
                                     Toast.makeText(JapitoJibonDescriptionActivity.this, "আপনার পেমেন্ট সফল হয়েছে, গান ডাউনলোড হচ্ছে", Toast.LENGTH_LONG).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            Log.i("tranResult","transactionResult: "+result);
+                            Log.i("tranResult", "transactionResult: " + result);
                         }
 
                         @Override
                         public void onError(JSONObject result) {
-                            Log.e("tranError","transactionResult: "+result);
+                            AppLogger.insertLogs(JapitoJibonDescriptionActivity.this, dateFormat.format(currenTime), "N", musicVideoObj.getContentId() + "",
+                                    "PAYMENT_FAILED", result.toString(), "content");
+
+                            Log.e("tranError", "transactionResult: " + result);
                         }
                     });
                 } catch (Exception e) {
@@ -314,6 +327,12 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
                 videoLayoutParams.height = cachedHeight;
                 videoLayout.setLayoutParams(videoLayoutParams);
                 ///videoView.setVideoPath("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
+                DataHelper dataHelper = new DataHelper(getApplicationContext());
+                if(dataHelper.getDownloadedPath(musicVideoObj.getContentId()).equals("")) {
+                    videoView.setVideoPath(musicVideoObj.getContentUrl());
+                }else{
+                    videoView.setVideoPath(dataHelper.getDownloadedPath(musicVideoObj.getContentId()));
+                }
                 videoView.setVideoPath(musicVideoObj.getContentUrl());
                 videoView.requestFocus();
             }
