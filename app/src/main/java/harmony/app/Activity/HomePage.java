@@ -608,6 +608,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         for (int i = 0; i < iconImageUrls.size(); i++) {
             Glide.with(HomePage.this).load(iconImageUrls.get(i).getImage()).into((ImageView) findViewById(imageViews[i]));
             TextView temp = findViewById(textViews[i]);
+            Log.i("Position: "+i, iconImageUrls.get(i).getCategoryTitle());
             temp.setText(iconImageUrls.get(i).getCategoryTitle());
             if (iconImageUrls.get(i).getType().equals("topic")) {
                 TextView temp2 = findViewById(textViewsCategories[i - 3]);
