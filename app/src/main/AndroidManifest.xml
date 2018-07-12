@@ -41,7 +41,7 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.PorashunaActivity" />
+        <activity android:name=".Activity.CategoryActivity" />
         <!-- <activity android:name=".Activity.PaymentMethod" /> -->
         <activity android:name=".Activity.ProfileActivity" />
 
@@ -53,7 +53,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".helper.PlayAudioInBackgroundService"
+            android:name=".Helper.PlayAudioInBackgroundService"
             android:enabled="true" />
         <service
             android:name=".Notification.MyFirebaseInstanceIDService"
@@ -67,9 +67,9 @@
         <activity android:name=".Activity.ImageViewActivity" />
         <activity android:name=".Activity.ContentDescriptionActivity.SliderContentDescriptionActivity" />
         <!-- <activity android:name=".Activity.PaymentConfirmation" /> -->
-        <activity android:name=".Activity.ContentDescriptionActivity.PorashunaDescriptionActivity" />
+        <activity android:name=".Activity.ContentDescriptionActivity.CommonDescriptionActivity" />
         <activity
-            android:name=".Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity"
+            android:name=".Activity.ContentDescriptionActivity.VideoDescriptionActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <!-- <activity android:name=".Activity.PayWithRocketActivity" /> -->
         <!-- <activity android:name=".Activity.PayWithPinActivity" /> -->
@@ -77,7 +77,7 @@
             android:name=".Activity.ContentDescriptionActivity.FullScreenVideoActivity"
             android:screenOrientation="landscape" />
 
-        <receiver android:name=".helper.Audio_Controle_button_click_listener">
+        <receiver android:name=".Helper.Audio_Controle_button_click_listener">
             <intent-filter>
                 <action android:name="button_click" />
             </intent-filter>
@@ -93,14 +93,10 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".Activity.MusicPlayerActivity" />
-
-        <service android:name=".helper.MusicService" />
-
         <activity android:name=".Activity.PlayAudioActivity" />
 
         <service
-            android:name=".helper.PlayerInService"
+            android:name=".Helper.PlayerInService"
             android:enabled="true" />
 
         <activity android:name=".Activity.ContactActivity" />

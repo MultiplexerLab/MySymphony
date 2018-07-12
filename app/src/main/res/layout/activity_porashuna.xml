@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activity.PorashunaActivity">
+    tools:context=".Activity.CategoryActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbarLayout"

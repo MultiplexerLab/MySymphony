@@ -37,10 +37,10 @@ import harmony.app.ModelClass.SliderImage;
 import harmony.app.R;
 import harmony.app.RecyclerViewAdapter.AppListAdapter;
 import harmony.app.RecyclerViewAdapter.EmoticonsAdapter;
-import harmony.app.helper.AppLogger;
-import harmony.app.helper.DownloadApk;
-import harmony.app.helper.Endpoints;
-import harmony.app.helper.ProgressDialog;
+import harmony.app.Helper.AppLogger;
+import harmony.app.Helper.DownloadApk;
+import harmony.app.Helper.Endpoints;
+import harmony.app.Helper.ProgressDialog;
 
 public class AppList extends AppCompatActivity implements DownloadApk.AsyncResponse{
 

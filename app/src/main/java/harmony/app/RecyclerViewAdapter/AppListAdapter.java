@@ -35,13 +35,14 @@ import java.util.Date;
 import java.util.List;
 
 import harmony.app.Activity.AppList;
+import harmony.app.Activity.PlayAudioActivity;
 import harmony.app.ModelClass.AppData;
 import harmony.app.ModelClass.DataBaseData;
 import harmony.app.R;
-import harmony.app.helper.AppLogger;
-import harmony.app.helper.DownloadApk;
-import harmony.app.helper.InsertPayment;
-import harmony.app.helper.ProgressDialog;
+import harmony.app.Helper.AppLogger;
+import harmony.app.Helper.DownloadApk;
+import harmony.app.Helper.InsertPayment;
+import harmony.app.Helper.ProgressDialog;
 
 public class AppListAdapter extends BaseAdapter {
     ProgressDialog progressDialog;
@@ -51,7 +52,7 @@ public class AppListAdapter extends BaseAdapter {
     public AppListAdapter(Context context, ArrayList<AppData> appData) {
         this.context = context;
         this.appData = appData;
-        progressDialog = new harmony.app.helper.ProgressDialog(context);
+        progressDialog = new harmony.app.Helper.ProgressDialog(context);
     }
 
     @Override
@@ -129,17 +130,6 @@ public class AppListAdapter extends BaseAdapter {
             expTv1.setText(appData.get(position).getContentDescription());
         }
 
-        /*installButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(price>0){
-                    Toast.makeText(context, "ইন্সটল এর পূর্বে পেমেন্ট সম্পন্ন করুন", Toast.LENGTH_LONG).show();
-                }else{
-
-                }
-            }
-        });*/
-
         installButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,6 +140,12 @@ public class AppListAdapter extends BaseAdapter {
                         try  {
                             final String deviceId = Settings.Secure.getString(context.getContentResolver(),
                                     Settings.Secure.ANDROID_ID);
+                            final Date startTime;
+                            final DateFormat dateFormat;
+                            dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                            startTime = new Date();
+                            AppLogger.insertLogs(context, dateFormat.format(startTime), "N", appData.get(position).getId(),
+                                    "PAYMENT_INITIATED", deviceId, "content");
                             SubscribeUsingPaymentGateway obj = new SubscribeUsingPaymentGateway();
                             obj.setData("test","test123","1234", (float) price, deviceId, appData.get(position).getContentTitle(), context, new OnSubscriptionListener() {
                                 @Override
@@ -160,10 +156,7 @@ public class AppListAdapter extends BaseAdapter {
                                         String transactionStatus = result.getString("transactionStatus");
                                         if(transactionStatus.equals("Completed")){
                                             Toast.makeText(context, "আপনার পেমেন্ট সফল হয়েছে", Toast.LENGTH_LONG).show();
-                                            Date startTime;
-                                            DateFormat dateFormat;
-                                            dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-                                            startTime = new Date();
+
                                             String paymentID = result.getString("paymentID");
                                             String paymentMethod = result.getString("paymentMethod");
                                             String referenceCode = result.getString("referenceCode");
@@ -171,7 +164,7 @@ public class AppListAdapter extends BaseAdapter {
                                             AppData app = appData.get(position);
                                             InsertPayment.insertPayment(context, Integer.parseInt(app.getId()), amount, paymentID, paymentMethod, referenceCode, deviceId, app.getContentTitle());
 
-                                            AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", "Start Downloading",
+                                            AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", app.getId(),
                                                     "INSTALL", "Install Button Clicked for " + apptitle, "app");
 
                                             String apkUrl = appData.get(position).getContentUrl();

@@ -23,11 +23,11 @@ import com.bumptech.glide.request.target.Target;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import harmony.app.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
+import harmony.app.Activity.ContentDescriptionActivity.VideoDescriptionActivity;
 import harmony.app.Activity.ContentDescriptionActivity.SliderContentDescriptionActivity;
 import harmony.app.Activity.PlayAudioActivity;
+import harmony.app.ModelClass.CategoryContent;
 import harmony.app.ModelClass.MusicVideo;
-import harmony.app.ModelClass.Porashuna;
 
 /**
  * Created by USER on 20-Nov-17.
@@ -35,9 +35,9 @@ import harmony.app.ModelClass.Porashuna;
 
 public class CustomSwipeAdapter extends PagerAdapter {
     private LayoutInflater inflater;
-    ArrayList<Porashuna> sliderImages;
+    ArrayList<CategoryContent> sliderImages;
     private Context context;
-    public CustomSwipeAdapter(Context context, ArrayList<Porashuna> images) {
+    public CustomSwipeAdapter(Context context, ArrayList<CategoryContent> images) {
         this.context = context;
         this.sliderImages=images;
     }
@@ -86,15 +86,15 @@ public class CustomSwipeAdapter extends PagerAdapter {
                 if(sliderImages.get(position).getContentType().equals("audio")){
                     Intent myIntent = new Intent(context, PlayAudioActivity.class);
                     myIntent.putExtra("cameFromWhichActivity", "music_video");
-                    Porashuna object = sliderImages.get(position);
+                    CategoryContent object = sliderImages.get(position);
                     MusicVideo musicVideo = new MusicVideo(object.getContentTitle(), object.getContentType(), object.getContentDescription(),
                             object.getContentUrl(), object.getContentCat(), object.getThumbnailImgUrl(), object.getContentId(), 0);
                     myIntent.putExtra("data", (Serializable) musicVideo);
                     context.startActivity(myIntent);
 
                 }else if(sliderImages.get(position).getContentType().equals("video")){
-                    Intent myIntent = new Intent(context, JapitoJibonDescriptionActivity.class);
-                    Porashuna object = sliderImages.get(position);
+                    Intent myIntent = new Intent(context, VideoDescriptionActivity.class);
+                    CategoryContent object = sliderImages.get(position);
                     MusicVideo musicVideo = new MusicVideo(object.getContentTitle(), object.getContentType(), object.getContentDescription(),
                             object.getContentUrl(), object.getContentCat(), object.getThumbnailImgUrl(), object.getContentId(), 0);
                     myIntent.putExtra("Data", (Serializable) musicVideo);

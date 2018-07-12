@@ -62,15 +62,15 @@ import harmony.app.ModelClass.MulloChar;
 import harmony.app.ModelClass.SeraChobi;
 import harmony.app.ModelClass.ShocolChobi;
 import harmony.app.R;
-import harmony.app.helper.CheckPermission;
-import harmony.app.helper.DataHelper;
-import harmony.app.helper.DownloadApk;
-import harmony.app.helper.DownloadAudio;
-import harmony.app.helper.DownloadImage;
-import harmony.app.helper.DownloadVideo;
-import harmony.app.helper.PlayAudioInBackgroundService;
-import harmony.app.helper.ProgressDialog;
-import harmony.app.helper.PushDataToSharedPref;
+import harmony.app.Helper.CheckPermission;
+import harmony.app.Helper.DataHelper;
+import harmony.app.Helper.DownloadApk;
+import harmony.app.Helper.DownloadAudio;
+import harmony.app.Helper.DownloadImage;
+import harmony.app.Helper.DownloadVideo;
+import harmony.app.Helper.PlayAudioInBackgroundService;
+import harmony.app.Helper.ProgressDialog;
+import harmony.app.Helper.PushDataToSharedPref;
 
 public class ImageViewActivity extends AppCompatActivity implements DownloadImage.AsyncResponse {
 
@@ -88,7 +88,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
     LinearLayout buyOrDownloadLinearLayout;
     ProgressBar progressBar;
     Context context;
-    harmony.app.helper.ProgressDialog progressDialog;
+    harmony.app.Helper.ProgressDialog progressDialog;
     SharedPreferences preferences;
     private String audioTitle;
     String[] permissions = new String[]{
@@ -107,7 +107,7 @@ public class ImageViewActivity extends AppCompatActivity implements DownloadImag
         previousPrice = findViewById(R.id.previousPriceTVinImageViewActivity);
         playAudioBTN = findViewById(R.id.playAudioBTN);
         newPrice = findViewById(R.id.newPriceTVinImageViewActivity);
-        progressDialog = new harmony.app.helper.ProgressDialog(this);
+        progressDialog = new harmony.app.Helper.ProgressDialog(this);
         progressBar = findViewById(R.id.progressBarInImageView);
         preferences = getSharedPreferences("tempData", MODE_PRIVATE);
         checkPermissions();

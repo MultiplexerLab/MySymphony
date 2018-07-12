@@ -43,8 +43,8 @@ import java.util.Map;
 
 import harmony.app.ModelClass.Icon;
 import harmony.app.R;
-import harmony.app.helper.AppLogger;
-import harmony.app.helper.Endpoints;
+import harmony.app.Helper.AppLogger;
+import harmony.app.Helper.Endpoints;
 
 public class ContactActivity extends AppCompatActivity {
 

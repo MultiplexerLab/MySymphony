@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -19,27 +18,22 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import harmony.app.Activity.HomePage;
-import harmony.app.Activity.ImageViewActivity;
 import harmony.app.Activity.ProfileActivity;
 import harmony.app.ModelClass.DataBaseData;
-import harmony.app.ModelClass.Porashuna;
-import harmony.app.ModelClass.SliderImage;
+import harmony.app.ModelClass.CategoryContent;
 import harmony.app.R;
-import harmony.app.helper.AppLogger;
-import harmony.app.helper.CheckPermission;
-import harmony.app.helper.DataHelper;
-import harmony.app.helper.DownloadApk;
-import harmony.app.helper.DownloadAudio;
-import harmony.app.helper.DownloadImage;
-import harmony.app.helper.DownloadVideo;
-import harmony.app.helper.ProgressDialog;
-import harmony.app.helper.PushDataToSharedPref;
+import harmony.app.Helper.AppLogger;
+import harmony.app.Helper.CheckPermission;
+import harmony.app.Helper.DataHelper;
+import harmony.app.Helper.DownloadApk;
+import harmony.app.Helper.DownloadImage;
+import harmony.app.Helper.ProgressDialog;
+import harmony.app.Helper.PushDataToSharedPref;
 
 public class SliderContentDescriptionActivity extends AppCompatActivity implements DownloadImage.AsyncResponse, DownloadApk.AsyncResponse {
 
     String imageUrl;
-    Porashuna sliderImage;
+    CategoryContent sliderImage;
     TextView newsTitleTv, newsDescriptionTV;
     DataHelper dataHelper;
     LinearLayout buyOrDownLoadLL, bishesOfferLL;
@@ -47,7 +41,7 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
     boolean isThisContentFree = false;
     TextView priceTV;
     DataBaseData dataBaseData;
-    harmony.app.helper.ProgressDialog progressDialog;
+    harmony.app.Helper.ProgressDialog progressDialog;
     Date currenTime;
     DateFormat dateFormat;
 
@@ -62,7 +56,7 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
         dataHelper = new DataHelper(SliderContentDescriptionActivity.this);
         priceTV = findViewById(R.id.priceTVinSliderDetails);
         progressDialog = new ProgressDialog(SliderContentDescriptionActivity.this);
-        sliderImage = (Porashuna) getIntent().getSerializableExtra("sliderImage");
+        sliderImage = (CategoryContent) getIntent().getSerializableExtra("sliderImage");
         newsTitleTv = findViewById(R.id.newsTiTleInSlideDetails);
         newsDescriptionTV = findViewById(R.id.newsdescriptionInSliderDetails);
         buyOrDownloadBTN = findViewById(R.id.buyOrDownloadBTNInSliderDetails);
@@ -71,7 +65,7 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
         AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", sliderImage.getContentId()+"",
-                "VISITED", "Category: "+sliderImage.getContentCat(), "content");
+                "VISITED", "CategoryContent: "+sliderImage.getContentCat(), "content");
 
         if (sliderImage.getContentUrl().contains("apk")) {
             Glide.with(this).load(sliderImage.getThumbnailImgUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));

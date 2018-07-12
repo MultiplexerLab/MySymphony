@@ -32,8 +32,8 @@ import java.util.ArrayList;
 
 import harmony.app.Activity.HomePage;
 import harmony.app.R;
-import harmony.app.helper.Endpoints;
-import harmony.app.helper.ProgressDialog;
+import harmony.app.Helper.Endpoints;
+import harmony.app.Helper.ProgressDialog;
 
 public class PaymentListFragmentInProfileActivity extends Fragment {
 

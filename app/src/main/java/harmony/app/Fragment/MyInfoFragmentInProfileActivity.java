@@ -23,7 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import harmony.app.R;
-import harmony.app.helper.Endpoints;
+import harmony.app.Helper.Endpoints;
 
 import static android.content.Context.MODE_PRIVATE;
 

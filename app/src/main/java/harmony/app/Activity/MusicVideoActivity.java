@@ -14,7 +14,7 @@ import harmony.app.Fragment.MusicFragment;
 import harmony.app.Fragment.VideoFragment;
 import harmony.app.R;
 import harmony.app.ViewpagerAdapter.ViewPagerAdapterMusic;
-import harmony.app.helper.AppLogger;
+import harmony.app.Helper.AppLogger;
 
 public class MusicVideoActivity extends AppCompatActivity {
 

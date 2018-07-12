@@ -5,6 +5,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -21,6 +22,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -69,19 +71,19 @@ import java.util.regex.Pattern;
 
 import harmony.app.CustomSwipeAdapter;
 import harmony.app.ModelClass.AppData;
+import harmony.app.ModelClass.CategoryContent;
 import harmony.app.ModelClass.DataBaseData;
 import harmony.app.ModelClass.GamesZone;
 import harmony.app.ModelClass.Icon;
 import harmony.app.ModelClass.MulloChar;
 import harmony.app.ModelClass.MusicVideo;
-import harmony.app.ModelClass.Porashuna;
 import harmony.app.ModelClass.SeraChobi;
 import harmony.app.ModelClass.ShocolChobi;
 import harmony.app.R;
 import harmony.app.RecyclerViewAdapter.RecyclerAdapterForJapitoJibon;
-import harmony.app.helper.AppLogger;
-import harmony.app.helper.DownloadApk;
-import harmony.app.helper.Endpoints;
+import harmony.app.Helper.AppLogger;
+import harmony.app.Helper.DownloadApk;
+import harmony.app.Helper.Endpoints;
 
 import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.Manifest.permission.READ_PHONE_STATE;
@@ -91,9 +93,9 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     Date currenTime;
     DateFormat dateFormat;
 
-    ArrayList<Porashuna> sliderImages;
+    ArrayList<CategoryContent> sliderImages;
     ArrayList<SeraChobi> seraChobiArrayList;
-    ArrayList<Porashuna> japitoJibonArrayList, hotNewsArrayList, sportsArralyList, auttoHashiArrList, mixedArrList, scienceArrList, kidsArrList, educationList;
+    ArrayList<CategoryContent> japitoJibonArrayList, hotNewsArrayList, sportsArralyList, auttoHashiArrList, mixedArrList, scienceArrList, kidsArrList, educationList;
     ArrayList<MulloChar> mulloCharArrayList;
     ArrayList<MusicVideo> musicVideoList, audioList;
     ArrayList<AppData> appList;
@@ -107,7 +109,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     ArrayList<Icon> iconImageUrls;
 
     RequestQueue queue;
-    harmony.app.helper.ProgressDialog progressDialog;
+    harmony.app.Helper.ProgressDialog progressDialog;
     String[] permissions = new String[]{
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.READ_PHONE_STATE,
@@ -148,7 +150,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 }
         );
 
-        progressDialog = new harmony.app.helper.ProgressDialog(this);
+        progressDialog = new harmony.app.Helper.ProgressDialog(this);
         context = HomePage.this;
         queue = Volley.newRequestQueue(HomePage.this);
         sliderImages = new ArrayList<>();
@@ -402,7 +404,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         editor = getSharedPreferences("login", MODE_PRIVATE).edit();
         editor.putString("firebaseToken", firebaseToken);
         editor.apply();
-        progressDialog = new harmony.app.helper.ProgressDialog(HomePage.this);
+        progressDialog = new harmony.app.Helper.ProgressDialog(HomePage.this);
         checkPermissions();
 
         TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -682,6 +684,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             @Override
             public void onResponse(JSONArray response) {
                 try {
+                    String apkURL = "";
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
                         Log.i("Pname", jsonObject.toString());
@@ -694,6 +697,29 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                             ImageView imageLogo = toolbar.findViewById(R.id.imageLogo);
                             Glide.with(HomePage.this).load(jsonObject.getString("pValue")).into(imageLogo);
                         }
+                        if (jsonObject.getString("pName").equals("apkURL")) {
+                            apkURL = jsonObject.getString("pValue");
+                        }
+                        if(jsonObject.getString("pName").equals("versionCode")){
+                            int versionCode = Integer.parseInt(jsonObject.getString("pValue"));
+
+                            PackageInfo pinfo = context.getPackageManager().getPackageInfo("harmony.app", 0);
+                            int versionNumber = pinfo.versionCode;
+                            if(versionNumber<versionCode){
+                                AlertDialog.Builder dialog = new AlertDialog.Builder(HomePage.this);
+                                dialog.setTitle("Harmony App").setMessage("হারমনি অ্যাপের নতুন ভার্সন পাওয়া যাচ্ছে। এখুনি ইন্সটল করুন।").setCancelable(false);
+                                final String finalApkURL = apkURL;
+                                dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        DownloadApk downloadApk = new DownloadApk();
+                                        downloadApk.downLoadAPK(finalApkURL, HomePage.this);
+                                    }
+                                });
+                                dialog.show();
+                            }
+                        }
+
                     }
                 } catch (Exception e) {
                     Log.d("exceptionLoadData4rmvly", e.toString());
@@ -755,25 +781,25 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                         contentPrice = japito_jibon_content_arr.getJSONObject(i).getInt("contentPrice");
                     }
                     if (contentCat.equals("daily_life")) {
-                        japitoJibonArrayList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        japitoJibonArrayList.add(new CategoryContent(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
                         initializeJapitoJibonRecyclerView();
                     } else if (contentCat.equals("news")) {
-                        hotNewsArrayList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        hotNewsArrayList.add(new CategoryContent(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
                         initializeHotNewsRecylerView();
                     } else if (contentCat.equals("sports")) {
-                        sportsArralyList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        sportsArralyList.add(new CategoryContent(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
                         initializeSportsRecylerView();
                     } else if (contentCat.equals("autto_hashi")) {
-                        auttoHashiArrList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        auttoHashiArrList.add(new CategoryContent(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
                         initializeAuttoHashiRecylerView();
                     } else if (contentCat.equals("science")) {
-                        scienceArrList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        scienceArrList.add(new CategoryContent(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
                         initializeScienceRecylerView();
                     } else if (contentCat.equals("mixed")) {
-                        mixedArrList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        mixedArrList.add(new CategoryContent(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
                         initializeMixedRecylerView();
                     } else if (contentCat.equals("kk_mela")) {
-                        kidsArrList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        kidsArrList.add(new CategoryContent(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
                         initializeKidsRecylerView();
                     } else if (contentCat.equals("mobile_app")) {
                         String packageName = japito_jibon_content_arr.getJSONObject(i).getString("reference1");
@@ -787,7 +813,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                             audioList.add(new MusicVideo(contentTitle, contentType, contentDescription, contentUrl, contentCat,thumbNail_image , contentid, contentPrice));
                         }
                     } else if (contentCat.equals("education")) {
-                        educationList.add(new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
+                        educationList.add(new CategoryContent(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
                         initializeEducationRecyclerView();
                     }
                 } catch (JSONException e) {
@@ -820,7 +846,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                         if (jsonSliderContentArr.getJSONObject(i).has("contentPrice")) {
                             contentPrice = jsonSliderContentArr.getJSONObject(i).getInt("contentPrice");
                         }
-                        sliderImages.add(new Porashuna(contentTitle, contentType, description, contentUrl, thumbNailImg, contentCat, contentId));
+                        sliderImages.add(new CategoryContent(contentTitle, contentType, description, contentUrl, thumbNailImg, contentCat, contentId));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -944,7 +970,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     public void startGoromKhoborPage(View view) {
-        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, CategoryActivity.class);
         myIntent.putExtra("tag", "news");
         startActivity(myIntent);
     }
@@ -955,55 +981,55 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     public void moreJapitoJibon(View view) {
-        Intent intentDailyLife = new Intent(HomePage.this, PorashunaActivity.class);
+        Intent intentDailyLife = new Intent(HomePage.this, CategoryActivity.class);
         intentDailyLife.putExtra("tag", "daily_life");
         startActivity(intentDailyLife);
     }
 
     public void moreShikha(View view) {
-        Intent intentDailyLife = new Intent(HomePage.this, PorashunaActivity.class);
+        Intent intentDailyLife = new Intent(HomePage.this, CategoryActivity.class);
         intentDailyLife.putExtra("tag", "education");
         startActivity(intentDailyLife);
     }
 
     public void startSportActivity(View view) {
-        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, CategoryActivity.class);
         myIntent.putExtra("tag", "sports");
         startActivity(myIntent);
     }
 
     public void startPorashunaActivity(View view) {
-        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, CategoryActivity.class);
         myIntent.putExtra("tag", "education");
         startActivity(myIntent);
     }
 
     public void startAuttoHashiActivity(View view) {
-        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, CategoryActivity.class);
         myIntent.putExtra("tag", "autto_hashi");
         startActivity(myIntent);
     }
 
     public void startJibonJaponActivity(View view) {
-        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, CategoryActivity.class);
         myIntent.putExtra("tag", "daily_life");
         startActivity(myIntent);
     }
 
     public void startPachMishaliActivity(View view) {
-        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, CategoryActivity.class);
         myIntent.putExtra("tag", "mixed");
         startActivity(myIntent);
     }
 
     public void startBigganOProjuktiActivity(View view) {
-        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, CategoryActivity.class);
         myIntent.putExtra("tag", "science");
         startActivity(myIntent);
     }
 
     public void startCartoonActivity(View view) {
-        Intent myIntent = new Intent(HomePage.this, PorashunaActivity.class);
+        Intent myIntent = new Intent(HomePage.this, CategoryActivity.class);
         myIntent.putExtra("tag", "kk_mela");
         startActivity(myIntent);
     }

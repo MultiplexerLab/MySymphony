@@ -42,9 +42,9 @@ import harmony.app.ModelClass.SliderImage;
 import harmony.app.R;
 import harmony.app.RecyclerViewAdapter.AppListAdapter;
 import harmony.app.RecyclerViewAdapter.EmoticonsAdapter;
-import harmony.app.helper.AppLogger;
-import harmony.app.helper.DownloadImage;
-import harmony.app.helper.Endpoints;
+import harmony.app.Helper.AppLogger;
+import harmony.app.Helper.DownloadImage;
+import harmony.app.Helper.Endpoints;
 
 public class Emoticons extends AppCompatActivity implements DownloadImage.AsyncResponse {
 

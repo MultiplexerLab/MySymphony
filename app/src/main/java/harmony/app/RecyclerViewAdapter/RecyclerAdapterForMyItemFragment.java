@@ -22,12 +22,11 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import harmony.app.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
+import harmony.app.Activity.ContentDescriptionActivity.VideoDescriptionActivity;
 import harmony.app.Activity.PlayAudioActivity;
 import harmony.app.BuildConfig;
 import harmony.app.ModelClass.DataBaseData;
 import harmony.app.ModelClass.MusicVideo;
-import harmony.app.ModelClass.Porashuna;
 import harmony.app.R;
 
 /**
@@ -194,7 +193,7 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
                         myIntent.putExtra("data", (Serializable) musicVideo);
                         activity.startActivity(myIntent);
                     } else if (dataHelperArrayList.get(getAdapterPosition()).getContentType().contains("video")) {
-                        Intent myIntent = new Intent(activity, JapitoJibonDescriptionActivity.class);
+                        Intent myIntent = new Intent(activity, VideoDescriptionActivity.class);
                         myIntent.putExtra("cameFromWhichActivity", "music_video");
                         MusicVideo musicVideo = new MusicVideo(dataHelperArrayList.get(getAdapterPosition()).getContentTitle(), dataHelperArrayList.get(getAdapterPosition()).getContentType(), dataHelperArrayList.get(getAdapterPosition()).getContentTitle(),
                                 "", dataHelperArrayList.get(getAdapterPosition()).getContentCat(), dataHelperArrayList.get(getAdapterPosition()).getThumbNailImgUrl(), dataHelperArrayList.get(getAdapterPosition()).getContentId(), 0);

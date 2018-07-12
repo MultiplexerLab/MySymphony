@@ -39,12 +39,12 @@ import harmony.app.Activity.PlayAudioActivity;
 import harmony.app.ModelClass.DataBaseData;
 import harmony.app.ModelClass.SliderImage;
 import harmony.app.R;
-import harmony.app.helper.AppLogger;
-import harmony.app.helper.DataHelper;
-import harmony.app.helper.DownloadApk;
-import harmony.app.helper.DownloadImage;
-import harmony.app.helper.InsertPayment;
-import harmony.app.helper.ProgressDialog;
+import harmony.app.Helper.AppLogger;
+import harmony.app.Helper.DataHelper;
+import harmony.app.Helper.DownloadApk;
+import harmony.app.Helper.DownloadImage;
+import harmony.app.Helper.InsertPayment;
+import harmony.app.Helper.ProgressDialog;
 
 public class EmoticonsAdapter extends BaseAdapter {
     ProgressDialog progressDialog;
@@ -57,7 +57,7 @@ public class EmoticonsAdapter extends BaseAdapter {
     public EmoticonsAdapter(Context context, ArrayList<SliderImage> emoticonList) {
         this.context = context;
         this.emoticonList = emoticonList;
-        progressDialog = new harmony.app.helper.ProgressDialog(context);
+        progressDialog = new harmony.app.Helper.ProgressDialog(context);
     }
 
     @Override
@@ -143,6 +143,8 @@ public class EmoticonsAdapter extends BaseAdapter {
                                         currenTime = new Date();
                                         final String deviceId = Settings.Secure.getString(context.getContentResolver(),
                                                 Settings.Secure.ANDROID_ID);
+                                        AppLogger.insertLogs(context, dateFormat.format(currenTime), "N", emoticon.getId()+"",
+                                                "PAYMENT_INITIATED", deviceId, "content");
                                         SubscribeUsingPaymentGateway obj = new SubscribeUsingPaymentGateway();
                                         obj.setData("test", "test123", "1234", (float) price, deviceId, emoticon.getContentTitle(), context, new OnSubscriptionListener() {
                                             @Override

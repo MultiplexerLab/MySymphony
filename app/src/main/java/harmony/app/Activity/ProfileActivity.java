@@ -24,7 +24,7 @@ import harmony.app.Fragment.MyItemFragmentInProfileActivity;
 import harmony.app.Fragment.PaymentListFragmentInProfileActivity;
 import harmony.app.R;
 import harmony.app.ViewpagerAdapter.ViewPagerAdapter;
-import harmony.app.helper.AppLogger;
+import harmony.app.Helper.AppLogger;
 
 public class ProfileActivity extends AppCompatActivity implements MyInfoFragmentInProfileActivity.ActivityCommunicator {
 

@@ -22,11 +22,9 @@ import com.bumptech.glide.request.target.Target;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import harmony.app.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
-import harmony.app.Activity.ContentDescriptionActivity.PorashunaDescriptionActivity;
-import harmony.app.ModelClass.Porashuna;
+import harmony.app.Activity.ContentDescriptionActivity.CommonDescriptionActivity;
+import harmony.app.ModelClass.CategoryContent;
 import harmony.app.R;
-import harmony.app.ModelClass.JapitoJibon;
 
 /**
  * Created by USER on 01-Feb-17.
@@ -34,8 +32,8 @@ import harmony.app.ModelClass.JapitoJibon;
 
 public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<RecyclerAdapterForJapitoJibon.RecyclerViewHolder> {
     Activity activity;
-    private ArrayList<Porashuna> japitoJibonArrayList;
-    public RecyclerAdapterForJapitoJibon(Activity activity, ArrayList<Porashuna> japitoJibonArrayLis) {
+    private ArrayList<CategoryContent> japitoJibonArrayList;
+    public RecyclerAdapterForJapitoJibon(Activity activity, ArrayList<CategoryContent> japitoJibonArrayLis) {
 
         this.activity = activity;
         this.japitoJibonArrayList = japitoJibonArrayLis;
@@ -85,10 +83,10 @@ public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<Recycler
         TextView japitoJebonNewsTV;
         ProgressBar progressBar;
         Activity activity;
-        ArrayList<Porashuna> japitoJibonArrayList;
+        ArrayList<CategoryContent> japitoJibonArrayList;
         CardView cardView;
 
-        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<Porashuna> japitoJibonArrayLis) {
+        public RecyclerViewHolder(View view, final Activity activity, final ArrayList<CategoryContent> japitoJibonArrayLis) {
             super(view);
             imageView = view.findViewById(R.id.imgJapitoJibon);
             japitoJebonNewsTV = view.findViewById(R.id.japitoJibonNewsTV);
@@ -102,7 +100,7 @@ public class RecyclerAdapterForJapitoJibon extends RecyclerView.Adapter<Recycler
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent myIntent = new Intent(activity, PorashunaDescriptionActivity.class);
+                    Intent myIntent = new Intent(activity, CommonDescriptionActivity.class);
                     myIntent.putExtra("source", "home");
                     myIntent.putExtra("Data", (Serializable) japitoJibonArrayLis.get(getAdapterPosition()));
                     activity.startActivity(myIntent);

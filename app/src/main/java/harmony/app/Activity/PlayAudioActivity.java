@@ -1,7 +1,6 @@
 package harmony.app.Activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +11,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -37,18 +34,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import harmony.app.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
+import harmony.app.Activity.ContentDescriptionActivity.VideoDescriptionActivity;
 import harmony.app.ModelClass.DataBaseData;
-import harmony.app.ModelClass.MulloChar;
 import harmony.app.ModelClass.MusicVideo;
-import harmony.app.ModelClass.Porashuna;
 import harmony.app.R;
-import harmony.app.helper.AppLogger;
-import harmony.app.helper.DataHelper;
-import harmony.app.helper.DownloadAudio;
-import harmony.app.helper.InsertPayment;
-import harmony.app.helper.PlayerInService;
-import harmony.app.helper.Utility;
+import harmony.app.Helper.AppLogger;
+import harmony.app.Helper.DataHelper;
+import harmony.app.Helper.DownloadAudio;
+import harmony.app.Helper.InsertPayment;
+import harmony.app.Helper.PlayerInService;
+import harmony.app.Helper.Utility;
 
 public class PlayAudioActivity extends AppCompatActivity implements DownloadAudio.AsyncResponse {
 
@@ -60,7 +55,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
     MusicVideo data;
     DataBaseData dataBaseData;
     ImageView imageView;
-    public harmony.app.helper.ProgressDialog progressDialog;
+    public harmony.app.Helper.ProgressDialog progressDialog;
     Date currenTime;
     DateFormat dateFormat;
     Button buyOrDownloadBTN;
@@ -73,7 +68,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_audio);
         utility = new Utility();
-        progressDialog = new harmony.app.helper.ProgressDialog(PlayAudioActivity.this);
+        progressDialog = new harmony.app.Helper.ProgressDialog(PlayAudioActivity.this);
         SharedPreferences.Editor editor = getSharedPreferences("audioData", MODE_PRIVATE).edit();
         data = (MusicVideo) getIntent().getSerializableExtra("data");
         initView();
@@ -81,7 +76,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             currenTime = new Date();
             AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId() + "",
-                    "SONG_VISITED", "Category: " + data.getContentCat(), "content");
+                    "SONG_VISITED", "CategoryContent: " + data.getContentCat(), "content");
             String imageUrl = data.getThumbnailImgUrl();
             editor.putString("imageUrl", imageUrl);
             editor.apply();
@@ -266,6 +261,8 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
                 try {
                     final String deviceId = Settings.Secure.getString(getContentResolver(),
                             Settings.Secure.ANDROID_ID);
+                    AppLogger.insertLogs(PlayAudioActivity.this, dateFormat.format(currenTime), "N", data.getContentId() + "",
+                            "PAYMENT_INITIATED", deviceId, "content");
                     SubscribeUsingPaymentGateway obj = new SubscribeUsingPaymentGateway();
                     obj.setData("test", "test123", "1234", (float) price, deviceId,data.getContentTitle(), PlayAudioActivity.this, new OnSubscriptionListener() {
                         @Override

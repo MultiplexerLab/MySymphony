@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import harmony.app.ModelClass.DataBaseData;
 import harmony.app.R;
 import harmony.app.RecyclerViewAdapter.RecyclerAdapterForMyItemFragment;
-import harmony.app.helper.DataHelper;
+import harmony.app.Helper.DataHelper;
 
 public class MyItemFragmentInProfileActivity extends Fragment {
 
@@ -31,7 +31,7 @@ public class MyItemFragmentInProfileActivity extends Fragment {
     private ArrayList<DataBaseData> dataBaseDataArrayList;
     private ArrayList<String> contentDownloadTimestampArrayList;
     View view;
-    harmony.app.helper.ProgressDialog progressDialog;
+    harmony.app.Helper.ProgressDialog progressDialog;
 
     public MyItemFragmentInProfileActivity() {
     }
@@ -46,7 +46,7 @@ public class MyItemFragmentInProfileActivity extends Fragment {
         contentSdCardUrlArrayList = new ArrayList<>();
         contentDownloadTimestampArrayList = new ArrayList<>();
         activity = getActivity();
-        progressDialog = new harmony.app.helper.ProgressDialog(getActivity());
+        progressDialog = new harmony.app.Helper.ProgressDialog(getActivity());
         progressDialog.showProgressDialog();
         new RetriveBitMapFromDatabase().execute();
         return view;

@@ -28,12 +28,12 @@ import java.util.List;
 import harmony.app.ModelClass.SliderImage;
 import harmony.app.R;
 import harmony.app.ViewpagerAdapter.CustomSwipeAdapterIntro;
-import harmony.app.helper.AppLogger;
-import harmony.app.helper.Endpoints;
+import harmony.app.Helper.AppLogger;
+import harmony.app.Helper.Endpoints;
 
 public class AboutUs extends AppCompatActivity {
 
-    harmony.app.helper.ProgressDialog progressDialog;
+    harmony.app.Helper.ProgressDialog progressDialog;
     RequestQueue queue;
     Date currenTime;
     DateFormat dateFormat;

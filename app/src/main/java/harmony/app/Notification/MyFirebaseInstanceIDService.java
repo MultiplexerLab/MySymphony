@@ -21,7 +21,7 @@ import java.util.Map;
 
 import harmony.app.Activity.ContactActivity;
 import harmony.app.Activity.HomePage;
-import harmony.app.helper.Endpoints;
+import harmony.app.Helper.Endpoints;
 
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {

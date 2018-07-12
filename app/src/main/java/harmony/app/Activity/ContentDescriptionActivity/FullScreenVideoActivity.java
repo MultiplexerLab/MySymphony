@@ -8,7 +8,7 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import harmony.app.R;
-import harmony.app.helper.FullScreenMediaController;
+import harmony.app.Helper.FullScreenMediaController;
 
 public class FullScreenVideoActivity extends AppCompatActivity {
 

@@ -51,17 +51,17 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import harmony.app.Activity.AppList;
-import harmony.app.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
-import harmony.app.Activity.ContentDescriptionActivity.PorashunaDescriptionActivity;
+import harmony.app.Activity.CategoryActivity;
+import harmony.app.Activity.ContentDescriptionActivity.VideoDescriptionActivity;
+import harmony.app.Activity.ContentDescriptionActivity.CommonDescriptionActivity;
 import harmony.app.Activity.Emoticons;
 import harmony.app.Activity.HomePage;
 import harmony.app.Activity.PlayAudioActivity;
-import harmony.app.Activity.PorashunaActivity;
 import harmony.app.ModelClass.AppData;
-import harmony.app.ModelClass.Porashuna;
+import harmony.app.ModelClass.CategoryContent;
 import harmony.app.R;
-import harmony.app.helper.AppLogger;
-import harmony.app.helper.Endpoints;
+import harmony.app.Helper.AppLogger;
+import harmony.app.Helper.Endpoints;
 
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -419,38 +419,38 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (action.equals("home")) {
             return new Intent(this, HomePage.class);
         } else if (action.equals("joke")) {
-            Intent myIntent = new Intent(this, PorashunaActivity.class);
+            Intent myIntent = new Intent(this, CategoryActivity.class);
             myIntent.putExtra("tag", "autto_hashi");
             return myIntent;
         } else if (action.equals("study")) {
-            Intent myIntent = new Intent(this, PorashunaActivity.class);
+            Intent myIntent = new Intent(this, CategoryActivity.class);
             myIntent.putExtra("tag", "education");
             return myIntent;
         } else if (action.equals("news")) {
-            Intent news = new Intent(this, PorashunaActivity.class);
+            Intent news = new Intent(this, CategoryActivity.class);
             news.putExtra("tag", "news");
             return news;
         } else if (action.equals("sports")) {
-            Intent myIntent = new Intent(this, PorashunaActivity.class);
+            Intent myIntent = new Intent(this, CategoryActivity.class);
             myIntent.putExtra("tag", "sports");
             return myIntent;
         } else if (action.equals("lifestyle")) {
-            Intent myIntent = new Intent(this, PorashunaActivity.class);
+            Intent myIntent = new Intent(this, CategoryActivity.class);
             myIntent.putExtra("tag", "daily_life");
             return myIntent;
         } else if (action.equals("mix")) {
-            Intent myIntent = new Intent(this, PorashunaActivity.class);
+            Intent myIntent = new Intent(this, CategoryActivity.class);
             myIntent.putExtra("tag", "mixed");
             return myIntent;
         } else if (action.equals("science")) {
-            Intent myIntent = new Intent(this, PorashunaActivity.class);
+            Intent myIntent = new Intent(this, CategoryActivity.class);
             myIntent.putExtra("tag", "science");
             return myIntent;
         } else if (action.equals("applist")) {
             Intent myIntent = new Intent(this, AppList.class);
             return myIntent;
         } else if (action.equals("cartoon")) {
-            Intent myIntent = new Intent(this, PorashunaActivity.class);
+            Intent myIntent = new Intent(this, CategoryActivity.class);
             myIntent.putExtra("tag", "kk_mela");
             return myIntent;
         } else if (action.equals("wallpaper")) {
@@ -532,21 +532,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 } else if (contentCat.equals("music_video")) {
                     if (contentType.equals("audio")) {
                         String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
-                        Porashuna porashuna = new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, Integer.parseInt(contentId));
+                        CategoryContent porashuna = new CategoryContent(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, Integer.parseInt(contentId));
                         ccontentIntent = new Intent(MyFirebaseMessagingService.this, PlayAudioActivity.class);
                         ccontentIntent.putExtra("cameFromWhichActivity", "music_video");
                         ccontentIntent.putExtra("data", (Serializable) porashuna);
                     } else {
                         String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
-                        Porashuna porashuna = new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, Integer.parseInt(contentId));
-                        ccontentIntent = new Intent(MyFirebaseMessagingService.this, JapitoJibonDescriptionActivity.class);
+                        CategoryContent porashuna = new CategoryContent(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, Integer.parseInt(contentId));
+                        ccontentIntent = new Intent(MyFirebaseMessagingService.this, VideoDescriptionActivity.class);
                         ccontentIntent.putExtra("Data", (Serializable) porashuna);
                         ccontentIntent.putExtra("cameFromWhichActivity", "music_video");
                     }
                 } else {
                     String contentUrl = jsonDataObject.getString("contentUrl");
-                    Porashuna porashuna = new Porashuna(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, Integer.parseInt(contentId));
-                    ccontentIntent = new Intent(MyFirebaseMessagingService.this, PorashunaDescriptionActivity.class);
+                    CategoryContent porashuna = new CategoryContent(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, Integer.parseInt(contentId));
+                    ccontentIntent = new Intent(MyFirebaseMessagingService.this, CommonDescriptionActivity.class);
                     ccontentIntent.putExtra("Data", (Serializable) porashuna);
                 }
             } catch (ExceptionInInitializerError e) {

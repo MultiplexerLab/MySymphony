@@ -17,7 +17,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import harmony.app.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
+import harmony.app.Activity.ContentDescriptionActivity.VideoDescriptionActivity;
 import harmony.app.ModelClass.MusicVideo;
 import harmony.app.R;
 import harmony.app.RecyclerViewAdapter.VideoListAdapter;
@@ -52,7 +52,7 @@ public class VideoFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent myIntent = new Intent(getActivity(), JapitoJibonDescriptionActivity.class);
+                Intent myIntent = new Intent(getActivity(), VideoDescriptionActivity.class);
                 myIntent.putExtra("Data", (Serializable) videoList.get(i));
                 myIntent.putExtra("cameFromWhichActivity", "music_video");
                 startActivity(myIntent);

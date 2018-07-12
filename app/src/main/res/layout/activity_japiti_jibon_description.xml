@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity">
+    tools:context=".Activity.ContentDescriptionActivity.VideoDescriptionActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbarLayoutInJapitiJibonDescription"
@@ -37,7 +37,7 @@
                 android:layout_height="300dp"
                 android:background="@android:color/black">
 
-                <harmony.app.universalvideoview.UniversalVideoView
+                <harmony.app.UniversalVideoview.UniversalVideoView
                     android:id="@+id/videoView"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -45,7 +45,7 @@
                     app:uvv_autoRotation="true"
                     app:uvv_fitXY="true" />
 
-                <harmony.app.universalvideoview.UniversalMediaController
+                <harmony.app.UniversalVideoview.UniversalMediaController
                     android:id="@+id/media_controller"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"

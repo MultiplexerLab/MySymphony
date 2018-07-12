@@ -23,8 +23,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import harmony.app.R;
-import harmony.app.helper.AppLogger;
-import harmony.app.helper.Endpoints;
+import harmony.app.Helper.AppLogger;
+import harmony.app.Helper.Endpoints;
 
 public class TermsActivity extends AppCompatActivity {
     RequestQueue queue;

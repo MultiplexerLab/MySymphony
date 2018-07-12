@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,13 +12,10 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-import harmony.app.Activity.PlayAudioActivity;
-import harmony.app.ModelClass.JapitoJibon;
 import harmony.app.ModelClass.MusicVideo;
-import harmony.app.ModelClass.Porashuna;
 import harmony.app.R;
-import harmony.app.helper.DataHelper;
-import harmony.app.helper.ProgressDialog;
+import harmony.app.Helper.DataHelper;
+import harmony.app.Helper.ProgressDialog;
 
 public class VideoListAdapter extends BaseAdapter {
     ProgressDialog progressDialog;
@@ -29,7 +25,7 @@ public class VideoListAdapter extends BaseAdapter {
     public VideoListAdapter(Context context, ArrayList<MusicVideo> videoList) {
         this.context = context;
         this.videoList = videoList;
-        progressDialog = new harmony.app.helper.ProgressDialog(context);
+        progressDialog = new harmony.app.Helper.ProgressDialog(context);
     }
 
     @Override
