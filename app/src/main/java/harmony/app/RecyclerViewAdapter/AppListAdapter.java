@@ -116,7 +116,6 @@ public class AppListAdapter extends BaseAdapter {
                         installButton.setBackgroundColor(context.getResources().getColor(R.color.dark_red));
                     }
                 }
-
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
