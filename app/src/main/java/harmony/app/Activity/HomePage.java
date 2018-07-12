@@ -3,6 +3,7 @@ package harmony.app.Activity;
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,6 +33,8 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -79,6 +82,7 @@ import harmony.app.ModelClass.MulloChar;
 import harmony.app.ModelClass.MusicVideo;
 import harmony.app.ModelClass.SeraChobi;
 import harmony.app.ModelClass.ShocolChobi;
+import harmony.app.ModelClass.SliderImage;
 import harmony.app.R;
 import harmony.app.RecyclerViewAdapter.RecyclerAdapterForJapitoJibon;
 import harmony.app.Helper.AppLogger;
@@ -93,7 +97,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     Date currenTime;
     DateFormat dateFormat;
 
-    ArrayList<CategoryContent> sliderImages;
+    ArrayList<SliderImage> sliderImages;
     ArrayList<SeraChobi> seraChobiArrayList;
     ArrayList<CategoryContent> japitoJibonArrayList, hotNewsArrayList, sportsArralyList, auttoHashiArrList, mixedArrList, scienceArrList, kidsArrList, educationList;
     ArrayList<MulloChar> mulloCharArrayList;
@@ -413,7 +417,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             if (ActivityCompat.checkSelfPermission(HomePage.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            devicePhoneNumber = manager.getLine1Number();
+            //devicePhoneNumber = manager.getLine1Number();
             Log.i("PhoneNo", devicePhoneNumber);
         } catch (Exception e) {
             Log.e("ExcepPhoneNo", e.toString());
@@ -684,7 +688,9 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
             @Override
             public void onResponse(JSONArray response) {
                 try {
-                    String apkURL = "";
+                    String apkURL = "", thumbNailUrl="";
+                    int tag=0;
+                    int versionCode = 0;
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
                         Log.i("Pname", jsonObject.toString());
@@ -695,31 +701,66 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                         }
                         if (jsonObject.getString("pName").equals("appLogo")) {
                             ImageView imageLogo = toolbar.findViewById(R.id.imageLogo);
-                            Glide.with(HomePage.this).load(jsonObject.getString("pValue")).into(imageLogo);
+                            thumbNailUrl = jsonObject.getString("pValue");
+                            Glide.with(HomePage.this).load(thumbNailUrl).into(imageLogo);
                         }
                         if (jsonObject.getString("pName").equals("apkURL")) {
                             apkURL = jsonObject.getString("pValue");
                         }
-                        if(jsonObject.getString("pName").equals("versionCode")){
-                            int versionCode = Integer.parseInt(jsonObject.getString("pValue"));
+                        if (jsonObject.getString("pName").equals("mandatory")) {
+                            tag = Integer.parseInt(jsonObject.getString("pValue"));
+                        }
+                        if(jsonObject.getString("pName").equals("versionCode")) {
+                            versionCode = Integer.parseInt(jsonObject.getString("pValue"));
+                        }                        
+                    }
 
-                            PackageInfo pinfo = context.getPackageManager().getPackageInfo("harmony.app", 0);
-                            int versionNumber = pinfo.versionCode;
-                            if(versionNumber<versionCode){
-                                AlertDialog.Builder dialog = new AlertDialog.Builder(HomePage.this);
-                                dialog.setTitle("Harmony App").setMessage("হারমনি অ্যাপের নতুন ভার্সন পাওয়া যাচ্ছে। এখুনি ইন্সটল করুন।").setCancelable(false);
+                    PackageInfo pinfo = context.getPackageManager().getPackageInfo("harmony.app", 0);
+                    int versionNumber = pinfo.versionCode;
+                    if(versionNumber<versionCode){
+                        Log.i("Dhukse", "VersionCode");
+                               /* AlertDialog.Builder dialog = new AlertDialog.Builder(HomePage.this);
+                                dialog.setTitle("").setMessage("হারমনি অ্যাপের নতুন ভার্সন পাওয়া যাচ্ছে। এখুনি ইন্সটল করুন। ").setCancelable(false);
                                 final String finalApkURL = apkURL;
+                                final String finalThumbNailUrl = thumbNailUrl;
                                 dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
+                                        DataBaseData dataBaseData = new DataBaseData("Harmony App", "mobile_app", "apk", "Download Harmony App Update", finalThumbNailUrl, "free", 1 );
                                         DownloadApk downloadApk = new DownloadApk();
-                                        downloadApk.downLoadAPK(finalApkURL, HomePage.this);
+                                        downloadApk.downLoadAPK(finalApkURL, HomePage.this, dataBaseData);
                                     }
                                 });
-                                dialog.show();
+                                dialog.show();*/
+                        try {
+                            final Dialog dialog = new Dialog(HomePage.this);
+                            if(tag==1){
+                                dialog.setCancelable(false);
+                            }else{
+                                dialog.setCancelable(true);
                             }
-                        }
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            dialog.setContentView(R.layout.dialog_app);
 
+                            TextView text = dialog.findViewById(R.id.appDescrption);
+                            text.setText("হারমনি অ্যাপের নতুন ভার্সন পাওয়া যাচ্ছে। এখুনি ইন্সটল করুন।");
+
+                            final String finalApkURL = apkURL;
+                            final String finalThumbNailUrl = thumbNailUrl;
+
+                            Button dialogButton = dialog.findViewById(R.id.updateAppButton);
+                            dialogButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    DataBaseData dataBaseData = new DataBaseData("Harmony App", "mobile_app", "apk", "Download Harmony App Update", finalThumbNailUrl, "free", 1);
+                                    DownloadApk downloadApk = new DownloadApk();
+                                    downloadApk.downLoadAPK(finalApkURL, HomePage.this, dataBaseData);
+                                }
+                            });
+                            dialog.show();
+                        }catch (Exception e){
+                            Log.e("ErrorInDialog", e.toString());
+                        }
                     }
                 } catch (Exception e) {
                     Log.d("exceptionLoadData4rmvly", e.toString());
@@ -846,7 +887,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                         if (jsonSliderContentArr.getJSONObject(i).has("contentPrice")) {
                             contentPrice = jsonSliderContentArr.getJSONObject(i).getInt("contentPrice");
                         }
-                        sliderImages.add(new CategoryContent(contentTitle, contentType, description, contentUrl, thumbNailImg, contentCat, contentId));
+                        sliderImages.add(new SliderImage(contentUrl, description,  contentType, contentTitle, contentCat, contentId, thumbNailImg, contentPrice));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

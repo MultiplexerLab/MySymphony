@@ -26,18 +26,14 @@ import java.util.ArrayList;
 import harmony.app.Activity.ContentDescriptionActivity.VideoDescriptionActivity;
 import harmony.app.Activity.ContentDescriptionActivity.SliderContentDescriptionActivity;
 import harmony.app.Activity.PlayAudioActivity;
-import harmony.app.ModelClass.CategoryContent;
 import harmony.app.ModelClass.MusicVideo;
-
-/**
- * Created by USER on 20-Nov-17.
- */
+import harmony.app.ModelClass.SliderImage;
 
 public class CustomSwipeAdapter extends PagerAdapter {
     private LayoutInflater inflater;
-    ArrayList<CategoryContent> sliderImages;
+    ArrayList<SliderImage> sliderImages;
     private Context context;
-    public CustomSwipeAdapter(Context context, ArrayList<CategoryContent> images) {
+    public CustomSwipeAdapter(Context context, ArrayList<SliderImage> images) {
         this.context = context;
         this.sliderImages=images;
     }
@@ -57,14 +53,14 @@ public class CustomSwipeAdapter extends PagerAdapter {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public Object instantiateItem(ViewGroup view, final int position) {
-        Log.i("DataGot", sliderImages.get(position).getThumbnailImgUrl());
+        Log.i("DataGot", sliderImages.get(position).getThumbNail_image());
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View item_view = inflater.inflate(R.layout.swipelayout, null, false);
         final ImageView imageView = item_view
                 .findViewById(R.id.image);
         final ProgressBar progressBar=item_view.findViewById(R.id.progressBarInSliderContent);
         Glide.with(context)
-                .load(sliderImages.get(position).getThumbnailImgUrl())
+                .load(sliderImages.get(position).getThumbNail_image())
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -86,17 +82,17 @@ public class CustomSwipeAdapter extends PagerAdapter {
                 if(sliderImages.get(position).getContentType().equals("audio")){
                     Intent myIntent = new Intent(context, PlayAudioActivity.class);
                     myIntent.putExtra("cameFromWhichActivity", "music_video");
-                    CategoryContent object = sliderImages.get(position);
+                    SliderImage object = sliderImages.get(position);
                     MusicVideo musicVideo = new MusicVideo(object.getContentTitle(), object.getContentType(), object.getContentDescription(),
-                            object.getContentUrl(), object.getContentCat(), object.getThumbnailImgUrl(), object.getContentId(), 0);
+                            object.getContentUrl(), object.getContentCat(), object.getThumbNail_image(), object.getId(), object.getContentPrice());
                     myIntent.putExtra("data", (Serializable) musicVideo);
                     context.startActivity(myIntent);
 
                 }else if(sliderImages.get(position).getContentType().equals("video")){
                     Intent myIntent = new Intent(context, VideoDescriptionActivity.class);
-                    CategoryContent object = sliderImages.get(position);
+                    SliderImage object = sliderImages.get(position);
                     MusicVideo musicVideo = new MusicVideo(object.getContentTitle(), object.getContentType(), object.getContentDescription(),
-                            object.getContentUrl(), object.getContentCat(), object.getThumbnailImgUrl(), object.getContentId(), 0);
+                            object.getContentUrl(), object.getContentCat(), object.getThumbNail_image(), object.getId(), object.getContentPrice());
                     myIntent.putExtra("Data", (Serializable) musicVideo);
                     myIntent.putExtra("cameFromWhichActivity", "music_video");
                     context.startActivity(myIntent);

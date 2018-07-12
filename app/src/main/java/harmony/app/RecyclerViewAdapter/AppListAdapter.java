@@ -86,9 +86,9 @@ public class AppListAdapter extends BaseAdapter {
             Glide.with(context).load(appData.get(position).getThumbNail_image()).into(appThumbnail);
         }
 
-        if(price>0){
+        if (price > 0) {
             payTag.setVisibility(View.VISIBLE);
-            payTag.setText("BDT "+price);
+            payTag.setText("BDT " + price);
         }
 
         apptitle.setText(appData.get(position).getContentTitle());
@@ -99,7 +99,7 @@ public class AppListAdapter extends BaseAdapter {
             try {
                 pinfo = context.getPackageManager().getPackageInfo(packageName, 0);
                 int versionNumber = pinfo.versionCode;
-                Log.i("VersionCode", packageName+"  "+versionNumber);
+                Log.i("VersionCode", packageName + "  " + versionNumber);
                 String versionCodeStr = appData.get(position).getReference3();
                 if (versionCodeStr == null || versionCodeStr.equals("null")) {
 
@@ -133,74 +133,77 @@ public class AppListAdapter extends BaseAdapter {
         installButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Thread thread = new Thread(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        try  {
-                            final String deviceId = Settings.Secure.getString(context.getContentResolver(),
-                                    Settings.Secure.ANDROID_ID);
-                            final Date startTime;
-                            final DateFormat dateFormat;
-                            dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-                            startTime = new Date();
-                            AppLogger.insertLogs(context, dateFormat.format(startTime), "N", appData.get(position).getId(),
-                                    "PAYMENT_INITIATED", deviceId, "content");
-                            SubscribeUsingPaymentGateway obj = new SubscribeUsingPaymentGateway();
-                            obj.setData("test","test123","1234", (float) price, deviceId, appData.get(position).getContentTitle(), context, new OnSubscriptionListener() {
-                                @Override
-                                public void onSuccess(JSONObject result) {
-                                    try {
-                                        String deviceId = Settings.Secure.getString(context.getContentResolver(),
-                                                Settings.Secure.ANDROID_ID);
-                                        String transactionStatus = result.getString("transactionStatus");
-                                        if(transactionStatus.equals("Completed")){
-                                            Toast.makeText(context, "আপনার পেমেন্ট সফল হয়েছে", Toast.LENGTH_LONG).show();
+                if (price > 0) {
+                    Thread thread = new Thread(new Runnable() {
 
-                                            String paymentID = result.getString("paymentID");
-                                            String paymentMethod = result.getString("paymentMethod");
-                                            String referenceCode = result.getString("referenceCode");
-                                            Long amount = result.getLong("amount");
-                                            AppData app = appData.get(position);
-                                            InsertPayment.insertPayment(context, Integer.parseInt(app.getId()), amount, paymentID, paymentMethod, referenceCode, deviceId, app.getContentTitle());
+                        @Override
+                        public void run() {
+                            try {
+                                final String deviceId = Settings.Secure.getString(context.getContentResolver(),
+                                        Settings.Secure.ANDROID_ID);
+                                final Date startTime;
+                                final DateFormat dateFormat;
+                                dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                                startTime = new Date();
+                                AppLogger.insertLogs(context, dateFormat.format(startTime), "N", appData.get(position).getId(),
+                                        "PAYMENT_INITIATED", deviceId, "content");
+                                SubscribeUsingPaymentGateway obj = new SubscribeUsingPaymentGateway();
+                                obj.setData("test", "test123", "1234", (float) price, deviceId, appData.get(position).getContentTitle(), context, new OnSubscriptionListener() {
+                                    @Override
+                                    public void onSuccess(JSONObject result) {
+                                        try {
+                                            String deviceId = Settings.Secure.getString(context.getContentResolver(),
+                                                    Settings.Secure.ANDROID_ID);
+                                            String transactionStatus = result.getString("transactionStatus");
+                                            if (transactionStatus.equals("Completed")) {
+                                                Toast.makeText(context, "আপনার পেমেন্ট সফল হয়েছে", Toast.LENGTH_LONG).show();
 
-                                            AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", app.getId(),
-                                                    "INSTALL", "Install Button Clicked for " + apptitle, "app");
+                                                String paymentID = result.getString("paymentID");
+                                                String paymentMethod = result.getString("paymentMethod");
+                                                String referenceCode = result.getString("referenceCode");
+                                                Long amount = result.getLong("amount");
+                                                AppData app = appData.get(position);
+                                                InsertPayment.insertPayment(context, Integer.parseInt(app.getId()), amount, paymentID, paymentMethod, referenceCode, deviceId, app.getContentTitle());
 
-                                            String apkUrl = appData.get(position).getContentUrl();
-                                            String appTitle = appData.get(position).getContentTitle();
-                                            Log.i("DownloadAPK", apkUrl);
-                                            DataBaseData dataBaseData = new DataBaseData(appTitle, "mobile_app","apk", appData.get(position).getContentDescription(),
-                                                    appData.get(position).getThumbNail_image(), "free", Integer.parseInt(appData.get(position).getId()));
-                                            DownloadApk downloadApk = new DownloadApk();
-                                            downloadApk.downLoadAPK(apkUrl, context, dataBaseData);
+                                                AppLogger.insertLogs(context, dateFormat.format(startTime), "Y", app.getId(),
+                                                        "INSTALL", "Install Button Clicked for " + apptitle, "app");
+
+                                                String apkUrl = appData.get(position).getContentUrl();
+                                                String appTitle = appData.get(position).getContentTitle();
+                                                Log.i("DownloadAPK", apkUrl);
+                                                DataBaseData dataBaseData = new DataBaseData(appTitle, "mobile_app", "apk", appData.get(position).getContentDescription(),
+                                                        appData.get(position).getThumbNail_image(), "free", Integer.parseInt(appData.get(position).getId()));
+                                                DownloadApk downloadApk = new DownloadApk();
+                                                downloadApk.downLoadAPK(apkUrl, context, dataBaseData);
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
                                         }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                        Log.i("tranResult", "transactionResult: " + result);
                                     }
-                                    Log.i("tranResult","transactionResult: "+result);
-                                }
 
-                                @Override
-                                public void onError(JSONObject result) {
-                                    Log.e("tranError","transactionResult: "+result);
-                                }
-                            });
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                                    @Override
+                                    public void onError(JSONObject result) {
+                                        Log.e("tranError", "transactionResult: " + result);
+                                    }
+                                });
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                });
+                    });
 
-                thread.start();
-
+                    thread.start();
+                } else {
+                    DataBaseData dataBaseData = new DataBaseData(appData.get(position).getContentTitle(), "mobile_app", "apk", appData.get(position).getContentDescription(),
+                            appData.get(position).getThumbNail_image(), "free", Integer.parseInt(appData.get(position).getId()));
+                    DownloadApk downloadApk = new DownloadApk();
+                    downloadApk.downLoadAPK(appData.get(position).getContentUrl(), context, dataBaseData);
+                }
             }
         });
         return customView;
-    }
-
-    private void initSubscription(final int price) {
-
     }
 
     public boolean isPackageExisted(String targetPackage) {

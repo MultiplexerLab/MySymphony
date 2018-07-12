@@ -21,6 +21,7 @@ import java.util.Date;
 import harmony.app.Activity.ProfileActivity;
 import harmony.app.ModelClass.DataBaseData;
 import harmony.app.ModelClass.CategoryContent;
+import harmony.app.ModelClass.SliderImage;
 import harmony.app.R;
 import harmony.app.Helper.AppLogger;
 import harmony.app.Helper.CheckPermission;
@@ -33,12 +34,11 @@ import harmony.app.Helper.PushDataToSharedPref;
 public class SliderContentDescriptionActivity extends AppCompatActivity implements DownloadImage.AsyncResponse, DownloadApk.AsyncResponse {
 
     String imageUrl;
-    CategoryContent sliderImage;
+    SliderImage sliderImage;
     TextView newsTitleTv, newsDescriptionTV;
     DataHelper dataHelper;
     LinearLayout buyOrDownLoadLL, bishesOfferLL;
     Button buyOrDownloadBTN;
-    boolean isThisContentFree = false;
     TextView priceTV;
     DataBaseData dataBaseData;
     harmony.app.Helper.ProgressDialog progressDialog;
@@ -56,7 +56,7 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
         dataHelper = new DataHelper(SliderContentDescriptionActivity.this);
         priceTV = findViewById(R.id.priceTVinSliderDetails);
         progressDialog = new ProgressDialog(SliderContentDescriptionActivity.this);
-        sliderImage = (CategoryContent) getIntent().getSerializableExtra("sliderImage");
+        sliderImage = (SliderImage) getIntent().getSerializableExtra("sliderImage");
         newsTitleTv = findViewById(R.id.newsTiTleInSlideDetails);
         newsDescriptionTV = findViewById(R.id.newsdescriptionInSliderDetails);
         buyOrDownloadBTN = findViewById(R.id.buyOrDownloadBTNInSliderDetails);
@@ -64,40 +64,28 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
 
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
-        AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", sliderImage.getContentId()+"",
+        AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", sliderImage.getId()+"",
                 "VISITED", "CategoryContent: "+sliderImage.getContentCat(), "content");
 
         if (sliderImage.getContentUrl().contains("apk")) {
-            Glide.with(this).load(sliderImage.getThumbnailImgUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
+            Glide.with(this).load(sliderImage.getThumbNail_image()).into((ImageView) findViewById(R.id.imageViewWallpaper));
 
         } else {
             Glide.with(this).load(sliderImage.getContentUrl()).into((ImageView) findViewById(R.id.imageViewWallpaper));
         }
         newsTitleTv.setText(sliderImage.getContentTitle());
         newsDescriptionTV.setText(sliderImage.getContentDescription());
-        if (dataHelper.checkDownLoadedOrNot(sliderImage.getContentCat(), sliderImage.getContentId())) {
+        if (dataHelper.checkDownLoadedOrNot(sliderImage.getContentCat(), sliderImage.getId())) {
             buyOrDownLoadLL.setVisibility(View.GONE);
-        } /*else if (sliderImage.get == 0) {
-            bishesOfferLL.setVisibility(View.GONE);
-            buyOrDownloadBTN.setText("ডাউনলোড করুন");
-            isThisContentFree = true;
-        } else if (sliderImage.getContentPrice() > 0) {
-            bishesOfferLL.setVisibility(View.VISIBLE);
-            Log.d("price", Integer.toString(sliderImage.getContentPrice()));
-            priceTV.setText(Integer.toString(sliderImage.getContentPrice()));
-            isThisContentFree = false;
-        }*/
+        }
     }
 
     public void downloadSlider(View view) {
-        //Intent purchase = new Intent(SliderContentDescriptionActivity.this, PaymentMethod.class);
-        String priceStatus = null;
-        priceStatus = "free";
-        dataBaseData = new DataBaseData(sliderImage.getContentTitle(), sliderImage.getContentCat(), sliderImage.getContentType(), "", sliderImage.getThumbnailImgUrl(), priceStatus, sliderImage.getContentId());
+        String priceStatus = "free";
+        dataBaseData = new DataBaseData(sliderImage.getContentTitle(), sliderImage.getContentCat(), sliderImage.getContentType(), "", sliderImage.getThumbNail_image(), priceStatus, sliderImage.getId());
 
         PushDataToSharedPref pushDataToSharedPref = new PushDataToSharedPref();
         pushDataToSharedPref.pushDatabaseDataToSharedPref(dataBaseData, imageUrl, SliderContentDescriptionActivity.this);
-        Log.d("enterFree", "enterFree");
 
         Log.i("DataType", dataBaseData.getContentType());
 

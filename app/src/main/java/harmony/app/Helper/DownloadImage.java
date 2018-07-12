@@ -28,13 +28,11 @@ import java.util.List;
 import java.util.Random;
 
 import harmony.app.ModelClass.DataBaseData;
-import harmony.app.ModelClass.SliderImage;
 
 public class DownloadImage {
 
     Context context;
     DataBaseData dataBaseData;
-    SliderImage sliderImage;
     String imageUrl;
     String contentSdCardUrl;
     DataHelper dbHelper;

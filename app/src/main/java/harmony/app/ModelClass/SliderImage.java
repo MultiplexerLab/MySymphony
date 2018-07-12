@@ -9,7 +9,7 @@ public class SliderImage implements Serializable {
     private String contentType, contentTitle, contentCat, thumbNail_image;
     int contentPrice;
 
-    public SliderImage(String contentUrl, String description, String contentType, String contentTitle, String contentCat, int contentId, String contentDesc, String thumbNail_image, int contentPrice) {
+    public SliderImage(String contentUrl, String description, String contentType, String contentTitle, String contentCat, int contentId, String thumbNail_image, int contentPrice) {
         this.contentUrl = contentUrl;
         this.contentDescription = description;
         this.contentType = contentType;

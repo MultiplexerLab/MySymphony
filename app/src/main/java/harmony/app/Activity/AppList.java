@@ -33,7 +33,6 @@ import java.util.Date;
 import java.util.List;
 
 import harmony.app.ModelClass.AppData;
-import harmony.app.ModelClass.SliderImage;
 import harmony.app.R;
 import harmony.app.RecyclerViewAdapter.AppListAdapter;
 import harmony.app.RecyclerViewAdapter.EmoticonsAdapter;
