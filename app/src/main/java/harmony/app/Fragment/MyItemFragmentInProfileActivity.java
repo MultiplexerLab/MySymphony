@@ -19,9 +19,6 @@ import harmony.app.R;
 import harmony.app.RecyclerViewAdapter.RecyclerAdapterForMyItemFragment;
 import harmony.app.helper.DataHelper;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class MyItemFragmentInProfileActivity extends Fragment {
 
     private RecyclerView recyclerViewForMyItem;
@@ -30,7 +27,6 @@ public class MyItemFragmentInProfileActivity extends Fragment {
     DataHelper dataHelper;
     Activity activity;
     int rowCount;
-    /*private ArrayList<Bitmap> bitmapArrayList;*/
     private ArrayList<String> contentSdCardUrlArrayList;
     private ArrayList<DataBaseData> dataBaseDataArrayList;
     private ArrayList<String> contentDownloadTimestampArrayList;
@@ -38,7 +34,6 @@ public class MyItemFragmentInProfileActivity extends Fragment {
     harmony.app.helper.ProgressDialog progressDialog;
 
     public MyItemFragmentInProfileActivity() {
-        // Required empty public constructor
     }
 
     @Override
@@ -47,7 +42,6 @@ public class MyItemFragmentInProfileActivity extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_my_item_fragment_in_profile, container, false);
         dataHelper = new DataHelper(getActivity());
-        /*bitmapArrayList=new ArrayList<>();*/
         dataBaseDataArrayList = new ArrayList<>();
         contentSdCardUrlArrayList = new ArrayList<>();
         contentDownloadTimestampArrayList = new ArrayList<>();
@@ -62,6 +56,7 @@ public class MyItemFragmentInProfileActivity extends Fragment {
         @Override
         protected void onPreExecute() {
         }
+
         @Override
         protected Void doInBackground(Void... voids) {
             rowCount = (int) dataHelper.getRowCount();
@@ -70,20 +65,12 @@ public class MyItemFragmentInProfileActivity extends Fragment {
                 dataBaseDataArrayList.add(dataHelper.getAllData(i + 1));
                 contentSdCardUrlArrayList.add(dataHelper.getColContentSdCardUrl(i + 1));
                 contentDownloadTimestampArrayList.add(dataHelper.getContentDownloadTimestamp(i + 1));
-               /* if (dataBaseDataArrayList.get(i).getContentType().contains("audio") || dataBaseDataArrayList.get(i).getContentType().contains("video"))
-                {
-                    bitmapArrayList.add(null);
-                }
-                else
-                {
-                    bitmapArrayList.add(dataHelper.getBitmap(i+1));
-                }*/
             }
             return null;
         }
+
         @Override
         protected void onPostExecute(Void aVoid) {
-            ///progressDialog.hideProgressDialog();
             updateRecyclerView();
         }
     }

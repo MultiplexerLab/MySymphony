@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -224,7 +225,7 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
                                     currenTime = new Date();
                                     AppLogger.insertLogs(JapitoJibonDescriptionActivity.this, dateFormat.format(currenTime), "N", musicVideoObj.getContentId() + "",
                                             "PAYMENT_DONE", result.getString("paymentMethod"), "content");
-                                    Toast.makeText(JapitoJibonDescriptionActivity.this, "আপনার পেমেন্ট সফল হয়েছে, গান ডাউনলোড হচ্ছে", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(JapitoJibonDescriptionActivity.this, "আপনার পেমেন্ট সফল হয়েছে,  ডাউনলোড হচ্ছে", Toast.LENGTH_LONG).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -330,12 +331,14 @@ public class JapitoJibonDescriptionActivity extends AppCompatActivity implements
                 videoLayout.setLayoutParams(videoLayoutParams);
                 ///videoView.setVideoPath("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
                 DataHelper dataHelper = new DataHelper(getApplicationContext());
-                if(dataHelper.getDownloadedPath(musicVideoObj.getContentId()).equals("")) {
+                if(dataHelper.getColContentSdCardUrl(musicVideoObj.getContentId()).equals("")) {
                     videoView.setVideoPath(musicVideoObj.getContentUrl());
                 }else{
-                    videoView.setVideoPath(dataHelper.getDownloadedPath(musicVideoObj.getContentId()));
+                    String destination = Environment.getExternalStorageDirectory().toString() + "/appstore/"+dataHelper.getColContentSdCardUrl(musicVideoObj.getContentId());
+                    Log.i("PathUri", destination);
+                    videoView.setVideoPath(destination);
                 }
-                videoView.setVideoPath(musicVideoObj.getContentUrl());
+                //videoView.setVideoPath(musicVideoObj.getContentUrl());
                 videoView.requestFocus();
             }
         });

@@ -19,10 +19,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 
+import harmony.app.Activity.ContentDescriptionActivity.JapitoJibonDescriptionActivity;
+import harmony.app.Activity.PlayAudioActivity;
 import harmony.app.BuildConfig;
 import harmony.app.ModelClass.DataBaseData;
+import harmony.app.ModelClass.MusicVideo;
+import harmony.app.ModelClass.Porashuna;
 import harmony.app.R;
 
 /**
@@ -181,18 +186,29 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
                 public void onClick(View view) {
                     if (dataHelperArrayList.get(getAdapterPosition()).getContentType().contains("apk")) {
                         activity.startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
-                    }else{
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT );
+                    } else if (dataHelperArrayList.get(getAdapterPosition()).getContentType().contains("audio")) {
+                        Intent myIntent = new Intent(activity, PlayAudioActivity.class);
+                        myIntent.putExtra("cameFromWhichActivity", "music_video");
+                        MusicVideo musicVideo = new MusicVideo(dataHelperArrayList.get(getAdapterPosition()).getContentTitle(), dataHelperArrayList.get(getAdapterPosition()).getContentType(), dataHelperArrayList.get(getAdapterPosition()).getContentTitle(),
+                                "", dataHelperArrayList.get(getAdapterPosition()).getContentCat(), dataHelperArrayList.get(getAdapterPosition()).getThumbNailImgUrl(), dataHelperArrayList.get(getAdapterPosition()).getContentId(), 0);
+                        myIntent.putExtra("data", (Serializable) musicVideo);
+                        activity.startActivity(myIntent);
+                    } else if (dataHelperArrayList.get(getAdapterPosition()).getContentType().contains("video")) {
+                        Intent myIntent = new Intent(activity, JapitoJibonDescriptionActivity.class);
+                        myIntent.putExtra("cameFromWhichActivity", "music_video");
+                        MusicVideo musicVideo = new MusicVideo(dataHelperArrayList.get(getAdapterPosition()).getContentTitle(), dataHelperArrayList.get(getAdapterPosition()).getContentType(), dataHelperArrayList.get(getAdapterPosition()).getContentTitle(),
+                                "", dataHelperArrayList.get(getAdapterPosition()).getContentCat(), dataHelperArrayList.get(getAdapterPosition()).getThumbNailImgUrl(), dataHelperArrayList.get(getAdapterPosition()).getContentId(), 0);
+                        myIntent.putExtra("Data", (Serializable) musicVideo);
+                        activity.startActivity(myIntent);
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                         Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()
                                 + "/appstore/");
                         intent.setDataAndType(uri, "*/*");
                         activity.startActivity(Intent.createChooser(intent, "Open folder"));
-//                        Uri selectedUri = Uri.parse(Environment.getExternalStorageDirectory() + "/appstore/");
-//                        Intent intent = new Intent(Intent.ACTION_VIEW);
-//                        intent.setDataAndType(selectedUri, "*/*");
-//                        activity.startActivity(intent);
                     }
                 }
+
             });
         }
     }

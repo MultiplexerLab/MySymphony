@@ -177,6 +177,15 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         editor.commit();
         Log.i("TrackerstartTime", dateFormat.format(currenTime));
 
+        ImageView doanloadedIcon = findViewById(R.id.doanloadedIcon);
+        doanloadedIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent downloadedContent = new Intent(HomePage.this, ProfileActivity.class);
+                startActivity(downloadedContent);
+            }
+        });
+
         initDataFromServer();
         String appContentId = getIntent().getStringExtra("appContentId");
         String apkTitle = getIntent().getStringExtra("notificationTitle");

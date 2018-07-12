@@ -35,7 +35,6 @@ public class ProfileActivity extends AppCompatActivity implements MyInfoFragment
     ImageView logoutIcon;
     TextView nameTVInActivityUserProfile;
     TextView nameTV;
-    String cameFromWhichActivity;
     Date currenTime;
     DateFormat dateFormat;
 

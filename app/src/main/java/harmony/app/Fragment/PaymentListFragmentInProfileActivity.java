@@ -1,6 +1,9 @@
 package harmony.app.Fragment;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
@@ -35,9 +38,8 @@ import harmony.app.helper.ProgressDialog;
 public class PaymentListFragmentInProfileActivity extends Fragment {
 
     public PaymentListFragmentInProfileActivity() {
-        // Required empty public constructor
-    }
 
+    }
     ListView listViewPayment;
     ArrayAdapter<String> adapter;
     ArrayList<String> arrayList;
@@ -52,10 +54,21 @@ public class PaymentListFragmentInProfileActivity extends Fragment {
         adapter = new ArrayAdapter<>(getActivity(), R.layout.payment_list_item, arrayList);
         listViewPayment.setAdapter(adapter);
         progressDialog = new ProgressDialog(getActivity());
-        getPaymentData();
+        if(internetConnected()) {
+            getPaymentData();
+        }
         return customView;
     }
 
+    private boolean internetConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     private void getPaymentData() {
         String deviceId = Settings.Secure.getString(getActivity().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
@@ -92,5 +105,4 @@ public class PaymentListFragmentInProfileActivity extends Fragment {
         });
         queue.add(jsonArrayRequest);
     }
-
 }

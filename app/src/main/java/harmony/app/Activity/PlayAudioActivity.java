@@ -101,14 +101,20 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
                 Boolean check = dataHelper.checkDownLoadedOrNot(data.getContentCat(), data.getContentId());
                 Log.d("CheckAudio", check.toString());
                 if (dataHelper.checkDownLoadedOrNot(data.getContentCat(), data.getContentId())) {
-                    Log.d("enter", "japitojibon");
                     priceTag.setVisibility(View.INVISIBLE);
                     buyOrDownloadBTN.setVisibility(View.INVISIBLE);
                 }else{
                     priceTag.setText("৳"+price);
                 }
             } else {
-                priceTag.setText("ফ্রি ডাউনলোড\nকরুন");
+                DataHelper dataHelper = new DataHelper(PlayAudioActivity.this);
+                if (dataHelper.checkDownLoadedOrNot(data.getContentCat(), data.getContentId())) {
+                    priceTag.setVisibility(View.INVISIBLE);
+                    buyOrDownloadBTN.setVisibility(View.INVISIBLE);
+                }else{
+                    priceTag.setText("ফ্রি ডাউনলোড\nকরুন");
+                }
+
             }
             editor.putString("songUrl", data.getContentUrl());
             editor.putString("songTitle", data.getContentTitle());
