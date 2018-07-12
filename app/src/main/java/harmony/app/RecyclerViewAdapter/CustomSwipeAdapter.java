@@ -1,4 +1,4 @@
-package harmony.app;
+package harmony.app.RecyclerViewAdapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -28,6 +28,7 @@ import harmony.app.Activity.ContentDescriptionActivity.SliderContentDescriptionA
 import harmony.app.Activity.PlayAudioActivity;
 import harmony.app.ModelClass.MusicVideo;
 import harmony.app.ModelClass.SliderImage;
+import harmony.app.R;
 
 public class CustomSwipeAdapter extends PagerAdapter {
     private LayoutInflater inflater;
