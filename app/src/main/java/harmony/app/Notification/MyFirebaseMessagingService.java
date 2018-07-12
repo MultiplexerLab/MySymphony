@@ -59,6 +59,7 @@ import harmony.app.Activity.HomePage;
 import harmony.app.Activity.PlayAudioActivity;
 import harmony.app.ModelClass.AppData;
 import harmony.app.ModelClass.CategoryContent;
+import harmony.app.ModelClass.MusicVideo;
 import harmony.app.R;
 import harmony.app.Helper.AppLogger;
 import harmony.app.Helper.Endpoints;
@@ -532,13 +533,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 } else if (contentCat.equals("music_video")) {
                     if (contentType.equals("audio")) {
                         String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
-                        CategoryContent porashuna = new CategoryContent(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, Integer.parseInt(contentId));
+                        MusicVideo porashuna = new MusicVideo(contentTitle, contentType, contentDescription, contentUrl, contentCat, thumbNail_image,  Integer.parseInt(contentId), contentPrice);
                         ccontentIntent = new Intent(MyFirebaseMessagingService.this, PlayAudioActivity.class);
                         ccontentIntent.putExtra("cameFromWhichActivity", "music_video");
                         ccontentIntent.putExtra("data", (Serializable) porashuna);
                     } else {
                         String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
-                        CategoryContent porashuna = new CategoryContent(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, Integer.parseInt(contentId));
+                        MusicVideo porashuna = new MusicVideo(contentTitle, contentType, contentDescription, contentUrl, contentCat, thumbNail_image,  Integer.parseInt(contentId), contentPrice);
                         ccontentIntent = new Intent(MyFirebaseMessagingService.this, VideoDescriptionActivity.class);
                         ccontentIntent.putExtra("Data", (Serializable) porashuna);
                         ccontentIntent.putExtra("cameFromWhichActivity", "music_video");

@@ -52,9 +52,9 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
     SliderImage sliderImage;
     TextView newsTitleTv, newsDescriptionTV;
     DataHelper dataHelper;
-    LinearLayout buyOrDownLoadLL, bishesOfferLL;
+    LinearLayout buyOrDownLoadLL;
     Button buyOrDownloadBTN;
-    TextView priceTV;
+    TextView priceTag;
     DataBaseData dataBaseData;
     harmony.app.Helper.ProgressDialog progressDialog;
     Date currenTime;
@@ -71,9 +71,8 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
         CheckPermission checkPermission = new CheckPermission(this);
         checkPermission.checkPermissions();
         buyOrDownLoadLL = findViewById(R.id.buyOrDownLoadLLInSliderDetails);
-        bishesOfferLL = findViewById(R.id.bisheshOfferLLInSliderDetails);
+        priceTag = findViewById(R.id.priceTag);
         dataHelper = new DataHelper(SliderContentDescriptionActivity.this);
-        priceTV = findViewById(R.id.priceTVinSliderDetails);
         progressDialog = new ProgressDialog(SliderContentDescriptionActivity.this);
         sliderImage = (SliderImage) getIntent().getSerializableExtra("sliderImage");
         newsTitleTv = findViewById(R.id.newsTiTleInSlideDetails);
@@ -94,8 +93,24 @@ public class SliderContentDescriptionActivity extends AppCompatActivity implemen
         }
         newsTitleTv.setText(sliderImage.getContentTitle());
         newsDescriptionTV.setText(sliderImage.getContentDescription());
-        if (dataHelper.checkDownLoadedOrNot(sliderImage.getContentCat(), sliderImage.getId())) {
-            buyOrDownLoadLL.setVisibility(View.GONE);
+
+        if (sliderImage.getContentPrice() > 0) {
+            DataHelper dataHelper = new DataHelper(this);
+            Boolean check = dataHelper.checkDownLoadedOrNot(sliderImage.getContentCat(), sliderImage.getId());
+            if (dataHelper.checkDownLoadedOrNot(sliderImage.getContentCat(), sliderImage.getId())) {
+                priceTag.setVisibility(View.INVISIBLE);
+                buyOrDownloadBTN.setVisibility(View.INVISIBLE);
+            }else{
+                priceTag.setText("৳"+sliderImage.getContentPrice());
+            }
+        } else {
+            DataHelper dataHelper = new DataHelper(this);
+            if (dataHelper.checkDownLoadedOrNot(sliderImage.getContentCat(), sliderImage.getId())) {
+                priceTag.setVisibility(View.INVISIBLE);
+                buyOrDownloadBTN.setVisibility(View.INVISIBLE);
+            }else{
+                priceTag.setText("ফ্রি ডাউনলোড\nকরুন");
+            }
         }
     }
 

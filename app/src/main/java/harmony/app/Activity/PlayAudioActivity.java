@@ -54,7 +54,6 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
     Utility utility;
     MusicVideo data;
     DataBaseData dataBaseData;
-    ImageView imageView;
     public harmony.app.Helper.ProgressDialog progressDialog;
     Date currenTime;
     DateFormat dateFormat;
@@ -71,6 +70,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         progressDialog = new harmony.app.Helper.ProgressDialog(PlayAudioActivity.this);
         SharedPreferences.Editor editor = getSharedPreferences("audioData", MODE_PRIVATE).edit();
         data = (MusicVideo) getIntent().getSerializableExtra("data");
+        //Log.i("dataAudio", data.getContentUrl()+"  "+data.getContentId());
         initView();
         if (data != null) {
             dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
@@ -78,8 +78,6 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             AppLogger.insertLogs(this, dateFormat.format(currenTime), "N", data.getContentId() + "",
                     "SONG_VISITED", "CategoryContent: " + data.getContentCat(), "content");
             String imageUrl = data.getThumbnailImgUrl();
-            editor.putString("imageUrl", imageUrl);
-            editor.apply();
             if (imageUrl.isEmpty() || imageUrl == null) {
 
             } else {
@@ -109,10 +107,12 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
                 }else{
                     priceTag.setText("ফ্রি ডাউনলোড\nকরুন");
                 }
-
             }
+            editor.putString("imageUrl", imageUrl);
             editor.putString("songUrl", data.getContentUrl());
             editor.putString("songTitle", data.getContentTitle());
+            editor.putInt("songId", data.getContentId());
+            editor.putInt("price", data.getContentPrice());
             editor.commit();
 
             dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNailImgUrl, "free", data.getContentId());
@@ -128,13 +128,26 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
                 playerService.putExtra("songUrl", data.getContentUrl());
                 playerService.putExtra("songTitle", data.getContentTitle());
                 playerService.putExtra("songId", data.getContentId());
+                playerService.putExtra("price", data.getContentPrice());
                 stopService(playerService);
             }
             utility.cancelNotification();
 
         } else {
-            SharedPreferences prefs = getSharedPreferences("imageUrlSp", MODE_PRIVATE);
-            String restoredText = prefs.getString("imageUrl", null);
+            SharedPreferences prefs = getSharedPreferences("audioData", MODE_PRIVATE);
+            String imageUrl = prefs.getString("imageUrl", null);
+            int contentId = prefs.getInt("songId", 1);
+            int price = prefs.getInt("price", 1);
+            Glide.with(this).load(imageUrl).into((ImageView) findViewById(R.id.songimageView));
+
+            DataHelper dataHelper = new DataHelper(PlayAudioActivity.this);
+            Boolean check = dataHelper.checkDownLoadedOrNot("music_video", contentId);
+            if (dataHelper.checkDownLoadedOrNot("music_video", contentId)) {
+                priceTag.setVisibility(View.INVISIBLE);
+                buyOrDownloadBTN.setVisibility(View.INVISIBLE);
+            }else{
+                priceTag.setText("৳"+price);
+            }
         }
 
         SharedPreferences prefs = getSharedPreferences("audioData", MODE_PRIVATE);

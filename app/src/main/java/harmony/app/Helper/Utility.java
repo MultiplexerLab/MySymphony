@@ -34,7 +34,6 @@ public class Utility {
             builder.setSmallIcon(R.drawable.icon);
             builder.setContentIntent(pendingIntent);
             builder.setOngoing(true);
-            builder.setNumber(100);
             builder.build();
 
             myNotication = builder.getNotification();

@@ -42,7 +42,9 @@
                 android:id="@+id/newsTiTleInSlideDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp" />
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_marginTop="10dp"/>
 
             <TextView
                 android:id="@+id/newsdescriptionInSliderDetails"
@@ -51,7 +53,7 @@
                 android:layout_marginTop="10dp"
                 android:text="ক্রিকেট দুনিয়ার নানান ধরনের দারুন সব খবর নিয়ে আমাদের এই আয়োজন"
                 android:textColor="@color/black"
-                android:textSize="@dimen/textSize" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <LinearLayout
                 android:id="@+id/buyOrDownLoadLLInSliderDetails"
@@ -61,39 +63,15 @@
                 android:gravity="bottom|end"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/bisheshOfferLLInSliderDetails"
+                <TextView
+                    android:id="@+id/priceTag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:visibility="gone"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="বিশেষ অফার"
-                        android:textColor="@color/red" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <!--<TextView-->
-                        <!--android:id="@+id/strikeThroughInWallPaperBundle"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="৳১৫" />-->
-                        <TextView
-                            android:id="@+id/priceTVinSliderDetails"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="৳১০"
-                            android:textColor="@color/green" />
-                    </LinearLayout>
-                </LinearLayout>
+                    android:layout_alignBaseline="@id/buyOrDownloadBTN"
+                    android:text=""
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <Button
                     android:id="@+id/buyOrDownloadBTNInSliderDetails"
