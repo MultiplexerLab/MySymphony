@@ -64,7 +64,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Activity.ImageViewActivity" />
         <activity android:name=".Activity.ContentDescriptionActivity.SliderContentDescriptionActivity" />
         <!-- <activity android:name=".Activity.PaymentConfirmation" /> -->
         <activity android:name=".Activity.ContentDescriptionActivity.CommonDescriptionActivity" />

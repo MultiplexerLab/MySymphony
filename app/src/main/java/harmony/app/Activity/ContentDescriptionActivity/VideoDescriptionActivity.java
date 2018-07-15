@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,7 +80,7 @@ public class VideoDescriptionActivity extends AppCompatActivity implements Downl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_japiti_jibon_description);
+        setContentView(R.layout.video_description_layout);
         toolbar = findViewById(R.id.toolbarLayoutInnJapitoJibonDescriptionActivity);
         setSupportActionBar(toolbar);
         dataHelper = new DataHelper(VideoDescriptionActivity.this);

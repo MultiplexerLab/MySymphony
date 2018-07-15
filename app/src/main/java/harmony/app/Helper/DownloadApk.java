@@ -31,11 +31,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import harmony.app.Activity.HomePage;
-import harmony.app.Activity.ImageViewActivity;
 import harmony.app.BuildConfig;
 import harmony.app.ModelClass.DataBaseData;
-import harmony.app.R;
 
 public class DownloadApk {
     Context context;
