@@ -336,6 +336,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
                                 String referenceCode = result.getString("referenceCode");
                                 Long amount = result.getLong("amount");
                                 if (transactionStatus.equals("Completed")) {
+                                    Log.i("AudioTitle", data.getContentTitle());
                                     downloadAudio();
                                     String deviceId = Settings.Secure.getString(getContentResolver(),
                                             Settings.Secure.ANDROID_ID);

@@ -759,7 +759,14 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 Log.e("Volley", error.toString());
                 Toast.makeText(HomePage.this, "ইন্টারনেট এ সমস্যা পুনরায় চেষ্টা করুন ", Toast.LENGTH_SHORT).show();
             }
-        });
+        }){ //no semicolon or coma
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                return params;
+            }
+        };
         queue.add(jsonArrayRequest);
     }
 
@@ -788,7 +795,14 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     progressDialog.hideProgressDialog();
                 }
             }
-        });
+        }){ //no semicolon or coma
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                return params;
+            }
+        };
         queue.add(jsonArrayRequest);
     }
 
@@ -799,6 +813,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                 int contentPrice = 0;
                 try {
                     String contentTitle = japito_jibon_content_arr.getJSONObject(i).getString("contentTitle");
+                    Log.i("ContentTitle", contentTitle);
                     String contentType = japito_jibon_content_arr.getJSONObject(i).getString("contentType");
                     String contentDescription = japito_jibon_content_arr.getJSONObject(i).getString("contentDescription");
                     String contentUrl = japito_jibon_content_arr.getJSONObject(i).getString("contentUrl");
