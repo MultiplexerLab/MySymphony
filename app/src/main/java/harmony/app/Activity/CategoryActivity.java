@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -31,6 +32,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import harmony.app.ModelClass.CategoryContent;
 import harmony.app.R;
@@ -154,7 +157,14 @@ public class CategoryActivity extends AppCompatActivity {
                 progressDialog.hideProgressDialog();
                 Log.e("Volley", error.toString());
             }
-        });
+        }){ //no semicolon or coma
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                return params;
+            }
+        };
         queue.add(jsonObjectRequest);
     }
 
