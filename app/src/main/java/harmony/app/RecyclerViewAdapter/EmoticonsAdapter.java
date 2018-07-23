@@ -38,6 +38,7 @@ import harmony.app.Activity.Emoticons;
 import harmony.app.Activity.PlayAudioActivity;
 import harmony.app.ModelClass.DataBaseData;
 import harmony.app.ModelClass.SliderImage;
+import harmony.app.ModelClass.SubscriptionConfig;
 import harmony.app.R;
 import harmony.app.Helper.AppLogger;
 import harmony.app.Helper.DataHelper;
@@ -53,10 +54,14 @@ public class EmoticonsAdapter extends BaseAdapter {
     String[] permissions = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
+    SubscriptionConfig config;
+    boolean isSubscribed;
 
-    public EmoticonsAdapter(Context context, ArrayList<SliderImage> emoticonList) {
+    public EmoticonsAdapter(Context context, ArrayList<SliderImage> emoticonList, SubscriptionConfig config, boolean isSubscribed) {
         this.context = context;
         this.emoticonList = emoticonList;
+        this.config = config;
+        this.isSubscribed = isSubscribed;
         progressDialog = new harmony.app.Helper.ProgressDialog(context);
     }
 
@@ -98,7 +103,7 @@ public class EmoticonsAdapter extends BaseAdapter {
             DataHelper dataHelper = new DataHelper(context);
             Boolean check = dataHelper.checkDownLoadedOrNot(emoticonObj.getContentCat(), emoticonObj.getId());
             Log.d("CheckEmoticon", check.toString());
-            if (dataHelper.checkDownLoadedOrNot(emoticonObj.getContentCat(), emoticonObj.getId())) {
+            if (dataHelper.checkDownLoadedOrNot(emoticonObj.getContentCat(), emoticonObj.getId()) || isSubscribed) {
                 Log.d("enter", "emoticon");
                 priceTag.setVisibility(View.INVISIBLE);
                 paymentLock.setVisibility(View.INVISIBLE);
@@ -132,7 +137,7 @@ public class EmoticonsAdapter extends BaseAdapter {
                     Toast.makeText(context, "আপনি এই কন্টেন্ট ডাউনলোড করেছেন ", Toast.LENGTH_SHORT).show();
                 }else {
                     if (checkPermissions()) {
-                        if (price > 0) {
+                        if (price > 0 && !isSubscribed) {
                             Thread thread = new Thread(new Runnable() {
                                 @Override
                                 public void run() {

@@ -21,10 +21,12 @@ public class VideoListAdapter extends BaseAdapter {
     ProgressDialog progressDialog;
     Context context;
     ArrayList<MusicVideo> videoList;
+    boolean isSubscribed;
 
-    public VideoListAdapter(Context context, ArrayList<MusicVideo> videoList) {
+    public VideoListAdapter(Context context, ArrayList<MusicVideo> videoList, boolean isSubscribed) {
         this.context = context;
         this.videoList = videoList;
+        this.isSubscribed = isSubscribed;
         progressDialog = new harmony.app.Helper.ProgressDialog(context);
     }
 
@@ -52,22 +54,22 @@ public class VideoListAdapter extends BaseAdapter {
         TextView apptitle = customView.findViewById(R.id.videoTitle);
         TextView type = customView.findViewById(R.id.contentType);
         TextView priceTag = customView.findViewById(R.id.priceTag);
-        if (videoList.get(position).getThumbnailImgUrl().isEmpty() || videoList.get(position).getThumbnailImgUrl().equals("null")) {
+        if (videoList.get(position).getThumbnailImgUrl() == null || videoList.get(position).getThumbnailImgUrl() == "") {
             if (videoList.get(position).getContentType().equals("video")) {
                 videoThumbnail.setImageDrawable(context.getResources().getDrawable(R.drawable.video_thumbnail));
             }
         } else {
             Glide.with(context).load(videoList.get(position).getThumbnailImgUrl()).into(videoThumbnail);
         }
-        int price = videoList.get(position).getContentPrice();
+/*        int price = videoList.get(position).getContentPrice();
         if(price>0) {
-            if (dataHelper.checkDownLoadedOrNot(videoList.get(position).getContentCat(), videoList.get(position).getContentId()))
+            if (dataHelper.checkDownLoadedOrNot(videoList.get(position).getContentCat(), videoList.get(position).getContentId()) || isSubscribed)
             {
                 priceTag.setVisibility(View.INVISIBLE);
             }else{
                 priceTag.setText("৳" + price);
             }
-        }
+        }*/
         apptitle.setText(videoList.get(position).getContentTitle());
         type.setText(videoList.get(position).getContentType());
 

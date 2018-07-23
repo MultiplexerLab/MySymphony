@@ -803,6 +803,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                     String contentDescription = japito_jibon_content_arr.getJSONObject(i).getString("contentDescription");
                     String contentUrl = japito_jibon_content_arr.getJSONObject(i).getString("contentUrl");
                     String contentCat = japito_jibon_content_arr.getJSONObject(i).getString("contentCat");
+                    String contentSubCat = japito_jibon_content_arr.getJSONObject(i).getString("contentSubCat");
                     String thumbNail_image = japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image");
                     int contentid = japito_jibon_content_arr.getJSONObject(i).getInt("id");
                     if (japito_jibon_content_arr.getJSONObject(i).has("contentPrice")) {
@@ -836,9 +837,9 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                         appList.add(new AppData(contentid + "", contentTitle, contentDescription, japito_jibon_content_arr.getJSONObject(i).getString("thumbNail_image"), contentUrl, contentPrice, packageName, versionCode));
                     } else if (contentCat.equals("music_video")) {
                         if (contentType.equals("video")) {
-                            musicVideoList.add(new MusicVideo(contentTitle, contentType, contentDescription, contentUrl, contentCat,thumbNail_image , contentid, contentPrice));
+                            musicVideoList.add(new MusicVideo(contentTitle, contentType, contentDescription, contentUrl, contentCat, contentSubCat,thumbNail_image , contentid, contentPrice));
                         } else {
-                            audioList.add(new MusicVideo(contentTitle, contentType, contentDescription, contentUrl, contentCat,thumbNail_image , contentid, contentPrice));
+                            audioList.add(new MusicVideo(contentTitle, contentType, contentDescription, contentUrl, contentCat, contentSubCat,thumbNail_image , contentid, contentPrice));
                         }
                     } else if (contentCat.equals("education")) {
                         educationList.add(new CategoryContent(contentTitle, contentType, contentDescription, contentUrl, thumbNail_image, contentCat, contentid));
@@ -1076,8 +1077,10 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         Gson gson = new Gson();
         String videoJson = gson.toJson(musicVideoList);
         String audioJson = gson.toJson(audioList);
+        String categoryDefList = gson.toJson(iconImageUrls);
         intent.putExtra("videoList", videoJson);
         intent.putExtra("audioList", audioJson);
+        intent.putExtra("categoryDefList", categoryDefList);
         startActivity(intent);
     }
 

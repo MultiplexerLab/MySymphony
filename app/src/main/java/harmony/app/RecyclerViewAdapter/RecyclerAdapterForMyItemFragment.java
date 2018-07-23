@@ -189,14 +189,14 @@ public class RecyclerAdapterForMyItemFragment extends RecyclerView.Adapter<Recyc
                         Intent myIntent = new Intent(activity, PlayAudioActivity.class);
                         myIntent.putExtra("cameFromWhichActivity", "music_video");
                         MusicVideo musicVideo = new MusicVideo(dataHelperArrayList.get(getAdapterPosition()).getContentTitle(), dataHelperArrayList.get(getAdapterPosition()).getContentType(), dataHelperArrayList.get(getAdapterPosition()).getContentTitle(),
-                                "", dataHelperArrayList.get(getAdapterPosition()).getContentCat(), dataHelperArrayList.get(getAdapterPosition()).getThumbNailImgUrl(), dataHelperArrayList.get(getAdapterPosition()).getContentId(), 0);
+                                "", dataHelperArrayList.get(getAdapterPosition()).getContentCat(), "", dataHelperArrayList.get(getAdapterPosition()).getThumbNailImgUrl(), dataHelperArrayList.get(getAdapterPosition()).getContentId(), 0);
                         myIntent.putExtra("data", (Serializable) musicVideo);
                         activity.startActivity(myIntent);
                     } else if (dataHelperArrayList.get(getAdapterPosition()).getContentType().contains("video")) {
                         Intent myIntent = new Intent(activity, VideoDescriptionActivity.class);
                         myIntent.putExtra("cameFromWhichActivity", "music_video");
                         MusicVideo musicVideo = new MusicVideo(dataHelperArrayList.get(getAdapterPosition()).getContentTitle(), dataHelperArrayList.get(getAdapterPosition()).getContentType(), dataHelperArrayList.get(getAdapterPosition()).getContentTitle(),
-                                "", dataHelperArrayList.get(getAdapterPosition()).getContentCat(), dataHelperArrayList.get(getAdapterPosition()).getThumbNailImgUrl(), dataHelperArrayList.get(getAdapterPosition()).getContentId(), 0);
+                                "", dataHelperArrayList.get(getAdapterPosition()).getContentCat(), "", dataHelperArrayList.get(getAdapterPosition()).getThumbNailImgUrl(), dataHelperArrayList.get(getAdapterPosition()).getContentId(), 0);
                         myIntent.putExtra("Data", (Serializable) musicVideo);
                         activity.startActivity(myIntent);
                     } else {

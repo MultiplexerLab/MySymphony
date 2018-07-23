@@ -533,13 +533,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 } else if (contentCat.equals("music_video")) {
                     if (contentType.equals("audio")) {
                         String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
-                        MusicVideo porashuna = new MusicVideo(contentTitle, contentType, contentDescription, contentUrl, contentCat, thumbNail_image,  Integer.parseInt(contentId), contentPrice);
+                        MusicVideo porashuna = new MusicVideo(contentTitle, contentType, contentDescription, contentUrl, contentCat, "", thumbNail_image,  Integer.parseInt(contentId), contentPrice);
                         ccontentIntent = new Intent(MyFirebaseMessagingService.this, PlayAudioActivity.class);
                         ccontentIntent.putExtra("cameFromWhichActivity", "music_video");
                         ccontentIntent.putExtra("data", (Serializable) porashuna);
                     } else {
                         String contentUrl = Endpoints.DOMAIN_PREFIX + jsonDataObject.getString("contentUrl");
-                        MusicVideo porashuna = new MusicVideo(contentTitle, contentType, contentDescription, contentUrl, contentCat, thumbNail_image,  Integer.parseInt(contentId), contentPrice);
+                        MusicVideo porashuna = new MusicVideo(contentTitle, contentType, contentDescription, contentUrl, contentCat, "", thumbNail_image,  Integer.parseInt(contentId), contentPrice);
                         ccontentIntent = new Intent(MyFirebaseMessagingService.this, VideoDescriptionActivity.class);
                         ccontentIntent.putExtra("Data", (Serializable) porashuna);
                         ccontentIntent.putExtra("cameFromWhichActivity", "music_video");

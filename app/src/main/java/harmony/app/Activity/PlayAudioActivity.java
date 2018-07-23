@@ -13,21 +13,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.looselycoupled.subscriptionintegration.OnSubscriptionListener;
 import com.looselycoupled.subscriptionintegration.SubscribeUsingPaymentGateway;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +47,7 @@ import java.util.Date;
 import java.util.List;
 
 import harmony.app.Activity.ContentDescriptionActivity.VideoDescriptionActivity;
+import harmony.app.Helper.Endpoints;
 import harmony.app.ModelClass.DataBaseData;
 import harmony.app.ModelClass.MusicVideo;
 import harmony.app.R;
@@ -44,15 +57,16 @@ import harmony.app.Helper.DownloadAudio;
 import harmony.app.Helper.InsertPayment;
 import harmony.app.Helper.PlayerInService;
 import harmony.app.Helper.Utility;
+import harmony.app.RecyclerViewAdapter.VideoListAdapter;
 
 public class PlayAudioActivity extends AppCompatActivity implements DownloadAudio.AsyncResponse {
 
     public static ImageButton btnPlay, btnStop, btnFastForward, btnRewind;
-    public static TextView textViewSongTime, priceTag;
+    public static TextView textViewSongTime, priceTag, musicTitle;
     private Intent playerService;
     public static SeekBar seekBar;
     Utility utility;
-    MusicVideo data;
+    MusicVideo data, notifData;
     DataBaseData dataBaseData;
     public harmony.app.Helper.ProgressDialog progressDialog;
     Date currenTime;
@@ -61,6 +75,12 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
     String[] permissions = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
+    RequestQueue queue;
+    ArrayList<MusicVideo> audioList;
+    VideoListAdapter adapter;
+    private ListView suggestionList;
+    boolean isSubscribed = false;
+    int contentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +90,10 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         progressDialog = new harmony.app.Helper.ProgressDialog(PlayAudioActivity.this);
         SharedPreferences.Editor editor = getSharedPreferences("audioData", MODE_PRIVATE).edit();
         data = (MusicVideo) getIntent().getSerializableExtra("data");
+        notifData = (MusicVideo) getIntent().getSerializableExtra("notifData");
         //Log.i("dataAudio", data.getContentUrl()+"  "+data.getContentId());
+        suggestionList = findViewById(R.id.musicSuggestionList);
+        musicTitle = findViewById(R.id.audioPlayTitle);
         initView();
         if (data != null) {
             dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
@@ -89,6 +112,12 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             String contentType = data.getContentType();
             String thumbNailImgUrl = data.getThumbnailImgUrl();
             int price = data.getContentPrice();
+            String title = data.getContentTitle();
+            contentId = data.getContentId();
+            isSubscribed = data.isSubscribed();
+            if(title != null) {
+                musicTitle.setText(title);
+            }
             if (price > 0) {
                 DataHelper dataHelper = new DataHelper(PlayAudioActivity.this);
                 Boolean check = dataHelper.checkDownLoadedOrNot(data.getContentCat(), data.getContentId());
@@ -97,7 +126,9 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
                     priceTag.setVisibility(View.INVISIBLE);
                     buyOrDownloadBTN.setVisibility(View.INVISIBLE);
                 }else{
-                    priceTag.setText("৳"+price);
+                    if(!isSubscribed) {
+                        priceTag.setText("৳" + price);
+                    }
                 }
             } else {
                 DataHelper dataHelper = new DataHelper(PlayAudioActivity.this);
@@ -105,7 +136,9 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
                     priceTag.setVisibility(View.INVISIBLE);
                     buyOrDownloadBTN.setVisibility(View.INVISIBLE);
                 }else{
-                    priceTag.setText("ফ্রি ডাউনলোড\nকরুন");
+                    if(!isSubscribed) {
+                        priceTag.setText("ফ্রি ডাউনলোড\nকরুন");
+                    }
                 }
             }
             editor.putString("imageUrl", imageUrl);
@@ -136,17 +169,27 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         } else {
             SharedPreferences prefs = getSharedPreferences("audioData", MODE_PRIVATE);
             String imageUrl = prefs.getString("imageUrl", null);
-            int contentId = prefs.getInt("songId", 1);
+            contentId = prefs.getInt("songId", 1);
             int price = prefs.getInt("price", 1);
             Glide.with(this).load(imageUrl).into((ImageView) findViewById(R.id.songimageView));
 
             DataHelper dataHelper = new DataHelper(PlayAudioActivity.this);
             Boolean check = dataHelper.checkDownLoadedOrNot("music_video", contentId);
+            String title = prefs.getString("songTitle", null);
+            if(musicTitle != null) {
+                musicTitle.setText(title);
+            }
+
             if (dataHelper.checkDownLoadedOrNot("music_video", contentId)) {
-                priceTag.setVisibility(View.INVISIBLE);
+                if(notifData.isSubscribed()) {
+                    priceTag.setVisibility(View.INVISIBLE);
+                }
                 buyOrDownloadBTN.setVisibility(View.INVISIBLE);
             }else{
                 priceTag.setText("৳"+price);
+                if(notifData.isSubscribed()) {
+                    priceTag.setVisibility(View.INVISIBLE);
+                }
             }
         }
 
@@ -161,6 +204,11 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             playerService.putExtra("songId", 0);
         }
         startService(playerService);
+
+        if(data!= null)
+            loadContentSuggestion(data, isSubscribed);
+        else if(notifData!= null)
+            loadContentSuggestion(notifData, notifData.isSubscribed());
     }
 
     @Override
@@ -189,6 +237,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
         seekBar = findViewById(R.id.seekBar);
         textViewSongTime = findViewById(R.id.textViewSongTime);
         priceTag = findViewById(R.id.priceTag);
+        musicTitle = findViewById(R.id.audioPlayTitle);
         buyOrDownloadBTN = findViewById(R.id.buyOrDownloadBTN);
 
     }
@@ -238,13 +287,13 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
     @Override
     protected void onStop() {
         SharedPreferences prefs = getSharedPreferences("audioData", MODE_PRIVATE);
-        Utility.initNotification(prefs.getString("songTitle", ""), this);
+        Utility.initNotification(prefs.getString("songTitle", ""), this, data);
         super.onStop();
     }
 
     public void downLoadAudio(View view) {
         if (checkPermissions()) {
-            if (data.getContentPrice() > 0) {
+            if (data.getContentPrice() > 0 && !isSubscribed) {
                 initSubscription(data.getContentPrice());
             } else {
                 downloadAudio();
@@ -277,7 +326,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
                     AppLogger.insertLogs(PlayAudioActivity.this, dateFormat.format(currenTime), "N", data.getContentId() + "",
                             "PAYMENT_INITIATED", deviceId, "content");
                     SubscribeUsingPaymentGateway obj = new SubscribeUsingPaymentGateway();
-                    obj.setData("test", "test123", "1234", (float) price, deviceId,data.getContentTitle(), PlayAudioActivity.this, new OnSubscriptionListener() {
+                    obj.setData("test", "test123", "1234", (float) price, deviceId, data.getContentTitle(), PlayAudioActivity.this, new OnSubscriptionListener() {
                         @Override
                         public void onSuccess(JSONObject result) {
                             try {
@@ -358,5 +407,46 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             return false;
         }
         return true;
+    }
+
+    private void loadContentSuggestion(MusicVideo data, final boolean isSubscribed) {
+        queue = Volley.newRequestQueue(this);
+        String url = Endpoints.GET_CONTENT_SUGGESTION+"?id="+data.getContentId()+"&cat="+data.getContentCat()+"&subCat="+data.getContentSubCat()+"&type="+data.getContentType();
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    Log.d("loadContentSuggestion",response.toString());
+                    String value = response.toString();
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<MusicVideo>>() {
+                    }.getType();
+                    audioList = gson.fromJson(value, type);
+                    adapter = new VideoListAdapter(PlayAudioActivity.this, audioList, isSubscribed);
+                    suggestionList.setAdapter(adapter);
+
+                    suggestionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent myIntent = new Intent(PlayAudioActivity.this, PlayAudioActivity.class);
+                            myIntent.putExtra("cameFromWhichActivity", "music_video");
+                            audioList.get(position).setSubscribed(isSubscribed);
+                            myIntent.putExtra("data", (Serializable) audioList.get(position));
+                            startActivity(myIntent);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d("loadSubscriptionConfig", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley", error.toString());
+            }
+        });
+        queue.add(jsonArrayRequest);
     }
 }

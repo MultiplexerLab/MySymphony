@@ -15,21 +15,33 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.looselycoupled.subscriptionintegration.OnSubscriptionListener;
 import com.looselycoupled.subscriptionintegration.SubscribeUsingPaymentGateway;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +49,7 @@ import java.util.Date;
 import java.util.List;
 
 import harmony.app.Activity.ProfileActivity;
+import harmony.app.Helper.Endpoints;
 import harmony.app.ModelClass.DataBaseData;
 import harmony.app.ModelClass.MusicVideo;
 import harmony.app.R;
@@ -45,6 +58,7 @@ import harmony.app.Helper.DataHelper;
 import harmony.app.Helper.DownloadImage;
 import harmony.app.Helper.DownloadVideo;
 import harmony.app.Helper.InsertPayment;
+import harmony.app.RecyclerViewAdapter.VideoListAdapter;
 import harmony.app.UniversalVideoview.UniversalMediaController;
 import harmony.app.UniversalVideoview.UniversalVideoView;
 
@@ -76,6 +90,11 @@ public class VideoDescriptionActivity extends AppCompatActivity implements Downl
             Manifest.permission.WRITE_EXTERNAL_STORAGE,};
     Date currenTime;
     DateFormat dateFormat;
+    RequestQueue queue;
+    ArrayList<MusicVideo> videoList;
+    VideoListAdapter adapter;
+    private ListView suggestionList;
+    boolean isSubscribed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +116,7 @@ public class VideoDescriptionActivity extends AppCompatActivity implements Downl
         videoLayout = findViewById(R.id.video_layout);
         videoView = findViewById(R.id.videoView);
         mediaController = findViewById(R.id.media_controller);
+        suggestionList = findViewById(R.id.videoSuggestionList);
         videoView.setMediaController(mediaController);
         progressDialog = new harmony.app.Helper.ProgressDialog(this);
         setDescripTionData();
@@ -113,13 +133,19 @@ public class VideoDescriptionActivity extends AppCompatActivity implements Downl
         String thumbNail_image = musicVideoObj.getThumbnailImgUrl();
         int price = musicVideoObj.getContentPrice();
         String priceStatus = "free";
+        isSubscribed = musicVideoObj.isSubscribed();
         if (price > 0) {
-            newPrice.setText(price + " Tk");
-            priceStatus = "paid";
+            if(!isSubscribed) {
+                newPrice.setText("৳" + price);
+                priceStatus = "paid";
+            }
             buyOrDownloadBTN.setVisibility(View.VISIBLE);
         } else {
-            newPrice.setText("ফ্রি দেখুন!");
-            priceStatus = "free";
+            if(!isSubscribed) {
+                newPrice.setText("ফ্রি দেখুন!");
+                priceStatus = "free";
+            }
+            buyOrDownloadBTN.setVisibility(View.VISIBLE);
         }
         dataBaseData = new DataBaseData(contentTitle, contentCat, contentType, contentDesc, thumbNail_image, priceStatus, musicVideoObj.getContentId());
         Boolean check = dataHelper.checkDownLoadedOrNot(musicVideoObj.getContentCat(), musicVideoObj.getContentId());
@@ -128,6 +154,7 @@ public class VideoDescriptionActivity extends AppCompatActivity implements Downl
             Log.d("enter", "japitojibon");
             buyOrDownloadLL.setVisibility(View.GONE);
         }
+        loadContentSuggestion(musicVideoObj, isSubscribed);
     }
 
     @Override
@@ -164,7 +191,12 @@ public class VideoDescriptionActivity extends AppCompatActivity implements Downl
 
     public void downloadVideo(View view) {
         if (checkPermissions()) {
-            initSubscription(musicVideoObj.getContentPrice());
+            if(musicVideoObj.getContentPrice() > 0 && !isSubscribed) {
+                initSubscription(musicVideoObj.getContentPrice());
+            }
+            else {
+                downloadVideo();
+            }
         } else {
             Toast.makeText(VideoDescriptionActivity.this, "ডাওনলোড এর পূর্বে ডিভাইস এক্সেস দিয়ে নিন", Toast.LENGTH_SHORT).show();
         }
@@ -427,5 +459,46 @@ public class VideoDescriptionActivity extends AppCompatActivity implements Downl
             return false;
         }
         return true;
+    }
+
+    private void loadContentSuggestion(MusicVideo data, final boolean isSubscribed) {
+        queue = Volley.newRequestQueue(this);
+        String url = Endpoints.GET_CONTENT_SUGGESTION+"?id="+data.getContentId()+"&cat="+data.getContentCat()+"&subCat="+data.getContentSubCat()+"&type="+data.getContentType();
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    Log.d("loadContentSuggestion",response.toString());
+                    String value = response.toString();
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<MusicVideo>>() {
+                    }.getType();
+                    videoList = gson.fromJson(value, type);
+                    adapter = new VideoListAdapter(VideoDescriptionActivity.this, videoList, isSubscribed);
+                    suggestionList.setAdapter(adapter);
+
+                    suggestionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent myIntent = new Intent(VideoDescriptionActivity.this, VideoDescriptionActivity.class);
+                            myIntent.putExtra("cameFromWhichActivity", "music_video");
+                            videoList.get(position).setSubscribed(isSubscribed);
+                            myIntent.putExtra("Data", (Serializable) videoList.get(position));
+                            startActivity(myIntent);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d("loadSubscriptionConfig", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley", error.toString());
+            }
+        });
+        queue.add(jsonArrayRequest);
     }
 }

@@ -28,7 +28,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -103,7 +102,8 @@
         <activity android:name=".Activity.MusicVideoActivity" />
         <activity android:name=".Activity.Emoticons" />
         <activity android:name=".Activity.AboutUs" />
-        <activity android:name=".Activity.TermsActivity"></activity>
+        <activity android:name=".Activity.TermsActivity" />
+        <activity android:name=".Activity.SubscriptionActivity"></activity>
     </application>
 
 </manifest>

@@ -31,4 +31,8 @@ public class Endpoints {
     public static final String FIREBASE_TOKEN_POST_URL=DOMAIN_PREFIX+"/ws/refreshFirebaseToken";
     public static final String GET_PAYMENT_INFO=DOMAIN_PREFIX+"/ws/commonGetFromTableForSym?tbl=paymentData";
     public static final String PAYMENT_POST_URL=DOMAIN_PREFIX+"/ws/addPaymentData";
+    public static final String GET_SUBSCRIPTION_CONFIG=DOMAIN_PREFIX+"/ws/getSubscriptionConfig";
+    public static final String GET_CONTENT_SUGGESTION=DOMAIN_PREFIX+"/ws/getContentSuggestion";
+    public static final String SUBSCRIPTION_POST_URL=DOMAIN_PREFIX+"/ws/insertUserSubscription";
+    public static final String GET_USER_SUBSCRIPTION=DOMAIN_PREFIX+"/ws/getUsersSubscription?userId=";
 }

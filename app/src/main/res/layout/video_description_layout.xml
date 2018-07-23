@@ -21,7 +21,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appbarLayoutInJapitiJibonDescription">
+        android:layout_below="@id/appbarLayoutInJapitiJibonDescription"
+        android:id="@+id/scrollViewLayoutVideo">
 
         <LinearLayout
             android:layout_gravity="center"
@@ -179,4 +180,10 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+    <ListView
+        android:id="@+id/videoSuggestionList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scrollViewLayoutVideo"
+        android:layout_margin="5dp"></ListView>
 </RelativeLayout>

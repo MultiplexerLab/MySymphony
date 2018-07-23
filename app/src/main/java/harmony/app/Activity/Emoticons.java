@@ -14,9 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -30,15 +32,22 @@ import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import harmony.app.Helper.SubscriptionService;
 import harmony.app.ModelClass.AppData;
+import harmony.app.ModelClass.MusicVideo;
 import harmony.app.ModelClass.SliderImage;
+import harmony.app.ModelClass.Subscription;
+import harmony.app.ModelClass.SubscriptionConfig;
 import harmony.app.R;
 import harmony.app.RecyclerViewAdapter.AppListAdapter;
 import harmony.app.RecyclerViewAdapter.EmoticonsAdapter;
@@ -56,6 +65,12 @@ public class Emoticons extends AppCompatActivity implements DownloadImage.AsyncR
     RequestQueue queue;
     LinearLayout rootLayout;
     Snackbar snackbar;
+    ArrayList<SubscriptionConfig> subscriptionConfigList;
+    Map<String, SubscriptionConfig> subscriptionConfigMap;
+    ArrayList<Subscription> subscriptionList;
+    Map<String, Subscription> subscriptionMap;
+    Button subscribe;
+    TextView subscribed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +79,14 @@ public class Emoticons extends AppCompatActivity implements DownloadImage.AsyncR
 
         rootLayout = findViewById(R.id.rootLayout);
         gridView = findViewById(R.id.gridViewEmoticons);
+        subscribe = findViewById(R.id.subscribeBtn);
+        subscribed = findViewById(R.id.isSubscribeText);
+
+
         queue = Volley.newRequestQueue(this);
 
         if(internetConnected()){
-            getEmoticons();
+            loadSubscriptionConfig();
         }else{
             showSnackBar();
         }
@@ -82,7 +101,7 @@ public class Emoticons extends AppCompatActivity implements DownloadImage.AsyncR
                                     snackbar.dismiss();
                                 }
                             }
-                            getEmoticons();
+                            loadSubscriptionConfig();
                             mySwipeRefreshLayout.setRefreshing(false);
                         } else {
                             showSnackBar();
@@ -127,7 +146,32 @@ public class Emoticons extends AppCompatActivity implements DownloadImage.AsyncR
                     }.getType();
                     emoticonList = gson.fromJson(response.toString(), type);
                     Log.i("SliderImages", emoticonList.toString());
-                    adapter = new EmoticonsAdapter(Emoticons.this, emoticonList);
+                    final SubscriptionConfig config = subscriptionConfigMap.get("emoticons");
+                    SubscriptionService service = new SubscriptionService();
+                    boolean isSubscribed = service.isSubscribed(subscriptionMap, "emoticons");
+                    if(config != null && !isSubscribed) {
+                        subscribed.setVisibility(View.INVISIBLE);
+                        subscribe.setVisibility(View.VISIBLE);
+                    }
+                    if(isSubscribed) {
+                        subscribe.setVisibility(View.INVISIBLE);
+                        subscribed.setVisibility(View.VISIBLE);
+                    }
+
+                    subscribe.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            Intent myIntent = null;
+                            myIntent = new Intent(Emoticons.this, SubscriptionActivity.class);
+                            myIntent.putExtra("itemType", "emoticons");
+                            myIntent.putExtra("itemSubCat", "emoticons");
+                            myIntent.putExtra("config", (Serializable) config);
+                            Emoticons.this.startActivity(myIntent);
+                        }
+                    });
+
+                    adapter = new EmoticonsAdapter(Emoticons.this, emoticonList, config, isSubscribed);
                     gridView.setAdapter(adapter);
                 } catch (Exception e) {
                     Log.d("exceptionLoadData4rmvly", e.toString());
@@ -190,5 +234,87 @@ public class Emoticons extends AppCompatActivity implements DownloadImage.AsyncR
                 showSnackBar();
             }
         }
+    }
+
+    private void loadSubscriptionConfig() {
+        queue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_SUBSCRIPTION_CONFIG, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    Log.d("loadSubscriptionConfig",response.toString());
+                    String value = response.toString();
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<SubscriptionConfig>>() {
+                    }.getType();
+                    subscriptionConfigList = gson.fromJson(value, type);
+                    subscriptionConfigMap = new HashMap<String, SubscriptionConfig>();
+                    for(int i=0;i<subscriptionConfigList.size();i++){
+                        String itemType = subscriptionConfigList.get(i).getItemType();
+                        String itemSubCat = subscriptionConfigList.get(i).getItemSubcategory();
+                        if(itemType.equals("emoticons") && subscriptionConfigList.get(i).getStatus().equals("active")) {
+                            SubscriptionConfig config = subscriptionConfigList.get(i);
+                            subscriptionConfigMap.put(itemSubCat, config);
+                        }
+                    }
+                    getUserSubsscription(Emoticons.this, "");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d("loadSubscriptionConfig", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley", error.toString());
+            }
+        });
+        queue.add(jsonArrayRequest);
+    }
+
+    public void getUserSubsscription(final Context context, String userId) {
+
+
+        if(userId == null || userId == "") {
+            userId = Settings.Secure.getString(context.getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+        }
+
+        queue = Volley.newRequestQueue(context);
+        String url = Endpoints.GET_USER_SUBSCRIPTION+userId;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    Log.d("getUserSubsscription",response.toString());
+                    String value = response.toString();
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<Subscription>>() {
+                    }.getType();
+                    subscriptionList = gson.fromJson(value, type);
+                    subscriptionMap = new HashMap<String, Subscription>();
+                    subscriptionMap = new HashMap<String, Subscription>();
+                    for(int i=0;i<subscriptionList.size();i++){
+                        String itemType = subscriptionList.get(i).getItemType();
+                        String itemSubCat = subscriptionList.get(i).getItemSubCategory();
+                        if(itemType.equals("emoticons")) {
+                            Subscription subscription = subscriptionList.get(i);
+                            subscriptionMap.put(itemSubCat, subscription);
+                        }
+                    }
+
+                    getEmoticons();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d("getUserSubsscription", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley", error.toString());
+            }
+        });
+        queue.add(jsonArrayRequest);
     }
 }

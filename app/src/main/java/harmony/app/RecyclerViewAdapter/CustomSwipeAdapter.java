@@ -85,7 +85,7 @@ public class CustomSwipeAdapter extends PagerAdapter {
                     myIntent.putExtra("cameFromWhichActivity", "music_video");
                     SliderImage object = sliderImages.get(position);
                     MusicVideo musicVideo = new MusicVideo(object.getContentTitle(), object.getContentType(), object.getContentDescription(),
-                            object.getContentUrl(), object.getContentCat(), object.getThumbNail_image(), object.getId(), object.getContentPrice());
+                            object.getContentUrl(), object.getContentCat(), "", object.getThumbNail_image(), object.getId(), object.getContentPrice());
                     myIntent.putExtra("data", (Serializable) musicVideo);
                     context.startActivity(myIntent);
 
@@ -93,7 +93,7 @@ public class CustomSwipeAdapter extends PagerAdapter {
                     Intent myIntent = new Intent(context, VideoDescriptionActivity.class);
                     SliderImage object = sliderImages.get(position);
                     MusicVideo musicVideo = new MusicVideo(object.getContentTitle(), object.getContentType(), object.getContentDescription(),
-                            object.getContentUrl(), object.getContentCat(), object.getThumbNail_image(), object.getId(), object.getContentPrice());
+                            object.getContentUrl(), object.getContentCat(), "", object.getThumbNail_image(), object.getId(), object.getContentPrice());
                     myIntent.putExtra("Data", (Serializable) musicVideo);
                     myIntent.putExtra("cameFromWhichActivity", "music_video");
                     context.startActivity(myIntent);

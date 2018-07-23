@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.util.Log;
 
 import harmony.app.Activity.PlayAudioActivity;
+import harmony.app.ModelClass.MusicVideo;
 import harmony.app.R;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -21,11 +22,11 @@ public class Utility {
     private static Notification myNotication;
     public static final String NOTIFICATION_CHANNEL_ID = "10001";
 
-    public static void initNotification(String songTitle, Context mContext) {
+    public static void initNotification(String songTitle, Context mContext, MusicVideo data) {
         try {
             manager = (NotificationManager) mContext.getSystemService(NOTIFICATION_SERVICE);
-
             Intent intent = new Intent(mContext,PlayAudioActivity.class);
+            intent.putExtra("notifData", data);
             PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
             Notification.Builder builder = new Notification.Builder(mContext);
 

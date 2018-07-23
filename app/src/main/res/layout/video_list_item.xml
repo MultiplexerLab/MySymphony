@@ -16,7 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#F08C53"
+            android:background="@color/White"
             android:orientation="horizontal">
 
             <ImageView
@@ -39,7 +39,7 @@
                     android:layout_marginTop="20dp"
                     android:text="Video Title"
                     android:textSize="14dp"
-                    android:textColor="@color/White" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/contentType"
