@@ -283,19 +283,19 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
         Log.i("LoginTag", loginStatus + "");
         if (loginStatus == 1) {
             if (internetConnected()) {
+                getInstanceInfo();
                 updateFirebaseToken();
                 loadIconsFromServer();
-                getInstanceInfo();
                 newloadDataFromVolley();
             } else {
                 showSnackBar();
             }
         } else {
             if (internetConnected()) {
+                getInstanceInfo();
                 initializeData();
                 insertUserToDB();
                 loadIconsFromServer();
-                getInstanceInfo();
             } else {
                 showSnackBar();
             }
@@ -487,7 +487,7 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
 
     private void insertToServerDB() {
         progressDialog.showProgressDialog();
-        String url = "http://bot.sharedtoday.com:9500/ws/mysymphony/commonInsertIntoSymUsers?tbl=symUsers";
+        String url = Endpoints.ADD_NEW_USER;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -671,7 +671,10 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
     }
 
     private void getInstanceInfo() {
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Endpoints.GET_APP_INFO, new Response.Listener<JSONArray>() {
+
+        String url = Endpoints.GET_APP_INFO;
+
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
@@ -699,26 +702,16 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                         }
                         if(jsonObject.getString("pName").equals("versionCode")) {
                             versionCode = Integer.parseInt(jsonObject.getString("pValue"));
-                        }                        
+                        }
+                        if(jsonObject.getString("pName").equals("domainPreFix")) {
+                            Endpoints.DOMAIN_PREFIX = jsonObject.getString("pValue");
+                        }
                     }
 
                     PackageInfo pinfo = context.getPackageManager().getPackageInfo("harmony.app", 0);
                     int versionNumber = pinfo.versionCode;
                     if(versionNumber<versionCode){
-                        Log.i("Dhukse", "VersionCode");
-                               /* AlertDialog.Builder dialog = new AlertDialog.Builder(HomePage.this);
-                                dialog.setTitle("").setMessage("হারমনি অ্যাপের নতুন ভার্সন পাওয়া যাচ্ছে। এখুনি ইন্সটল করুন। ").setCancelable(false);
-                                final String finalApkURL = apkURL;
-                                final String finalThumbNailUrl = thumbNailUrl;
-                                dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        DataBaseData dataBaseData = new DataBaseData("Harmony App", "mobile_app", "apk", "Download Harmony App Update", finalThumbNailUrl, "free", 1 );
-                                        DownloadApk downloadApk = new DownloadApk();
-                                        downloadApk.downLoadAPK(finalApkURL, HomePage.this, dataBaseData);
-                                    }
-                                });
-                                dialog.show();*/
+
                         try {
                             final Dialog dialog = new Dialog(HomePage.this);
                             if(tag==1){
@@ -736,12 +729,20 @@ public class HomePage extends AppCompatActivity implements DownloadApk.AsyncResp
                             final String finalThumbNailUrl = thumbNailUrl;
 
                             Button dialogButton = dialog.findViewById(R.id.updateAppButton);
+                            Button laterButton = dialog.findViewById(R.id.laterUpdateAppButton);
                             dialogButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     DataBaseData dataBaseData = new DataBaseData("Harmony App", "mobile_app", "apk", "Download Harmony App Update", finalThumbNailUrl, "free", 1);
                                     DownloadApk downloadApk = new DownloadApk();
                                     downloadApk.downLoadAPK(finalApkURL, HomePage.this, dataBaseData);
+                                }
+                            });
+
+                            laterButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.cancel();
                                 }
                             });
                             dialog.show();

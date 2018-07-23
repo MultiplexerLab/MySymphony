@@ -97,7 +97,8 @@ public class ProgressDialog {
     }
 
     public void hideProgressDialog() {
-        alertDialog.dismiss();
+        if(alertDialog != null)
+            alertDialog.dismiss();
     }
 
     public void setAlertdialogNull() {

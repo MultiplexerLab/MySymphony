@@ -18,14 +18,30 @@
         android:layout_gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-    <Button
-        android:id="@+id/updateAppButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:background="@color/dark_red"
-        android:text="UPDATE"
-        android:textColor="@color/White" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/laterUpdateAppButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@color/White"
+            android:layout_gravity="left"
+            android:text="LATER"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/updateAppButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="15dp"
+            android:background="@color/dark_red"
+            android:text="UPDATE NOW"
+            android:textColor="@color/White" />
+    </RelativeLayout>
 
 </LinearLayout>

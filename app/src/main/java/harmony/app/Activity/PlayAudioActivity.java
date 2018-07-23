@@ -81,6 +81,7 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
     private ListView suggestionList;
     boolean isSubscribed = false;
     int contentId;
+    boolean isPaymentinitiated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -258,6 +259,9 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
 
     @Override
     protected void onResume() {
+
+        isPaymentinitiated = false;
+
         dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         currenTime = new Date();
         try {
@@ -287,14 +291,19 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
     @Override
     protected void onStop() {
         SharedPreferences prefs = getSharedPreferences("audioData", MODE_PRIVATE);
-        Utility.initNotification(prefs.getString("songTitle", ""), this, data);
+        if(PlayerInService.mp.isPlaying() && !isPaymentinitiated) {
+            Utility.initNotification(prefs.getString("songTitle", ""), this, data);
+        }
         super.onStop();
     }
 
     public void downLoadAudio(View view) {
         if (checkPermissions()) {
-            if (data.getContentPrice() > 0 && !isSubscribed) {
+            if (data != null && data.getContentPrice() > 0 && !isSubscribed) {
                 initSubscription(data.getContentPrice());
+            } else if (notifData != null && notifData.getContentPrice() > 0 && !notifData.isSubscribed()) {
+                data = notifData;
+                initSubscription(notifData.getContentPrice());
             } else {
                 downloadAudio();
             }
@@ -321,6 +330,9 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
             @Override
             public void run() {
                 try {
+
+                    isPaymentinitiated = true;
+
                     final String deviceId = Settings.Secure.getString(getContentResolver(),
                             Settings.Secure.ANDROID_ID);
                     AppLogger.insertLogs(PlayAudioActivity.this, dateFormat.format(currenTime), "N", data.getContentId() + "",
@@ -330,6 +342,9 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
                         @Override
                         public void onSuccess(JSONObject result) {
                             try {
+
+                                isPaymentinitiated = false;
+
                                 String transactionStatus = result.getString("transactionStatus");
                                 String paymentID = result.getString("paymentID");
                                 String paymentMethod = result.getString("paymentMethod");
@@ -354,6 +369,9 @@ public class PlayAudioActivity extends AppCompatActivity implements DownloadAudi
 
                         @Override
                         public void onError(JSONObject result) {
+
+                            isPaymentinitiated = false;
+
                             AppLogger.insertLogs(PlayAudioActivity.this, dateFormat.format(currenTime), "N", data.getContentId() + "",
                                     "PAYMENT_FAILED", result.toString(), "content");
 
